@@ -1,0 +1,27 @@
+/*! \mainpage
+ *
+ * \section Casecreation Description:
+ * This is a tool to create a circular body and a set of OARs and TARGETs. The user can choose coordinates
+ * and radius of volumes of interest and the software will return a set of Dose-to-Points matrices in sparse matrix
+ * format.
+ * <img src="../../tests/plotcase.png" alt="Whole Case View" style="width:304px;height:228px;">
+ * <img src="../../tests/voxelandray.png" alt="Voxel and Ray View" style="width:304px;height:228px;">
+ *
+ * \section Casecreation2 Case Creation Reference Usage
+ *
+ * <h3>Python Programmers:</h3>
+ * <p>Use <a href="hierarchy.html">Class Hierarchy</a> or <a href="classes.html"> Alphabetical List </a>
+ * or <a href="annotated.html"> Compound List</a>
+ * to find the class you are interested in. For example, to find ControlPoint class,
+ * you can go to the <a href="classes.html"> Alphabetical List</a>, then click on
+ * "ControlPoint". Once you are at the class, you will find an inheritance
+ * chart, a list of the public members, a detailed description of the class,
+ * then detailed member descriptions.</p>
+ *
+ * <hr>
+ *
+ * <h2>Other references</h2>
+ * <ul>
+ *   <li><a href="../latex/refman.pdf">PDF Documentation of the project</a></li>
+ * </ul>
+ */
