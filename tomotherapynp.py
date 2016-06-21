@@ -13,6 +13,7 @@ import sys
 import gurobipy as gp
 import numpy as np
 import scipy.sparse as sps
+import os
 
 def getvector(necfile,dtype):
     with open(necfile, 'rb') as f:
@@ -22,14 +23,23 @@ def getvector(necfile,dtype):
             f.close()
     return(data)
 
-bixels = getvector('T:\\Physics Research\\CAP Group\\tools\\OptTool\\dijapp\\dij\\Bixels_out.bin',np.int32)
-voxels = getvector('T:\\Physics Research\\CAP Group\\tools\\OptTool\\dijapp\\dij\\Voxels_out.bin',np.int32)
-Dijs = getvector('T:\\Physics Research\\CAP Group\\tools\\OptTool\\dijapp\\dij\\Dijs_out.bin',np.float32)
+bixels = getvector('data\\Bixels_out.bin', np.int32)
+voxels = getvector('data\\Voxels_out.bin', np.int32)
+Dijs = getvector('data\\Dijs_out.bin', np.float32)
 
-print (bixels.shape,voxels.shape,Dijs.shape)
-print (bixels, voxels, Dijs)
+mask = getvector('optmask.img', np.float32)
+print(sum(mask))
+# with open('optmask.img', 'rb') as f:
+#     block = f.read(512 * 2**10)
+#     while block != "":
+#         # Do stuff with a block
+#         block = f.read(512 * 2**10)
 
-D = sps.csc_matrix((Dijs,(bixels,voxels)),shape=(14240,65536))
-print(D)
-print(D.nnz)
-print(np.mean(D*np.ones(14240)))
+# print (bixels.shape,voxels.shape,Dijs.shape)
+# print (bixels, voxels, Dijs)
+
+# D = sps.csc_matrix((Dijs,(bixels,voxels)),shape=(14240,65536))
+#
+# cwd = os.getcwd()  # Get the current working directory (cwd)
+# files = os.listdir(cwd)  # Get all the files in that directory
+# print(cwd, files)
