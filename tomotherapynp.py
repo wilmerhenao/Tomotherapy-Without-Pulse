@@ -41,22 +41,30 @@ class tomotherapyNP(object):
         # Addition of t variables. All terms according to the terminology in the writeup.
         self.timeVars = [None] * (self.data.N * self.data.K)
         self.BinaryVars = [None] * (self.data.N * self.data.K)
-        self.xi = [None] * (self.data.N * self.data.K)
-        self.zeta = [None] * (self.data.N * self.data.K)
+        self.xiVars = [None] * (self.data.N * self.data.K)
+        self.zetaVars = [None] * (self.data.N * self.data.K)
         for i in range(0, self.data.N):
             for k in range(0, self.data.K):
-                self.doseVars[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.CONTINUOUS,
+
+                self.timeVars[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.CONTINUOUS,
                                                                      name="t_{" + str(i) + "," + str(k) + "}",
                                                                      column=None)
-                self.xi[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0, vtype=grb.GRB.CONTINUOUS,
+                self.xiVars[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0, vtype=grb.GRB.CONTINUOUS,
                                                                      name="xi_{" + str(i) + "," + str(k) + "}",
                                                                      column=None)
-                self.zeta[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0, vtype=grb.GRB.CONTINUOUS,
+                self.zetaVars[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0, vtype=grb.GRB.CONTINUOUS,
                                                                      name="zeta_{" + str(i) + "," + str(k) + "}",
                                                                      column=None)
                 self.binaryVars[k + i * self.data.N] = self.mod.addVar(lb = 0.0, ub=1.0, obj=0.0, vtype=grb.GRB.BINARY,
                                                                        name="binary_{" + str(i) + "," + str(k) + "}",
                                                                        column=None)
+        ## This is the variable in the $z_{j}$ constraint.
+        self.zee = [None] * (self.data.numrealvoxels)
+        for i in range(0, self.data.numrealvoxels):
+            self.zee[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=1.0, vtype=grb.GRB.CONTINUOUS,
+                                                                     name="zee_{" + str(i) + "}",
+                                                                     column=None)
+
 
         self.mod.update()
         self.doseConstraint = [self.mod.addConstr(-self.doseVars[j], grb.GRB.EQUAL, 0) for j in range(self.data.nVox)]
@@ -426,11 +434,12 @@ class tomodata:
         self.dimY = 256
         ## Total number of voxels in the phantom
         self.totalVoxels = self.dimX * self.dimY
-
         self.bixels = getvector('data\\Bixels_out.bin', np.int32)
         self.voxels = getvector('data\\Voxels_out.bin', np.int32)
         self.Dijs = getvector('data\\Dijs_out.bin', np.float32)
         self.mask = getvector('data\\optmask.img', np.int32)
+        ## This is the total number of voxels that there are in the body. Not all voxels from all directions.
+        self.numrealvoxels = len(np.unique(self.voxels))
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 dataobject = tomodata()

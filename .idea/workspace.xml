@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/tomotherapynp.py" line="412" mnemonic="5" />
+    <bookmark url="file://$PROJECT_DIR$/tomotherapynp.py" line="420" mnemonic="5" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
@@ -40,8 +40,8 @@
       <file leaf-file-name="tomotherapynp.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapynp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="823">
-              <caret line="416" column="49" selection-start-line="416" selection-start-column="49" selection-end-line="416" selection-end-column="49" />
+            <state relative-caret-position="268">
+              <caret line="47" column="16" selection-start-line="47" selection-start-column="16" selection-end-line="47" selection-end-column="16" />
               <folding>
                 <element signature="e#226#244#0" expanded="true" />
               </folding>
@@ -478,7 +478,14 @@
       <option name="project" value="LOCAL" />
       <updated>1466610816895</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="code is really messy right now. I just added a gurobi class that is only now taking shape.">
+      <created>1466628018129</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1466628018129</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -543,7 +550,8 @@
     <MESSAGE value="added reading the mask. Maybe needs a different type. Fixing it tomorrow" />
     <MESSAGE value="Corrected the problem. All variables are read correctly. Ready to start setting up the gurobi computations." />
     <MESSAGE value="Added matrix multiplication wrapper" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added matrix multiplication wrapper" />
+    <MESSAGE value="code is really messy right now. I just added a gurobi class that is only now taking shape." />
+    <option name="LAST_COMMIT_MESSAGE" value="code is really messy right now. I just added a gurobi class that is only now taking shape." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -924,8 +932,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="823">
-          <caret line="416" column="49" selection-start-line="416" selection-start-column="49" selection-end-line="416" selection-end-column="49" />
+        <state relative-caret-position="268">
+          <caret line="47" column="16" selection-start-line="47" selection-start-column="16" selection-end-line="47" selection-end-column="16" />
           <folding>
             <element signature="e#226#244#0" expanded="true" />
           </folding>
