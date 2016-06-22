@@ -18,7 +18,7 @@ import os
 def getvector(necfile,dtype):
     with open(necfile, 'rb') as f:
         try:
-            data = np.fromfile(f,dtype=dtype)
+            data = np.fromfile(f, dtype=dtype)
         finally:
             f.close()
     return(data)
@@ -26,19 +26,10 @@ def getvector(necfile,dtype):
 bixels = getvector('data\\Bixels_out.bin', np.int32)
 voxels = getvector('data\\Voxels_out.bin', np.int32)
 Dijs = getvector('data\\Dijs_out.bin', np.float32)
+mask = getvector('data\\optmask.img', np.int32)
+print(len(mask))
 
-mask = getvector('optmask.img', np.float32)
-print(sum(mask))
-# with open('optmask.img', 'rb') as f:
-#     block = f.read(512 * 2**10)
-#     while block != "":
-#         # Do stuff with a block
-#         block = f.read(512 * 2**10)
-
-# print (bixels.shape,voxels.shape,Dijs.shape)
-# print (bixels, voxels, Dijs)
-
-# D = sps.csc_matrix((Dijs,(bixels,voxels)),shape=(14240,65536))
+D = sps.csc_matrix((Dijs,(bixels,voxels)),shape=(14240,65536))
 #
 # cwd = os.getcwd()  # Get the current working directory (cwd)
 # files = os.listdir(cwd)  # Get all the files in that directory
