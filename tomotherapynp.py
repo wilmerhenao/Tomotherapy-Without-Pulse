@@ -39,13 +39,18 @@ class tomotherapyNP(object):
     ## This function builds variables to be included in the model.
     def buildVariables(self):
         # Addition of t variables. All terms according to the terminology in the writeup.
+        ## Time variable
         self.timeVars = [None] * (self.data.N * self.data.K)
-        self.BinaryVars = [None] * (self.data.N * self.data.K)
+        ## Binary Variable. I call it delta in the writeup
+        self.BinaryVars = [None] * ((self.data.N * self.data.K) + self.data.N)
+        ## xi Variables. Helper variables to create a continuous binary variable
         self.xiVars = [None] * (self.data.N * self.data.K)
+        ## zeta Variables. Helper variables to create a continuous binary variable
         self.zetaVars = [None] * (self.data.N * self.data.K)
+        self.zeeplusVars = [None] * (self.data.N * self.data.K)
+        self.zeeminusVars = [None] * (self.data.N * self.data.K)
         for i in range(0, self.data.N):
             for k in range(0, self.data.K):
-
                 self.timeVars[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.CONTINUOUS,
                                                                      name="t_{" + str(i) + "," + str(k) + "}",
                                                                      column=None)
@@ -55,10 +60,23 @@ class tomotherapyNP(object):
                 self.zetaVars[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0, vtype=grb.GRB.CONTINUOUS,
                                                                      name="zeta_{" + str(i) + "," + str(k) + "}",
                                                                      column=None)
+                self.zeeplusVars[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0,
+                                                                     vtype=grb.GRB.CONTINUOUS,
+                                                                     name="zeta_{" + str(i) + "," + str(k) + "}",
+                                                                     column=None)
+                self.zeeminusVars[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0,
+                                                                     vtype=grb.GRB.CONTINUOUS,
+                                                                     name="zeta_{" + str(i) + "," + str(k) + "}",
+                                                                     column=None)
                 self.binaryVars[k + i * self.data.N] = self.mod.addVar(lb = 0.0, ub=1.0, obj=0.0, vtype=grb.GRB.BINARY,
                                                                        name="binary_{" + str(i) + "," + str(k) + "}",
                                                                        column=None)
-        ## This is the variable in the $z_{j}$ constraint.
+            ## Initialize extra members of binaryvars that are needed. Since there's an extra edge (see writeup)
+            self.binaryVars[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.BINARY,
+                                                                       name="binary_{" + str(i) + ", extramember}",
+                                                                       column=None)
+
+        ## This is the variable that will appear in the $z_{j}$ constraint. One per actual voxel in small space.
         self.zee = [None] * (self.data.numrealvoxels)
         for i in range(0, self.data.numrealvoxels):
             self.zee[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=1.0, vtype=grb.GRB.CONTINUOUS,
