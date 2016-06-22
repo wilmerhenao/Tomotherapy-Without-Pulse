@@ -49,6 +49,15 @@ class tomotherapyNP(object):
         self.zetaVars = [None] * (self.data.N * self.data.K)
         self.zeeplusVars = [None] * (self.data.N * self.data.K)
         self.zeeminusVars = [None] * (self.data.N * self.data.K)
+        ## Initialize extra members of binaryvars that are needed. Since there's an extra edge (see writeup)
+        for i in range(0, self.data.N)
+            self.binaryVars[i] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.BINARY,
+                                                                       name="binary_{" + str(i) + ", extramember}",
+                                                                       column=None)        ## Initialize extra members of binaryvars that are needed. Since there's an extra edge (see writeup)
+            self.binaryVars[i] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.BINARY,
+                                                                       name="binary_{" + str(i) + ", extramember}",
+                                                                       column=None)
+
         for i in range(0, self.data.N):
             for k in range(0, self.data.K):
                 self.timeVars[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.CONTINUOUS,
@@ -71,10 +80,6 @@ class tomotherapyNP(object):
                 self.binaryVars[k + i * self.data.N] = self.mod.addVar(lb = 0.0, ub=1.0, obj=0.0, vtype=grb.GRB.BINARY,
                                                                        name="binary_{" + str(i) + "," + str(k) + "}",
                                                                        column=None)
-            ## Initialize extra members of binaryvars that are needed. Since there's an extra edge (see writeup)
-            self.binaryVars[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.BINARY,
-                                                                       name="binary_{" + str(i) + ", extramember}",
-                                                                       column=None)
 
         ## This is the variable that will appear in the $z_{j}$ constraint. One per actual voxel in small space.
         self.zee = [None] * (self.data.numrealvoxels)
@@ -82,10 +87,31 @@ class tomotherapyNP(object):
             self.zee[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=1.0, vtype=grb.GRB.CONTINUOUS,
                                                                      name="zee_{" + str(i) + "}",
                                                                      column=None)
-
-
+        # Lazy update of gurobi
         self.mod.update()
-        self.doseConstraint = [self.mod.addConstr(-self.doseVars[j], grb.GRB.EQUAL, 0) for j in range(self.data.nVox)]
+
+        ## Add some constraints
+        self.absoluteValueRemovalConstraint = [None] * (self.data.N * self.data.K)
+        self.xiconstraint1 = [None] * (self.data.N * self.data.K)
+        self.xiconstraint2 = [None] * (self.data.N * self.data.K)
+        self.xiconstraint3 = [None] * (self.data.N * self.data.K)
+        for i in range(0, self.data.N):
+            for k in range(0, self.data.K):
+                self.absoluteValueRemovalConstraint[k + i * self.data.N] = self.mod.addConstr(self.binaryVars[(k+1) + i * self.data.N] - self.binaryVars[k + i * self.data.N], grb.GRB.EQUAL, self.zeeplus[k + i * self.data.N] - self.zeeminus[k + i * self.data.N], name="rmabs_{" + str(i) + "," + str(k) + "}")
+                self.xiconstraint1[k + i * self.data.N] = self.mod.addConstr(self.xiVars[k + i * self.data.N],
+                                                                             grb.GRB.LESS_EQUAL,
+                                                                             self.data.fractionUB * self.binaryVars[k + i * self.data.N],
+                                                                             name="rmabs_{" + str(i) + "," + str(k) + "}")
+                self.xiconstraint2[k + i * self.data.N] = self.mod.addConstr(self.xiVars[k + i * self.data.N],
+                                                                             grb.GRB.LESS_EQUAL,
+                                                                             self.timeVars[k + i * self.data.N],
+                                                                             name="rmabs_{" + str(i) + "," + str(
+                                                                                 k) + "}")
+                self.xiconstraint3[k + i * self.data.N] = self.mod.addConstr(self.xiVars[k + i * self.data.N],
+                                                                             grb.GRB.GREATER_EQUAL,
+                                                                             self.timeVars[k + i * self.data.N] - (1 - self.binaryVars[k + i * self.data.N]) * self.data.fractionUB,
+                                                                             name="rmabs_{" + str(i) + "," + str(
+                                                                                 k) + "}")
         self.mod.update()
         self.cpBinaryVars = [None] * self.data.nCP
         print 'Building dose constraint (of ', self.data.nCP, 'for CP',

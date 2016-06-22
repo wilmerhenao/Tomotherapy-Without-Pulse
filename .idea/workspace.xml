@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/tomotherapynp.py" line="438" mnemonic="5" />
+    <bookmark url="file://$PROJECT_DIR$/tomotherapynp.py" line="464" mnemonic="5" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
@@ -40,8 +40,8 @@
       <file leaf-file-name="tomotherapynp.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapynp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="50" column="25" selection-start-line="50" selection-start-column="25" selection-end-line="50" selection-end-column="25" />
+            <state relative-caret-position="424">
+              <caret line="103" column="77" selection-start-line="103" selection-start-column="77" selection-end-line="103" selection-end-column="77" />
               <folding>
                 <element signature="e#226#244#0" expanded="true" />
               </folding>
@@ -492,7 +492,14 @@
       <option name="project" value="LOCAL" />
       <updated>1466629653524</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="added zeeplus and zeeminus vars that will replace the rolls of delta in removing the absolute value from the set of constraints.">
+      <created>1466630601625</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1466630601625</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -559,7 +566,8 @@
     <MESSAGE value="Added matrix multiplication wrapper" />
     <MESSAGE value="code is really messy right now. I just added a gurobi class that is only now taking shape." />
     <MESSAGE value="included the z &quot;dose&quot; variable" />
-    <option name="LAST_COMMIT_MESSAGE" value="included the z &quot;dose&quot; variable" />
+    <MESSAGE value="added zeeplus and zeeminus vars that will replace the rolls of delta in removing the absolute value from the set of constraints." />
+    <option name="LAST_COMMIT_MESSAGE" value="added zeeplus and zeeminus vars that will replace the rolls of delta in removing the absolute value from the set of constraints." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -940,8 +948,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="50" column="25" selection-start-line="50" selection-start-column="25" selection-end-line="50" selection-end-column="25" />
+        <state relative-caret-position="424">
+          <caret line="103" column="77" selection-start-line="103" selection-start-column="77" selection-end-line="103" selection-end-column="77" />
           <folding>
             <element signature="e#226#244#0" expanded="true" />
           </folding>
