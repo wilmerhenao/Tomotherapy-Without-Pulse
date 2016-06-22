@@ -40,8 +40,8 @@
       <file leaf-file-name="tomotherapynp.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapynp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="424">
-              <caret line="103" column="77" selection-start-line="103" selection-start-column="77" selection-end-line="103" selection-end-column="77" />
+            <state relative-caret-position="450">
+              <caret line="77" column="83" selection-start-line="77" selection-start-column="83" selection-end-line="77" selection-end-column="83" />
               <folding>
                 <element signature="e#226#244#0" expanded="true" />
               </folding>
@@ -499,7 +499,14 @@
       <option name="project" value="LOCAL" />
       <updated>1466630601625</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Added xi constraints without a lot of reviewing. I think there may be problems with indices which I'll fix later">
+      <created>1466632878160</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1466632878160</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -567,7 +574,8 @@
     <MESSAGE value="code is really messy right now. I just added a gurobi class that is only now taking shape." />
     <MESSAGE value="included the z &quot;dose&quot; variable" />
     <MESSAGE value="added zeeplus and zeeminus vars that will replace the rolls of delta in removing the absolute value from the set of constraints." />
-    <option name="LAST_COMMIT_MESSAGE" value="added zeeplus and zeeminus vars that will replace the rolls of delta in removing the absolute value from the set of constraints." />
+    <MESSAGE value="Added xi constraints without a lot of reviewing. I think there may be problems with indices which I'll fix later" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added xi constraints without a lot of reviewing. I think there may be problems with indices which I'll fix later" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -948,8 +956,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="424">
-          <caret line="103" column="77" selection-start-line="103" selection-start-column="77" selection-end-line="103" selection-end-column="77" />
+        <state relative-caret-position="450">
+          <caret line="77" column="83" selection-start-line="77" selection-start-column="83" selection-end-line="77" selection-end-column="83" />
           <folding>
             <element signature="e#226#244#0" expanded="true" />
           </folding>

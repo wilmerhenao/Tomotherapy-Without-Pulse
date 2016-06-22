@@ -71,11 +71,11 @@ class tomotherapyNP(object):
                                                                      column=None)
                 self.zeeplusVars[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0,
                                                                      vtype=grb.GRB.CONTINUOUS,
-                                                                     name="zeta_{" + str(i) + "," + str(k) + "}",
+                                                                     name="zeeplus_{" + str(i) + "," + str(k) + "}",
                                                                      column=None)
                 self.zeeminusVars[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0,
                                                                      vtype=grb.GRB.CONTINUOUS,
-                                                                     name="zeta_{" + str(i) + "," + str(k) + "}",
+                                                                     name="zeeminus_{" + str(i) + "," + str(k) + "}",
                                                                      column=None)
                 self.binaryVars[k + i * self.data.N] = self.mod.addVar(lb = 0.0, ub=1.0, obj=0.0, vtype=grb.GRB.BINARY,
                                                                        name="binary_{" + str(i) + "," + str(k) + "}",
