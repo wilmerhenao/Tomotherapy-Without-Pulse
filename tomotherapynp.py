@@ -49,37 +49,38 @@ class tomotherapyNP(object):
         self.zetaVars = [None] * (self.data.N * self.data.K)
         self.zeeplusVars = [None] * (self.data.N * self.data.K)
         self.zeeminusVars = [None] * (self.data.N * self.data.K)
-        ## Initialize extra members of binaryvars that are needed. Since there's an extra edge (see writeup)
-        for i in range(0, self.data.N)
-            self.binaryVars[i] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.BINARY,
-                                                                       name="binary_{" + str(i) + ", extramember}",
-                                                                       column=None)        ## Initialize extra members of binaryvars that are needed. Since there's an extra edge (see writeup)
-            self.binaryVars[i] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.BINARY,
-                                                                       name="binary_{" + str(i) + ", extramember}",
-                                                                       column=None)
 
-        for i in range(0, self.data.N):
-            for k in range(0, self.data.K):
-                self.timeVars[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.CONTINUOUS,
+        for k in range(0, self.data.K):
+            for i in range(0, self.data.N):
+                self.timeVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.CONTINUOUS,
                                                                      name="t_{" + str(i) + "," + str(k) + "}",
                                                                      column=None)
-                self.xiVars[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0, vtype=grb.GRB.CONTINUOUS,
-                                                                     name="xi_{" + str(i) + "," + str(k) + "}",
-                                                                     column=None)
-                self.zetaVars[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0, vtype=grb.GRB.CONTINUOUS,
+                self.xiVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0,
+                                                                   vtype=grb.GRB.CONTINUOUS,
+                                                                   name="xi_{" + str(i) + "," + str(k) + "}",
+                                                                   column=None)
+                self.zetaVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0,
+                                                                     vtype=grb.GRB.CONTINUOUS,
                                                                      name="zeta_{" + str(i) + "," + str(k) + "}",
                                                                      column=None)
-                self.zeeplusVars[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0,
+                self.gammaplusVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0,
                                                                      vtype=grb.GRB.CONTINUOUS,
-                                                                     name="zeeplus_{" + str(i) + "," + str(k) + "}",
+                                                                     name="gammaplus_{" + str(i) + "," + str(k) + "}",
                                                                      column=None)
-                self.zeeminusVars[k + i * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0,
+                self.gammaminusVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0,
                                                                      vtype=grb.GRB.CONTINUOUS,
-                                                                     name="zeeminus_{" + str(i) + "," + str(k) + "}",
+                                                                     name="gammaminus_{" + str(i) + "," + str(k) + "}",
                                                                      column=None)
-                self.binaryVars[k + i * self.data.N] = self.mod.addVar(lb = 0.0, ub=1.0, obj=0.0, vtype=grb.GRB.BINARY,
+                self.binaryVars[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub=1.0, obj=0.0, vtype=grb.GRB.BINARY,
                                                                        name="binary_{" + str(i) + "," + str(k) + "}",
                                                                        column=None)
+        ## Initialize extra members of binaryvars that are needed. Since there's an extra edge (see writeup)
+        for i in range(0, self.data.N):
+            self.binaryVars[i + self.data.K * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0,
+                                                                                    vtype=grb.GRB.BINARY,
+                                                                                    name="binary_{" + str(i) +
+                                                                                         ", extramember}",
+                                                                                    column=None)
 
         ## This is the variable that will appear in the $z_{j}$ constraint. One per actual voxel in small space.
         self.zee = [None] * (self.data.numrealvoxels)
@@ -97,21 +98,26 @@ class tomotherapyNP(object):
         self.xiconstraint3 = [None] * (self.data.N * self.data.K)
         for i in range(0, self.data.N):
             for k in range(0, self.data.K):
-                self.absoluteValueRemovalConstraint[k + i * self.data.N] = self.mod.addConstr(self.binaryVars[(k+1) + i * self.data.N] - self.binaryVars[k + i * self.data.N], grb.GRB.EQUAL, self.zeeplus[k + i * self.data.N] - self.zeeminus[k + i * self.data.N], name="rmabs_{" + str(i) + "," + str(k) + "}")
-                self.xiconstraint1[k + i * self.data.N] = self.mod.addConstr(self.xiVars[k + i * self.data.N],
-                                                                             grb.GRB.LESS_EQUAL,
-                                                                             self.data.fractionUB * self.binaryVars[k + i * self.data.N],
-                                                                             name="rmabs_{" + str(i) + "," + str(k) + "}")
-                self.xiconstraint2[k + i * self.data.N] = self.mod.addConstr(self.xiVars[k + i * self.data.N],
-                                                                             grb.GRB.LESS_EQUAL,
-                                                                             self.timeVars[k + i * self.data.N],
-                                                                             name="rmabs_{" + str(i) + "," + str(
-                                                                                 k) + "}")
-                self.xiconstraint3[k + i * self.data.N] = self.mod.addConstr(self.xiVars[k + i * self.data.N],
-                                                                             grb.GRB.GREATER_EQUAL,
-                                                                             self.timeVars[k + i * self.data.N] - (1 - self.binaryVars[k + i * self.data.N]) * self.data.fractionUB,
-                                                                             name="rmabs_{" + str(i) + "," + str(
-                                                                                 k) + "}")
+                self.absoluteValueRemovalConstraint[k + i * self.data.N] = self.mod.addConstr(
+                    self.binaryVars[(k+1) + i * self.data.N] - self.binaryVars[k + i * self.data.N],
+                    grb.GRB.EQUAL,
+                    self.gammaplus[k + i * self.data.N] - self.gammaminus[k + i * self.data.N],
+                    name="rmabs_{" + str(i) + "," + str(k) + "}")
+                self.xiconstraint1[k + i * self.data.N] = self.mod.addConstr(
+                    self.xiVars[k + i * self.data.N],
+                    grb.GRB.LESS_EQUAL,
+                    self.data.fractionUB * self.binaryVars[k + i * self.data.N],
+                    name="rmabs_{" + str(i) + "," + str(k) + "}")
+                self.xiconstraint2[k + i * self.data.N] = self.mod.addConstr(
+                    self.xiVars[k + i * self.data.N],
+                    grb.GRB.LESS_EQUAL,
+                    self.timeVars[k + i * self.data.N],
+                    name="rmabs_{" + str(i) + "," + str(k) + "}")
+                self.xiconstraint3[k + i * self.data.N] = self.mod.addConstr(
+                    self.xiVars[k + i * self.data.N],
+                    grb.GRB.GREATER_EQUAL,
+                    self.timeVars[k + i * self.data.N] - (1 - self.binaryVars[k + i * self.data.N]) * self.data.fractionUB,
+                    name="rmabs_{" + str(i) + "," + str(k) + "}")
         self.mod.update()
         self.cpBinaryVars = [None] * self.data.nCP
         print 'Building dose constraint (of ', self.data.nCP, 'for CP',
