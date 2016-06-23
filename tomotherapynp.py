@@ -39,6 +39,9 @@ class tomotherapyNP(object):
     ## This function builds variables to be included in the model.
     def buildVariables(self):
         # Addition of t variables. All terms according to the terminology in the writeup.
+        ## IntensityVariable
+        self.yVar = self.mod.addVar(lb = 0.0, ub = self.data.maxIntensity, obj=0.0, vtype=grb.GRB.CONTINUOUS,
+                                    name="intensity", column=None)
         ## Time variable
         self.timeVars = [None] * (self.data.N * self.data.K)
         ## Binary Variable. I call it delta in the writeup
@@ -134,16 +137,25 @@ class tomotherapyNP(object):
                     self.timeVars[i + k * self.data.N] - (1 - self.binaryVars[i + (k + 1) * self.data.N]) * self.data.fractionUB,
                     name="zetaconstraint3_{" + str(i) + "," + str(k) + "}")
         self.zeeconstraints = [None] * (self.data.smallvoxelspace)
-        for i in self.data.smallvoxelspace:
-            expr = LinExpr()
-            for j in range(cols):
-                if A[i][j] != 0:
-                    expr += A[i][j] * vars[j]
-            model.addConstr(expr, sense[i], rhs[i])
-            self.zeeconstraints[i] = self.mod.addConstr()
-
-
+        ## Create a unique list of voxels (smallvoxelspace steps but living in bigvoxelspace)
+        voxels = np.unique(self.data.voxels)
+        i = 0
+        # Create all the dose constraints
+        for voxel in voxels:
+            # Find locations with value corresponding to voxel
+            positions = np.where(voxel == self.data.voxels)[0]
+            expr = grb.LinExpr()
+            for p in positions:
+                abixel = self.data.bixels[p]
+                expr += self.Dijs[abixel] * self.xiVars[abixel] * self.yVar
+                expr += self.Dijs[abixel] * self.zetaVars[abixel] * self.yVar
+            self.zeeconstraints[i] = self.mod.addConstr(self.zeeVars[i], grb.GRB.LESS_EQUAL, expr )
+            i += 1
+        # Make a lazy update of this last set of constraints
         self.mod.update()
+
+
+
         self.cpBinaryVars = [None] * self.data.nCP
         print 'Building dose constraint (of ', self.data.nCP, 'for CP',
         for i in range(self.data.nCP):
