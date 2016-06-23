@@ -83,9 +83,9 @@ class tomotherapyNP(object):
                                                                                     column=None)
 
         ## This is the variable that will appear in the $z_{j}$ constraint. One per actual voxel in small space.
-        self.zee = [None] * (self.data.numrealvoxels)
-        for i in range(0, self.data.numrealvoxels):
-            self.zee[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=1.0, vtype=grb.GRB.CONTINUOUS,
+        self.zeeVars = [None] * (self.data.smallvoxelspace)
+        for i in range(0, self.data.smallvoxelspace):
+            self.zeeVars[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=1.0, vtype=grb.GRB.CONTINUOUS,
                                                                      name="zee_{" + str(i) + "}",
                                                                      column=None)
         # Lazy update of gurobi
@@ -96,28 +96,53 @@ class tomotherapyNP(object):
         self.xiconstraint1 = [None] * (self.data.N * self.data.K)
         self.xiconstraint2 = [None] * (self.data.N * self.data.K)
         self.xiconstraint3 = [None] * (self.data.N * self.data.K)
-        for i in range(0, self.data.N):
-            for k in range(0, self.data.K):
-                self.absoluteValueRemovalConstraint[k + i * self.data.N] = self.mod.addConstr(
-                    self.binaryVars[(k+1) + i * self.data.N] - self.binaryVars[k + i * self.data.N],
+        for k in range(0, self.data.K):
+            for i in range(0, self.data.N):
+                self.absoluteValueRemovalConstraint[i + k * self.data.N] = self.mod.addConstr(
+                    self.binaryVars[i + (k + 1) * self.data.N] - self.binaryVars[i + k * self.data.N],
                     grb.GRB.EQUAL,
-                    self.gammaplus[k + i * self.data.N] - self.gammaminus[k + i * self.data.N],
+                    self.gammaplus[i + k * self.data.N] - self.gammaminus[i + k * self.data.N],
                     name="rmabs_{" + str(i) + "," + str(k) + "}")
-                self.xiconstraint1[k + i * self.data.N] = self.mod.addConstr(
-                    self.xiVars[k + i * self.data.N],
+                self.xiconstraint1[i + k * self.data.N] = self.mod.addConstr(
+                    self.xiVars[i + k * self.data.N],
                     grb.GRB.LESS_EQUAL,
-                    self.data.fractionUB * self.binaryVars[k + i * self.data.N],
-                    name="rmabs_{" + str(i) + "," + str(k) + "}")
-                self.xiconstraint2[k + i * self.data.N] = self.mod.addConstr(
-                    self.xiVars[k + i * self.data.N],
+                    self.data.fractionUB * self.binaryVars[i + k * self.data.N],
+                    name="xiconstraint1_{" + str(i) + "," + str(k) + "}")
+                self.xiconstraint2[i + k * self.data.N] = self.mod.addConstr(
+                    self.xiVars[i + k * self.data.N],
                     grb.GRB.LESS_EQUAL,
-                    self.timeVars[k + i * self.data.N],
-                    name="rmabs_{" + str(i) + "," + str(k) + "}")
-                self.xiconstraint3[k + i * self.data.N] = self.mod.addConstr(
-                    self.xiVars[k + i * self.data.N],
+                    self.timeVars[i + k * self.data.N],
+                    name="xiconstraint2_{" + str(i) + "," + str(k) + "}")
+                self.xiconstraint3[i + k * self.data.N] = self.mod.addConstr(
+                    self.xiVars[i + k * self.data.N],
                     grb.GRB.GREATER_EQUAL,
-                    self.timeVars[k + i * self.data.N] - (1 - self.binaryVars[k + i * self.data.N]) * self.data.fractionUB,
-                    name="rmabs_{" + str(i) + "," + str(k) + "}")
+                    self.timeVars[i + k * self.data.N] - (1 - self.binaryVars[i + k * self.data.N]) * self.data.fractionUB,
+                    name="xiconstraint3_{" + str(i) + "," + str(k) + "}")
+                self.zetaconstraint1[i + k * self.data.N] = self.mod.addConstr(
+                    self.zetaVars[i + k * self.data.N],
+                    grb.GRB.LESS_EQUAL,
+                    self.data.fractionUB * self.binaryVars[i + (k + 1) * self.data.N],
+                    name="zetaconstraint1_{" + str(i) + "," + str(k) + "}")
+                self.zetaconstraint2[i + k * self.data.N] = self.mod.addConstr(
+                    self.zetaVars[i + k * self.data.N],
+                    grb.GRB.LESS_EQUAL,
+                    self.timeVars[i + k * self.data.N],
+                    name="zetaconstraint2_{" + str(i) + "," + str(k) + "}")
+                self.zetaconstraint3[i + k * self.data.N] = self.mod.addConstr(
+                    self.zetaVars[i + k * self.data.N],
+                    grb.GRB.GREATER_EQUAL,
+                    self.timeVars[i + k * self.data.N] - (1 - self.binaryVars[i + (k + 1) * self.data.N]) * self.data.fractionUB,
+                    name="zetaconstraint3_{" + str(i) + "," + str(k) + "}")
+        self.zeeconstraints = [None] * (self.data.smallvoxelspace)
+        for i in self.data.smallvoxelspace:
+            expr = LinExpr()
+            for j in range(cols):
+                if A[i][j] != 0:
+                    expr += A[i][j] * vars[j]
+            model.addConstr(expr, sense[i], rhs[i])
+            self.zeeconstraints[i] = self.mod.addConstr()
+
+
         self.mod.update()
         self.cpBinaryVars = [None] * self.data.nCP
         print 'Building dose constraint (of ', self.data.nCP, 'for CP',
@@ -489,7 +514,7 @@ class tomodata:
         self.Dijs = getvector('data\\Dijs_out.bin', np.float32)
         self.mask = getvector('data\\optmask.img', np.int32)
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions.
-        self.numrealvoxels = len(np.unique(self.voxels))
+        self.smallvoxelspace = len(np.unique(self.voxels))
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 dataobject = tomodata()
