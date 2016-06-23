@@ -138,13 +138,14 @@ class tomotherapyNP(object):
                     name="zetaconstraint3_{" + str(i) + "," + str(k) + "}")
         self.zeeconstraints = [None] * (self.data.smallvoxelspace)
         ## Create a unique list of voxels (smallvoxelspace steps but living in bigvoxelspace)
+        # This vector should be used later and is the standard ordering of particles in smallvoxelspace.
         voxels = np.unique(self.data.voxels)
         i = 0
         # Create all the dose constraints
         for voxel in voxels:
             # Find locations with value corresponding to voxel
             positions = np.where(voxel == self.data.voxels)[0]
-            expr = grb.LinExpr()
+            expr = grb.QuadExpr()
             for p in positions:
                 abixel = self.data.bixels[p]
                 expr += self.Dijs[abixel] * self.xiVars[abixel] * self.yVar
@@ -153,8 +154,6 @@ class tomotherapyNP(object):
             i += 1
         # Make a lazy update of this last set of constraints
         self.mod.update()
-
-
 
         self.cpBinaryVars = [None] * self.data.nCP
         print 'Building dose constraint (of ', self.data.nCP, 'for CP',
