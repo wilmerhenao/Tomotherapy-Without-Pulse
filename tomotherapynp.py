@@ -22,13 +22,13 @@ import os
 # Original template from Troy Long.
 class tomotherapyNP(object):
     def __init__(self, datastructure):
-        print('Reading in data...')
+        print('Reading in data...', end="")
         self.data = datastructure
         print('done')
-        print('Constructing Gurobi model object...')
+        print('Constructing Gurobi model object...', end="")
         self.mod = grb.Model()
         print('done')
-        print('Building main decision variables (dose, binaries)...')
+        print('Building main decision variables (dose, binaries).')
         self.buildVariables()
         print('Main variables and dose done')
 
@@ -45,13 +45,13 @@ class tomotherapyNP(object):
         ## Time variable
         self.timeVars = [None] * (self.data.N * self.data.K)
         ## Binary Variable. I call it delta in the writeup
-        self.BinaryVars = [None] * ((self.data.N * self.data.K) + self.data.N)
+        self.binaryVars = [None] * ((self.data.N * self.data.K) + self.data.N)
         ## xi Variables. Helper variables to create a continuous binary variable
         self.xiVars = [None] * (self.data.N * self.data.K)
         ## zeta Variables. Helper variables to create a continuous binary variable
         self.zetaVars = [None] * (self.data.N * self.data.K)
-        self.zeeplusVars = [None] * (self.data.N * self.data.K)
-        self.zeeminusVars = [None] * (self.data.N * self.data.K)
+        self.gammaplusVars = [None] * (self.data.N * self.data.K)
+        self.gammaminusVars = [None] * (self.data.N * self.data.K)
         print('Building Variables related to dose constraints...', end=" ")
         for k in range(0, self.data.K):
             for i in range(0, self.data.N):
@@ -99,8 +99,12 @@ class tomotherapyNP(object):
         self.xiconstraint1 = [None] * (self.data.N * self.data.K)
         self.xiconstraint2 = [None] * (self.data.N * self.data.K)
         self.xiconstraint3 = [None] * (self.data.N * self.data.K)
+        self.zetaconstraint1 = [None] * (self.data.N * self.data.K)
+        self.zetaconstraint2 = [None] * (self.data.N * self.data.K)
+        self.zetaconstraint3 = [None] * (self.data.N * self.data.K)
         print('Building Secondary constraints; binaries, xi, zeta...', end="")
         for k in range(0, self.data.K):
+            print(str(k) + " ,", end="")
             for i in range(0, self.data.N):
                 self.absoluteValueRemovalConstraint[i + k * self.data.N] = self.mod.addConstr(
                     self.binaryVars[i + (k + 1) * self.data.N] - self.binaryVars[i + k * self.data.N],
@@ -137,22 +141,27 @@ class tomotherapyNP(object):
                     grb.GRB.GREATER_EQUAL,
                     self.timeVars[i + k * self.data.N] - (1 - self.binaryVars[i + (k + 1) * self.data.N]) * self.data.fractionUB,
                     name="zetaconstraint3_{" + str(i) + "," + str(k) + "}")
-        prin('done')
+        print('\ndone')
         self.zeeconstraints = [None] * (self.data.smallvoxelspace)
+        print('here')
         ## Create a unique list of voxels (smallvoxelspace steps but living in bigvoxelspace)
         # This vector should be used later and is the standard ordering of particles in smallvoxelspace.
         voxels = np.unique(self.data.voxels)
+        print('here')
         i = 0
+        print('whatisstoppinme')
         print('creating primary dose constraints...', end="")
+        print('did I just not want to print that?')
         # Create all the dose constraints
         for voxel in voxels:
             # Find locations with value corresponding to voxel
+            print(voxel)
             positions = np.where(voxel == self.data.voxels)[0]
             expr = grb.QuadExpr()
             for p in positions:
                 abixel = self.data.bixels[p]
-                expr += self.Dijs[abixel] * self.xiVars[abixel] * self.yVar
-                expr += self.Dijs[abixel] * self.zetaVars[abixel] * self.yVar
+                expr += self.data.Dijs[abixel] * self.xiVars[abixel] * self.yVar
+                expr += self.data.Dijs[abixel] * self.zetaVars[abixel] * self.yVar
             self.zeeconstraints[i] = self.mod.addQConstr(self.zeeVars[i], grb.GRB.EQUAL, expr, name = "DoseConstraint" + str(i))
             i += 1
         # Make a lazy update of this last set of constraints
