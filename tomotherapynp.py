@@ -52,7 +52,7 @@ class tomotherapyNP(object):
         self.zetaVars = [None] * (self.data.N * self.data.K)
         self.zeeplusVars = [None] * (self.data.N * self.data.K)
         self.zeeminusVars = [None] * (self.data.N * self.data.K)
-
+        print('Building Variables related to dose constraints...', end=" ")
         for k in range(0, self.data.K):
             for i in range(0, self.data.N):
                 self.timeVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.CONTINUOUS,
@@ -93,12 +93,13 @@ class tomotherapyNP(object):
                                                                      column=None)
         # Lazy update of gurobi
         self.mod.update()
-
+        print('done')
         ## Add some constraints
         self.absoluteValueRemovalConstraint = [None] * (self.data.N * self.data.K)
         self.xiconstraint1 = [None] * (self.data.N * self.data.K)
         self.xiconstraint2 = [None] * (self.data.N * self.data.K)
         self.xiconstraint3 = [None] * (self.data.N * self.data.K)
+        print('Building Secondary constraints; binaries, xi, zeta...', end="")
         for k in range(0, self.data.K):
             for i in range(0, self.data.N):
                 self.absoluteValueRemovalConstraint[i + k * self.data.N] = self.mod.addConstr(
@@ -136,11 +137,13 @@ class tomotherapyNP(object):
                     grb.GRB.GREATER_EQUAL,
                     self.timeVars[i + k * self.data.N] - (1 - self.binaryVars[i + (k + 1) * self.data.N]) * self.data.fractionUB,
                     name="zetaconstraint3_{" + str(i) + "," + str(k) + "}")
+        prin('done')
         self.zeeconstraints = [None] * (self.data.smallvoxelspace)
         ## Create a unique list of voxels (smallvoxelspace steps but living in bigvoxelspace)
         # This vector should be used later and is the standard ordering of particles in smallvoxelspace.
         voxels = np.unique(self.data.voxels)
         i = 0
+        print('creating primary dose constraints...', end="")
         # Create all the dose constraints
         for voxel in voxels:
             # Find locations with value corresponding to voxel
@@ -154,8 +157,10 @@ class tomotherapyNP(object):
             i += 1
         # Make a lazy update of this last set of constraints
         self.mod.update()
+        print('done')
         # Update the objective function.
         # Create a variable that will be the minimum dose to a PTV.
+        print('creating VOI constraints and constraints directly associated with the objective...', end="")
         self.minDosePTVVar = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0, vtype=grb.GRB.CONTINUOUS,
                                                                      name="minDosePTV", column=None)
         self.minDoseConstraints = []
@@ -168,8 +173,9 @@ class tomotherapyNP(object):
             if 2 == self.data.mask[self.data.SmalltoBig[i]]:
                 self.maxDoseConstraints.append(self.mod.addConstr(self.zeeVars[i], grb.GRB.LESS_EQUAL, self.data.OARMAX))
         self.mod.update()
-
+        print('done')
         # Set the objective value
+        print('Setting up and launching the optimization...', end="")
         objexpr = grb.LinExpr()
         objexpr = - self.minDosePTVVar
         for k in range(0, self.data.K):
@@ -178,6 +184,7 @@ class tomotherapyNP(object):
         self.mod.setObjective(objexpr, 1.0) #1.0 expresses minimization. It is the model sense.
         self.mod.update()
         self.mod.optimize()
+        print('done')
 
     def plotDVH(self, saveNameTag='', plotFull=False, showPlot=False, differentVoxelMap=''):
         if differentVoxelMap != '':
@@ -246,6 +253,7 @@ class tomodata:
     def __init__(self):
         ## M value. A large value that variable t will not reach (t in this case is from 0 to 1)
         self.fractionUB = 1.0
+        self.maxIntensity = 10.0
         self.N = 80
         ## Number of control points (every 2 degrees)
         self.K = 178
@@ -272,5 +280,5 @@ class tomodata:
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 dataobject = tomodata()
-tomoinstance = tomotherapyNP()
-tomoinstance.buildVariables()
+tomoinstance = tomotherapyNP(dataobject)
+
