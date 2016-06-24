@@ -104,7 +104,7 @@ class tomotherapyNP(object):
                 self.absoluteValueRemovalConstraint[i + k * self.data.N] = self.mod.addConstr(
                     self.binaryVars[i + (k + 1) * self.data.N] - self.binaryVars[i + k * self.data.N],
                     grb.GRB.EQUAL,
-                    self.gammaplus[i + k * self.data.N] - self.gammaminus[i + k * self.data.N],
+                    self.gammaplusVars[i + k * self.data.N] - self.gammaminusVars[i + k * self.data.N],
                     name="rmabs_{" + str(i) + "," + str(k) + "}")
                 self.xiconstraint1[i + k * self.data.N] = self.mod.addConstr(
                     self.xiVars[i + k * self.data.N],
@@ -150,7 +150,7 @@ class tomotherapyNP(object):
                 abixel = self.data.bixels[p]
                 expr += self.Dijs[abixel] * self.xiVars[abixel] * self.yVar
                 expr += self.Dijs[abixel] * self.zetaVars[abixel] * self.yVar
-            self.zeeconstraints[i] = self.mod.addConstr(self.zeeVars[i], grb.GRB.EQUAL, expr)
+            self.zeeconstraints[i] = self.mod.addQConstr(self.zeeVars[i], grb.GRB.EQUAL, expr, name = "DoseConstraint" + str(i))
             i += 1
         # Make a lazy update of this last set of constraints
         self.mod.update()
@@ -167,8 +167,17 @@ class tomotherapyNP(object):
             # Constraint on maximum radiation to the OAR
             if 2 == self.data.mask[self.data.SmalltoBig[i]]:
                 self.maxDoseConstraints.append(self.mod.addConstr(self.zeeVars[i], grb.GRB.LESS_EQUAL, self.data.OARMAX))
-
         self.mod.update()
+
+        # Set the objective value
+        objexpr = grb.LinExpr()
+        objexpr = - self.minDosePTVVar
+        for k in range(0, self.data.K):
+            for i in range(0, self.data.N):
+                objexpr += self.gammaplusVars[i + k * self.data.N] + self.gammaminusVars[i + k * self.data.N]
+        self.mod.setObjective(objexpr, 1.0) #1.0 expresses minimization. It is the model sense.
+        self.mod.update()
+        self.mod.optimize()
 
     def plotDVH(self, saveNameTag='', plotFull=False, showPlot=False, differentVoxelMap=''):
         if differentVoxelMap != '':
@@ -247,10 +256,12 @@ class tomodata:
         self.dimY = 256
         ## Total number of voxels in the phantom
         self.totalVoxels = self.dimX * self.dimY
+        print('Read vectors...', end="")
         self.bixels = getvector('data\\Bixels_out.bin', np.int32)
         self.voxels = getvector('data\\Voxels_out.bin', np.int32)
         self.Dijs = getvector('data\\Dijs_out.bin', np.float32)
         self.mask = getvector('data\\optmask.img', np.int32)
+        print('done')
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions.
         self.smallvoxelspace = len(np.unique(self.voxels))
         self.SmallToBigCreator()
@@ -261,9 +272,5 @@ class tomodata:
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 dataobject = tomodata()
-print('done')
-D = sparseWrapper(bixels, voxels, Dijs, mask, totalbeamlets, totalVoxels)
-
-# cwd = os.getcwd()  # Get the current working directory (cwd)
-# files = os.listdir(cwd)  # Get all the files in that directory
-# print(cwd, files)
+tomoinstance = tomotherapyNP()
+tomoinstance.buildVariables()
