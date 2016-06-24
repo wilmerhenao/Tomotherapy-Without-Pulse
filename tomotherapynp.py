@@ -150,10 +150,18 @@ class tomotherapyNP(object):
                 abixel = self.data.bixels[p]
                 expr += self.Dijs[abixel] * self.xiVars[abixel] * self.yVar
                 expr += self.Dijs[abixel] * self.zetaVars[abixel] * self.yVar
-            self.zeeconstraints[i] = self.mod.addConstr(self.zeeVars[i], grb.GRB.LESS_EQUAL, expr )
+            self.zeeconstraints[i] = self.mod.addConstr(self.zeeVars[i], grb.GRB.EQUAL, expr)
             i += 1
         # Make a lazy update of this last set of constraints
         self.mod.update()
+        # Update the objective function.
+        # Create a variable that will be the minimum dose to a PTV.
+        self.minDosePTVVar = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0, vtype=grb.GRB.CONTINUOUS,
+                                                                     name="minDosePTV", column=None)
+        self.minDoseConstraint = []
+        for i in range(0, self.data.smallvoxelspace):
+            if 256 ==
+            self.minDoseConstraint.append(self.mod.addConstr(self.minDosePTVVar, grb.GRB.LESS_EQUAL, self.zeeVars[i]))
 
     def plotDVH(self, saveNameTag='', plotFull=False, showPlot=False, differentVoxelMap=''):
         if differentVoxelMap != '':
@@ -239,9 +247,13 @@ class tomodata:
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions.
         self.smallvoxelspace = len(np.unique(self.voxels))
 
+    ## Create a map from big to small voxel space
+    def SmallToBigCreator(self):
+        self.SmalltoBig = np.where(0 != self.mask)
+
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 dataobject = tomodata()
-
+print('done')
 D = sparseWrapper(bixels, voxels, Dijs, mask, totalbeamlets, totalVoxels)
 
 # cwd = os.getcwd()  # Get the current working directory (cwd)
