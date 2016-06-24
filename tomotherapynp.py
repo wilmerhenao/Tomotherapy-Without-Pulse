@@ -158,10 +158,17 @@ class tomotherapyNP(object):
         # Create a variable that will be the minimum dose to a PTV.
         self.minDosePTVVar = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0, vtype=grb.GRB.CONTINUOUS,
                                                                      name="minDosePTV", column=None)
-        self.minDoseConstraint = []
+        self.minDoseConstraints = []
+        self.maxDoseConstraints = []
         for i in range(0, self.data.smallvoxelspace):
-            if 256 ==
-            self.minDoseConstraint.append(self.mod.addConstr(self.minDosePTVVar, grb.GRB.LESS_EQUAL, self.zeeVars[i]))
+            # Constraint on minimum radiation if this is a tumor
+            if 256 == self.data.mask[self.data.SmalltoBig[i]]:
+                self.minDoseConstraints.append(self.mod.addConstr(self.minDosePTVVar, grb.GRB.LESS_EQUAL, self.zeeVars[i]))
+            # Constraint on maximum radiation to the OAR
+            if 2 == self.data.mask[self.data.SmalltoBig[i]]:
+                self.maxDoseConstraints.append(self.mod.addConstr(self.zeeVars[i], grb.GRB.LESS_EQUAL, self.data.OARMAX))
+
+        self.mod.update()
 
     def plotDVH(self, saveNameTag='', plotFull=False, showPlot=False, differentVoxelMap=''):
         if differentVoxelMap != '':
@@ -246,6 +253,7 @@ class tomodata:
         self.mask = getvector('data\\optmask.img', np.int32)
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions.
         self.smallvoxelspace = len(np.unique(self.voxels))
+        self.SmallToBigCreator()
 
     ## Create a map from big to small voxel space
     def SmallToBigCreator(self):

@@ -110,8 +110,8 @@
       <file leaf-file-name="tomotherapynp.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapynp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="28">
-              <caret line="232" column="19" selection-start-line="232" selection-start-column="19" selection-end-line="232" selection-end-column="19" />
+            <state relative-caret-position="522">
+              <caret line="170" column="25" selection-start-line="170" selection-start-column="25" selection-end-line="170" selection-end-column="25" />
               <folding>
                 <element signature="e#226#244#0" expanded="true" />
               </folding>
@@ -576,7 +576,14 @@
       <option name="project" value="LOCAL" />
       <updated>1466718926657</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Added minimum target constraint (partially) and created a SmallToBig map that will be needed for this.">
+      <created>1466787865254</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1466787865254</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -651,14 +658,15 @@
     <MESSAGE value="Included the dose constraint using linear expressions" />
     <MESSAGE value="Changed things to quadratic expressions for dose constraints" />
     <MESSAGE value="Got rid of unnecessary lines of code" />
-    <option name="LAST_COMMIT_MESSAGE" value="Got rid of unnecessary lines of code" />
+    <MESSAGE value="Added minimum target constraint (partially) and created a SmallToBig map that will be needed for this." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added minimum target constraint (partially) and created a SmallToBig map that will be needed for this." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/tomotherapynp.py</url>
-          <line>255</line>
+          <line>263</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
@@ -1042,8 +1050,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="28">
-          <caret line="232" column="19" selection-start-line="232" selection-start-column="19" selection-end-line="232" selection-end-column="19" />
+        <state relative-caret-position="522">
+          <caret line="170" column="25" selection-start-line="170" selection-start-column="25" selection-end-line="170" selection-end-column="25" />
           <folding>
             <element signature="e#226#244#0" expanded="true" />
           </folding>
