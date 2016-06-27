@@ -27,6 +27,7 @@ class tomotherapyNP(object):
         print('done')
         print('Constructing Gurobi model object...', end="")
         self.mod = grb.Model()
+        self.mod.params.threads = 4
         print('done')
         print('Building main decision variables (dose, binaries).')
         self.buildVariables()
@@ -149,7 +150,6 @@ class tomotherapyNP(object):
         voxels = np.unique(self.data.voxels)
         print('here')
         i = 0
-        print('whatisstoppinme')
         print('creating primary dose constraints...', end="")
         print('did I just not want to print that?')
         # Create all the dose constraints
@@ -158,12 +158,15 @@ class tomotherapyNP(object):
             print(voxel)
             positions = np.where(voxel == self.data.voxels)[0]
             expr = grb.QuadExpr()
-            for p in positions:
+            xiArray = [None] * (len(positions))
+            zetaArray = [None] * (len(positions))
+            for i, p in zip(range(0, len(positions)), positions):
                 abixel = self.data.bixels[p]
                 expr += self.data.Dijs[abixel] * self.xiVars[abixel] * self.yVar
                 expr += self.data.Dijs[abixel] * self.zetaVars[abixel] * self.yVar
             self.zeeconstraints[i] = self.mod.addQConstr(self.zeeVars[i], grb.GRB.EQUAL, expr, name = "DoseConstraint" + str(i))
             i += 1
+
         # Make a lazy update of this last set of constraints
         self.mod.update()
         print('done')
@@ -186,10 +189,11 @@ class tomotherapyNP(object):
         # Set the objective value
         print('Setting up and launching the optimization...', end="")
         objexpr = grb.LinExpr()
-        objexpr = - self.minDosePTVVar
-        for k in range(0, self.data.K):
-            for i in range(0, self.data.N):
-                objexpr += self.gammaplusVars[i + k * self.data.N] + self.gammaminusVars[i + k * self.data.N]
+        objexpr = grb.QuadExpr.addTerms(self.gammaplusVars[i + k * self.data.N], self.gammaminusVars[i + k * self.data.N])
+        objexpr -= self.minDosePTVVar
+        #for k in range(0, self.data.K):
+        #    for i in range(0, self.data.N):
+        #        objexpr += self.gammaplusVars[i + k * self.data.N] + self.gammaminusVars[i + k * self.data.N]
         self.mod.setObjective(objexpr, 1.0) #1.0 expresses minimization. It is the model sense.
         self.mod.update()
         self.mod.optimize()
