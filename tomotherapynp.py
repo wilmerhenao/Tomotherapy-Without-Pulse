@@ -30,6 +30,8 @@ class tomotherapyNP(object):
         self.mod.params.threads = 4
         print('done')
         print('Building main decision variables (dose, binaries).')
+        self.minDoseConstraints = []
+        self.maxDoseConstraints = []
         self.buildVariables()
         print('Main variables and dose done')
 
@@ -147,19 +149,17 @@ class tomotherapyNP(object):
         print('here')
         ## Create a unique list of voxels (smallvoxelspace steps but living in bigvoxelspace)
         # This vector should be used later and is the standard ordering of particles in smallvoxelspace.
-        voxels = np.unique(self.data.voxels)
+        uniquevoxels = np.unique(self.data.voxels)
         print('here')
         i = 0
         print('creating primary dose constraints...', end="")
         print('did I just not want to print that?')
         # Create all the dose constraints
-        for voxel in voxels:
+        for voxel in uniquevoxels:
             # Find locations with value corresponding to voxel
             print(voxel)
             positions = np.where(voxel == self.data.voxels)[0]
             expr = grb.QuadExpr()
-            xiArray = [None] * (len(positions))
-            zetaArray = [None] * (len(positions))
             for i, p in zip(range(0, len(positions)), positions):
                 abixel = self.data.bixels[p]
                 expr += self.data.Dijs[abixel] * self.xiVars[abixel] * self.yVar
@@ -175,21 +175,23 @@ class tomotherapyNP(object):
         print('creating VOI constraints and constraints directly associated with the objective...', end="")
         self.minDosePTVVar = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0, vtype=grb.GRB.CONTINUOUS,
                                                                      name="minDosePTV", column=None)
-        self.minDoseConstraints = []
-        self.maxDoseConstraints = []
+        self.mod.update()
         for i in range(0, self.data.smallvoxelspace):
             # Constraint on minimum radiation if this is a tumor
-            if 256 == self.data.mask[self.data.SmalltoBig[i]]:
+            if 256 == self.data.mask[self.data.SmalltoBig[0][i]]:
                 self.minDoseConstraints.append(self.mod.addConstr(self.minDosePTVVar, grb.GRB.LESS_EQUAL, self.zeeVars[i]))
             # Constraint on maximum radiation to the OAR
-            if 2 == self.data.mask[self.data.SmalltoBig[i]]:
+            if 2 == self.data.mask[self.data.SmalltoBig[0][i]]:
                 self.maxDoseConstraints.append(self.mod.addConstr(self.zeeVars[i], grb.GRB.LESS_EQUAL, self.data.OARMAX))
         self.mod.update()
         print('done')
         # Set the objective value
         print('Setting up and launching the optimization...', end="")
         objexpr = grb.LinExpr()
-        objexpr = grb.QuadExpr.addTerms(self.gammaplusVars[i + k * self.data.N], self.gammaminusVars[i + k * self.data.N])
+        objexpr2 = grb.LinExpr()
+        objexpr = grb.LinExpr.addTerms(self.dataobject, self.gammaplusVars)
+        objexpr2 = grb.LinExpr.addTerms(self.dataobject, self.gammaminusVars)
+        objexpr = grb.LinExpr.add(objexpr2)
         objexpr -= self.minDosePTVVar
         #for k in range(0, self.data.K):
         #    for i in range(0, self.data.N):
@@ -264,6 +266,8 @@ def sparseWrapper(bixels, voxels, Dijs, mask, totalbeamlets, totalVoxels):
 class tomodata:
     ## Initialization of the data
     def __init__(self):
+        ## C Value in the objective function
+        self.C = 1.0
         ## M value. A large value that variable t will not reach (t in this case is from 0 to 1)
         self.fractionUB = 1.0
         self.maxIntensity = 10.0
