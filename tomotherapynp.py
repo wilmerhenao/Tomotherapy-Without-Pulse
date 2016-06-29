@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 import sys
 import scipy.sparse as sps
 import os
+import pickle
 
 ## Class definition of the gurobi object that handles creation and execution of the model
 # Original template from Troy Long.
@@ -39,9 +40,9 @@ class tomotherapyNP(object):
     def solveModel(self):
         self.mod.optimize()
 
-    ## This function builds variables to be included in the model.
+    ## This function builds variables to be included in the model
     def buildVariables(self):
-        # Addition of t variables. All terms according to the terminology in the writeup.
+        # Addition of t variables. All terms according to the terminology in the writeup
         ## IntensityVariable
         self.yVar = self.mod.addVar(lb = 0.0, ub = self.data.maxIntensity, obj=0.0, vtype=grb.GRB.CONTINUOUS,
                                     name="intensity", column=None)
@@ -157,14 +158,14 @@ class tomotherapyNP(object):
         # Create all the dose constraints
         for voxel in uniquevoxels:
             # Find locations with value corresponding to voxel
-            print(voxel)
             positions = np.where(voxel == self.data.voxels)[0]
             expr = grb.QuadExpr()
             for i, p in zip(range(0, len(positions)), positions):
                 abixel = self.data.bixels[p]
                 expr += self.data.Dijs[abixel] * self.xiVars[abixel] * self.yVar
                 expr += self.data.Dijs[abixel] * self.zetaVars[abixel] * self.yVar
-            self.zeeconstraints[i] = self.mod.addQConstr(self.zeeVars[i], grb.GRB.EQUAL, expr, name = "DoseConstraint" + str(i))
+            self.zeeconstraints[i] = self.mod.addQConstr(self.zeeVars[i], grb.GRB.EQUAL, expr, name = "DoseConstraint" +
+                                                                                                      str(i))
             i += 1
 
         # Make a lazy update of this last set of constraints
@@ -178,20 +179,18 @@ class tomotherapyNP(object):
         self.mod.update()
         for i in range(0, self.data.smallvoxelspace):
             # Constraint on minimum radiation if this is a tumor
-            if 256 == self.data.mask[self.data.SmalltoBig[0][i]]:
+            if self.data.mask[self.data.SmalltoBig[0][i]] in self.data.TARGETList:
                 self.minDoseConstraints.append(self.mod.addConstr(self.minDosePTVVar, grb.GRB.LESS_EQUAL, self.zeeVars[i]))
             # Constraint on maximum radiation to the OAR
-            if 2 == self.data.mask[self.data.SmalltoBig[0][i]]:
+            if self.data.mask[self.data.SmalltoBig[0][i]] in self.data.OARList:
                 self.maxDoseConstraints.append(self.mod.addConstr(self.zeeVars[i], grb.GRB.LESS_EQUAL, self.data.OARMAX))
         self.mod.update()
         print('done')
         # Set the objective value
         print('Setting up and launching the optimization...', end="")
         objexpr = grb.LinExpr()
-        objexpr2 = grb.LinExpr()
-        objexpr = grb.LinExpr.addTerms(self.dataobject, self.gammaplusVars)
-        objexpr2 = grb.LinExpr.addTerms(self.dataobject, self.gammaminusVars)
-        objexpr = grb.LinExpr.add(objexpr2)
+        objexpr.addTerms(np.array([1.0 for element in range(len(self.gammaplusVars))], dtype=np.int32), self.gammaplusVars)
+        objexpr.addTerms(np.array([1.0 for element in range(len(self.gammaplusVars))], dtype=np.int32), self.gammaminusVars)
         objexpr -= self.minDosePTVVar
         #for k in range(0, self.data.K):
         #    for i in range(0, self.data.N):
@@ -279,15 +278,15 @@ class tomodata:
         ## Dimensions of the 2-Dimensional screen
         self.dimX = 256
         self.dimY = 256
+        ## OARMAX is maximum dose tolerable for organs. 10 in this case
+        self.OARMAX = 10
         ## Total number of voxels in the phantom
         self.totalVoxels = self.dimX * self.dimY
         print('Read vectors...', end="")
-        self.bixels = getvector('data\\Bixels_out.bin', np.int32)
-        self.voxels = getvector('data\\Voxels_out.bin', np.int32)
-        self.Dijs = getvector('data\\Dijs_out.bin', np.float32)
-        self.mask = getvector('data\\optmask.img', np.int32)
+        self.readWilmersCase()
+        #self.readWeiguosCase()
         print('done')
-        ## This is the total number of voxels that there are in the body. Not all voxels from all directions.
+        ## This is the total number of voxels that there are in the body. Not all voxels from all directions
         self.smallvoxelspace = len(np.unique(self.voxels))
         self.SmallToBigCreator()
 
@@ -295,7 +294,26 @@ class tomodata:
     def SmallToBigCreator(self):
         self.SmalltoBig = np.where(0 != self.mask)
 
+    def readWeiguosCase(self):
+        self.bixels = getvector('data\\Bixels_out.bin', np.int32)
+        self.voxels = getvector('data\\Voxels_out.bin', np.int32)
+        self.Dijs = getvector('data\\Dijs_out.bin', np.float32)
+        self.mask = getvector('data\\optmask.img', np.int32)
+        self.OARList = [2, 3]
+        self.TARGETList = [256]
+
+    def readWilmersCase(self):
+        self.bixels = getvector('data\\myBixels_out.bin', np.int32)
+        self.voxels = getvector('data\\myVoxels_out.bin', np.int32)
+        self.Dijs = getvector('data\\myDijs_out.bin', np.float32)
+        self.mask = getvector('data\\myoptmask.img', np.int32)
+        with open('C:/Users/S170452/PycharmProjects/Tomotherapy-Without-Pulse/data/mydict.pckl', 'rb') as ff:
+            dictdata = pickle.load(ff)
+        self.K = dictdata['K']
+        self.N = dictdata['N']
+        self.OARList = dictdata['OARIDs']
+        self.TARGETList = dictdata['TARGETIDs']
+
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 dataobject = tomodata()
 tomoinstance = tomotherapyNP(dataobject)
-
