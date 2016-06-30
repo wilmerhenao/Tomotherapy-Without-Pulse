@@ -154,7 +154,6 @@ class tomotherapyNP(object):
         print('here')
         i = 0
         print('creating primary dose constraints...', end="")
-        print('did I just not want to print that?')
         # Create all the dose constraints
         for voxel in uniquevoxels:
             # Find locations with value corresponding to voxel
@@ -283,8 +282,8 @@ class tomodata:
         ## Total number of voxels in the phantom
         self.totalVoxels = self.dimX * self.dimY
         print('Read vectors...', end="")
-        self.readWilmersCase()
-        #self.readWeiguosCase()
+        #self.readWilmersCase()
+        self.readWeiguosCase()
         print('done')
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions
         self.smallvoxelspace = len(np.unique(self.voxels))
