@@ -19,6 +19,7 @@ import scipy.sparse as sps
 import os
 import pickle
 from collections import defaultdict
+import time
 
 ## Class definition of the gurobi object that handles creation and execution of the model
 # Original template from Troy Long.
@@ -124,20 +125,20 @@ class tomotherapyNP(object):
                                                                      column = None)
         # Lazy update of gurobi
         self.mod.update()
-        j = 0
         # Create a list of all duplicates at once
         duplicatelist = list_duplicates(self.data.voxels)
         # For each dup... here dup is a tuple. You call tuples as dup[0], dup[1]
-        for dup in duplicatelist:
+        for j, dup in enumerate(duplicatelist):
+            print('item:', j, end="")
+            sys.stdout.flush()
             # Find locations with value corresponding to voxel
             expr = grb.LinExpr()
+            print(' has ' + str(len(dup[1])) + ' elements')
             for elem in dup[1]:
                 abixel = self.data.bixels[elem]
                 expr += self.data.Dijs[abixel] * self.xiVars[abixel]
-            self.zeeconstraints[j] = self.mod.addQConstr(self.zeeVars[j], grb.GRB.EQUAL, expr, name = "DoseConstraint" +
+            self.zeeconstraints[j] = self.mod.addConstr(self.zeeVars[j], grb.GRB.EQUAL, expr, name = "DoseConstraint" +
                                                                                                       str(j))
-            j += 1
-
         # Make a lazy update of this last set of constraints
         self.mod.update()
         print('done')
@@ -223,11 +224,6 @@ def getvector(necfile,dtype):
             f.close()
     return(data)
 
-## This function creates a sparse matrix
-def sparseWrapper(bixels, voxels, Dijs, mask, totalbeamlets, totalVoxels):
-    D = sps.csc_matrix((Dijs, (bixels, voxels)), shape=(totalbeamlets, totalVoxels))
-    return(D)
-
 ## Function that takes a list and returns a default dictionary with repeated indices as duplicates
 def list_duplicates(seq):
     tally = defaultdict(list)
@@ -248,18 +244,17 @@ class tomodata:
         ## Number of control points (every 2 degrees)
         self.K = 178
         ## Total number of beamlets
-        self.totalbeamlets = self.K * self.N
-        ## Dimensions of the 2-Dimensional screen
-        self.dimX = 256
-        self.dimY = 256
         ## OARMAX is maximum dose tolerable for organs. 10 in this case
         self.OARMAX = 10
-        ## Total number of voxels in the phantom
-        self.totalVoxels = self.dimX * self.dimY
         print('Read vectors...', end="")
         self.readWilmersCase()
         #self.readWeiguosCase()
         print('done')
+        print('Build sparse matrix.')
+        # The next part uses the case corresponding to either Wilmer or Weiguo's case.
+        self.totalbeamlets = self.K * self.N
+        self.totalvoxels = max(self.voxels) + 1
+        self.D = sps.csc_matrix((self.Dijs, (self.voxels, self.bixels)), shape=(self.totalvoxels, self.totalbeamlets))
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions
         self.smallvoxelspace = len(np.unique(self.voxels))
         self.SmallToBigCreator()
@@ -289,5 +284,7 @@ class tomodata:
         self.TARGETList = dictdata['TARGETIDs']
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
+start_time = time.time()
 dataobject = tomodata()
 tomoinstance = tomotherapyNP(dataobject)
+print("--- %s seconds ---" % (time.time() - start_time))
