@@ -153,12 +153,8 @@ class tomotherapyNP(object):
         # Set the objective value
         print('Setting up and launching the optimization...', end="")
         objexpr = grb.LinExpr()
-        objexpr.addTerms(np.array([1.0 for element in range(len(self.gammaplusVars))], dtype=np.int32), self.gammaplusVars)
-        objexpr.addTerms(np.array([1.0 for element in range(len(self.gammaplusVars))], dtype=np.int32), self.gammaminusVars)
-        objexpr -= self.minDosePTVVar
-        #for k in range(0, self.data.K):
-        #    for i in range(0, self.data.N):
-        #        objexpr += self.gammaplusVars[i + k * self.data.N] + self.gammaminusVars[i + k * self.data.N]
+        objexpr = -self.minDosePTVVar
+
         self.mod.setObjective(objexpr, 1.0) #1.0 expresses minimization. It is the model sense.
         self.mod.update()
         self.mod.optimize()

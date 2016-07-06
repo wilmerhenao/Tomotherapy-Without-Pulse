@@ -52,8 +52,8 @@
       <file leaf-file-name="tomotherapynpNoQuadratic.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="410">
-              <caret line="133" column="0" selection-start-line="133" selection-start-column="0" selection-end-line="133" selection-end-column="0" />
+            <state relative-caret-position="510">
+              <caret line="158" column="25" selection-start-line="158" selection-start-column="25" selection-end-line="158" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -645,7 +645,14 @@
       <option name="project" value="LOCAL" />
       <updated>1467820334880</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Added dose constraints. One per voxel.">
+      <created>1467821891793</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1467821891793</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -702,7 +709,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added reading the mask. Maybe needs a different type. Fixing it tomorrow" />
     <MESSAGE value="Corrected the problem. All variables are read correctly. Ready to start setting up the gurobi computations." />
     <MESSAGE value="Added matrix multiplication wrapper" />
     <MESSAGE value="code is really messy right now. I just added a gurobi class that is only now taking shape." />
@@ -727,7 +733,8 @@
     <MESSAGE value="Adding a new file with a new formulation of the problem. The reason being that the other formulation brought up a quadratic term in one of the constraints." />
     <MESSAGE value="Done building variables" />
     <MESSAGE value="updated mu and xi constraints" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated mu and xi constraints" />
+    <MESSAGE value="Added dose constraints. One per voxel." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added dose constraints. One per voxel." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1079,8 +1086,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="410">
-          <caret line="133" column="0" selection-start-line="133" selection-start-column="0" selection-end-line="133" selection-end-column="0" />
+        <state relative-caret-position="510">
+          <caret line="158" column="25" selection-start-line="158" selection-start-column="25" selection-end-line="158" selection-end-column="25" />
           <folding />
         </state>
       </provider>
