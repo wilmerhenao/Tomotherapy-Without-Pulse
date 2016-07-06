@@ -71,70 +71,48 @@ class tomotherapyNP(object):
                                                                        name = "mu_{" + str(i) + "," + str(k) + "}",
                                                                        column = None)
 
-        ## Initialize extra members of binaryvars that are needed. Since there's an extra edge (see writeup)
-        for i in range(0, self.data.N):
-            self.binaryVars[i + self.data.K * self.data.N] = self.mod.addVar(lb = 0.0, ub = 1.0, obj = 0.0,
-                                                                                    vtype = grb.GRB.BINARY,
-                                                                                    name = "binary_{" + str(i) +
-                                                                                         ", extramember}",
-                                                                                    column = None)
-
-        ## This is the variable that will appear in the $z_{j}$ constraint. One per actual voxel in small space.
-        self.zeeVars = [None] * (self.data.smallvoxelspace)
-        for i in range(0, self.data.smallvoxelspace):
-            self.zeeVars[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=1.0, vtype=grb.GRB.CONTINUOUS,
-                                                                     name="zee_{" + str(i) + "}",
-                                                                     column=None)
         # Lazy update of gurobi
         self.mod.update()
         print('done')
         ## Add some constraints
-        self.absoluteValueRemovalConstraint = [None] * (self.data.N * self.data.K)
+        self.absoluteValueRemovalConstraint1 = [None] * (self.data.N * (self.data.K-1))
+        self.absoluteValueRemovalConstraint2 = [None] * (self.data.N * (self.data.K-1))
         self.xiconstraint1 = [None] * (self.data.N * self.data.K)
         self.xiconstraint2 = [None] * (self.data.N * self.data.K)
         self.xiconstraint3 = [None] * (self.data.N * self.data.K)
-        self.zetaconstraint1 = [None] * (self.data.N * self.data.K)
-        self.zetaconstraint2 = [None] * (self.data.N * self.data.K)
-        self.zetaconstraint3 = [None] * (self.data.N * self.data.K)
-        print('Building Secondary constraints; binaries, xi, zeta...', end="")
+        print('Building Secondary constraints; binaries, mu, xi...', end="")
+        for k in range(0, (self.data.K - 1)):
+            print(str(k) + " ,", end="")
+            for i in range(0, self.data.N):
+                self.absoluteValueRemovalConstraint1[i + k * self.data.N] = self.mod.addConstr(
+                    self.muVars[i + k * self.data.N],
+                    grb.GRB.GREATER_EQUAL,
+                    self.binaryVars[i + (k + 1) * self.data.N] - self.binaryVars[i + k * self.data.N],
+                    name = "rmabs1_{" + str(i) + "," + str(k) + "}")
+                self.absoluteValueRemovalConstraint2[i + k * self.data.N] = self.mod.addConstr(
+                    self.muVars[i + k * self.data.N],
+                    grb.GRB.GREATER_EQUAL,
+                    -(self.gammaplusVars[i + k * self.data.N] - self.gammaminusVars[i + k * self.data.N]),
+                    name = "rmabs2_{" + str(i) + "," + str(k) + "}")
         for k in range(0, self.data.K):
             print(str(k) + " ,", end="")
             for i in range(0, self.data.N):
-                self.absoluteValueRemovalConstraint[i + k * self.data.N] = self.mod.addConstr(
-                    self.binaryVars[i + (k + 1) * self.data.N] - self.binaryVars[i + k * self.data.N],
-                    grb.GRB.EQUAL,
-                    self.gammaplusVars[i + k * self.data.N] - self.gammaminusVars[i + k * self.data.N],
-                    name="rmabs_{" + str(i) + "," + str(k) + "}")
                 self.xiconstraint1[i + k * self.data.N] = self.mod.addConstr(
                     self.xiVars[i + k * self.data.N],
                     grb.GRB.LESS_EQUAL,
-                    self.data.fractionUB * self.binaryVars[i + k * self.data.N],
+                    self.binaryVars[i + k * self.data.N],
                     name="xiconstraint1_{" + str(i) + "," + str(k) + "}")
                 self.xiconstraint2[i + k * self.data.N] = self.mod.addConstr(
                     self.xiVars[i + k * self.data.N],
                     grb.GRB.LESS_EQUAL,
-                    self.timeVars[i + k * self.data.N],
+                    self.yVar[i + k * self.data.N],
                     name="xiconstraint2_{" + str(i) + "," + str(k) + "}")
                 self.xiconstraint3[i + k * self.data.N] = self.mod.addConstr(
                     self.xiVars[i + k * self.data.N],
                     grb.GRB.GREATER_EQUAL,
-                    self.timeVars[i + k * self.data.N] - (1 - self.binaryVars[i + k * self.data.N]) * self.data.fractionUB,
+                    self.yVar[i + k * self.data.N] - (1 - self.binaryVars[i + k * self.data.N]) * self.data.maxIntensity,
                     name="xiconstraint3_{" + str(i) + "," + str(k) + "}")
-                self.zetaconstraint1[i + k * self.data.N] = self.mod.addConstr(
-                    self.zetaVars[i + k * self.data.N],
-                    grb.GRB.LESS_EQUAL,
-                    self.data.fractionUB * self.binaryVars[i + (k + 1) * self.data.N],
-                    name="zetaconstraint1_{" + str(i) + "," + str(k) + "}")
-                self.zetaconstraint2[i + k * self.data.N] = self.mod.addConstr(
-                    self.zetaVars[i + k * self.data.N],
-                    grb.GRB.LESS_EQUAL,
-                    self.timeVars[i + k * self.data.N],
-                    name="zetaconstraint2_{" + str(i) + "," + str(k) + "}")
-                self.zetaconstraint3[i + k * self.data.N] = self.mod.addConstr(
-                    self.zetaVars[i + k * self.data.N],
-                    grb.GRB.GREATER_EQUAL,
-                    self.timeVars[i + k * self.data.N] - (1 - self.binaryVars[i + (k + 1) * self.data.N]) * self.data.fractionUB,
-                    name="zetaconstraint3_{" + str(i) + "," + str(k) + "}")
+        self.mod.update()
         print('\ndone')
         self.zeeconstraints = [None] * (self.data.smallvoxelspace)
         print('here')
