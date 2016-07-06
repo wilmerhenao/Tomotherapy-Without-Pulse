@@ -43,13 +43,12 @@ class tomotherapyNP(object):
     ## This function builds variables to be included in the model
     def buildVariables(self):
         # Addition of t variables. All terms according to the terminology in the writeup
-        ## IntensityVariable
-        self.yVar = self.mod.addVar(lb = 0.0, ub = self.data.maxIntensity, obj=0.0, vtype=grb.GRB.CONTINUOUS,
-                                    name="intensity", column=None))
         ## Binary Variable. I call it delta in the writeup
         self.binaryVars = [None] * (self.data.N * self.data.K)
         ## xi Variables. Helper variables to create a continuous binary variable
         self.xiVars = [None] * (self.data.N * self.data.K)
+        ## IntensityVariable
+        self.yVar = [None] * (self.data.N * self.data.K)
         ## mu Variables. Helper variables to remove the absolute value nonlinear constraint
         self.muVars = [None] * ((self.data.N) * (self.data.K - 1))
         print('Building Variables related to dose constraints...', end=" ")
@@ -66,7 +65,7 @@ class tomotherapyNP(object):
                                                                    vtype = grb.GRB.CONTINUOUS,
                                                                    name = "Y_{" + str(i) + "," + str(k) + "}",
                                                                    column = None)
-                if (self.data.N - 1) == i:
+                if (self.data.K - 1) != k:
                     self.muVars[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub = 1.0, obj = 0.0, vtype = grb.GRB.CONTINUOUS,
                                                                        name = "mu_{" + str(i) + "," + str(k) + "}",
                                                                        column = None)
@@ -92,7 +91,7 @@ class tomotherapyNP(object):
                 self.absoluteValueRemovalConstraint2[i + k * self.data.N] = self.mod.addConstr(
                     self.muVars[i + k * self.data.N],
                     grb.GRB.GREATER_EQUAL,
-                    -(self.gammaplusVars[i + k * self.data.N] - self.gammaminusVars[i + k * self.data.N]),
+                    -(self.binaryVars[i + (k + 1) * self.data.N] - self.binaryVars[i + k * self.data.N]),
                     name = "rmabs2_{" + str(i) + "," + str(k) + "}")
         for k in range(0, self.data.K):
             print(str(k) + " ,", end="")
@@ -116,6 +115,14 @@ class tomotherapyNP(object):
         print('\ndone')
         print('creating primary dose constraints...', end="")
         self.zeeconstraints = [None] * (self.data.smallvoxelspace)
+        ## This is the variable that will appear in the $z_{j}$ constraint. One per actual voxel in small space.
+        self.zeeVars = [None] * (self.data.smallvoxelspace)
+        for i in range(0, self.data.smallvoxelspace):
+            self.zeeVars[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=1.0, vtype=grb.GRB.CONTINUOUS,
+                                                                     name="zee_{" + str(i) + "}",
+                                                                     column=None)
+        # Lazy update of gurobi
+        self.mod.update()
         ## Create a unique list of voxels (smallvoxelspace steps but living in bigvoxelspace)
         # This vector should be used later and is the standard ordering of particles in smallvoxelspace.
         uniquevoxels = np.unique(self.data.voxels)
@@ -243,8 +250,8 @@ class tomodata:
         ## Total number of voxels in the phantom
         self.totalVoxels = self.dimX * self.dimY
         print('Read vectors...', end="")
-        #self.readWilmersCase()
-        self.readWeiguosCase()
+        self.readWilmersCase()
+        #self.readWeiguosCase()
         print('done')
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions
         self.smallvoxelspace = len(np.unique(self.voxels))
