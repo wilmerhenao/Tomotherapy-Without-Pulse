@@ -47,45 +47,37 @@ class tomotherapyNP(object):
         self.yVar = self.mod.addVar(lb = 0.0, ub = self.data.maxIntensity, obj=0.0, vtype=grb.GRB.CONTINUOUS,
                                     name="intensity", column=None))
         ## Binary Variable. I call it delta in the writeup
-        self.binaryVars = [None] * ((self.data.N * self.data.K) + self.data.N)
+        self.binaryVars = [None] * (self.data.N * self.data.K)
         ## xi Variables. Helper variables to create a continuous binary variable
         self.xiVars = [None] * (self.data.N * self.data.K)
-        ## zeta Variables. Helper variables to create a continuous binary variable
-        self.zetaVars = [None] * (self.data.N * self.data.K)
-        self.gammaplusVars = [None] * (self.data.N * self.data.K)
-        self.gammaminusVars = [None] * (self.data.N * self.data.K)
+        ## mu Variables. Helper variables to remove the absolute value nonlinear constraint
+        self.muVars = [None] * ((self.data.N) * (self.data.K - 1))
         print('Building Variables related to dose constraints...', end=" ")
-        for k in range(0, self.data.K):
-            for i in range(0, self.data.N):
-                self.timeVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.CONTINUOUS,
-                                                                     name="t_{" + str(i) + "," + str(k) + "}",
-                                                                     column=None)
-                self.xiVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0,
-                                                                   vtype=grb.GRB.CONTINUOUS,
-                                                                   name="xi_{" + str(i) + "," + str(k) + "}",
-                                                                   column=None)
-                self.zetaVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0,
-                                                                     vtype=grb.GRB.CONTINUOUS,
-                                                                     name="zeta_{" + str(i) + "," + str(k) + "}",
-                                                                     column=None)
-                self.gammaplusVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0,
-                                                                     vtype=grb.GRB.CONTINUOUS,
-                                                                     name="gammaplus_{" + str(i) + "," + str(k) + "}",
-                                                                     column=None)
-                self.gammaminusVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0,
-                                                                     vtype=grb.GRB.CONTINUOUS,
-                                                                     name="gammaminus_{" + str(i) + "," + str(k) + "}",
-                                                                     column=None)
-                self.binaryVars[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub=1.0, obj=0.0, vtype=grb.GRB.BINARY,
-                                                                       name="binary_{" + str(i) + "," + str(k) + "}",
-                                                                       column=None)
+        for k in range(0, (self.data.K)):
+            for i in range(0, (self.data.N)):
+                self.xiVars[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub = self.data.maxIntensity, obj = 0.0,
+                                                                   vtype = grb.GRB.CONTINUOUS,
+                                                                   name = "xi_{" + str(i) + "," + str(k) + "}",
+                                                                   column = None)
+                self.binaryVars[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub=1.0, obj=0.0, vtype = grb.GRB.BINARY,
+                                                                       name = "binary_{" + str(i) + "," + str(k) + "}",
+                                                                       column = None)
+                self.yVar[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub = self.data.maxIntensity, obj = 0.0,
+                                                                   vtype = grb.GRB.CONTINUOUS,
+                                                                   name = "Y_{" + str(i) + "," + str(k) + "}",
+                                                                   column = None)
+                if (self.data.N - 1) == i:
+                    self.muVars[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub = 1.0, obj = 0.0, vtype = grb.GRB.CONTINUOUS,
+                                                                       name = "mu_{" + str(i) + "," + str(k) + "}",
+                                                                       column = None)
+
         ## Initialize extra members of binaryvars that are needed. Since there's an extra edge (see writeup)
         for i in range(0, self.data.N):
-            self.binaryVars[i + self.data.K * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0,
-                                                                                    vtype=grb.GRB.BINARY,
-                                                                                    name="binary_{" + str(i) +
+            self.binaryVars[i + self.data.K * self.data.N] = self.mod.addVar(lb = 0.0, ub = 1.0, obj = 0.0,
+                                                                                    vtype = grb.GRB.BINARY,
+                                                                                    name = "binary_{" + str(i) +
                                                                                          ", extramember}",
-                                                                                    column=None)
+                                                                                    column = None)
 
         ## This is the variable that will appear in the $z_{j}$ constraint. One per actual voxel in small space.
         self.zeeVars = [None] * (self.data.smallvoxelspace)
