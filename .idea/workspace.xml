@@ -53,7 +53,7 @@
         <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="410">
-              <caret line="113" column="73" selection-start-line="113" selection-start-column="73" selection-end-line="113" selection-end-column="73" />
+              <caret line="133" column="0" selection-start-line="133" selection-start-column="0" selection-end-line="133" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -638,7 +638,14 @@
       <option name="project" value="LOCAL" />
       <updated>1467818749561</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="updated mu and xi constraints">
+      <created>1467820334880</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1467820334880</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -695,7 +702,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Reading data from binary files" />
     <MESSAGE value="added reading the mask. Maybe needs a different type. Fixing it tomorrow" />
     <MESSAGE value="Corrected the problem. All variables are read correctly. Ready to start setting up the gurobi computations." />
     <MESSAGE value="Added matrix multiplication wrapper" />
@@ -720,7 +726,8 @@
     <MESSAGE value="makin sure this works for Weiguo's case too." />
     <MESSAGE value="Adding a new file with a new formulation of the problem. The reason being that the other formulation brought up a quadratic term in one of the constraints." />
     <MESSAGE value="Done building variables" />
-    <option name="LAST_COMMIT_MESSAGE" value="Done building variables" />
+    <MESSAGE value="updated mu and xi constraints" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated mu and xi constraints" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1073,7 +1080,7 @@
     <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="410">
-          <caret line="113" column="73" selection-start-line="113" selection-start-column="73" selection-end-line="113" selection-end-column="73" />
+          <caret line="133" column="0" selection-start-line="133" selection-start-column="0" selection-end-line="133" selection-end-column="0" />
           <folding />
         </state>
       </provider>

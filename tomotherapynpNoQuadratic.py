@@ -114,26 +114,23 @@ class tomotherapyNP(object):
                     name="xiconstraint3_{" + str(i) + "," + str(k) + "}")
         self.mod.update()
         print('\ndone')
+        print('creating primary dose constraints...', end="")
         self.zeeconstraints = [None] * (self.data.smallvoxelspace)
-        print('here')
         ## Create a unique list of voxels (smallvoxelspace steps but living in bigvoxelspace)
         # This vector should be used later and is the standard ordering of particles in smallvoxelspace.
         uniquevoxels = np.unique(self.data.voxels)
-        print('here')
-        i = 0
-        print('creating primary dose constraints...', end="")
+        j = 0
         # Create all the dose constraints
         for voxel in uniquevoxels:
             # Find locations with value corresponding to voxel
             positions = np.where(voxel == self.data.voxels)[0]
-            expr = grb.QuadExpr()
+            expr = grb.LinExpr()
             for i, p in zip(range(0, len(positions)), positions):
                 abixel = self.data.bixels[p]
-                expr += self.data.Dijs[abixel] * self.xiVars[abixel] * self.yVar
-                expr += self.data.Dijs[abixel] * self.zetaVars[abixel] * self.yVar
-            self.zeeconstraints[i] = self.mod.addQConstr(self.zeeVars[i], grb.GRB.EQUAL, expr, name = "DoseConstraint" +
-                                                                                                      str(i))
-            i += 1
+                expr += self.data.Dijs[abixel] * self.xiVars[abixel]
+            self.zeeconstraints[j] = self.mod.addQConstr(self.zeeVars[j], grb.GRB.EQUAL, expr, name = "DoseConstraint" +
+                                                                                                      str(j))
+            j += 1
 
         # Make a lazy update of this last set of constraints
         self.mod.update()
