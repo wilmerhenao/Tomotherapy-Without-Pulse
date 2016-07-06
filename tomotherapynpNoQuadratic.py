@@ -18,6 +18,7 @@ import sys
 import scipy.sparse as sps
 import os
 import pickle
+from collections import defaultdict
 
 ## Class definition of the gurobi object that handles creation and execution of the model
 # Original template from Troy Long.
@@ -62,9 +63,9 @@ class tomotherapyNP(object):
                                                                        name = "binary_{" + str(i) + "," + str(k) + "}",
                                                                        column = None)
                 self.yVar[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub = self.data.maxIntensity, obj = 0.0,
-                                                                   vtype = grb.GRB.CONTINUOUS,
-                                                                   name = "Y_{" + str(i) + "," + str(k) + "}",
-                                                                   column = None)
+                                                                 vtype = grb.GRB.CONTINUOUS,
+                                                                 name = "Y_{" + str(i) + "," + str(k) + "}",
+                                                                 column = None)
                 if (self.data.K - 1) != k:
                     self.muVars[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub = 1.0, obj = 0.0, vtype = grb.GRB.CONTINUOUS,
                                                                        name = "mu_{" + str(i) + "," + str(k) + "}",
@@ -120,20 +121,18 @@ class tomotherapyNP(object):
         for i in range(0, self.data.smallvoxelspace):
             self.zeeVars[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=1.0, vtype=grb.GRB.CONTINUOUS,
                                                                      name="zee_{" + str(i) + "}",
-                                                                     column=None)
+                                                                     column = None)
         # Lazy update of gurobi
         self.mod.update()
-        ## Create a unique list of voxels (smallvoxelspace steps but living in bigvoxelspace)
-        # This vector should be used later and is the standard ordering of particles in smallvoxelspace.
-        uniquevoxels = np.unique(self.data.voxels)
         j = 0
-        # Create all the dose constraints
-        for voxel in uniquevoxels:
+        # Create a list of all duplicates at once
+        duplicatelist = list_duplicates(self.data.voxels)
+        # For each dup... here dup is a tuple. You call tuples as dup[0], dup[1]
+        for dup in duplicatelist:
             # Find locations with value corresponding to voxel
-            positions = np.where(voxel == self.data.voxels)[0]
             expr = grb.LinExpr()
-            for i, p in zip(range(0, len(positions)), positions):
-                abixel = self.data.bixels[p]
+            for elem in dup[1]:
+                abixel = self.data.bixels[elem]
                 expr += self.data.Dijs[abixel] * self.xiVars[abixel]
             self.zeeconstraints[j] = self.mod.addQConstr(self.zeeVars[j], grb.GRB.EQUAL, expr, name = "DoseConstraint" +
                                                                                                       str(j))
@@ -228,6 +227,14 @@ def getvector(necfile,dtype):
 def sparseWrapper(bixels, voxels, Dijs, mask, totalbeamlets, totalVoxels):
     D = sps.csc_matrix((Dijs, (bixels, voxels)), shape=(totalbeamlets, totalVoxels))
     return(D)
+
+## Function that takes a list and returns a default dictionary with repeated indices as duplicates
+def list_duplicates(seq):
+    tally = defaultdict(list)
+    for i, item in enumerate(seq):
+        tally[item].append(i)
+    return ((key,locs) for key,locs in tally.items()
+                            if len(locs) > 1)
 
 class tomodata:
     ## Initialization of the data
