@@ -46,6 +46,31 @@ class tomotherapyNP(object):
         self.mod.optimize()
 
     def addVarsandDoseConstraint(self):
+        print('creating primary dose constraints...', end="")
+        sys.stdout.flush()
+        self.zeeconstraints = [None] * (self.data.totalsmallvoxels)
+        ## This is the variable that will appear in the $z_{j}$ constraint. One per actual voxel in small space.
+        self.zeeVars = [None] * (self.data.totalsmallvoxels)
+        for i in range(0, self.data.totalsmallvoxels):
+            self.zeeVars[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
+                                                                     name="zee_{" + str(i) + "}",
+                                                                     column = None)
+        self.mod.update()
+        for i in range(0, self.data.totalsmallvoxels):
+            if i % 1000 == 0:
+                print(str(i) + ',', end=""); sys.stdout.flush()
+            self.zeeconstraints[i] = self.mod.addConstr(-self.zeeVars[i], grb.GRB.EQUAL, 0)
+        # Lazy update of gurobi
+        self.mod.update()
+        # Addition of t variables. All terms according to the terminology in the writeup
+        ## Binary Variable. I call it delta in the writeup
+        self.binaryVars = [None] * (self.data.N * self.data.K)
+        ## xi Variables. Helper variables to create a continuous binary variable
+        self.xiVars = [None] * (self.data.N * self.data.K)
+        ## IntensityVariable
+        self.yVar = [None] * (self.data.K)
+        ## mu Variables. Helper variables to remove the absolute value nonlinear constraint
+        self.muVars = [None] * ((self.data.N) * (self.data.K - 1))
         for k in range(0, (self.data.K)):
             print('On control point: ' + str(k + 1) + ' out of ' + str(self.data.K))
             # yVar created outside the inner loop because there is only one per control point
@@ -130,33 +155,22 @@ class tomotherapyNP(object):
                     name="xiconstraint3_{" + str(i) + "," + str(k) + "}")
         self.mod.update()
 
+    def objConstraints(self):
+        self.minDosePTVVar = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
+                                             name="minDosePTV", column=None)
+
+        self.mod.update()
+        for i in range(0, self.data.totalsmallvoxels):
+            # Constraint on minimum radiation if this is a tumor
+            if self.data.mask[self.data.TumorMap[0][i]] in self.data.TARGETList:
+                self.minDoseConstraints.append(self.mod.addConstr(self.minDosePTVVar, grb.GRB.LESS_EQUAL, self.zeeVars[i]))
+            # Constraint on maximum radiation to the OAR
+            if self.data.mask[self.data.TumorMap[0][i]] in self.data.OARList:
+                self.maxDoseConstraints.append(self.mod.addConstr(self.zeeVars[i], grb.GRB.LESS_EQUAL, self.data.OARMAX))
+        self.mod.update()
+
     ## This function builds variables to be included in the model
     def buildVariables(self):
-        print('creating primary dose constraints...', end="")
-        sys.stdout.flush()
-        self.zeeconstraints = [None] * (self.data.totalsmallvoxels)
-        ## This is the variable that will appear in the $z_{j}$ constraint. One per actual voxel in small space.
-        self.zeeVars = [None] * (self.data.totalsmallvoxels)
-        for i in range(0, self.data.totalsmallvoxels):
-            self.zeeVars[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
-                                                                     name="zee_{" + str(i) + "}",
-                                                                     column = None)
-        self.mod.update()
-        for i in range(0, self.data.totalsmallvoxels):
-            if i % 1000 == 0:
-                print(str(i) + ',', end=""); sys.stdout.flush()
-            self.zeeconstraints[i] = self.mod.addConstr(-self.zeeVars[i], grb.GRB.EQUAL, 0)
-        # Lazy update of gurobi
-        self.mod.update()
-        # Addition of t variables. All terms according to the terminology in the writeup
-        ## Binary Variable. I call it delta in the writeup
-        self.binaryVars = [None] * (self.data.N * self.data.K)
-        ## xi Variables. Helper variables to create a continuous binary variable
-        self.xiVars = [None] * (self.data.N * self.data.K)
-        ## IntensityVariable
-        self.yVar = [None] * (self.data.K)
-        ## mu Variables. Helper variables to remove the absolute value nonlinear constraint
-        self.muVars = [None] * ((self.data.N) * (self.data.K - 1))
         print('\nBuilding Variables related to dose constraints...')
         sys.stdout.flush()
         self.addVarsandDoseConstraint()
@@ -167,17 +181,7 @@ class tomotherapyNP(object):
         # Update the objective function.
         # Create a variable that will be the minimum dose to a PTV.
         print('creating VOI constraints and constraints directly associated with the objective...', end="")
-        self.minDosePTVVar = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
-                                                                     name="minDosePTV", column=None)
-        self.mod.update()
-        for i in range(0, self.data.totalsmallvoxels):
-            # Constraint on minimum radiation if this is a tumor
-            if self.data.mask[self.data.TumorMap[0][i]] in self.data.TARGETList:
-                self.minDoseConstraints.append(self.mod.addConstr(self.minDosePTVVar, grb.GRB.LESS_EQUAL, self.zeeVars[i]))
-            # Constraint on maximum radiation to the OAR
-            if self.data.mask[self.data.TumorMap[0][i]] in self.data.OARList:
-                self.maxDoseConstraints.append(self.mod.addConstr(self.zeeVars[i], grb.GRB.LESS_EQUAL, self.data.OARMAX))
-        self.mod.update()
+        self.objConstraints()
         print('done')
         # Set the objective value
         print('Setting up and launching the optimization...', end="")
@@ -251,7 +255,7 @@ def list_duplicates(seq):
     tally = defaultdict(list)
     for i, item in enumerate(seq):
         tally[item].append(i)
-    return ((key,locs) for key,locs in tally.items()
+    return ((key, locs) for key,locs in tally.items()
                             if len(locs) > 1)
 
 class tomodata:
@@ -271,6 +275,7 @@ class tomodata:
         print('Read vectors...', end="")
         self.readWilmersCase()
         #self.readWeiguosCase()
+        sys.stdout.flush()
         print('done')
         # Create a space in smallvoxel coordinates
         self.smallvoxels = self.BigToSmallCreator()
@@ -278,6 +283,8 @@ class tomodata:
         # The next part uses the case corresponding to either Wilmer or Weiguo's case.
         self.totalbeamlets = self.K * self.N
         self.totalsmallvoxels = max(self.smallvoxels) + 1
+        print('lengts of voxels and mask: ' + str(len((self.smallvoxels))) + ' ' + str(len(self.mask)))
+        print("unique voi's: ", np.unique(self.mask))
         self.D = sps.csc_matrix((self.Dijs, (self.smallvoxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions
         self.TumorMapCreator()
@@ -310,6 +317,7 @@ class tomodata:
         self.N = dictdata['N']
         self.OARList = dictdata['OARIDs']
         self.TARGETList = dictdata['TARGETIDs']
+        print("Targets and OARS: ", self.TARGETList, self.OARList)
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 start_time = time.time()
