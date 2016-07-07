@@ -45,6 +45,25 @@ class tomotherapyNP(object):
     def solveModel(self):
         self.mod.optimize()
 
+    def addVarsandDoseConstraint(self):
+        for k in range(0, (self.data.K)):
+            print('On control point: ' + str(k + 1) + ' out of ' + str(self.data.K))
+            # yVar created outside the inner loop because there is only one per control point
+            self.yVar[k] = self.mod.addVar(lb=0.0, ub=self.data.maxIntensity, obj=0.0,
+                                           vtype=grb.GRB.CONTINUOUS, name="Y_{" + str(k) + "}",
+                                           column=None)
+            # Create a partial function
+            self.partialdeclareFunc = partial(self.declareVariables, k=k)
+            for i in range(0, self.data.N):
+                self.partialdeclareFunc(i)
+                # if __name__ == '__main__':
+                #      pool = Pool(processes=numcores)  # process per MP
+                #      pool.map(self.partialdeclareFunc, range(0, self.data.N))
+                # pool.close()
+                # pool.join()
+        # Lazy update of gurobi
+        self.mod.update()
+
     def declareVariables(self, i, k):
         self.xiVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=self.data.maxIntensity, obj=0.0,
                                                            vtype=grb.GRB.CONTINUOUS,
@@ -65,62 +84,8 @@ class tomotherapyNP(object):
                                                                name="mu_{" + str(i) + "," + str(k) + "}",
                                                                column=None)
 
-    ## This function builds variables to be included in the model
-    def buildVariables(self):
-        print('creating primary dose constraints...', end="")
-        sys.stdout.flush()
-        self.zeeconstraints = [None] * (self.data.totalsmallvoxels)
-        ## This is the variable that will appear in the $z_{j}$ constraint. One per actual voxel in small space.
-        self.zeeVars = [None] * (self.data.totalsmallvoxels)
-        for i in range(0, self.data.totalsmallvoxels):
-            self.zeeVars[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
-                                                                     name="zee_{" + str(i) + "}",
-                                                                     column = None)
-        self.mod.update()
-        for i in range(0, self.data.totalsmallvoxels):
-            if i % 1000 == 0:
-                print(str(i) + ',', end=""); sys.stdout.flush()
-            self.zeeconstraints[i] = self.mod.addConstr(-self.zeeVars[i], grb.GRB.EQUAL, 0)
-        # Lazy update of gurobi
-        self.mod.update()
-        # Addition of t variables. All terms according to the terminology in the writeup
-        ## Binary Variable. I call it delta in the writeup
-        self.binaryVars = [None] * (self.data.N * self.data.K)
-        ## xi Variables. Helper variables to create a continuous binary variable
-        self.xiVars = [None] * (self.data.N * self.data.K)
-        ## IntensityVariable
-        self.yVar = [None] * (self.data.K)
-        ## mu Variables. Helper variables to remove the absolute value nonlinear constraint
-        self.muVars = [None] * ((self.data.N) * (self.data.K - 1))
-        print('\nBuilding Variables related to dose constraints...')
-        sys.stdout.flush()
-        for k in range(0, (self.data.K)):
-            print('On control point: ' + str(k+1) + ' out of ' + str(self.data.K))
-            # yVar created outside the inner loop because there is only one per control point
-            self.yVar[k] = self.mod.addVar(lb=0.0, ub=self.data.maxIntensity, obj=0.0,
-                                                             vtype=grb.GRB.CONTINUOUS, name="Y_{" + str(k) + "}",
-                                                             column=None)
-            # Create a partial function
-            self.partialdeclareFunc = partial(self.declareVariables, k=k)
-            for i in range(0, self.data.N):
-                self.partialdeclareFunc(i)
-            # if __name__ == '__main__':
-            #      pool = Pool(processes=numcores)  # process per MP
-            #      pool.map(self.partialdeclareFunc, range(0, self.data.N))
-            # pool.close()
-            # pool.join()
+    def createXiandAbsolute(self):
 
-        # Lazy update of gurobi
-        self.mod.update()
-        print('done')
-        # Add some constraints. This one is about replacing the absolute value with linear expressions
-        self.absoluteValueRemovalConstraint1 = [None] * (self.data.N * (self.data.K-1))
-        self.absoluteValueRemovalConstraint2 = [None] * (self.data.N * (self.data.K-1))
-        # This constraint is about replacing the multiplication of binary times continuous variables using McCormick's envelopes
-        self.xiconstraint1 = [None] * (self.data.N * self.data.K)
-        self.xiconstraint2 = [None] * (self.data.N * self.data.K)
-        self.xiconstraint3 = [None] * (self.data.N * self.data.K)
-        print('Building Secondary constraints; binaries, mu, xi...', end="")
         for k in range(0, (self.data.K - 1)):
             for i in range(0, self.data.N):
                 self.absoluteValueRemovalConstraint1[i + k * self.data.N] = self.mod.addConstr(
@@ -151,6 +116,48 @@ class tomotherapyNP(object):
                     self.yVar[k] - (1 - self.binaryVars[i + k * self.data.N]) * self.data.maxIntensity,
                     name="xiconstraint3_{" + str(i) + "," + str(k) + "}")
         self.mod.update()
+
+    ## This function builds variables to be included in the model
+    def buildVariables(self):
+        print('creating primary dose constraints...', end="")
+        sys.stdout.flush()
+        self.zeeconstraints = [None] * (self.data.totalsmallvoxels)
+        ## This is the variable that will appear in the $z_{j}$ constraint. One per actual voxel in small space.
+        self.zeeVars = [None] * (self.data.totalsmallvoxels)
+        for i in range(0, self.data.totalsmallvoxels):
+            self.zeeVars[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
+                                                                     name="zee_{" + str(i) + "}",
+                                                                     column = None)
+        self.mod.update()
+        for i in range(0, self.data.totalsmallvoxels):
+            if i % 1000 == 0:
+                print(str(i) + ',', end=""); sys.stdout.flush()
+            self.zeeconstraints[i] = self.mod.addConstr(-self.zeeVars[i], grb.GRB.EQUAL, 0)
+        # Lazy update of gurobi
+        self.mod.update()
+        # Addition of t variables. All terms according to the terminology in the writeup
+        ## Binary Variable. I call it delta in the writeup
+        self.binaryVars = [None] * (self.data.N * self.data.K)
+        ## xi Variables. Helper variables to create a continuous binary variable
+        self.xiVars = [None] * (self.data.N * self.data.K)
+        ## IntensityVariable
+        self.yVar = [None] * (self.data.K)
+        ## mu Variables. Helper variables to remove the absolute value nonlinear constraint
+        self.muVars = [None] * ((self.data.N) * (self.data.K - 1))
+        print('\nBuilding Variables related to dose constraints...')
+        sys.stdout.flush()
+        self.addVarsandDoseConstraint()
+
+        print('done')
+        # Add some constraints. This one is about replacing the absolute value with linear expressions
+        self.absoluteValueRemovalConstraint1 = [None] * (self.data.N * (self.data.K-1))
+        self.absoluteValueRemovalConstraint2 = [None] * (self.data.N * (self.data.K-1))
+        # This constraint is about replacing the multiplication of binary times continuous variables using McCormick's envelopes
+        self.xiconstraint1 = [None] * (self.data.N * self.data.K)
+        self.xiconstraint2 = [None] * (self.data.N * self.data.K)
+        self.xiconstraint3 = [None] * (self.data.N * self.data.K)
+        print('Building Secondary constraints; binaries, mu, xi...', end="")
+        self.createXiandAbsolute()
         print('done')
         # Update the objective function.
         # Create a variable that will be the minimum dose to a PTV.
