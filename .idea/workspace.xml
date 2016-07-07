@@ -52,8 +52,8 @@
       <file leaf-file-name="tomotherapynpNoQuadratic.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="262" column="30" selection-start-line="262" selection-start-column="30" selection-end-line="262" selection-end-column="30" />
+            <state relative-caret-position="305">
+              <caret line="257" column="62" selection-start-line="257" selection-start-column="62" selection-end-line="257" selection-end-column="62" />
               <folding>
                 <element signature="e#226#244#0" expanded="true" />
               </folding>
@@ -701,7 +701,14 @@
       <option name="project" value="LOCAL" />
       <updated>1467843416516</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Created a small voxel space across the board. Also, there is a new way to allocate variables by column which speeds up the running time of the assignations?">
+      <created>1467903794309</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1467903794309</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -758,7 +765,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added zeeplus and zeeminus vars that will replace the rolls of delta in removing the absolute value from the set of constraints." />
     <MESSAGE value="Added xi constraints without a lot of reviewing. I think there may be problems with indices which I'll fix later" />
     <MESSAGE value="corrected zeeplus zeeminus names" />
     <MESSAGE value="Corrected variable definitions. Changed names of variables to agree with new writeup" />
@@ -783,7 +789,8 @@
     <MESSAGE value="It's running. It's spitting a number but I'm not sure if this is a good solution or not. Will have to check results." />
     <MESSAGE value="change the data structure to add unique objects to a list of tuples. This means faster times." />
     <MESSAGE value="Added a sparse matrix in order to make the addition of the dose constraint simpler with columns." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a sparse matrix in order to make the addition of the dose constraint simpler with columns." />
+    <MESSAGE value="Created a small voxel space across the board. Also, there is a new way to allocate variables by column which speeds up the running time of the assignations?" />
+    <option name="LAST_COMMIT_MESSAGE" value="Created a small voxel space across the board. Also, there is a new way to allocate variables by column which speeds up the running time of the assignations?" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1142,8 +1149,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="262" column="30" selection-start-line="262" selection-start-column="30" selection-end-line="262" selection-end-column="30" />
+        <state relative-caret-position="305">
+          <caret line="257" column="62" selection-start-line="257" selection-start-column="62" selection-end-line="257" selection-end-column="62" />
           <folding>
             <element signature="e#226#244#0" expanded="true" />
           </folding>

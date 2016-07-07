@@ -246,8 +246,8 @@ class tomodata:
         ## OARMAX is maximum dose tolerable for organs. 10 in this case
         self.OARMAX = 10
         print('Read vectors...', end="")
-        self.readWilmersCase()
-        #self.readWeiguosCase()
+        #self.readWilmersCase()
+        self.readWeiguosCase()
         print('done')
         # Create a space in smallvoxel coordinates
         self.smallvoxels = self.BigToSmallCreator()
@@ -255,7 +255,7 @@ class tomodata:
         # The next part uses the case corresponding to either Wilmer or Weiguo's case.
         self.totalbeamlets = self.K * self.N
         self.totalsmallvoxels = max(self.smallvoxels) + 1
-        self.D = sps.csc_matrix((self.Dijs, (self.voxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
+        self.D = sps.csc_matrix((self.Dijs, (self.smallvoxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions
         self.TumorMapCreator()
 
