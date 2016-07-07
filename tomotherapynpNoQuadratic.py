@@ -49,7 +49,7 @@ class tomotherapyNP(object):
         for k in range(0, (self.data.K)):
             print('On control point: ' + str(k + 1) + ' out of ' + str(self.data.K))
             # yVar created outside the inner loop because there is only one per control point
-            self.yVar[k] = self.mod.addVar(lb=0.0, ub=self.data.maxIntensity, obj=0.0,
+            self.yVar[k] = self.mod.addVar(lb=0.0, ub=self.data.maxIntensity,
                                            vtype=grb.GRB.CONTINUOUS, name="Y_{" + str(k) + "}",
                                            column=None)
             # Create a partial function
@@ -65,7 +65,7 @@ class tomotherapyNP(object):
         self.mod.update()
 
     def declareVariables(self, i, k):
-        self.xiVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=self.data.maxIntensity, obj=0.0,
+        self.xiVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=self.data.maxIntensity,
                                                            vtype=grb.GRB.CONTINUOUS,
                                                            name="xi_{" + str(i) + "," + str(k) + "}",
                                                            column=grb.Column(np.array(self.data.D[:,
@@ -74,42 +74,55 @@ class tomotherapyNP(object):
                                                                                  0].tolist(),
                                                                              self.zeeconstraints))
 
-        self.binaryVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.BINARY,
+        self.binaryVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, vtype=grb.GRB.BINARY,
                                                                name="binary_{" + str(i) + "," + str(k) + "}",
                                                                column=None)
         # The mu variable will register change in the behaviour from one control to the other. Therefore loses 1
         # degree of freedom
         if (self.data.K - 1) != k:
-            self.muVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.CONTINUOUS,
+            self.muVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, vtype=grb.GRB.CONTINUOUS,
                                                                name="mu_{" + str(i) + "," + str(k) + "}",
                                                                column=None)
 
     def createXiandAbsolute(self):
-
+        # Add some constraints. This one is about replacing the absolute value with linear expressions
+        self.absoluteValueRemovalConstraint1 = [None] * (self.data.N * (self.data.K-1))
+        self.absoluteValueRemovalConstraint2 = [None] * (self.data.N * (self.data.K-1))
+        # This constraint is about replacing the multiplication of binary times continuous variables using McCormick's envelopes
+        self.xiconstraint1 = [None] * (self.data.N * self.data.K)
+        self.xiconstraint2 = [None] * (self.data.N * self.data.K)
+        self.xiconstraint3 = [None] * (self.data.N * self.data.K)
+        # Constraints related to absolute value removal from objective function
         for k in range(0, (self.data.K - 1)):
             for i in range(0, self.data.N):
+                # \mu \geq \beta_{i,k+1} - \beta_{i,k}
                 self.absoluteValueRemovalConstraint1[i + k * self.data.N] = self.mod.addConstr(
                     self.muVars[i + k * self.data.N],
                     grb.GRB.GREATER_EQUAL,
                     self.binaryVars[i + (k + 1) * self.data.N] - self.binaryVars[i + k * self.data.N],
                     name = "rmabs1_{" + str(i) + "," + str(k) + "}")
+                # \mu \geq -(\beta_{i,k+1} - \beta_{i,k})
                 self.absoluteValueRemovalConstraint2[i + k * self.data.N] = self.mod.addConstr(
                     self.muVars[i + k * self.data.N],
                     grb.GRB.GREATER_EQUAL,
                     -(self.binaryVars[i + (k + 1) * self.data.N] - self.binaryVars[i + k * self.data.N]),
                     name = "rmabs2_{" + str(i) + "," + str(k) + "}")
+        # Constraints related to McCormick relaxations.
         for k in range(0, self.data.K):
             for i in range(0, self.data.N):
+                # \xi \leq \beta
                 self.xiconstraint1[i + k * self.data.N] = self.mod.addConstr(
                     self.xiVars[i + k * self.data.N],
                     grb.GRB.LESS_EQUAL,
                     self.binaryVars[i + k * self.data.N],
                     name="xiconstraint1_{" + str(i) + "," + str(k) + "}")
+                # \xi \leq y
                 self.xiconstraint2[i + k * self.data.N] = self.mod.addConstr(
                     self.xiVars[i + k * self.data.N],
                     grb.GRB.LESS_EQUAL,
                     self.yVar[k],
                     name="xiconstraint2_{" + str(i) + "," + str(k) + "}")
+                # \xi \geq y - (1 - \beta) U
                 self.xiconstraint3[i + k * self.data.N] = self.mod.addConstr(
                     self.xiVars[i + k * self.data.N],
                     grb.GRB.GREATER_EQUAL,
@@ -147,22 +160,14 @@ class tomotherapyNP(object):
         print('\nBuilding Variables related to dose constraints...')
         sys.stdout.flush()
         self.addVarsandDoseConstraint()
-
         print('done')
-        # Add some constraints. This one is about replacing the absolute value with linear expressions
-        self.absoluteValueRemovalConstraint1 = [None] * (self.data.N * (self.data.K-1))
-        self.absoluteValueRemovalConstraint2 = [None] * (self.data.N * (self.data.K-1))
-        # This constraint is about replacing the multiplication of binary times continuous variables using McCormick's envelopes
-        self.xiconstraint1 = [None] * (self.data.N * self.data.K)
-        self.xiconstraint2 = [None] * (self.data.N * self.data.K)
-        self.xiconstraint3 = [None] * (self.data.N * self.data.K)
         print('Building Secondary constraints; binaries, mu, xi...', end="")
         self.createXiandAbsolute()
         print('done')
         # Update the objective function.
         # Create a variable that will be the minimum dose to a PTV.
         print('creating VOI constraints and constraints directly associated with the objective...', end="")
-        self.minDosePTVVar = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0, vtype=grb.GRB.CONTINUOUS,
+        self.minDosePTVVar = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
                                                                      name="minDosePTV", column=None)
         self.mod.update()
         for i in range(0, self.data.totalsmallvoxels):
