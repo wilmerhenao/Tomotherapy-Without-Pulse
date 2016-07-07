@@ -56,8 +56,7 @@ class tomotherapyNP(object):
         self.mod.update()
         for i in range(0, self.data.totalsmallvoxels):
             if i % 1000 == 0:
-                print(str(i) + ',', end="")
-                sys.stdout.flush()
+                print(str(i) + ',', end=""); sys.stdout.flush()
             self.zeeconstraints[i] = self.mod.addConstr(-self.zeeVars[i], grb.GRB.EQUAL, 0)
         # Lazy update of gurobi
         self.mod.update()
@@ -74,6 +73,7 @@ class tomotherapyNP(object):
         sys.stdout.flush()
         for k in range(0, (self.data.K)):
             print('On control point: ' + str(k+1) + ' out of ' + str(self.data.K))
+            # yVar created outside the inner loop because there is only one per control point
             self.yVar[k] = self.mod.addVar(lb=0.0, ub=self.data.maxIntensity, obj=0.0,
                                                              vtype=grb.GRB.CONTINUOUS, name="Y_{" + str(k) + "}",
                                                              column=None)
@@ -88,6 +88,8 @@ class tomotherapyNP(object):
                 self.binaryVars[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub=1.0, obj=0.0, vtype = grb.GRB.BINARY,
                                                                        name = "binary_{" + str(i) + "," + str(k) + "}",
                                                                        column = None)
+                # The mu variable will register change in the behaviour from one control to the other. Therefore loses 1
+                # degree of freedom
                 if (self.data.K - 1) != k:
                     self.muVars[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub = 1.0, obj = 0.0, vtype = grb.GRB.CONTINUOUS,
                                                                        name = "mu_{" + str(i) + "," + str(k) + "}",
@@ -96,15 +98,15 @@ class tomotherapyNP(object):
         # Lazy update of gurobi
         self.mod.update()
         print('done')
-        ## Add some constraints
+        # Add some constraints. This one is about replacing the absolute value with linear expressions
         self.absoluteValueRemovalConstraint1 = [None] * (self.data.N * (self.data.K-1))
         self.absoluteValueRemovalConstraint2 = [None] * (self.data.N * (self.data.K-1))
+        # This constraint is about replacing the multiplication of binary times continuous variables using McCormick's envelopes
         self.xiconstraint1 = [None] * (self.data.N * self.data.K)
         self.xiconstraint2 = [None] * (self.data.N * self.data.K)
         self.xiconstraint3 = [None] * (self.data.N * self.data.K)
         print('Building Secondary constraints; binaries, mu, xi...', end="")
         for k in range(0, (self.data.K - 1)):
-            print(str(k) + " ,", end="")
             for i in range(0, self.data.N):
                 self.absoluteValueRemovalConstraint1[i + k * self.data.N] = self.mod.addConstr(
                     self.muVars[i + k * self.data.N],
@@ -117,7 +119,6 @@ class tomotherapyNP(object):
                     -(self.binaryVars[i + (k + 1) * self.data.N] - self.binaryVars[i + k * self.data.N]),
                     name = "rmabs2_{" + str(i) + "," + str(k) + "}")
         for k in range(0, self.data.K):
-            print(str(k) + " ,", end="")
             for i in range(0, self.data.N):
                 self.xiconstraint1[i + k * self.data.N] = self.mod.addConstr(
                     self.xiVars[i + k * self.data.N],
@@ -135,19 +136,8 @@ class tomotherapyNP(object):
                     self.yVar[k] - (1 - self.binaryVars[i + k * self.data.N]) * self.data.maxIntensity,
                     name="xiconstraint3_{" + str(i) + "," + str(k) + "}")
         self.mod.update()
-        print('\ndone')
-        # for j in range(self.data.totalsmallvoxels):
-        #     print('item:', j, end="")
-        #     sys.stdout.flush()
-        #     # Find locations with value corresponding to voxel
-        #     expr = grb.LinExpr()
-        #     print(' has ' + str(len(dup[1])) + ' elements')
-        #     expr.addTerms(self.data.D[j,:],self.xiVars)
-        #     self.zeeconstraints[j] = self.mod.addConstr(self.zeeVars[j], grb.GRB.EQUAL, expr, name = "DoseConstraint" +
-        #                                                                                               str(j))
-        # Make a lazy update of this last set of constraints
-        self.mod.update()
         print('done')
+        self.mod.update()
         # Update the objective function.
         # Create a variable that will be the minimum dose to a PTV.
         print('creating VOI constraints and constraints directly associated with the objective...', end="")
