@@ -50,15 +50,12 @@ class tomotherapyNP(object):
         ## This is the variable that will appear in the $z_{j}$ constraint. One per actual voxel in small space.
         self.zeeVars = [None] * (self.data.totalsmallvoxels)
         for i in range(0, self.data.totalsmallvoxels):
-            if i % 100 == 0:
-                print(str(i) + ',', end="")
-                sys.stdout.flush()
             self.zeeVars[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
                                                                      name="zee_{" + str(i) + "}",
                                                                      column = None)
         self.mod.update()
         for i in range(0, self.data.totalsmallvoxels):
-            if i % 100 == 0:
+            if i % 1000 == 0:
                 print(str(i) + ',', end="")
                 sys.stdout.flush()
             self.zeeconstraints[i] = self.mod.addConstr(-self.zeeVars[i], grb.GRB.EQUAL, 0)
@@ -70,25 +67,27 @@ class tomotherapyNP(object):
         ## xi Variables. Helper variables to create a continuous binary variable
         self.xiVars = [None] * (self.data.N * self.data.K)
         ## IntensityVariable
-        self.yVar = [None] * (self.data.N * self.data.K)
+        self.yVar = [None] * (self.data.K)
         ## mu Variables. Helper variables to remove the absolute value nonlinear constraint
         self.muVars = [None] * ((self.data.N) * (self.data.K - 1))
-        print('Building Variables related to dose constraints...', end=" ")
+        print('\nBuilding Variables related to dose constraints...')
         sys.stdout.flush()
         for k in range(0, (self.data.K)):
+            print('On control point: ' + str(k+1) + ' out of ' + str(self.data.K))
+            self.yVar[k] = self.mod.addVar(lb=0.0, ub=self.data.maxIntensity, obj=0.0,
+                                                             vtype=grb.GRB.CONTINUOUS, name="Y_{" + str(k) + "}",
+                                                             column=None)
             for i in range(0, (self.data.N)):
                 self.xiVars[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub = self.data.maxIntensity, obj = 0.0,
                                                                    vtype = grb.GRB.CONTINUOUS,
                                                                    name = "xi_{" + str(i) + "," + str(k) + "}",
-                                                                   column = grb.Column(np.array(self.data.D[:,(i + k * self.data.N)].todense().transpose())[0].tolist(), self.zeeconstraints))
-
+                                                                   column = grb.Column(np.array(self.data.D[ : ,
+                                                                                                (i + k * self.data.N) ].
+                                                                                                todense().transpose())[0].tolist(),
+                                                                                       self.zeeconstraints))
                 self.binaryVars[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub=1.0, obj=0.0, vtype = grb.GRB.BINARY,
                                                                        name = "binary_{" + str(i) + "," + str(k) + "}",
                                                                        column = None)
-                self.yVar[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub = self.data.maxIntensity, obj = 0.0,
-                                                                 vtype = grb.GRB.CONTINUOUS,
-                                                                 name = "Y_{" + str(i) + "," + str(k) + "}",
-                                                                 column = None)
                 if (self.data.K - 1) != k:
                     self.muVars[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub = 1.0, obj = 0.0, vtype = grb.GRB.CONTINUOUS,
                                                                        name = "mu_{" + str(i) + "," + str(k) + "}",
@@ -128,12 +127,12 @@ class tomotherapyNP(object):
                 self.xiconstraint2[i + k * self.data.N] = self.mod.addConstr(
                     self.xiVars[i + k * self.data.N],
                     grb.GRB.LESS_EQUAL,
-                    self.yVar[i + k * self.data.N],
+                    self.yVar[k],
                     name="xiconstraint2_{" + str(i) + "," + str(k) + "}")
                 self.xiconstraint3[i + k * self.data.N] = self.mod.addConstr(
                     self.xiVars[i + k * self.data.N],
                     grb.GRB.GREATER_EQUAL,
-                    self.yVar[i + k * self.data.N] - (1 - self.binaryVars[i + k * self.data.N]) * self.data.maxIntensity,
+                    self.yVar[k] - (1 - self.binaryVars[i + k * self.data.N]) * self.data.maxIntensity,
                     name="xiconstraint3_{" + str(i) + "," + str(k) + "}")
         self.mod.update()
         print('\ndone')
@@ -254,8 +253,8 @@ class tomodata:
         ## OARMAX is maximum dose tolerable for organs. 10 in this case
         self.OARMAX = 10
         print('Read vectors...', end="")
-        #self.readWilmersCase()
-        self.readWeiguosCase()
+        self.readWilmersCase()
+        #self.readWeiguosCase()
         print('done')
         # Create a space in smallvoxel coordinates
         self.smallvoxels = self.BigToSmallCreator()
