@@ -45,15 +45,22 @@ class tomotherapyNP(object):
     ## This function builds variables to be included in the model
     def buildVariables(self):
         print('creating primary dose constraints...', end="")
+        sys.stdout.flush()
         self.zeeconstraints = [None] * (self.data.totalsmallvoxels)
         ## This is the variable that will appear in the $z_{j}$ constraint. One per actual voxel in small space.
         self.zeeVars = [None] * (self.data.totalsmallvoxels)
         for i in range(0, self.data.totalsmallvoxels):
+            if i % 100 == 0:
+                print(str(i) + ',', end="")
+                sys.stdout.flush()
             self.zeeVars[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
                                                                      name="zee_{" + str(i) + "}",
                                                                      column = None)
         self.mod.update()
         for i in range(0, self.data.totalsmallvoxels):
+            if i % 100 == 0:
+                print(str(i) + ',', end="")
+                sys.stdout.flush()
             self.zeeconstraints[i] = self.mod.addConstr(-self.zeeVars[i], grb.GRB.EQUAL, 0)
         # Lazy update of gurobi
         self.mod.update()
@@ -67,6 +74,7 @@ class tomotherapyNP(object):
         ## mu Variables. Helper variables to remove the absolute value nonlinear constraint
         self.muVars = [None] * ((self.data.N) * (self.data.K - 1))
         print('Building Variables related to dose constraints...', end=" ")
+        sys.stdout.flush()
         for k in range(0, (self.data.K)):
             for i in range(0, (self.data.N)):
                 self.xiVars[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub = self.data.maxIntensity, obj = 0.0,
