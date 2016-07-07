@@ -44,6 +44,19 @@ class tomotherapyNP(object):
 
     ## This function builds variables to be included in the model
     def buildVariables(self):
+        print('creating primary dose constraints...', end="")
+        self.zeeconstraints = [None] * (self.data.totalsmallvoxels)
+        ## This is the variable that will appear in the $z_{j}$ constraint. One per actual voxel in small space.
+        self.zeeVars = [None] * (self.data.totalsmallvoxels)
+        for i in range(0, self.data.totalsmallvoxels):
+            self.zeeVars[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
+                                                                     name="zee_{" + str(i) + "}",
+                                                                     column = None)
+        self.mod.update()
+        for i in range(0, self.data.totalsmallvoxels):
+            self.zeeconstraints[i] = self.mod.addConstr(-self.zeeVars[i], grb.GRB.EQUAL, 0)
+        # Lazy update of gurobi
+        self.mod.update()
         # Addition of t variables. All terms according to the terminology in the writeup
         ## Binary Variable. I call it delta in the writeup
         self.binaryVars = [None] * (self.data.N * self.data.K)
@@ -59,7 +72,8 @@ class tomotherapyNP(object):
                 self.xiVars[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub = self.data.maxIntensity, obj = 0.0,
                                                                    vtype = grb.GRB.CONTINUOUS,
                                                                    name = "xi_{" + str(i) + "," + str(k) + "}",
-                                                                   column = None)
+                                                                   column = grb.Column(np.array(self.data.D[:,(i + k * self.data.N)].todense().transpose())[0].tolist(), self.zeeconstraints))
+
                 self.binaryVars[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub=1.0, obj=0.0, vtype = grb.GRB.BINARY,
                                                                        name = "binary_{" + str(i) + "," + str(k) + "}",
                                                                        column = None)
@@ -115,30 +129,15 @@ class tomotherapyNP(object):
                     name="xiconstraint3_{" + str(i) + "," + str(k) + "}")
         self.mod.update()
         print('\ndone')
-        print('creating primary dose constraints...', end="")
-        self.zeeconstraints = [None] * (self.data.smallvoxelspace)
-        ## This is the variable that will appear in the $z_{j}$ constraint. One per actual voxel in small space.
-        self.zeeVars = [None] * (self.data.smallvoxelspace)
-        for i in range(0, self.data.smallvoxelspace):
-            self.zeeVars[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=1.0, vtype=grb.GRB.CONTINUOUS,
-                                                                     name="zee_{" + str(i) + "}",
-                                                                     column = None)
-        # Lazy update of gurobi
-        self.mod.update()
-        # Create a list of all duplicates at once
-        duplicatelist = list_duplicates(self.data.voxels)
-        # For each dup... here dup is a tuple. You call tuples as dup[0], dup[1]
-        for j, dup in enumerate(duplicatelist):
-            print('item:', j, end="")
-            sys.stdout.flush()
-            # Find locations with value corresponding to voxel
-            expr = grb.LinExpr()
-            print(' has ' + str(len(dup[1])) + ' elements')
-            for elem in dup[1]:
-                abixel = self.data.bixels[elem]
-                expr += self.data.Dijs[abixel] * self.xiVars[abixel]
-            self.zeeconstraints[j] = self.mod.addConstr(self.zeeVars[j], grb.GRB.EQUAL, expr, name = "DoseConstraint" +
-                                                                                                      str(j))
+        # for j in range(self.data.totalsmallvoxels):
+        #     print('item:', j, end="")
+        #     sys.stdout.flush()
+        #     # Find locations with value corresponding to voxel
+        #     expr = grb.LinExpr()
+        #     print(' has ' + str(len(dup[1])) + ' elements')
+        #     expr.addTerms(self.data.D[j,:],self.xiVars)
+        #     self.zeeconstraints[j] = self.mod.addConstr(self.zeeVars[j], grb.GRB.EQUAL, expr, name = "DoseConstraint" +
+        #                                                                                               str(j))
         # Make a lazy update of this last set of constraints
         self.mod.update()
         print('done')
@@ -148,12 +147,12 @@ class tomotherapyNP(object):
         self.minDosePTVVar = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, obj=0.0, vtype=grb.GRB.CONTINUOUS,
                                                                      name="minDosePTV", column=None)
         self.mod.update()
-        for i in range(0, self.data.smallvoxelspace):
+        for i in range(0, self.data.totalsmallvoxels):
             # Constraint on minimum radiation if this is a tumor
-            if self.data.mask[self.data.SmalltoBig[0][i]] in self.data.TARGETList:
+            if self.data.mask[self.data.TumorMap[0][i]] in self.data.TARGETList:
                 self.minDoseConstraints.append(self.mod.addConstr(self.minDosePTVVar, grb.GRB.LESS_EQUAL, self.zeeVars[i]))
             # Constraint on maximum radiation to the OAR
-            if self.data.mask[self.data.SmalltoBig[0][i]] in self.data.OARList:
+            if self.data.mask[self.data.TumorMap[0][i]] in self.data.OARList:
                 self.maxDoseConstraints.append(self.mod.addConstr(self.zeeVars[i], grb.GRB.LESS_EQUAL, self.data.OARMAX))
         self.mod.update()
         print('done')
@@ -250,18 +249,24 @@ class tomodata:
         self.readWilmersCase()
         #self.readWeiguosCase()
         print('done')
+        # Create a space in smallvoxel coordinates
+        self.smallvoxels = self.BigToSmallCreator()
         print('Build sparse matrix.')
         # The next part uses the case corresponding to either Wilmer or Weiguo's case.
         self.totalbeamlets = self.K * self.N
-        self.totalvoxels = max(self.voxels) + 1
-        self.D = sps.csc_matrix((self.Dijs, (self.voxels, self.bixels)), shape=(self.totalvoxels, self.totalbeamlets))
+        self.totalsmallvoxels = max(self.smallvoxels) + 1
+        self.D = sps.csc_matrix((self.Dijs, (self.voxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions
-        self.smallvoxelspace = len(np.unique(self.voxels))
-        self.SmallToBigCreator()
+        self.TumorMapCreator()
 
     ## Create a map from big to small voxel space
-    def SmallToBigCreator(self):
-        self.SmalltoBig = np.where(0 != self.mask)
+    def TumorMapCreator(self):
+        self.TumorMap = np.where(0 != self.mask)
+
+    ## Create a map from big to small voxel space
+    def BigToSmallCreator(self):
+        a,b,c,d = np.unique(self.voxels, return_index=True, return_inverse=True, return_counts=True)
+        return(c)
 
     def readWeiguosCase(self):
         self.bixels = getvector('data\\Bixels_out.bin', np.int32)
