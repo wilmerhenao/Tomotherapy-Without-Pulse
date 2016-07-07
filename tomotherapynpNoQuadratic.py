@@ -20,6 +20,7 @@ import os
 import pickle
 from collections import defaultdict
 import time
+from multiprocessing import Pool
 
 ## Class definition of the gurobi object that handles creation and execution of the model
 # Original template from Troy Long.
@@ -41,6 +42,26 @@ class tomotherapyNP(object):
     ## Wrapper for the optimize function
     def solveModel(self):
         self.mod.optimize()
+
+    def declareVariables(self, i, k):
+        self.xiVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=self.data.maxIntensity, obj=0.0,
+                                                           vtype=grb.GRB.CONTINUOUS,
+                                                           name="xi_{" + str(i) + "," + str(k) + "}",
+                                                           column=grb.Column(np.array(self.data.D[:,
+                                                                                      (i + k * self.data.N)].
+                                                                                      todense().transpose())[
+                                                                                 0].tolist(),
+                                                                             self.zeeconstraints))
+
+        self.binaryVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.BINARY,
+                                                           name="binary_{" + str(i) + "," + str(k) + "}",
+                                                           column=None)
+        # The mu variable will register change in the behaviour from one control to the other. Therefore loses 1
+        # degree of freedom
+        if (self.data.K - 1) != k:
+            self.muVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.CONTINUOUS,
+                                                           name="mu_{" + str(i) + "," + str(k) + "}",
+                                                           column=None)
 
     ## This function builds variables to be included in the model
     def buildVariables(self):
@@ -78,22 +99,8 @@ class tomotherapyNP(object):
                                                              vtype=grb.GRB.CONTINUOUS, name="Y_{" + str(k) + "}",
                                                              column=None)
             for i in range(0, (self.data.N)):
-                self.xiVars[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub = self.data.maxIntensity, obj = 0.0,
-                                                                   vtype = grb.GRB.CONTINUOUS,
-                                                                   name = "xi_{" + str(i) + "," + str(k) + "}",
-                                                                   column = grb.Column(np.array(self.data.D[ : ,
-                                                                                                (i + k * self.data.N) ].
-                                                                                                todense().transpose())[0].tolist(),
-                                                                                       self.zeeconstraints))
-                self.binaryVars[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub=1.0, obj=0.0, vtype = grb.GRB.BINARY,
-                                                                       name = "binary_{" + str(i) + "," + str(k) + "}",
-                                                                       column = None)
-                # The mu variable will register change in the behaviour from one control to the other. Therefore loses 1
-                # degree of freedom
-                if (self.data.K - 1) != k:
-                    self.muVars[i + k * self.data.N] = self.mod.addVar(lb = 0.0, ub = 1.0, obj = 0.0, vtype = grb.GRB.CONTINUOUS,
-                                                                       name = "mu_{" + str(i) + "," + str(k) + "}",
-                                                                       column = None)
+                self.declareVariables(i, k)
+
 
         # Lazy update of gurobi
         self.mod.update()
@@ -137,7 +144,6 @@ class tomotherapyNP(object):
                     name="xiconstraint3_{" + str(i) + "," + str(k) + "}")
         self.mod.update()
         print('done')
-        self.mod.update()
         # Update the objective function.
         # Create a variable that will be the minimum dose to a PTV.
         print('creating VOI constraints and constraints directly associated with the objective...', end="")
