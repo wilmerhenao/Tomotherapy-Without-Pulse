@@ -21,7 +21,9 @@ import pickle
 from collections import defaultdict
 import time
 from multiprocessing import Pool
+from functools import partial
 
+numcores = 4
 ## Class definition of the gurobi object that handles creation and execution of the model
 # Original template from Troy Long.
 class tomotherapyNP(object):
@@ -31,7 +33,7 @@ class tomotherapyNP(object):
         print('done')
         print('Constructing Gurobi model object...', end="")
         self.mod = grb.Model()
-        self.mod.params.threads = 4
+        self.mod.params.threads = numcores
         print('done')
         print('Building main decision variables (dose, binaries).')
         self.minDoseConstraints = []
@@ -54,14 +56,14 @@ class tomotherapyNP(object):
                                                                              self.zeeconstraints))
 
         self.binaryVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.BINARY,
-                                                           name="binary_{" + str(i) + "," + str(k) + "}",
-                                                           column=None)
+                                                               name="binary_{" + str(i) + "," + str(k) + "}",
+                                                               column=None)
         # The mu variable will register change in the behaviour from one control to the other. Therefore loses 1
         # degree of freedom
         if (self.data.K - 1) != k:
             self.muVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, obj=0.0, vtype=grb.GRB.CONTINUOUS,
-                                                           name="mu_{" + str(i) + "," + str(k) + "}",
-                                                           column=None)
+                                                               name="mu_{" + str(i) + "," + str(k) + "}",
+                                                               column=None)
 
     ## This function builds variables to be included in the model
     def buildVariables(self):
@@ -98,9 +100,15 @@ class tomotherapyNP(object):
             self.yVar[k] = self.mod.addVar(lb=0.0, ub=self.data.maxIntensity, obj=0.0,
                                                              vtype=grb.GRB.CONTINUOUS, name="Y_{" + str(k) + "}",
                                                              column=None)
-            for i in range(0, (self.data.N)):
-                self.declareVariables(i, k)
-
+            # Create a partial function
+            self.partialdeclareFunc = partial(self.declareVariables, k=k)
+            for i in range(0, self.data.N):
+                self.partialdeclareFunc(i)
+            # if __name__ == '__main__':
+            #      pool = Pool(processes=numcores)  # process per MP
+            #      pool.map(self.partialdeclareFunc, range(0, self.data.N))
+            # pool.close()
+            # pool.join()
 
         # Lazy update of gurobi
         self.mod.update()
