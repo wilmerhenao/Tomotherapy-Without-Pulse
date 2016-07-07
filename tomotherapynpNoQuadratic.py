@@ -34,16 +34,17 @@ class tomotherapyNP(object):
         print('Constructing Gurobi model object...', end="")
         self.mod = grb.Model()
         self.mod.params.threads = numcores
+        self.mod.params.MIPFocus = 3
+        self.mod.params.PreSparsify = 1
+        self.mod.params.Presolve = 2
+        self.mod.params.TimeLimit = 4.0 # Time limit in seconds
         print('done')
         print('Building main decision variables (dose, binaries).')
         self.minDoseConstraints = []
         self.maxDoseConstraints = []
         self.buildVariables()
-        print('Main variables and dose done')
-
-    ## Wrapper for the optimize function
-    def solveModel(self):
-        self.mod.optimize()
+        self.launchOptimization()
+        print('The problem has been completed')
 
     def addVarsandDoseConstraint(self):
         print('creating primary dose constraints...', end="")
@@ -184,6 +185,8 @@ class tomotherapyNP(object):
         self.objConstraints()
         print('done')
         # Set the objective value
+
+    def launchOptimization(self):
         print('Setting up and launching the optimization...', end="")
         objexpr = grb.LinExpr()
         objexpr = -self.minDosePTVVar
@@ -192,6 +195,20 @@ class tomotherapyNP(object):
         self.mod.update()
         self.mod.optimize()
         print('done')
+
+    def outputSolution(self):
+        outDict = {}
+        outDict['yVector'] = np.array([self.cpBinaryVars[i].X for i in range(self.data.K)])
+        outDict['doseVector'] = np.array([self.zeeVars[j].X for j in range(self.data.totalsmallvoxels)])
+        outDict['obj'] = self.mod.objVal
+
+        if self.data.modType == 'modulated':
+            outDict['intensities'] = np.array([self.cpBilinearVars[i].X for i in range(self.data.nCP)])
+
+        # check if directory exists
+        if not os.path.exists(self.data.outputDirectory):
+            os.makedirs(self.data.outputDirectory)
+        sio.savemat(self.data.outputDirectory + self.data.outputFilename, outDict)
 
     def plotDVH(self, saveNameTag='', plotFull=False, showPlot=False, differentVoxelMap=''):
         if differentVoxelMap != '':
@@ -229,17 +246,8 @@ class tomotherapyNP(object):
 
     def outputSolution(self):
         outDict = {}
-        outDict['yVector'] = np.array([self.cpBinaryVars[i].X for i in range(self.data.nCP)])
         outDict['doseVector'] = np.array([self.doseVars[j].X for j in range(self.data.nVox)])
         outDict['obj'] = self.mod.objVal
-
-        if self.data.modType == 'modulated':
-            outDict['intensities'] = np.array([self.cpBilinearVars[i].X for i in range(self.data.nCP)])
-
-        # check if directory exists
-        if not os.path.exists(self.data.outputDirectory):
-            os.makedirs(self.data.outputDirectory)
-        sio.savemat(self.data.outputDirectory + self.data.outputFilename, outDict)
 
 ## Function that reads the files produced by Weiguo
 def getvector(necfile,dtype):
