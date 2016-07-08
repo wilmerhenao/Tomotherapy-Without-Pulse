@@ -164,10 +164,11 @@ class tomotherapyNP(object):
         self.mod.update()
         for i in range(0, self.data.totalsmallvoxels):
             # Constraint on minimum radiation if this is a tumor
-            if self.data.mask[self.data.TumorMap[0][i]] in self.data.TARGETList:
+            sys.stdout.flush()
+            if self.data.mask[i] in self.data.TARGETList:
                 self.minDoseConstraints.append(self.mod.addConstr(self.minDosePTVVar, grb.GRB.LESS_EQUAL, self.zeeVars[i]))
             # Constraint on maximum radiation to the OAR
-            if self.data.mask[self.data.TumorMap[0][i]] in self.data.OARList:
+            if self.data.mask[i] in self.data.OARList:
                 self.maxDoseConstraints.append(self.mod.addConstr(self.zeeVars[i], grb.GRB.LESS_EQUAL, self.data.OARMAX))
         self.mod.update()
 
@@ -203,23 +204,26 @@ class tomotherapyNP(object):
         outDict['obj'] = self.mod.objVal
 
     def plotDVH(self, NameTag='', showPlot=False):
-        voxMap = np.loadtxt(self.data.dataDirectory + self.data.voxelMapDVH, dtype='int32')
         voxDict = {}
+        print('string of data.mask ', len(self.data.mask), self.data.mask)
         for t in self.data.TARGETList:
-            voxDict[t] = np.where(self.data.smallvoxels == t)[0]
+            voxDict[t] = np.where(self.data.mask == t)[0]
         for o in self.data.OARList:
-            voxDict[o] = np.where(self.data.smallvoxels == o)[0]
+            voxDict[o] = np.where(self.data.mask == o)[0]
         dose = np.array([self.zeeVars[j].X for j in range(self.data.totalsmallvoxels)])
         plt.clf()
-        for index, sValues in voxDict.iteritems():
+        for index, sValues in voxDict.items():
             sVoxels = sValues
+            print('checker: ', index, sValues)
+            print('dose: ', dose)
+            print('totalsmallvoxels', self.data.totalsmallvoxels)
             hist, bins = np.histogram(dose[sVoxels], bins=100)
             dvh = 1. - np.cumsum(hist) / float(sVoxels.shape[0])
             plt.plot(bins[:-1], dvh, label = "struct " + str(index), linewidth = 2)
 
         lgd = plt.legend(fancybox=True, framealpha=0.5, bbox_to_anchor=(1.05, 1), loc=2)
         plt.title('DVH')
-        plt.savefig(self.data.outputDirectory + NameTag '.png',
+        plt.savefig(self.data.outputDirectory + NameTag + '.png',
                         bbox_extra_artists=(lgd,), bbox_inches='tight')
         if showPlot:
             plt.show()
@@ -249,7 +253,7 @@ def list_duplicates(seq):
 class tomodata:
     ## Initialization of the data
     def __init__(self):
-        self.outputdirectory = "outputs/"
+        self.outputDirectory = "output/"
         ## C Value in the objective function
         self.C = 1.0
         ## M value. A large value that variable t will not reach (t in this case is from 0 to 1)
@@ -267,23 +271,22 @@ class tomodata:
         sys.stdout.flush()
         print('done')
         # Create a space in smallvoxel coordinates
+
         self.smallvoxels = self.BigToSmallCreator()
+        print('voxels: ', self.voxels, len(self.voxels), len(np.unique(self.voxels)))
+        print('smallvoxels: ', self.smallvoxels, len(self.smallvoxels), len(np.unique(self.smallvoxels)))
         print('Build sparse matrix.')
         # The next part uses the case corresponding to either Wilmer or Weiguo's case.
         self.totalbeamlets = self.K * self.N
         self.totalsmallvoxels = max(self.smallvoxels) + 1
+        print('totalsmallvoxels: ', self.totalsmallvoxels)
         print('lengts of voxels and mask: ' + str(len((self.smallvoxels))) + ' ' + str(len(self.mask)))
-        print("unique voi's: ", np.unique(self.mask))
         self.D = sps.csc_matrix((self.Dijs, (self.smallvoxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions
-        self.TumorMapCreator()
-
-    ## Create a map from big to small voxel space
-    def TumorMapCreator(self):
-        self.TumorMap = np.where(0 != self.mask)
 
     ## Create a map from big to small voxel space
     def BigToSmallCreator(self):
+        # Notice that the order of voxels IS preserved. So (1,2,3,80,7) produces c = (0,1,2,4,3)
         a,b,c,d = np.unique(self.voxels, return_index=True, return_inverse=True, return_counts=True)
         return(c)
 
@@ -306,7 +309,6 @@ class tomodata:
         self.N = dictdata['N']
         self.OARList = dictdata['OARIDs']
         self.TARGETList = dictdata['TARGETIDs']
-        print("Targets and OARS: ", self.TARGETList, self.OARList)
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 start_time = time.time()
