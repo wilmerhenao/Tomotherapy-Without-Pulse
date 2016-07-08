@@ -44,6 +44,7 @@ class tomotherapyNP(object):
         self.maxDoseConstraints = []
         self.buildVariables()
         self.launchOptimization()
+        self.plotDVH('dvhcheck')
         print('The problem has been completed')
 
     def addVarsandDoseConstraint(self):
@@ -198,48 +199,27 @@ class tomotherapyNP(object):
 
     def outputSolution(self):
         outDict = {}
-        outDict['yVector'] = np.array([self.cpBinaryVars[i].X for i in range(self.data.K)])
         outDict['doseVector'] = np.array([self.zeeVars[j].X for j in range(self.data.totalsmallvoxels)])
         outDict['obj'] = self.mod.objVal
 
-        if self.data.modType == 'modulated':
-            outDict['intensities'] = np.array([self.cpBilinearVars[i].X for i in range(self.data.nCP)])
-
-        # check if directory exists
-        if not os.path.exists(self.data.outputDirectory):
-            os.makedirs(self.data.outputDirectory)
-        sio.savemat(self.data.outputDirectory + self.data.outputFilename, outDict)
-
-    def plotDVH(self, saveNameTag='', plotFull=False, showPlot=False, differentVoxelMap=''):
-        if differentVoxelMap != '':
-            voxMap = np.loadtxt(self.data.dataDirectory + differentVoxelMap, dtype='int32')
-            voxDict = {}
-            for t in self.data.targetIndices:
-                voxDict[t] = np.where(voxMap == t)[0]
-            for o in self.data.oarIndices:
-                voxDict[o] = np.where(voxMap == o)[0]
-        else:
-            voxMap = np.loadtxt(self.data.dataDirectory + self.data.voxelMapDVH, dtype='int32')
-            voxDict = {}
-            for t in self.data.targetIndices:
-                voxDict[t] = np.where(voxMap == t)[0]
-            for o in self.data.oarIndices:
-                voxDict[o] = np.where(voxMap == o)[0]
-        dose = np.array([self.doseVars[j].X for j in range(self.data.nVox)])
+    def plotDVH(self, NameTag='', showPlot=False):
+        voxMap = np.loadtxt(self.data.dataDirectory + self.data.voxelMapDVH, dtype='int32')
+        voxDict = {}
+        for t in self.data.TARGETList:
+            voxDict[t] = np.where(self.data.smallvoxels == t)[0]
+        for o in self.data.OARList:
+            voxDict[o] = np.where(self.data.smallvoxels == o)[0]
+        dose = np.array([self.zeeVars[j].X for j in range(self.data.totalsmallvoxels)])
         plt.clf()
         for index, sValues in voxDict.iteritems():
-            if plotFull:
-                sVoxels = sValues
-            else:
-                if not len(sValues) > 0:
-                    continue
-                sVoxels = sValues
+            sVoxels = sValues
             hist, bins = np.histogram(dose[sVoxels], bins=100)
             dvh = 1. - np.cumsum(hist) / float(sVoxels.shape[0])
-            plt.plot(bins[:-1], dvh, label="struct " + str(index), linewidth=2)
+            plt.plot(bins[:-1], dvh, label = "struct " + str(index), linewidth = 2)
+
         lgd = plt.legend(fancybox=True, framealpha=0.5, bbox_to_anchor=(1.05, 1), loc=2)
         plt.title('DVH')
-        plt.savefig(self.data.outputDirectory + saveNameTag + '_' + self.data.outputFilename[:-4] + '.png',
+        plt.savefig(self.data.outputDirectory + NameTag '.png',
                         bbox_extra_artists=(lgd,), bbox_inches='tight')
         if showPlot:
             plt.show()
@@ -269,6 +249,7 @@ def list_duplicates(seq):
 class tomodata:
     ## Initialization of the data
     def __init__(self):
+        self.outputdirectory = "outputs/"
         ## C Value in the objective function
         self.C = 1.0
         ## M value. A large value that variable t will not reach (t in this case is from 0 to 1)
