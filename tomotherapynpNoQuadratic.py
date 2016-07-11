@@ -37,7 +37,7 @@ class tomotherapyNP(object):
         self.mod.params.MIPFocus = 3
         self.mod.params.PreSparsify = 1
         self.mod.params.Presolve = 2
-        self.mod.params.TimeLimit = 4.0 # Time limit in seconds
+        #self.mod.params.TimeLimit = 14.0 # Time limit in seconds
         print('done')
         print('Building main decision variables (dose, binaries).')
         self.minDoseConstraints = []
@@ -119,9 +119,13 @@ class tomotherapyNP(object):
         self.xiconstraint1 = [None] * (self.data.N * self.data.K)
         self.xiconstraint2 = [None] * (self.data.N * self.data.K)
         self.xiconstraint3 = [None] * (self.data.N * self.data.K)
+        self.sumMaxRestriction = [None] * (self.data.N)
         # Constraints related to absolute value removal from objective function
-        for k in range(0, (self.data.K - 1)):
-            for i in range(0, self.data.N):
+        for i in range(0, self.data.N):
+            expr = grb.LinExpr()
+            for k in range(0, (self.data.K - 1)):
+                # sum mu variables and restrict their sum to be smaller than M
+                expr += self.muVars[i + k * self.data.N]
                 # \mu \geq \beta_{i,k+1} - \beta_{i,k}
                 self.absoluteValueRemovalConstraint1[i + k * self.data.N] = self.mod.addConstr(
                     self.muVars[i + k * self.data.N],
@@ -134,6 +138,9 @@ class tomotherapyNP(object):
                     grb.GRB.GREATER_EQUAL,
                     -(self.binaryVars[i + (k + 1) * self.data.N] - self.binaryVars[i + k * self.data.N]),
                     name = "rmabs2_{" + str(i) + "," + str(k) + "}")
+            self.sumMaxRestriction[k] = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL,self.data.M,
+                                                                   name = "summaxrest_{" + str(k) + "}")
+
         # Constraints related to McCormick relaxations.
         for k in range(0, self.data.K):
             for i in range(0, self.data.N):
@@ -168,8 +175,10 @@ class tomotherapyNP(object):
             if self.data.mask[i] in self.data.TARGETList:
                 self.minDoseConstraints.append(self.mod.addConstr(self.minDosePTVVar, grb.GRB.LESS_EQUAL, self.zeeVars[i]))
             # Constraint on maximum radiation to the OAR
-            if self.data.mask[i] in self.data.OARList:
+            elif self.data.mask[i] in self.data.OARList:
                 self.maxDoseConstraints.append(self.mod.addConstr(self.zeeVars[i], grb.GRB.LESS_EQUAL, self.data.OARMAX))
+            else:
+                sys.exit('there is a voxel that does not belong anywhere')
         self.mod.update()
 
     ## This function builds variables to be included in the model
@@ -205,24 +214,27 @@ class tomotherapyNP(object):
 
     def plotDVH(self, NameTag='', showPlot=False):
         voxDict = {}
-        print('string of data.mask ', len(self.data.mask), self.data.mask)
         for t in self.data.TARGETList:
             voxDict[t] = np.where(self.data.mask == t)[0]
         for o in self.data.OARList:
             voxDict[o] = np.where(self.data.mask == o)[0]
         dose = np.array([self.zeeVars[j].X for j in range(self.data.totalsmallvoxels)])
+
+
         plt.clf()
         for index, sValues in voxDict.items():
             sVoxels = sValues
-            print('checker: ', index, sValues)
-            print('dose: ', dose)
-            print('totalsmallvoxels', self.data.totalsmallvoxels)
             hist, bins = np.histogram(dose[sVoxels], bins=100)
             dvh = 1. - np.cumsum(hist) / float(sVoxels.shape[0])
-            plt.plot(bins[:-1], dvh, label = "struct " + str(index), linewidth = 2)
+            print('dvh: ', dvh)
+            dvh = np.insert(dvh, 0, 1)
+            plt.plot(bins, dvh, label = "struct " + str(index), linewidth = 2)
 
         lgd = plt.legend(fancybox=True, framealpha=0.5, bbox_to_anchor=(1.05, 1), loc=2)
         plt.title('DVH')
+        plt.grid(True)
+        plt.xlabel('Dose Gray')
+        plt.ylabel('Fractional Volume')
         plt.savefig(self.data.outputDirectory + NameTag + '.png',
                         bbox_extra_artists=(lgd,), bbox_inches='tight')
         if showPlot:
@@ -254,17 +266,18 @@ class tomodata:
     ## Initialization of the data
     def __init__(self):
         self.outputDirectory = "output/"
+        ## M value. Number of times per beamlet that the switch can be turned on or off
+        self.M = 5
         ## C Value in the objective function
         self.C = 1.0
-        ## M value. A large value that variable t will not reach (t in this case is from 0 to 1)
-        self.fractionUB = 1.0
-        self.maxIntensity = 10.0
+        ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
+        self.maxIntensity = 10.0
         ## Number of control points (every 2 degrees)
         self.K = 178
         ## Total number of beamlets
         ## OARMAX is maximum dose tolerable for organs. 10 in this case
-        self.OARMAX = 10
+        self.OARMAX = 7
         print('Read vectors...', end="")
         self.readWilmersCase()
         #self.readWeiguosCase()
@@ -273,14 +286,11 @@ class tomodata:
         # Create a space in smallvoxel coordinates
 
         self.smallvoxels = self.BigToSmallCreator()
-        print('voxels: ', self.voxels, len(self.voxels), len(np.unique(self.voxels)))
-        print('smallvoxels: ', self.smallvoxels, len(self.smallvoxels), len(np.unique(self.smallvoxels)))
         print('Build sparse matrix.')
         # The next part uses the case corresponding to either Wilmer or Weiguo's case.
         self.totalbeamlets = self.K * self.N
         self.totalsmallvoxels = max(self.smallvoxels) + 1
         print('totalsmallvoxels: ', self.totalsmallvoxels)
-        print('lengts of voxels and mask: ' + str(len((self.smallvoxels))) + ' ' + str(len(self.mask)))
         self.D = sps.csc_matrix((self.Dijs, (self.smallvoxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions
 
