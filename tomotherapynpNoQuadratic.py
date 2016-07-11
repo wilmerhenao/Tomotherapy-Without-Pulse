@@ -137,7 +137,7 @@ class tomotherapyNP(object):
                     -(self.binaryVars[i + (k + 1) * self.data.N] - self.binaryVars[i + k * self.data.N]),
                     name = "rmabs2_{" + str(i) + "," + str(k) + "}")
             self.sumMaxRestriction[i] = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL,self.data.M,
-                                                                   name = "summaxrest_{" + str(k) + "}")
+                                                                   name = "summaxrest_{" + str(i) + "}")
             expr = None
 
         # Constraints related to McCormick relaxations.
@@ -332,8 +332,9 @@ class tomodata:
         self.voxels = getvector('data\\Voxels_out.bin', np.int32)
         self.Dijs = getvector('data\\Dijs_out.bin', np.float32)
         self.mask = getvector('data\\optmask.img', np.int32)
-        self.OARList = [2, 3]
+        self.OARList = [0, 1, 2, 3]
         self.TARGETList = [256]
+        #print(np.unique(self.mask))
 
     def readWilmersCase(self):
         self.bixels = getvector('data\\myBixels_out.bin', np.int32)
