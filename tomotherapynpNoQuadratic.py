@@ -136,7 +136,7 @@ class tomotherapyNP(object):
                     grb.GRB.GREATER_EQUAL,
                     -(self.binaryVars[i + (k + 1) * self.data.N] - self.binaryVars[i + k * self.data.N]),
                     name = "rmabs2_{" + str(i) + "," + str(k) + "}")
-            self.sumMaxRestriction[k] = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL,self.data.M,
+            self.sumMaxRestriction[i] = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL,self.data.M,
                                                                    name = "summaxrest_{" + str(k) + "}")
             expr = None
 
@@ -306,8 +306,8 @@ class tomodata:
         ## OARMAX is maximum dose tolerable for organs. 10 in this case
         self.OARMAX = 7
         print('Read vectors...', end="")
-        self.readWilmersCase()
-        #self.readWeiguosCase()
+        #self.readWilmersCase()
+        self.readWeiguosCase()
         sys.stdout.flush()
         print('done')
         # Create a space in smallvoxel coordinates
