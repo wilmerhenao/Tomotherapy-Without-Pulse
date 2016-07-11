@@ -220,13 +220,11 @@ class tomotherapyNP(object):
             voxDict[o] = np.where(self.data.mask == o)[0]
         dose = np.array([self.zeeVars[j].X for j in range(self.data.totalsmallvoxels)])
 
-
         plt.clf()
         for index, sValues in voxDict.items():
             sVoxels = sValues
             hist, bins = np.histogram(dose[sVoxels], bins=100)
             dvh = 1. - np.cumsum(hist) / float(sVoxels.shape[0])
-            print('dvh: ', dvh)
             dvh = np.insert(dvh, 0, 1)
             plt.plot(bins, dvh, label = "struct " + str(index), linewidth = 2)
 
