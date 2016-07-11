@@ -40,8 +40,6 @@ class tomotherapyNP(object):
         #self.mod.params.TimeLimit = 14.0 # Time limit in seconds
         print('done')
         print('Building main decision variables (dose, binaries).')
-        self.minDoseConstraints = []
-        self.maxDoseConstraints = []
         self.buildVariables()
         self.launchOptimization()
         self.plotDVH('dvhcheck')
@@ -140,6 +138,7 @@ class tomotherapyNP(object):
                     name = "rmabs2_{" + str(i) + "," + str(k) + "}")
             self.sumMaxRestriction[k] = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL,self.data.M,
                                                                    name = "summaxrest_{" + str(k) + "}")
+            expr = None
 
         # Constraints related to McCormick relaxations.
         for k in range(0, self.data.K):
@@ -164,22 +163,51 @@ class tomotherapyNP(object):
                     name="xiconstraint3_{" + str(i) + "," + str(k) + "}")
         self.mod.update()
 
-    def objConstraints(self):
+    def objConstraintsMinDose(self):
+        self.minDoseConstraints = []
+        self.maxDoseConstraints = []
         self.minDosePTVVar = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
-                                             name="minDosePTV", column=None)
-
+                                             name="minDosePTV", column = None)
+        self.objQuad = grb.QuadExpr()
         self.mod.update()
         for i in range(0, self.data.totalsmallvoxels):
             # Constraint on minimum radiation if this is a tumor
-            sys.stdout.flush()
             if self.data.mask[i] in self.data.TARGETList:
-                self.minDoseConstraints.append(self.mod.addConstr(self.minDosePTVVar, grb.GRB.LESS_EQUAL, self.zeeVars[i]))
+                self.minDoseConstraints.append(self.mod.addConstr(self.minDosePTVVar, grb.GRB.LESS_EQUAL,
+                                                                  self.zeeVars[i]))
+                # Constraint even the maximum dose to voxels
+                self.minDoseConstraints.append(self.mod.addConstr(
+                    self.zeeVars[i], grb.GRB.LESS_EQUAL, self.data.maxDosePTV))
             # Constraint on maximum radiation to the OAR
             elif self.data.mask[i] in self.data.OARList:
                 self.maxDoseConstraints.append(self.mod.addConstr(self.zeeVars[i], grb.GRB.LESS_EQUAL, self.data.OARMAX))
             else:
                 sys.exit('there is a voxel that does not belong anywhere')
+        #self.mod.addConstr(self.minDosePTVVar, grb.GRB.GREATER_EQUAL, 8.00)
         self.mod.update()
+
+    # def objConstraintsQuadratic(self):
+    #     self.QuadDosePTVVar = self.mod.addVar(lb = 0.0, ub = grb.GRB.INFINITY, vtype = grb.GRB.CONTINUOUS,
+    #                                          name = "minDosePTV", column = None)
+    #     self.mod.update()
+    #     for i in range(0, self.data.totalsmallvoxels):
+    #         # Constraint on minimum radiation if this is a tumor
+    #         if self.data.mask[i] in self.data.TARGETList:
+    #             self.minDoseConstraints.append(self.mod.addConstr(self.minDosePTVVar, grb.GRB.LESS_EQUAL,
+    #                                                               self.zeeVars[i] ) )
+    #             # Constraint even the maximum dose to voxels
+    #             self.minDoseConstraints.append(self.mod.addConstr(
+    #                 self.zeeVars[i], grb.GRB.LESS_EQUAL, self.data.maxDosePTV))
+    #         # Constraint on maximum radiation to the OAR
+    #         elif self.data.mask[i] in self.data.OARList:
+    #             self.maxDoseConstraints.append(
+    #                 self.mod.addConstr(self.zeeVars[i], grb.GRB.LESS_EQUAL, self.data.OARMAX
+    #                                    )
+    #                 )
+    #         else:
+    #             sys.exit('there is a voxel that does not belong anywhere')
+    #     # self.mod.addConstr(self.minDosePTVVar, grb.GRB.GREATER_EQUAL, 8.00)
+    #     self.mod.update()
 
     ## This function builds variables to be included in the model
     def buildVariables(self):
@@ -193,16 +221,16 @@ class tomotherapyNP(object):
         # Update the objective function.
         # Create a variable that will be the minimum dose to a PTV.
         print('creating VOI constraints and constraints directly associated with the objective...', end="")
-        self.objConstraints()
+        self.objConstraintsMinDose()
         print('done')
         # Set the objective value
 
     def launchOptimization(self):
         print('Setting up and launching the optimization...', end="")
         objexpr = grb.LinExpr()
-        objexpr = -self.minDosePTVVar
+        objexpr = self.minDosePTVVar
 
-        self.mod.setObjective(objexpr, 1.0) #1.0 expresses minimization. It is the model sense.
+        self.mod.setObjective(objexpr, grb.GRB.MAXIMIZE) #1.0 expresses minimization. It is the model sense.
         self.mod.update()
         self.mod.optimize()
         print('done')
@@ -219,7 +247,7 @@ class tomotherapyNP(object):
         for o in self.data.OARList:
             voxDict[o] = np.where(self.data.mask == o)[0]
         dose = np.array([self.zeeVars[j].X for j in range(self.data.totalsmallvoxels)])
-
+        print('dose: ', dose)
         plt.clf()
         for index, sValues in voxDict.items():
             sVoxels = sValues
@@ -271,6 +299,7 @@ class tomodata:
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 10.0
+        self.maxDosePTV = 9.9
         ## Number of control points (every 2 degrees)
         self.K = 178
         ## Total number of beamlets
