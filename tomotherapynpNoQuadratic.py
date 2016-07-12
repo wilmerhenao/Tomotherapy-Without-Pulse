@@ -36,8 +36,8 @@ class tomotherapyNP(object):
         self.mod.params.threads = numcores
         self.mod.params.MIPFocus = 3
         self.mod.params.PreSparsify = 1
-        self.mod.params.Presolve = 2
-        #self.mod.params.TimeLimit = 14.0 # Time limit in seconds
+        self.mod.params.Presolve = 1
+        self.mod.params.TimeLimit = 14.0 # Time limit in seconds
         print('done')
         print('Building main decision variables (dose, binaries).')
         self.buildVariables()
@@ -181,8 +181,9 @@ class tomotherapyNP(object):
             # Constraint on maximum radiation to the OAR
             elif self.data.mask[i] in self.data.OARList:
                 self.maxDoseConstraints.append(self.mod.addConstr(self.zeeVars[i], grb.GRB.LESS_EQUAL, self.data.OARMAX))
-            else:
-                sys.exit('there is a voxel that does not belong anywhere')
+            elif 0 == self.data.mask[i] :
+                print('there is an element in the voxels that is also mask 0')
+                ## sys.exit('there is a voxel that does not belong anywhere')
         #self.mod.addConstr(self.minDosePTVVar, grb.GRB.GREATER_EQUAL, 8.00)
         self.mod.update()
 
@@ -247,10 +248,12 @@ class tomotherapyNP(object):
         for o in self.data.OARList:
             voxDict[o] = np.where(self.data.mask == o)[0]
         dose = np.array([self.zeeVars[j].X for j in range(self.data.totalsmallvoxels)])
-        print('dose: ', dose)
+        print(max(np.unique(dose)))
+        print('dose: ', len(dose))
         plt.clf()
         for index, sValues in voxDict.items():
             sVoxels = sValues
+            print('MAX SVALUES: ', max(sValues))
             hist, bins = np.histogram(dose[sVoxels], bins=100)
             dvh = 1. - np.cumsum(hist) / float(sVoxels.shape[0])
             dvh = np.insert(dvh, 0, 1)
@@ -308,7 +311,7 @@ class tomodata:
         print('Read vectors...', end="")
         #self.readWilmersCase()
         self.readWeiguosCase()
-        sys.stdout.flush()
+        #sys.stdout.flush()
         print('done')
         # Create a space in smallvoxel coordinates
 
@@ -324,7 +327,7 @@ class tomodata:
     ## Create a map from big to small voxel space
     def BigToSmallCreator(self):
         # Notice that the order of voxels IS preserved. So (1,2,3,80,7) produces c = (0,1,2,4,3)
-        a,b,c,d = np.unique(self.voxels, return_index=True, return_inverse=True, return_counts=True)
+        a, b, c, d = np.unique(self.voxels, return_index=True, return_inverse=True, return_counts=True)
         return(c)
 
     def readWeiguosCase(self):
@@ -332,7 +335,27 @@ class tomodata:
         self.voxels = getvector('data\\Voxels_out.bin', np.int32)
         self.Dijs = getvector('data\\Dijs_out.bin', np.float32)
         self.mask = getvector('data\\optmask.img', np.int32)
-        self.OARList = [0, 1, 2, 3]
+        print('bixels length: ', len(self.bixels))
+        print('VOXELS length: ', len(self.voxels))
+        print('dijs length: ', len(self.Dijs))
+        print('mask length: ', len(self.mask))
+        print('remove all values of zeroes... and double checking')
+        locats = np.where(0 == self.mask)[0]
+        self.mask = np.delete(self.mask, locats)
+        print('locats: ', len(locats))
+        print('mask length: ', len(self.mask))
+        indices = np.where(np.in1d(self.voxels, locats))[0]
+        print('indices', indices)
+        self.bixels = np.delete(self.bixels, indices)
+        self.voxels = np.delete(self.voxels, indices)
+        self.Dijs = np.delete(self.Dijs, indices)
+
+        print('bixels out length: ', len(self.bixels))
+        print('VOXELS out length: ', len(self.voxels))
+        print('unique voxel elements:', len(np.unique(self.voxels)))
+        print('dijs out length: ', len(self.Dijs))
+        print('mask out length: ', len(self.mask))
+        self.OARList = [1, 2, 3]
         self.TARGETList = [256]
         #print(np.unique(self.mask))
 
