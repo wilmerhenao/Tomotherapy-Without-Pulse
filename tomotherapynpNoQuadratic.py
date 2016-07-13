@@ -24,83 +24,9 @@ from multiprocessing import Pool
 from functools import partial
 import math
 from scipy.stats import describe
+import matplotlib
 
 numcores = 4
-
-def mycallback(model, where):
-    if where == GRB.Callback.POLLING:
-        # Ignore polling callback
-        pass
-    elif where == GRB.Callback.PRESOLVE:
-        # Presolve callback
-        cdels = model.cbGet(GRB.Callback.PRE_COLDEL)
-        rdels = model.cbGet(GRB.Callback.PRE_ROWDEL)
-        if cdels or rdels:
-            print('%d columns and %d rows are removed' % (cdels, rdels))
-    elif where == GRB.Callback.SIMPLEX:
-        # Simplex callback
-        print('simplex')
-        itcnt = model.cbGet(GRB.Callback.SPX_ITRCNT)
-        if itcnt - model._lastiter >= 100:
-            model._lastiter = itcnt
-            obj = model.cbGet(GRB.Callback.SPX_OBJVAL)
-            ispert = model.cbGet(GRB.Callback.SPX_ISPERT)
-            pinf = model.cbGet(GRB.Callback.SPX_PRIMINF)
-            dinf = model.cbGet(GRB.Callback.SPX_DUALINF)
-            if ispert == 0:
-                ch = ' '
-            elif ispert == 1:
-                ch = 'S'
-            else:
-                ch = 'P'
-            print('%d %g%s %g %g' % (int(itcnt), obj, ch, pinf, dinf))
-    elif where == GRB.Callback.MIP:
-        # General MIP callback
-        nodecnt = model.cbGet(GRB.Callback.MIP_NODCNT)
-        objbst = model.cbGet(GRB.Callback.MIP_OBJBST)
-        objbnd = model.cbGet(GRB.Callback.MIP_OBJBND)
-        solcnt = model.cbGet(GRB.Callback.MIP_SOLCNT)
-        if nodecnt - model._lastnode >= 100:
-            model._lastnode = nodecnt
-            actnodes = model.cbGet(GRB.Callback.MIP_NODLFT)
-            itcnt = model.cbGet(GRB.Callback.MIP_ITRCNT)
-            cutcnt = model.cbGet(GRB.Callback.MIP_CUTCNT)
-            print('%d %d %d %g %g %d %d' % (nodecnt, actnodes, \
-                  itcnt, objbst, objbnd, solcnt, cutcnt))
-        if abs(objbst - objbnd) < 0.1 * (1.0 + abs(objbst)):
-            print('Stop early - 10% gap achieved')
-            model.terminate()
-        if nodecnt >= 10000 and solcnt:
-            print('Stop early - 10000 nodes explored')
-            model.terminate()
-    elif where == GRB.Callback.MIPSOL:
-        # MIP solution callback
-        nodecnt = model.cbGet(GRB.Callback.MIPSOL_NODCNT)
-        obj = model.cbGet(GRB.Callback.MIPSOL_OBJ)
-        solcnt = model.cbGet(GRB.Callback.MIPSOL_SOLCNT)
-        x = model.cbGetSolution(model.getVars())
-        print('**** New solution at node %d, obj %g, sol %d, ' \
-              'x[0] = %g ****' % (nodecnt, obj, solcnt, x[0]))
-    elif where == GRB.Callback.MIPNODE:
-        # MIP node callback
-        print('**** New node ****')
-        if model.cbGet(GRB.Callback.MIPNODE_STATUS) == GRB.Status.OPTIMAL:
-            x = model.cbGetNodeRel(model.getVars())
-            model.cbSetSolution(model.getVars(), x)
-    elif where == GRB.Callback.BARRIER:
-        # Barrier callback
-        itcnt = model.cbGet(GRB.Callback.BARRIER_ITRCNT)
-        primobj = model.cbGet(GRB.Callback.BARRIER_PRIMOBJ)
-        dualobj = model.cbGet(GRB.Callback.BARRIER_DUALOBJ)
-        priminf = model.cbGet(GRB.Callback.BARRIER_PRIMINF)
-        dualinf = model.cbGet(GRB.Callback.BARRIER_DUALINF)
-        cmpl = model.cbGet(GRB.Callback.BARRIER_COMPL)
-        print('%d %g %g %g %g %g' % (itcnt, primobj, dualobj, \
-              priminf, dualinf, cmpl))
-    elif where == GRB.Callback.MESSAGE:
-        # Message callback
-        msg = model.cbGet(GRB.Callback.MSG_STRING)
-        model._logfile.write(msg)
 
 ## Class definition of the gurobi object that handles creation and execution of the model
 # Original template from Troy Long.
@@ -115,7 +41,7 @@ class tomotherapyNP(object):
         self.mod.params.MIPFocus = 3
         self.mod.params.PreSparsify = 1
         self.mod.params.Presolve = 1
-        self.mod.params.MIPGapAbs = 0.05
+        self.mod.params.MIPGapAbs = 0.5
         #self.mod.params.TimeLimit = 4.0 # Time limit in seconds
         print('done')
         print('Building main decision variables (dose, binaries).')
@@ -313,7 +239,7 @@ class tomotherapyNP(object):
 
         self.mod.setObjective(objexpr, grb.GRB.MAXIMIZE) #1.0 expresses minimization. It is the model sense.
         self.mod.update()
-        self.mod.optimize(mycallback())
+        self.mod.optimize()
         print('done')
 
     def outputSolution(self):
@@ -356,7 +282,7 @@ class tomotherapyNP(object):
         for k in range(self.data.K):
             for i in range(self.data.N):
                 if 1 == self.binaryVars[i + k * self.data.N].X:
-                    print('beamlet '+str(i)+' in CP '+str(k)+ ' is open with intensity ', str(self.yVar[k].X))
+                    #print('beamlet '+str(i)+' in CP '+str(k)+ ' is open with intensity ', str(self.yVar[k].X))
                     # If this particular beamlet is open. Assign the intensity to it.
                     image[i + self.data.N * k] = self.yVar[k].X
         image = image.reshape((nrows, ncols))
@@ -364,7 +290,8 @@ class tomotherapyNP(object):
         plt.clf()
         fig = plt.figure(1)
         cmapper = plt.get_cmap("autumn_r")
-        cmapper.set_under('black', 1.0)
+        norm = matplotlib.colors.Normalize(clip=False)
+        cmapper.set_under('black')
         plt.imshow(image, cmap=cmapper, vmin=0.0, vmax=self.data.maxIntensity)
         plt.axis('off')
         fig.savefig(self.data.outputDirectory + 'sinogram.png', bbox_inches='tight')
@@ -401,8 +328,8 @@ class tomodata:
         self.C = 1.0
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
-        self.maxIntensity = 100
-        self.maxDosePTV = 99.9
+        self.maxIntensity = 1000
+        self.maxDosePTV = 999.9
         ## Number of control points (every 2 degrees)
         self.K = 178
         ## Total number of beamlets
@@ -411,10 +338,8 @@ class tomodata:
         print('Read vectors...', end="")
         #self.readWilmersCase()
         self.readWeiguosCase()
-        #sys.stdout.flush()
         print('done')
         # Create a space in smallvoxel coordinates
-
         self.smallvoxels = self.BigToSmallCreator()
         print('Build sparse matrix.')
         # The next part uses the case corresponding to either Wilmer or Weiguo's case.
