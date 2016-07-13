@@ -22,6 +22,8 @@ from collections import defaultdict
 import time
 from multiprocessing import Pool
 from functools import partial
+import math
+from scipy.stats import describe
 
 numcores = 4
 ## Class definition of the gurobi object that handles creation and execution of the model
@@ -37,12 +39,13 @@ class tomotherapyNP(object):
         self.mod.params.MIPFocus = 3
         self.mod.params.PreSparsify = 1
         self.mod.params.Presolve = 1
-        self.mod.params.TimeLimit = 14.0 # Time limit in seconds
+        #self.mod.params.TimeLimit = 4.0 # Time limit in seconds
         print('done')
         print('Building main decision variables (dose, binaries).')
         self.buildVariables()
         self.launchOptimization()
         self.plotDVH('dvhcheck')
+        self.plotSinoGram()
         print('The problem has been completed')
 
     def addVarsandDoseConstraint(self):
@@ -72,7 +75,7 @@ class tomotherapyNP(object):
         ## mu Variables. Helper variables to remove the absolute value nonlinear constraint
         self.muVars = [None] * ((self.data.N) * (self.data.K - 1))
         for k in range(0, (self.data.K)):
-            print('On control point: ' + str(k + 1) + ' out of ' + str(self.data.K))
+            print('Loading control point: ' + str(k + 1) + ' out of ' + str(self.data.K))
             # yVar created outside the inner loop because there is only one per control point
             self.yVar[k] = self.mod.addVar(lb=0.0, ub=self.data.maxIntensity,
                                            vtype=grb.GRB.CONTINUOUS, name="Y_{" + str(k) + "}",
@@ -99,13 +102,13 @@ class tomotherapyNP(object):
                                                                                  0].tolist(),
                                                                              self.zeeconstraints))
 
-        self.binaryVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, vtype=grb.GRB.BINARY,
+        self.binaryVars[i + k * self.data.N] = self.mod.addVar(vtype=grb.GRB.BINARY,
                                                                name="binary_{" + str(i) + "," + str(k) + "}",
                                                                column=None)
         # The mu variable will register change in the behaviour from one control to the other. Therefore loses 1
         # degree of freedom
         if (self.data.K - 1) != k:
-            self.muVars[i + k * self.data.N] = self.mod.addVar(lb=0.0, ub=1.0, vtype=grb.GRB.CONTINUOUS,
+            self.muVars[i + k * self.data.N] = self.mod.addVar(vtype=grb.GRB.BINARY,
                                                                name="mu_{" + str(i) + "," + str(k) + "}",
                                                                column=None)
 
@@ -147,7 +150,7 @@ class tomotherapyNP(object):
                 self.xiconstraint1[i + k * self.data.N] = self.mod.addConstr(
                     self.xiVars[i + k * self.data.N],
                     grb.GRB.LESS_EQUAL,
-                    self.binaryVars[i + k * self.data.N],
+                    self.binaryVars[i + k * self.data.N] * self.data.maxIntensity,
                     name="xiconstraint1_{" + str(i) + "," + str(k) + "}")
                 # \xi \leq y
                 self.xiconstraint2[i + k * self.data.N] = self.mod.addConstr(
@@ -253,7 +256,6 @@ class tomotherapyNP(object):
         plt.clf()
         for index, sValues in voxDict.items():
             sVoxels = sValues
-            print('MAX SVALUES: ', max(sValues))
             hist, bins = np.histogram(dose[sVoxels], bins=100)
             dvh = 1. - np.cumsum(hist) / float(sVoxels.shape[0])
             dvh = np.insert(dvh, 0, 1)
@@ -268,6 +270,27 @@ class tomotherapyNP(object):
                         bbox_extra_artists=(lgd,), bbox_inches='tight')
         if showPlot:
             plt.show()
+        plt.close()
+
+    def plotSinoGram(self):
+        ## Plotting apertures
+        nrows, ncols = self.data.K, self.data.N
+        image = -1 * np.ones(nrows * ncols)
+        for k in range(self.data.K):
+            for i in range(self.data.N):
+                if 1 == self.binaryVars[i + k * self.data.N].X:
+                    print('beamlet '+str(i)+' in CP '+str(k)+ ' is open with intensity ', str(self.yVar[k].X))
+                    # If this particular beamlet is open. Assign the intensity to it.
+                    image[i + self.data.N * k] = self.yVar[k].X
+        image = image.reshape((nrows, ncols))
+        print('image: ', image)
+        plt.clf()
+        fig = plt.figure(1)
+        cmapper = plt.get_cmap("autumn_r")
+        cmapper.set_under('black', 1.0)
+        plt.imshow(image, cmap=cmapper, vmin=0.0, vmax=self.data.maxIntensity)
+        plt.axis('off')
+        fig.savefig(self.data.outputDirectory + 'sinogram.png', bbox_inches='tight')
 
     def outputSolution(self):
         outDict = {}
@@ -296,18 +319,18 @@ class tomodata:
     def __init__(self):
         self.outputDirectory = "output/"
         ## M value. Number of times per beamlet that the switch can be turned on or off
-        self.M = 5
+        self.M = 51
         ## C Value in the objective function
         self.C = 1.0
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
-        self.maxIntensity = 10.0
-        self.maxDosePTV = 9.9
+        self.maxIntensity = 100
+        self.maxDosePTV = 99.9
         ## Number of control points (every 2 degrees)
         self.K = 178
         ## Total number of beamlets
         ## OARMAX is maximum dose tolerable for organs. 10 in this case
-        self.OARMAX = 7
+        self.OARMAX = 7.0
         print('Read vectors...', end="")
         #self.readWilmersCase()
         self.readWeiguosCase()
@@ -321,6 +344,7 @@ class tomodata:
         self.totalbeamlets = self.K * self.N
         self.totalsmallvoxels = max(self.smallvoxels) + 1
         print('totalsmallvoxels: ', self.totalsmallvoxels)
+        print('a brief description of Dijs array', describe(self.Dijs))
         self.D = sps.csc_matrix((self.Dijs, (self.smallvoxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions
 
@@ -329,6 +353,20 @@ class tomodata:
         # Notice that the order of voxels IS preserved. So (1,2,3,80,7) produces c = (0,1,2,4,3)
         a, b, c, d = np.unique(self.voxels, return_index=True, return_inverse=True, return_counts=True)
         return(c)
+
+    ## This function reduces the size of the case by a factor fr
+    def sizereduction(self, fr):
+        maxlimit = max(self.voxels)
+        print('MAXLIMIT: ', maxlimit)
+        existingvoxels = np.arange(0, maxlimit, fr)
+        indices = np.where(np.in1d(self.voxels, existingvoxels))[0]
+        self.bixels = self.bixels[indices]
+        self.voxels = self.voxels[indices]
+        self.Dijs = self.Dijs[indices]
+        self.mask = np.array([self.mask[i] for i in np.arange(0, maxlimit, fr)])
+        print('reduced size of mask', len(self.mask))
+        print('reduced size of voxels', len(self.voxels))
+        print('reduced size of Dijs', len(self.Dijs))
 
     def readWeiguosCase(self):
         self.bixels = getvector('data\\Bixels_out.bin', np.int32)
@@ -340,6 +378,7 @@ class tomodata:
         print('dijs length: ', len(self.Dijs))
         print('mask length: ', len(self.mask))
         print('remove all values of zeroes... and double checking')
+        self.sizereduction(200)
         locats = np.where(0 == self.mask)[0]
         self.mask = np.delete(self.mask, locats)
         print('locats: ', len(locats))
@@ -349,7 +388,6 @@ class tomodata:
         self.bixels = np.delete(self.bixels, indices)
         self.voxels = np.delete(self.voxels, indices)
         self.Dijs = np.delete(self.Dijs, indices)
-
         print('bixels out length: ', len(self.bixels))
         print('VOXELS out length: ', len(self.voxels))
         print('unique voxel elements:', len(np.unique(self.voxels)))
