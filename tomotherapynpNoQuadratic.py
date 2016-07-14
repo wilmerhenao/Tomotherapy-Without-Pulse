@@ -49,6 +49,8 @@ class tomotherapyNP(object):
         self.launchOptimization()
         self.plotDVH('dvhcheck')
         self.plotSinoGram()
+        #self.plotEventsMU()
+        self.plotEventsbinary()
         print('The problem has been completed')
 
     def addVarsandDoseConstraint(self):
@@ -275,6 +277,7 @@ class tomotherapyNP(object):
             plt.show()
         plt.close()
 
+    ## Showing the evolution of apertures through control points
     def plotSinoGram(self):
         ## Plotting apertures
         nrows, ncols = self.data.K, self.data.N
@@ -286,7 +289,6 @@ class tomotherapyNP(object):
                     # If this particular beamlet is open. Assign the intensity to it.
                     image[i + self.data.N * k] = self.yVar[k].X
         image = image.reshape((nrows, ncols))
-        print('image: ', image)
         plt.clf()
         fig = plt.figure(1)
         cmapper = plt.get_cmap("autumn_r")
@@ -294,7 +296,36 @@ class tomotherapyNP(object):
         cmapper.set_under('black')
         plt.imshow(image, cmap=cmapper, vmin=0.0, vmax=self.data.maxIntensity)
         plt.axis('off')
+        plt.title('Sinogram with ' + str(self.data.sampleevery) + ' subsamples and ' + str(self.data.M) + ' event limit')
         fig.savefig(self.data.outputDirectory + 'sinogram.png', bbox_inches='tight')
+
+    ## Show how many times you opened or closed each aperture.
+    def plotEventsMU(self):
+        ## DO NOT USE THIS FUNCTION> USE plotEventsbinary instead
+        arrayofevents = []
+        for i in range(self.data.N):
+            arrayofevents.append(0)
+            for k in range(self.data.K - 1):
+                arrayofevents[-1] += self.muVars[i + k * self.data.N].X
+        ind = range(len(arrayofevents))
+        plt.clf()
+        fig, ax = plt.subplots()
+        rects1 = ax.bar(ind, arrayofevents, 0.6, color='r')
+        plt.title('Events per beamlet')
+        fig.savefig(self.data.outputDirectory + 'beamletdistributionMU.png', bbox_inches='tight')
+
+    def plotEventsbinary(self):
+        arrayofevents = []
+        for i in range(self.data.N):
+            arrayofevents.append(0)
+            for k in range(self.data.K - 1):
+                arrayofevents[-1] += abs(self.binaryVars[i + k * self.data.N].X - self.binaryVars[i + (k + 1) * self.data.N].X)
+        ind = range(len(arrayofevents))
+        plt.clf()
+        fig, ax = plt.subplots()
+        rects1 = ax.bar(ind, arrayofevents, 0.6, color='r')
+        plt.title('Events per beamlet')
+        fig.savefig(self.data.outputDirectory + 'beamletdistribution.png', bbox_inches='tight')
 
     def outputSolution(self):
         outDict = {}
@@ -323,9 +354,11 @@ class tomodata:
     def __init__(self):
         self.outputDirectory = "output/"
         ## M value. Number of times per beamlet that the switch can be turned on or off
-        self.M = 51
+        self.M = 8
         ## C Value in the objective function
         self.C = 1.0
+        ## ry this number of observations
+        self.sampleevery = 200
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
@@ -380,7 +413,7 @@ class tomodata:
         print('dijs length: ', len(self.Dijs))
         print('mask length: ', len(self.mask))
         print('remove all values of zeroes... and double checking')
-        self.sizereduction(500)
+        self.sizereduction(self.sampleevery)
         locats = np.where(0 == self.mask)[0]
         self.mask = np.delete(self.mask, locats)
         print('locats: ', len(locats))
