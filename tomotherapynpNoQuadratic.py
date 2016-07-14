@@ -354,7 +354,7 @@ class tomodata:
     def __init__(self):
         self.outputDirectory = "output/"
         ## M value. Number of times per beamlet that the switch can be turned on or off
-        self.M = 8
+        self.M = 18
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
@@ -403,17 +403,41 @@ class tomodata:
         print('reduced size of voxels', len(self.voxels))
         print('reduced size of Dijs', len(self.Dijs))
 
+    ## Choose Small Space
+    def chooseSmallSpace(self, stepsparse):
+        # Original Map
+        om = [ij for ij in range(self.voxelsBigSpace)]
+        # New Map
+        nm = []
+        for i in np.arange(math.ceil(stepsparse/2), self.caseSide, stepsparse):
+            for j in np.arange(math.ceil(stepsparse/2), self.caseSide, stepsparse):
+                nm.append(om[j + i * self.caseSide])
+        # summary statistics of voxels
+        print('om', describe(om))
+        print('nm', describe(nm))
+        print('effectivity of the reduction:', len(om)/len(nm))
+        indices = np.where(np.in1d(self.voxels, nm))[0]
+        self.bixels = self.bixels[indices]
+        self.voxels = self.voxels[indices]
+        self.Dijs = self.Dijs[indices]
+        self.mask = np.array([self.mask[i] for i in np.arange(0, maxlimit, fr)])
+
+
+    ## Read Weiguo's Case
     def readWeiguosCase(self):
         self.bixels = getvector('data\\Bixels_out.bin', np.int32)
         self.voxels = getvector('data\\Voxels_out.bin', np.int32)
         self.Dijs = getvector('data\\Dijs_out.bin', np.float32)
         self.mask = getvector('data\\optmask.img', np.int32)
+        self.caseSide = 256
+        self.voxelsBigSpace = self.caseSide ** 2
+        self.smallvoxelspace = self.chooseSmallSpace(11)
         print('bixels length: ', len(self.bixels))
         print('VOXELS length: ', len(self.voxels))
         print('dijs length: ', len(self.Dijs))
         print('mask length: ', len(self.mask))
         print('remove all values of zeroes... and double checking')
-        self.sizereduction(self.sampleevery)
+        self.chooseSmallSpace(self.sampleevery)
         locats = np.where(0 == self.mask)[0]
         self.mask = np.delete(self.mask, locats)
         print('locats: ', len(locats))
