@@ -194,7 +194,6 @@ class tomotherapyNP(object):
                 ## sys.exit('there is a voxel that does not belong anywhere')
         #self.mod.addConstr(self.minDosePTVVar, grb.GRB.GREATER_EQUAL, 8.00)
         self.mod.update()
-
     # def objConstraintsQuadratic(self):
     #     self.QuadDosePTVVar = self.mod.addVar(lb = 0.0, ub = grb.GRB.INFINITY, vtype = grb.GRB.CONTINUOUS,
     #                                          name = "minDosePTV", column = None)
@@ -229,12 +228,12 @@ class tomotherapyNP(object):
         print('done')
         # Update the objective function.
         # Create a variable that will be the minimum dose to a PTV.
-        print('creating VOI constraints and constraints directly associated with the objective...', end="")
-        self.objConstraintsMinDose()
-        print('done')
         # Set the objective value
 
     def launchOptimization(self):
+        print('creating VOI constraints and constraints directly associated with the objective...', end="")
+        self.objConstraintsMinDose()
+        print('done')
         print('Setting up and launching the optimization...', end="")
         objexpr = grb.LinExpr()
         objexpr = self.minDosePTVVar
@@ -358,7 +357,7 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.sampleevery = 200
+        self.sampleevery = 11
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
@@ -420,8 +419,8 @@ class tomodata:
         self.bixels = self.bixels[indices]
         self.voxels = self.voxels[indices]
         self.Dijs = self.Dijs[indices]
-        self.mask = np.array([self.mask[i] for i in np.arange(0, maxlimit, fr)])
-
+        print(len(self.mask))
+        self.mask = np.array([self.mask[i] for i in nm])
 
     ## Read Weiguo's Case
     def readWeiguosCase(self):
@@ -431,7 +430,6 @@ class tomodata:
         self.mask = getvector('data\\optmask.img', np.int32)
         self.caseSide = 256
         self.voxelsBigSpace = self.caseSide ** 2
-        self.smallvoxelspace = self.chooseSmallSpace(11)
         print('bixels length: ', len(self.bixels))
         print('VOXELS length: ', len(self.voxels))
         print('dijs length: ', len(self.Dijs))
