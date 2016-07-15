@@ -30,8 +30,8 @@
       <file leaf-file-name="tomotherapynpNoQuadratic.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="394">
-              <caret line="232" column="33" selection-start-line="232" selection-start-column="33" selection-end-line="232" selection-end-column="33" />
+            <state relative-caret-position="405">
+              <caret line="258" column="56" selection-start-line="258" selection-start-column="56" selection-end-line="258" selection-end-column="56" />
               <folding>
                 <element signature="e#68#141#0" expanded="false" />
                 <element signature="e#166#224#0" expanded="false" />
@@ -44,7 +44,6 @@
                 <element signature="e#3236#4097#0" expanded="false" />
                 <element signature="e#3812#4097#0" expanded="false" />
                 <element signature="e#3855#3883#0" expanded="false" />
-                <element signature="e#4203#5704#0" expanded="false" />
                 <element signature="e#5270#5374#0" expanded="false" />
                 <element signature="e#5450#5704#0" expanded="false" />
                 <element signature="e#5749#9049#0" expanded="false" />
@@ -56,31 +55,32 @@
                 <element signature="e#9599#9980#0" expanded="false" />
                 <element signature="e#10275#10415#0" expanded="false" />
                 <element signature="e#10523#10559#0" expanded="false" />
-                <element signature="e#13007#13165#0" expanded="false" />
-                <element signature="e#13226#14341#0" expanded="false" />
-                <element signature="e#13666#13929#0" expanded="false" />
-                <element signature="e#14444#15496#0" expanded="false" />
-                <element signature="e#14607#14961#0" expanded="false" />
-                <element signature="e#14652#14961#0" expanded="false" />
-                <element signature="e#14720#14961#0" expanded="false" />
-                <element signature="e#14720#14811#0" expanded="false" />
-                <element signature="e#15597#16160#0" expanded="false" />
-                <element signature="e#15731#15871#0" expanded="false" />
-                <element signature="e#16202#16753#0" expanded="false" />
-                <element signature="e#16270#16466#0" expanded="false" />
-                <element signature="e#16793#16940#0" expanded="false" />
-                <element signature="e#17028#17174#0" expanded="false" />
-                <element signature="e#17067#17157#0" expanded="false" />
-                <element signature="e#17305#17495#0" expanded="false" />
-                <element signature="e#17407#17495#0" expanded="false" />
-                <element signature="e#17517#22985#0" expanded="false" />
-                <element signature="e#17579#19059#0" expanded="false" />
-                <element signature="e#18108#18135#0" expanded="false" />
-                <element signature="e#19152#19362#0" expanded="false" />
-                <element signature="e#19470#20027#0" expanded="false" />
-                <element signature="e#20107#20866#0" expanded="false" />
-                <element signature="e#20303#20436#0" expanded="false" />
-                <element signature="e#22426#22983#0" expanded="false" />
+                <element signature="e#12014#12440#0" expanded="false" />
+                <element signature="e#16568#17051#0" expanded="false" />
+                <element signature="e#17091#17249#0" expanded="false" />
+                <element signature="e#17310#18425#0" expanded="false" />
+                <element signature="e#17750#18013#0" expanded="false" />
+                <element signature="e#18528#19580#0" expanded="false" />
+                <element signature="e#18691#19045#0" expanded="false" />
+                <element signature="e#18736#19045#0" expanded="false" />
+                <element signature="e#18804#19045#0" expanded="false" />
+                <element signature="e#18804#18895#0" expanded="false" />
+                <element signature="e#19681#20244#0" expanded="false" />
+                <element signature="e#19815#19955#0" expanded="false" />
+                <element signature="e#20286#20837#0" expanded="false" />
+                <element signature="e#20354#20550#0" expanded="false" />
+                <element signature="e#20877#21024#0" expanded="false" />
+                <element signature="e#21112#21258#0" expanded="false" />
+                <element signature="e#21151#21241#0" expanded="false" />
+                <element signature="e#21389#21579#0" expanded="false" />
+                <element signature="e#21491#21579#0" expanded="false" />
+                <element signature="e#21663#23143#0" expanded="false" />
+                <element signature="e#22192#22219#0" expanded="false" />
+                <element signature="e#23236#23446#0" expanded="false" />
+                <element signature="e#23554#24111#0" expanded="false" />
+                <element signature="e#24191#24950#0" expanded="false" />
+                <element signature="e#24387#24520#0" expanded="false" />
+                <element signature="e#26586#27143#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -93,29 +93,15 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="dvhcheck.png" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/output/dvhcheck.png">
+          <provider selected="true" editor-type-id="images">
+            <state />
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="beamletdistribution.png" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/output/beamletdistribution.png">
-          <provider selected="true" editor-type-id="images">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="beamletdistribution-Sample-Every-100.png" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/output/beamletdistribution-Sample-Every-100.png">
-          <provider selected="true" editor-type-id="images">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="beamletdistribution-Sample-Every-100-limit-11.png" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/output/beamletdistribution-Sample-Every-100-limit-11.png">
-          <provider selected="true" editor-type-id="images">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="beamletdistributionMU.png" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/output/beamletdistributionMU.png">
           <provider selected="true" editor-type-id="images">
             <state />
           </provider>
@@ -571,20 +557,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00012" summary="added zeeplus and zeeminus vars that will replace the rolls of delta in removing the absolute value from the set of constraints.">
-      <created>1466630601625</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1466630601625</updated>
-    </task>
-    <task id="LOCAL-00013" summary="Added xi constraints without a lot of reviewing. I think there may be problems with indices which I'll fix later">
-      <created>1466632878160</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1466632878160</updated>
-    </task>
     <task id="LOCAL-00014" summary="corrected zeeplus zeeminus names">
       <created>1466633214960</created>
       <option name="number" value="00014" />
@@ -914,19 +886,33 @@
       <option name="project" value="LOCAL" />
       <updated>1468537281857</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="A small change to aid in the flow of the thought process">
+      <created>1468599685537</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1468599685537</updated>
+    </task>
+    <task id="LOCAL-00062" summary="Implemented semiquadratic objective functions">
+      <created>1468608145125</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1468608145125</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19546892" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11275026" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.08129176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3167028" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33333334" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973656" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -971,8 +957,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added a sparse matrix in order to make the addition of the dose constraint simpler with columns." />
-    <MESSAGE value="Created a small voxel space across the board. Also, there is a new way to allocate variables by column which speeds up the running time of the assignations?" />
     <MESSAGE value="Corrected a bug in the creation of the D matrix" />
     <MESSAGE value="added a counter to the printing of variables" />
     <MESSAGE value="Reduced the dimension of the intensity variable to 1 per control point" />
@@ -996,7 +980,9 @@
     <MESSAGE value="Fixed the sinogram to be black around" />
     <MESSAGE value="Added a histogram frequency plot of the number of events that happen." />
     <MESSAGE value="chooseSmallSpace was added as a new function that chooses a subsample of voxels" />
-    <option name="LAST_COMMIT_MESSAGE" value="chooseSmallSpace was added as a new function that chooses a subsample of voxels" />
+    <MESSAGE value="A small change to aid in the flow of the thought process" />
+    <MESSAGE value="Implemented semiquadratic objective functions" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented semiquadratic objective functions" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1251,11 +1237,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/output/dvhcheck.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/output/sinogram-Unlimited-Every-200.png">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -1263,26 +1244,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/output/beamletdistribution-Sample-Every-100 (2).png" />
     <entry file="file://$PROJECT_DIR$/output/sinogram-200-subsamples-11-event-limit.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/beamletdistribution-Sample-Every-100.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/beamletdistribution-Sample-Every-100-limit-11.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/dvh-Sample-Every -10.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/beamletdistribution.png">
       <provider selected="true" editor-type-id="images">
         <state />
       </provider>
@@ -1303,7 +1264,32 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/output/beamletdistribution-Sample-Every-100-limit-11.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/output/beamletdistribution-Sample-Every-100.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/output/beamletdistributionMU.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/output/beamletdistribution.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/output/dvh-Sample-Every -10.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/output/dvhcheck.png">
       <provider selected="true" editor-type-id="images">
         <state />
       </provider>
@@ -1315,8 +1301,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="394">
-          <caret line="232" column="33" selection-start-line="232" selection-start-column="33" selection-end-line="232" selection-end-column="33" />
+        <state relative-caret-position="405">
+          <caret line="258" column="56" selection-start-line="258" selection-start-column="56" selection-end-line="258" selection-end-column="56" />
           <folding>
             <element signature="e#68#141#0" expanded="false" />
             <element signature="e#166#224#0" expanded="false" />
@@ -1329,7 +1315,6 @@
             <element signature="e#3236#4097#0" expanded="false" />
             <element signature="e#3812#4097#0" expanded="false" />
             <element signature="e#3855#3883#0" expanded="false" />
-            <element signature="e#4203#5704#0" expanded="false" />
             <element signature="e#5270#5374#0" expanded="false" />
             <element signature="e#5450#5704#0" expanded="false" />
             <element signature="e#5749#9049#0" expanded="false" />
@@ -1341,31 +1326,32 @@
             <element signature="e#9599#9980#0" expanded="false" />
             <element signature="e#10275#10415#0" expanded="false" />
             <element signature="e#10523#10559#0" expanded="false" />
-            <element signature="e#13007#13165#0" expanded="false" />
-            <element signature="e#13226#14341#0" expanded="false" />
-            <element signature="e#13666#13929#0" expanded="false" />
-            <element signature="e#14444#15496#0" expanded="false" />
-            <element signature="e#14607#14961#0" expanded="false" />
-            <element signature="e#14652#14961#0" expanded="false" />
-            <element signature="e#14720#14961#0" expanded="false" />
-            <element signature="e#14720#14811#0" expanded="false" />
-            <element signature="e#15597#16160#0" expanded="false" />
-            <element signature="e#15731#15871#0" expanded="false" />
-            <element signature="e#16202#16753#0" expanded="false" />
-            <element signature="e#16270#16466#0" expanded="false" />
-            <element signature="e#16793#16940#0" expanded="false" />
-            <element signature="e#17028#17174#0" expanded="false" />
-            <element signature="e#17067#17157#0" expanded="false" />
-            <element signature="e#17305#17495#0" expanded="false" />
-            <element signature="e#17407#17495#0" expanded="false" />
-            <element signature="e#17517#22985#0" expanded="false" />
-            <element signature="e#17579#19059#0" expanded="false" />
-            <element signature="e#18108#18135#0" expanded="false" />
-            <element signature="e#19152#19362#0" expanded="false" />
-            <element signature="e#19470#20027#0" expanded="false" />
-            <element signature="e#20107#20866#0" expanded="false" />
-            <element signature="e#20303#20436#0" expanded="false" />
-            <element signature="e#22426#22983#0" expanded="false" />
+            <element signature="e#12014#12440#0" expanded="false" />
+            <element signature="e#16568#17051#0" expanded="false" />
+            <element signature="e#17091#17249#0" expanded="false" />
+            <element signature="e#17310#18425#0" expanded="false" />
+            <element signature="e#17750#18013#0" expanded="false" />
+            <element signature="e#18528#19580#0" expanded="false" />
+            <element signature="e#18691#19045#0" expanded="false" />
+            <element signature="e#18736#19045#0" expanded="false" />
+            <element signature="e#18804#19045#0" expanded="false" />
+            <element signature="e#18804#18895#0" expanded="false" />
+            <element signature="e#19681#20244#0" expanded="false" />
+            <element signature="e#19815#19955#0" expanded="false" />
+            <element signature="e#20286#20837#0" expanded="false" />
+            <element signature="e#20354#20550#0" expanded="false" />
+            <element signature="e#20877#21024#0" expanded="false" />
+            <element signature="e#21112#21258#0" expanded="false" />
+            <element signature="e#21151#21241#0" expanded="false" />
+            <element signature="e#21389#21579#0" expanded="false" />
+            <element signature="e#21491#21579#0" expanded="false" />
+            <element signature="e#21663#23143#0" expanded="false" />
+            <element signature="e#22192#22219#0" expanded="false" />
+            <element signature="e#23236#23446#0" expanded="false" />
+            <element signature="e#23554#24111#0" expanded="false" />
+            <element signature="e#24191#24950#0" expanded="false" />
+            <element signature="e#24387#24520#0" expanded="false" />
+            <element signature="e#26586#27143#0" expanded="false" />
           </folding>
         </state>
       </provider>

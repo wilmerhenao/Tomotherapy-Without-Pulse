@@ -256,7 +256,10 @@ class tomotherapyNP(object):
                                                                       self.data.mask[i] == self.data.TARGETList)[0]] -
                                                                     self.zeeVars[i])))
                 # Constraint on OAR
-            elif self.data.mask[i] in self.data.TARGETList:
+            elif self.data.mask[i] in self.data.OARList:
+                print('oarthreshold', self.data.OARThresholds[
+                                                                       np.where(
+                                                                           self.data.mask[i] == self.data.OARList)[0]])
                 self.overDoseConstraints.append(self.mod.addConstr(self.overDoseVar[i], grb.GRB.GREATER_EQUAL, 100 * (
                                                                    self.zeeVars[i] - self.data.OARThresholds[
                                                                        np.where(
