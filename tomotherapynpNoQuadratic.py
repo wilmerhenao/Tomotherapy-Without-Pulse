@@ -46,7 +46,7 @@ class tomotherapyNP(object):
         print('done')
         print('Building main decision variables (dose, binaries).')
         self.buildVariables()
-        self.launchOptimization()
+        self.launchOptimizationPWL()
         self.plotDVH('dvhcheck')
         self.plotSinoGram()
         #self.plotEventsMU()
@@ -230,7 +230,8 @@ class tomotherapyNP(object):
         # Create a variable that will be the minimum dose to a PTV.
         # Set the objective value
 
-    def objConstraintsQuadDose(self):
+
+    def objConstraintsPWL(self):
         self.overDoseConstraints = []
         self.underDoseConstraints = []
         self.overDoseVar = [None] * self.data.totalsmallvoxels
@@ -242,7 +243,7 @@ class tomotherapyNP(object):
                                                name="underDoseVoxel" + str(i), column = None)
         self.mod.update()
         for i in range(0, self.data.totalsmallvoxels):
-            # Constraint on a tumor
+            # Constraint on
             if self.data.mask[i] in self.data.TARGETList:
                 print('before error:', i, self.data.mask[i], self.data.TARGETList)
                 print('failing expr.', np.where(self.data.mask[i]==self.data.TARGETList)[0])
@@ -257,9 +258,6 @@ class tomotherapyNP(object):
                                                                     self.zeeVars[i])))
                 # Constraint on OAR
             elif self.data.mask[i] in self.data.OARList:
-                print('oarthreshold', self.data.OARThresholds[
-                                                                       np.where(
-                                                                           self.data.mask[i] == self.data.OARList)[0]])
                 self.overDoseConstraints.append(self.mod.addConstr(self.overDoseVar[i], grb.GRB.GREATER_EQUAL, 100 * (
                                                                    self.zeeVars[i] - self.data.OARThresholds[
                                                                        np.where(
@@ -275,7 +273,64 @@ class tomotherapyNP(object):
         # self.mod.addConstr(self.minDosePTVVar, grb.GRB.GREATER_EQUAL, 8.00)
         self.mod.update()
 
-    def launchOptimization(self):
+    def launchOptimizationPWL(self):
+        print('creating VOI constraints and constraints directly associated with the objective...', end="")
+        self.objConstraintsPWL()
+        print('done')
+        print('Setting up and launching the optimization...', end="")
+
+        self.objQuad = grb.QuadExpr()
+        for i in range(self.data.totalsmallvoxels):
+            self.objQuad += self.overDoseVar[i] * self.overDoseVar[i] + self.underDoseVar[i] * self.underDoseVar[i]
+
+        self.mod.setObjective(self.objQuad, grb.GRB.MINIMIZE)  # 1.0 expresses minimization. It is the model sense.
+        self.mod.update()
+        self.mod.optimize()
+        print('done')
+
+    def objConstraintsQuadDose(self):
+        self.overDoseConstraints = []
+        self.underDoseConstraints = []
+        self.overDoseVar = [None] * self.data.totalsmallvoxels
+        self.underDoseVar = [None] * self.data.totalsmallvoxels
+        for i in range(self.data.totalsmallvoxels):
+            self.overDoseVar[i] = self.mod.addVar(lb = 0.0, ub=grb.GRB.INFINITY, vtype = grb.GRB.CONTINUOUS,
+                                               name="overDoseVoxel" + str(i), column = None)
+            self.underDoseVar[i] = self.mod.addVar(lb = 0.0, ub=grb.GRB.INFINITY, vtype = grb.GRB.CONTINUOUS,
+                                               name="underDoseVoxel" + str(i), column = None)
+        self.mod.update()
+        for i in range(0, self.data.totalsmallvoxels):
+            # Constraint on
+            if self.data.mask[i] in self.data.TARGETList:
+                print('before error:', i, self.data.mask[i], self.data.TARGETList)
+                print('failing expr.', np.where(self.data.mask[i]==self.data.TARGETList)[0])
+                self.overDoseConstraints.append(self.mod.addConstr(self.overDoseVar[i], grb.GRB.GREATER_EQUAL,
+                                                                  self.zeeVars[i] - self.data.TARGETThresholds[
+                                                                       np.where(
+                                                                           self.data.mask[i]==self.data.TARGETList)[0]]))
+
+                self.underDoseConstraints.append(self.mod.addConstr(self.underDoseVar[i], grb.GRB.GREATER_EQUAL, 100 *(
+                                                                  self.data.TARGETThresholds[np.where(
+                                                                      self.data.mask[i] == self.data.TARGETList)[0]] -
+                                                                    self.zeeVars[i])))
+                # Constraint on OAR
+            elif self.data.mask[i] in self.data.OARList:
+                self.overDoseConstraints.append(self.mod.addConstr(self.overDoseVar[i], grb.GRB.GREATER_EQUAL, 100 * (
+                                                                   self.zeeVars[i] - self.data.OARThresholds[
+                                                                       np.where(
+                                                                           self.data.mask[i] == self.data.OARList)[0]])))
+
+                self.underDoseConstraints.append(self.mod.addConstr(self.underDoseVar[i], grb.GRB.GREATER_EQUAL,
+                                                                self.data.OARThresholds[np.where(
+                                                                    self.data.mask[i] == self.data.OARList)[0]] -
+                                                                self.zeeVars[i]))
+            elif 0 == self.data.mask[i]:
+                print('there is an element in the voxels that is also mask 0')
+                ## sys.exit('there is a voxel that does not belong anywhere')
+        # self.mod.addConstr(self.minDosePTVVar, grb.GRB.GREATER_EQUAL, 8.00)
+        self.mod.update()
+
+    def launchOptimizationQuadratic(self):
         print('creating VOI constraints and constraints directly associated with the objective...', end="")
         self.objConstraintsQuadDose()
         print('done')
