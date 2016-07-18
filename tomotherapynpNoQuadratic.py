@@ -46,7 +46,7 @@ class tomotherapyNP(object):
         print('done')
         print('Building main decision variables (dose, binaries).')
         self.buildVariables()
-        self.launchOptimizationPWL()
+        self.launchOptimizationPWLOwnImplementation()
         self.plotDVH('dvhcheck')
         self.plotSinoGram()
         #self.plotEventsMU()
@@ -230,46 +230,86 @@ class tomotherapyNP(object):
         # Create a variable that will be the minimum dose to a PTV.
         # Set the objective value
 
-
-    def objConstraintsPWL(self):
-        self.overDoseConstraints = []
-        self.underDoseConstraints = []
-        self.overDoseVar = [None] * self.data.totalsmallvoxels
-        self.underDoseVar = [None] * self.data.totalsmallvoxels
-        for i in range(self.data.totalsmallvoxels):
-            self.overDoseVar[i] = self.mod.addVar(lb = 0.0, ub=grb.GRB.INFINITY, vtype = grb.GRB.CONTINUOUS,
-                                               name="overDoseVoxel" + str(i), column = None)
-            self.underDoseVar[i] = self.mod.addVar(lb = 0.0, ub=grb.GRB.INFINITY, vtype = grb.GRB.CONTINUOUS,
-                                               name="underDoseVoxel" + str(i), column = None)
-        self.mod.update()
+    def objConstraintsPWLOwnImplementation(self):
+        # Create the auxiliary variables first in order to minimize the calls to update
+        self.y1 = [None] * self.data.totalsmallvoxels
+        self.y2 = [None] * self.data.totalsmallvoxels
+        self.wbinary1 = [None] * self.data.totalsmallvoxels
+        # Variable definition
         for i in range(0, self.data.totalsmallvoxels):
-            # Constraint on
             if self.data.mask[i] in self.data.TARGETList:
-                print('before error:', i, self.data.mask[i], self.data.TARGETList)
-                print('failing expr.', np.where(self.data.mask[i]==self.data.TARGETList)[0])
-                self.overDoseConstraints.append(self.mod.addConstr(self.overDoseVar[i], grb.GRB.GREATER_EQUAL,
-                                                                  self.zeeVars[i] - self.data.TARGETThresholds[
-                                                                       np.where(
-                                                                           self.data.mask[i]==self.data.TARGETList)[0]]))
-
-                self.underDoseConstraints.append(self.mod.addConstr(self.underDoseVar[i], grb.GRB.GREATER_EQUAL, 100 *(
-                                                                  self.data.TARGETThresholds[np.where(
-                                                                      self.data.mask[i] == self.data.TARGETList)[0]] -
-                                                                    self.zeeVars[i])))
-                # Constraint on OAR
+                T = self.data.TARGETThresholds[np.where(self.data.mask[i] == self.data.TARGETList)[0][0]]
+                self.y1[i] = self.mod.addVar(lb=0.0, ub=T, vtype=grb.GRB.CONTINUOUS,
+                                             name="Auxiliaryy1Voxel" + str(i), column=None)
+                self.y2[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
+                                             name="Auxiliaryy2Voxel" + str(i), column=None)
+                self.wbinary1[i] = self.mod.addVar(vtype=grb.GRB.BINARY, name="wbinaryauxiliar" + str(i), column=None)
             elif self.data.mask[i] in self.data.OARList:
-                self.overDoseConstraints.append(self.mod.addConstr(self.overDoseVar[i], grb.GRB.GREATER_EQUAL, 100 * (
-                                                                   self.zeeVars[i] - self.data.OARThresholds[
-                                                                       np.where(
-                                                                           self.data.mask[i] == self.data.OARList)[0]])))
+                T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0][0]]
+                self.y1[i] = self.mod.addVar(lb=0.0, ub=T, vtype=grb.GRB.CONTINUOUS,
+                                             name="Auxiliaryy1Voxel" + str(i), column=None)
+                self.y2[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
+                                             name="Auxiliaryy2Voxel" + str(i), column=None)
+                self.wbinary1[i] = self.mod.addVar(vtype=grb.GRB.BINARY, name="wbinaryauxiliar" + str(i), column=None)
+        self.mod.update()
 
-                self.underDoseConstraints.append(self.mod.addConstr(self.underDoseVar[i], grb.GRB.GREATER_EQUAL,
-                                                                self.data.OARThresholds[np.where(
-                                                                    self.data.mask[i] == self.data.OARList)[0]] -
-                                                                self.zeeVars[i]))
+        # Constraints implementation
+        self.y1constraint = [None] * self.data.totalsmallvoxels
+        self.y2constraint1 = [None] * self.data.totalsmallvoxels
+        self.y2constraint2 = [None] * self.data.totalsmallvoxels
+        self.sumconstraint = [None] * self.data.totalsmallvoxels
+        self.interceptions = [None] * self.data.totalsmallvoxels
+        objexpr = grb.LinExpr()
+
+        for i in range(0, self.data.totalsmallvoxels):
+            # Constraint on TARGETS
+            if self.data.mask[i] in self.data.TARGETList:
+                T = self.data.TARGETThresholds[np.where(self.data.mask[i] == self.data.TARGETList)[0][0]]
+                self.y1constraint[i] = self.mod.addConstr(T * self.wbinary1[i], grb.GRB.LESS_EQUAL, self.y1[i])
+                self.y2constraint1[i] = self.mod.addConstr(self.y2[i], grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
+                self.y2constraint2[i] = self.mod.addConstr(0.0, grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
+                self.sumconstraint[i] = self.mod.addConstr(self.zeeVars[i], grb.GRB.EQUAL, self.y1[i] + self.y2[i])
+                objexpr += 100.0 * T - 100.0 * self.y1[i] + self.y2[i]
+            # Constraint on OARs
+            elif self.data.mask[i] in self.data.OARList:
+                T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0][0]]
+                self.y1constraint[i] = self.mod.addConstr(T * self.wbinary1[i], grb.GRB.LESS_EQUAL, self.y1[i])
+                self.y2constraint1[i] = self.mod.addConstr(self.y2[i], grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
+                self.y2constraint2[i] = self.mod.addConstr(0.0, grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
+                self.sumconstraint[i] = self.mod.addConstr(self.zeeVars[i], grb.GRB.EQUAL, self.y1[i] + self.y2[i])
+                objexpr += T - 1.0 * self.y1[i] + 100.0 * self.y2[i]
             elif 0 == self.data.mask[i]:
                 print('there is an element in the voxels that is also mask 0')
-                ## sys.exit('there is a voxel that does not belong anywhere')
+
+        self.mod.setObjective(objexpr, grb.GRB.MAXIMIZE)  # 1.0 expresses minimization. It is the model sense.
+        self.mod.update()
+
+    def launchOptimizationPWLOwnImplementation(self):
+        print('creating VOI constraints and constraints directly associated with the objective...', end="")
+        self.objConstraintsPWLOwnImplementation()
+        print('done')
+        print('Setting up and launching the optimization...', end="")
+        #self.mod.write('pwlcrash.mps')
+        self.mod.optimize()
+        print('done')
+
+
+    def objConstraintsPWL(self):
+        for i in range(0, self.data.totalsmallvoxels):
+            # Constraint on TARGETS
+            if self.data.mask[i] in self.data.TARGETList:
+                T = self.data.TARGETThresholds[np.where(self.data.mask[i] == self.data.TARGETList)[0]]
+                points = [num for num in range(T - 1, T + 2)]
+                self.mod.setPWLObj(self.zeeVars[i], points, [100, 0, 1])
+            # Constraint on OARs
+            elif self.data.mask[i] in self.data.OARList:
+                T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0]]
+                points = [num for num in range(T - 1, T + 2)]
+                print("points:", points)
+                self.mod.setPWLObj(self.zeeVars[i], points, [0, 0, 100])
+            elif 0 == self.data.mask[i]:
+                print('there is an element in the voxels that is also mask 0')
+        ## sys.exit('there is a voxel that does not belong anywhere')
         # self.mod.addConstr(self.minDosePTVVar, grb.GRB.GREATER_EQUAL, 8.00)
         self.mod.update()
 
@@ -278,13 +318,7 @@ class tomotherapyNP(object):
         self.objConstraintsPWL()
         print('done')
         print('Setting up and launching the optimization...', end="")
-
-        self.objQuad = grb.QuadExpr()
-        for i in range(self.data.totalsmallvoxels):
-            self.objQuad += self.overDoseVar[i] * self.overDoseVar[i] + self.underDoseVar[i] * self.underDoseVar[i]
-
-        self.mod.setObjective(self.objQuad, grb.GRB.MINIMIZE)  # 1.0 expresses minimization. It is the model sense.
-        self.mod.update()
+        #self.mod.write('pwlcrash.mps')
         self.mod.optimize()
         print('done')
 
@@ -472,7 +506,7 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.sampleevery = 11
+        self.sampleevery = 5
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
