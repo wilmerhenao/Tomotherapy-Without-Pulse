@@ -9,7 +9,7 @@ except ImportError:
     have_mkl = False
     print("Running with normal backends")
 
-from data import *
+#from data import *
 import gurobipy as grb
 import numpy as np
 import scipy.io as sio
@@ -32,10 +32,10 @@ numcores = 4
 # Original template from Troy Long.
 class tomotherapyNP(object):
     def __init__(self, datastructure):
-        print('Reading in data...', end="")
+        print('Reading in data...')
         self.data = datastructure
         print('done')
-        print('Constructing Gurobi model object...', end="")
+        print('Constructing Gurobi model object...')
         self.mod = grb.Model()
         self.mod.params.threads = numcores
         self.mod.params.MIPFocus = 3
@@ -46,7 +46,8 @@ class tomotherapyNP(object):
         print('done')
         print('Building main decision variables (dose, binaries).')
         self.buildVariables()
-        self.launchOptimizationPWLOwnImplementation()
+        #self.launchOptimizationPWLOwnImplementation()
+        self.launchOptimizationPWL()
         self.plotDVH('dvhcheck')
         self.plotSinoGram()
         #self.plotEventsMU()
@@ -54,7 +55,7 @@ class tomotherapyNP(object):
         print('The problem has been completed')
 
     def addVarsandDoseConstraint(self):
-        print('creating primary dose constraints...', end="")
+        print('creating primary dose constraints...')
         sys.stdout.flush()
         self.zeeconstraints = [None] * (self.data.totalsmallvoxels)
         ## This is the variable that will appear in the $z_{j}$ constraint. One per actual voxel in small space.
@@ -66,7 +67,7 @@ class tomotherapyNP(object):
         self.mod.update()
         for i in range(0, self.data.totalsmallvoxels):
             if i % 1000 == 0:
-                print(str(i) + ',', end=""); sys.stdout.flush()
+                print(str(i) + ','); sys.stdout.flush()
             self.zeeconstraints[i] = self.mod.addConstr(-self.zeeVars[i], grb.GRB.EQUAL, 0)
         # Lazy update of gurobi
         self.mod.update()
@@ -223,7 +224,7 @@ class tomotherapyNP(object):
         sys.stdout.flush()
         self.addVarsandDoseConstraint()
         print('done')
-        print('Building Secondary constraints; binaries, mu, xi...', end="")
+        print('Building Secondary constraints; binaries, mu, xi...')
         self.createXiandAbsolute()
         print('done')
         # Update the objective function.
@@ -285,14 +286,13 @@ class tomotherapyNP(object):
         self.mod.update()
 
     def launchOptimizationPWLOwnImplementation(self):
-        print('creating VOI constraints and constraints directly associated with the objective...', end="")
+        print('creating VOI constraints and constraints directly associated with the objective...')
         self.objConstraintsPWLOwnImplementation()
         print('done')
-        print('Setting up and launching the optimization...', end="")
-        #self.mod.write('pwlcrash.mps')
+        print('Setting up and launching the optimization...')
+        self.mod.write('pwlcrash2OwnImplementationSmall.mps')
         self.mod.optimize()
         print('done')
-
 
     def objConstraintsPWL(self):
         for i in range(0, self.data.totalsmallvoxels):
@@ -314,11 +314,11 @@ class tomotherapyNP(object):
         self.mod.update()
 
     def launchOptimizationPWL(self):
-        print('creating VOI constraints and constraints directly associated with the objective...', end="")
+        print('creating VOI constraints and constraints directly associated with the objective...')
         self.objConstraintsPWL()
         print('done')
-        print('Setting up and launching the optimization...', end="")
-        #self.mod.write('pwlcrash.mps')
+        print('Setting up and launching the optimization...')
+        self.mod.write('pwlcrash.mps')
         self.mod.optimize()
         print('done')
 
@@ -365,10 +365,10 @@ class tomotherapyNP(object):
         self.mod.update()
 
     def launchOptimizationQuadratic(self):
-        print('creating VOI constraints and constraints directly associated with the objective...', end="")
+        print('creating VOI constraints and constraints directly associated with the objective...')
         self.objConstraintsQuadDose()
         print('done')
-        print('Setting up and launching the optimization...', end="")
+        print('Setting up and launching the optimization...')
 
         self.objQuad = grb.QuadExpr()
         for i in range(self.data.totalsmallvoxels):
@@ -380,10 +380,10 @@ class tomotherapyNP(object):
         print('done')
 
     def launchOptimizationMaxMin(self):
-        print('creating VOI constraints and constraints directly associated with the objective...', end="")
+        print('creating VOI constraints and constraints directly associated with the objective...')
         self.objConstraintsMinDose()
         print('done')
-        print('Setting up and launching the optimization...', end="")
+        print('Setting up and launching the optimization...')
         objexpr = grb.LinExpr()
         objexpr = self.minDosePTVVar
 
@@ -506,7 +506,7 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.sampleevery = 5
+        self.sampleevery = 30
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
@@ -516,7 +516,7 @@ class tomodata:
         ## Total number of beamlets
         ## OARMAX is maximum dose tolerable for organs. 10 in this case
         self.OARMAX = 7.0
-        print('Read vectors...', end="")
+        print('Read vectors...')
         #self.readWilmersCase()
         self.readWeiguosCase()
         print('done')
@@ -559,7 +559,7 @@ class tomodata:
         nm = []
         for i in np.arange(math.ceil(stepsparse/2), self.caseSide, stepsparse):
             for j in np.arange(math.ceil(stepsparse/2), self.caseSide, stepsparse):
-                nm.append(om[j + i * self.caseSide])
+                nm.append(om[int(j) + int(i) * self.caseSide])
         # summary statistics of voxels
         print('om', describe(om))
         print('nm', describe(nm))

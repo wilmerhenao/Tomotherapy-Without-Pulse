@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/tomotherapynp.py" line="160" mnemonic="5" />
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="created a template of piecewise linear objective">
+    <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/CaseCreation.iml" afterPath="$PROJECT_DIR$/.idea/CaseCreation.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" afterPath="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" />
     </list>
@@ -30,58 +29,17 @@
       <file leaf-file-name="tomotherapynpNoQuadratic.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="270" column="22" selection-start-line="270" selection-start-column="22" selection-end-line="270" selection-end-column="22" />
+            <state relative-caret-position="110">
+              <caret line="45" column="21" selection-start-line="45" selection-start-column="21" selection-end-line="45" selection-end-column="21" />
               <folding>
                 <element signature="e#68#141#0" expanded="false" />
-                <element signature="e#166#224#0" expanded="false" />
-                <element signature="e#593#682#0" expanded="false" />
-                <element signature="e#1634#4175#0" expanded="false" />
-                <element signature="e#2024#2294#0" expanded="false" />
-                <element signature="e#2388#2561#0" expanded="false" />
-                <element signature="e#2628#2708#0" expanded="false" />
-                <element signature="e#3256#4117#0" expanded="false" />
-                <element signature="e#3832#4117#0" expanded="false" />
-                <element signature="e#3875#3903#0" expanded="false" />
-                <element signature="e#4223#5724#0" expanded="false" />
-                <element signature="e#5290#5394#0" expanded="false" />
-                <element signature="e#5470#5724#0" expanded="false" />
-                <element signature="e#5769#9069#0" expanded="false" />
-                <element signature="e#6642#7607#0" expanded="false" />
-                <element signature="e#7943#9043#0" expanded="false" />
-                <element signature="e#7991#9043#0" expanded="false" />
-                <element signature="e#9116#10538#0" expanded="false" />
-                <element signature="e#9619#10000#0" expanded="false" />
-                <element signature="e#10295#10435#0" expanded="false" />
-                <element signature="e#10543#10579#0" expanded="false" />
-                <element signature="e#12034#12460#0" expanded="false" />
-                <element signature="e#18214#21301#0" expanded="false" />
-                <element signature="e#21354#21981#0" expanded="false" />
-                <element signature="e#22554#22712#0" expanded="false" />
-                <element signature="e#22773#23888#0" expanded="false" />
-                <element signature="e#23213#23476#0" expanded="false" />
-                <element signature="e#23991#25043#0" expanded="false" />
-                <element signature="e#24154#24508#0" expanded="false" />
-                <element signature="e#24199#24508#0" expanded="false" />
-                <element signature="e#24267#24508#0" expanded="false" />
-                <element signature="e#24267#24358#0" expanded="false" />
-                <element signature="e#25144#25707#0" expanded="false" />
-                <element signature="e#25278#25418#0" expanded="false" />
-                <element signature="e#25749#26300#0" expanded="false" />
-                <element signature="e#25817#26013#0" expanded="false" />
-                <element signature="e#26340#26487#0" expanded="false" />
-                <element signature="e#26575#26721#0" expanded="false" />
-                <element signature="e#26614#26704#0" expanded="false" />
-                <element signature="e#26852#27042#0" expanded="false" />
-                <element signature="e#26954#27042#0" expanded="false" />
-                <element signature="e#27064#32607#0" expanded="false" />
-                <element signature="e#27654#27681#0" expanded="false" />
-                <element signature="e#28698#28908#0" expanded="false" />
-                <element signature="e#29016#29573#0" expanded="false" />
-                <element signature="e#29653#30412#0" expanded="false" />
-                <element signature="e#29849#29982#0" expanded="false" />
-                <element signature="e#30479#32007#0" expanded="false" />
-                <element signature="e#32048#32605#0" expanded="false" />
+                <element signature="e#246#268#0" expanded="true" />
+                <element signature="e#594#683#0" expanded="false" />
+                <element signature="e#28646#28856#0" expanded="false" />
+                <element signature="e#28964#29521#0" expanded="false" />
+                <element signature="e#29601#30370#0" expanded="false" />
+                <element signature="e#30437#31965#0" expanded="false" />
+                <element signature="e#32006#32563#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -264,20 +222,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="output" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tomotherapy-Without-Pulse" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tomotherapy-Without-Pulse" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="data" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -290,7 +234,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="last_opened_file_path" value="C:/gurobi651/win64/examples/python/piecewise.py" />
   </component>
@@ -568,13 +512,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
-    </task>
-    <task id="LOCAL-00016" summary="Beginning the construction of a linear expression for dose constraints">
-      <created>1466711862554</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1466711862554</updated>
     </task>
     <task id="LOCAL-00017" summary="Included the dose constraint using linear expressions">
       <created>1466717332389</created>
@@ -912,7 +849,14 @@
       <option name="project" value="LOCAL" />
       <updated>1468610801246</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="My own implementation of a piecewise linear function because gurobi's seems fishy.">
+      <created>1468877232513</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1468877232514</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -924,7 +868,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.08129176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.69522774" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.48317048" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973656" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -969,7 +913,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Reduced the dimension of the intensity variable to 1 per control point" />
     <MESSAGE value="Wrote better output messages to stdout" />
     <MESSAGE value="created the declareVariables function which will serve in the paralellization of this thing." />
     <MESSAGE value="Created a partial function just in case Gurobi ever decides to allow pickling and I can use multithreading to upload this slow constraints." />
@@ -994,7 +937,8 @@
     <MESSAGE value="Implemented semiquadratic objective functions" />
     <MESSAGE value="corrected bug in list of OARs" />
     <MESSAGE value="created a template of piecewise linear objective" />
-    <option name="LAST_COMMIT_MESSAGE" value="created a template of piecewise linear objective" />
+    <MESSAGE value="My own implementation of a piecewise linear function because gurobi's seems fishy." />
+    <option name="LAST_COMMIT_MESSAGE" value="My own implementation of a piecewise linear function because gurobi's seems fishy." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1312,58 +1256,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="270" column="22" selection-start-line="270" selection-start-column="22" selection-end-line="270" selection-end-column="22" />
+        <state relative-caret-position="110">
+          <caret line="45" column="21" selection-start-line="45" selection-start-column="21" selection-end-line="45" selection-end-column="21" />
           <folding>
             <element signature="e#68#141#0" expanded="false" />
-            <element signature="e#166#224#0" expanded="false" />
-            <element signature="e#593#682#0" expanded="false" />
-            <element signature="e#1634#4175#0" expanded="false" />
-            <element signature="e#2024#2294#0" expanded="false" />
-            <element signature="e#2388#2561#0" expanded="false" />
-            <element signature="e#2628#2708#0" expanded="false" />
-            <element signature="e#3256#4117#0" expanded="false" />
-            <element signature="e#3832#4117#0" expanded="false" />
-            <element signature="e#3875#3903#0" expanded="false" />
-            <element signature="e#4223#5724#0" expanded="false" />
-            <element signature="e#5290#5394#0" expanded="false" />
-            <element signature="e#5470#5724#0" expanded="false" />
-            <element signature="e#5769#9069#0" expanded="false" />
-            <element signature="e#6642#7607#0" expanded="false" />
-            <element signature="e#7943#9043#0" expanded="false" />
-            <element signature="e#7991#9043#0" expanded="false" />
-            <element signature="e#9116#10538#0" expanded="false" />
-            <element signature="e#9619#10000#0" expanded="false" />
-            <element signature="e#10295#10435#0" expanded="false" />
-            <element signature="e#10543#10579#0" expanded="false" />
-            <element signature="e#12034#12460#0" expanded="false" />
-            <element signature="e#18214#21301#0" expanded="false" />
-            <element signature="e#21354#21981#0" expanded="false" />
-            <element signature="e#22554#22712#0" expanded="false" />
-            <element signature="e#22773#23888#0" expanded="false" />
-            <element signature="e#23213#23476#0" expanded="false" />
-            <element signature="e#23991#25043#0" expanded="false" />
-            <element signature="e#24154#24508#0" expanded="false" />
-            <element signature="e#24199#24508#0" expanded="false" />
-            <element signature="e#24267#24508#0" expanded="false" />
-            <element signature="e#24267#24358#0" expanded="false" />
-            <element signature="e#25144#25707#0" expanded="false" />
-            <element signature="e#25278#25418#0" expanded="false" />
-            <element signature="e#25749#26300#0" expanded="false" />
-            <element signature="e#25817#26013#0" expanded="false" />
-            <element signature="e#26340#26487#0" expanded="false" />
-            <element signature="e#26575#26721#0" expanded="false" />
-            <element signature="e#26614#26704#0" expanded="false" />
-            <element signature="e#26852#27042#0" expanded="false" />
-            <element signature="e#26954#27042#0" expanded="false" />
-            <element signature="e#27064#32607#0" expanded="false" />
-            <element signature="e#27654#27681#0" expanded="false" />
-            <element signature="e#28698#28908#0" expanded="false" />
-            <element signature="e#29016#29573#0" expanded="false" />
-            <element signature="e#29653#30412#0" expanded="false" />
-            <element signature="e#29849#29982#0" expanded="false" />
-            <element signature="e#30479#32007#0" expanded="false" />
-            <element signature="e#32048#32605#0" expanded="false" />
+            <element signature="e#246#268#0" expanded="true" />
+            <element signature="e#594#683#0" expanded="false" />
+            <element signature="e#28646#28856#0" expanded="false" />
+            <element signature="e#28964#29521#0" expanded="false" />
+            <element signature="e#29601#30370#0" expanded="false" />
+            <element signature="e#30437#31965#0" expanded="false" />
+            <element signature="e#32006#32563#0" expanded="false" />
           </folding>
         </state>
       </provider>
