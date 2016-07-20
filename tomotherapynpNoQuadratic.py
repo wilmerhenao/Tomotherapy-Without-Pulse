@@ -34,9 +34,10 @@ def mycallback(model, where):
         objbst = model.cbGet(grb.GRB.Callback.MIP_OBJBST)
         objbnd = model.cbGet(grb.GRB.Callback.MIP_OBJBND)
         mipgap = 0.02 # Here 0.2 means 2%
-        if abs(objbst - objbnd)/abs(objbst) < mipgap:
-            print('Stop early -', str(mipgap * 100), '% gap achieved')
-            model.terminate()
+        if 0 != objbst:
+            if abs(objbst - objbnd)/abs(objbst) < mipgap:
+                print('Stop early -', str(mipgap * 100), '% gap achieved')
+                model.terminate()
 
 ## Class definition of the gurobi object that handles creation and execution of the model
 # Original template from Troy Long.
@@ -49,9 +50,9 @@ class tomotherapyNP(object):
         self.mod = grb.Model()
         self.mod.params.threads = numcores
         self.mod.params.MIPFocus = 1
-        self.mod.params.PreSparsify = 1
-        self.mod.params.Presolve = 1
-        self.mod.params.Cuts = 0
+        #self.mod.params.PreSparsify = 1
+        #self.mod.params.Presolve = 1
+        #self.mod.params.Cuts = 0 # settings of 0, 1, and 2 correspond to no cut generation, conservative cut generation, or aggressive cut generation
         #self.mod.params.MIPGapABS = 0.2
         #self.mod.params.TimeLimit = 4.0 # Time limit in seconds
         print('done')
@@ -281,7 +282,7 @@ class tomotherapyNP(object):
                 self.y2constraint1[i] = self.mod.addConstr(self.y2[i], grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
                 self.y2constraint2[i] = self.mod.addConstr(0.0, grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
                 self.sumconstraint[i] = self.mod.addConstr(self.zeeVars[i], grb.GRB.EQUAL, self.y1[i] + self.y2[i])
-                objexpr += 100.0 * T - 100.0 * self.y1[i] + self.y2[i]
+                objexpr += 1000.0 * T - 1000.0 * self.y1[i] + self.y2[i]
             # Constraint on OARs
             elif self.data.mask[i] in self.data.OARList:
                 T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0][0]]
@@ -289,11 +290,11 @@ class tomotherapyNP(object):
                 self.y2constraint1[i] = self.mod.addConstr(self.y2[i], grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
                 self.y2constraint2[i] = self.mod.addConstr(0.0, grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
                 self.sumconstraint[i] = self.mod.addConstr(self.zeeVars[i], grb.GRB.EQUAL, self.y1[i] + self.y2[i])
-                objexpr += T - 1.0 * self.y1[i] + 100.0 * self.y2[i]
+                objexpr += T - 1.0 * self.y1[i] + 1000.0 * self.y2[i]
             elif 0 == self.data.mask[i]:
                 print('there is an element in the voxels that is also mask 0')
 
-        self.mod.setObjective(objexpr, grb.GRB.MAXIMIZE)  # 1.0 expresses minimization. It is the model sense.
+        self.mod.setObjective(objexpr, grb.GRB.MINIMIZE)  # 1.0 expresses minimization. It is the model sense.
         self.mod.update()
 
     def launchOptimizationPWLOwnImplementation(self):
@@ -306,6 +307,9 @@ class tomotherapyNP(object):
         #print('zeevar after: ', self.zeeVars[2].X)
         self.mod.optimize(mycallback)
         #self.mod.write("solution2.sol")
+        vbas = self.mod.getAttr("VBasis")
+        cbas = self.mod.getAttr("CBasis")
+        print('vbas', vbas, 'cbasis',cbas)
         print('done')
 
     def objConstraintsPWL(self):

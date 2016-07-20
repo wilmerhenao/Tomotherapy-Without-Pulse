@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/CaseCreation.iml" afterPath="$PROJECT_DIR$/.idea/CaseCreation.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" afterPath="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" />
     </list>
@@ -29,25 +27,29 @@
       <file leaf-file-name="tomotherapynpNoQuadratic.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="53" column="32" selection-start-line="53" selection-start-column="32" selection-end-line="53" selection-end-column="32" />
+            <state relative-caret-position="132">
+              <caret line="302" column="21" selection-start-line="302" selection-start-column="21" selection-end-line="302" selection-end-column="21" />
               <folding>
                 <element signature="e#68#141#0" expanded="false" />
                 <element signature="e#246#268#0" expanded="true" />
-                <element signature="e#2104#4629#0" expanded="false" />
-                <element signature="e#4677#6178#0" expanded="false" />
-                <element signature="e#6223#9523#0" expanded="false" />
-                <element signature="e#9570#10992#0" expanded="false" />
-                <element signature="e#10997#11033#0" expanded="false" />
-                <element signature="e#12488#12906#0" expanded="false" />
-                <element signature="e#12966#16777#0" expanded="false" />
-                <element signature="e#29226#29436#0" expanded="false" />
-                <element signature="e#29544#30101#0" expanded="false" />
-                <element signature="e#30181#30950#0" expanded="false" />
-                <element signature="e#31017#32545#0" expanded="false" />
-                <element signature="e#32586#33143#0" expanded="false" />
+                <element signature="e#2260#4785#0" expanded="false" />
+                <element signature="e#4833#6334#0" expanded="false" />
+                <element signature="e#6379#9679#0" expanded="false" />
+                <element signature="e#9726#11148#0" expanded="false" />
+                <element signature="e#11153#11189#0" expanded="false" />
+                <element signature="e#12644#13062#0" expanded="false" />
+                <element signature="e#29512#29722#0" expanded="false" />
+                <element signature="e#29830#30387#0" expanded="false" />
+                <element signature="e#30467#31236#0" expanded="false" />
               </folding>
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dvhcheck.png" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/output/dvhcheck.png">
+          <provider selected="true" editor-type-id="images">
+            <state />
           </provider>
         </entry>
       </file>
@@ -55,7 +57,7 @@
         <entry file="file://$PROJECT_DIR$/solution2.sol">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="154">
-              <caret line="42902" column="2" selection-start-line="42902" selection-start-column="1" selection-end-line="42902" selection-end-column="2" />
+              <caret line="42902" column="2" selection-start-line="42902" selection-start-column="2" selection-end-line="42902" selection-end-column="2" />
               <folding />
             </state>
           </provider>
@@ -95,27 +97,6 @@
       </file>
       <file leaf-file-name="sinogram.png" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/output/sinogram.png">
-          <provider selected="true" editor-type-id="images">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dvhcheck.png" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/output/dvhcheck.png">
-          <provider selected="true" editor-type-id="images">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="beamletdistribution.png" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/output/beamletdistribution.png">
-          <provider selected="true" editor-type-id="images">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dvh-Sample-Every -10.png" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/output/dvh-Sample-Every -10.png">
           <provider selected="true" editor-type-id="images">
             <state />
           </provider>
@@ -565,13 +546,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00018" summary="Changed things to quadratic expressions for dose constraints">
-      <created>1466718171817</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1466718171817</updated>
-    </task>
     <task id="LOCAL-00019" summary="Got rid of unnecessary lines of code">
       <created>1466718926657</created>
       <option name="number" value="00019" />
@@ -908,7 +882,14 @@
       <option name="project" value="LOCAL" />
       <updated>1468957818789</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="added a callback to stop execution early. Also a few tuning parameters">
+      <created>1469044171225</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1469044171229</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -920,7 +901,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.08129176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.43648207" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.50271446" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973656" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -965,7 +946,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="created the declareVariables function which will serve in the paralellization of this thing." />
     <MESSAGE value="Created a partial function just in case Gurobi ever decides to allow pickling and I can use multithreading to upload this slow constraints." />
     <MESSAGE value="Spreading functions around" />
     <MESSAGE value="Remove the strange obj argument calls" />
@@ -990,7 +970,8 @@
     <MESSAGE value="created a template of piecewise linear objective" />
     <MESSAGE value="My own implementation of a piecewise linear function because gurobi's seems fishy." />
     <MESSAGE value="This version runs under python 2.7 and python 3.5. It's indifferent" />
-    <option name="LAST_COMMIT_MESSAGE" value="This version runs under python 2.7 and python 3.5. It's indifferent" />
+    <MESSAGE value="added a callback to stop execution early. Also a few tuning parameters" />
+    <option name="LAST_COMMIT_MESSAGE" value="added a callback to stop execution early. Also a few tuning parameters" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1257,15 +1238,15 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://C:/gurobi651/win64/examples/python/piecewise.py">
+    <entry file="file://C:/gurobi651/win64/examples/python/lp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="439">
-          <caret line="54" column="12" selection-start-line="54" selection-start-column="12" selection-end-line="54" selection-end-column="12" />
+        <state relative-caret-position="418">
+          <caret line="20" column="16" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/output/dvhcheck.png">
+    <entry file="file://$PROJECT_DIR$/output/beamletdistribution.png">
       <provider selected="true" editor-type-id="images">
         <state />
       </provider>
@@ -1275,10 +1256,23 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://C:/gurobi651/win64/examples/python/lp.py">
+    <entry file="file://$PROJECT_DIR$/output/sinogram.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://C:/gurobi651/win64/examples/python/piecewise.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="20" column="16" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
+        <state relative-caret-position="439">
+          <caret line="54" column="12" selection-start-line="54" selection-start-column="12" selection-end-line="54" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/solution2.sol">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="42902" column="2" selection-start-line="42902" selection-start-column="2" selection-end-line="42902" selection-end-column="2" />
           <folding />
         </state>
       </provider>
@@ -1293,43 +1287,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram.png">
+    <entry file="file://$PROJECT_DIR$/output/dvhcheck.png">
       <provider selected="true" editor-type-id="images">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/beamletdistribution.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/solution2.sol">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="42902" column="2" selection-start-line="42902" selection-start-column="1" selection-end-line="42902" selection-end-column="2" />
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="53" column="32" selection-start-line="53" selection-start-column="32" selection-end-line="53" selection-end-column="32" />
+        <state relative-caret-position="132">
+          <caret line="302" column="21" selection-start-line="302" selection-start-column="21" selection-end-line="302" selection-end-column="21" />
           <folding>
             <element signature="e#68#141#0" expanded="false" />
             <element signature="e#246#268#0" expanded="true" />
-            <element signature="e#2104#4629#0" expanded="false" />
-            <element signature="e#4677#6178#0" expanded="false" />
-            <element signature="e#6223#9523#0" expanded="false" />
-            <element signature="e#9570#10992#0" expanded="false" />
-            <element signature="e#10997#11033#0" expanded="false" />
-            <element signature="e#12488#12906#0" expanded="false" />
-            <element signature="e#12966#16777#0" expanded="false" />
-            <element signature="e#29226#29436#0" expanded="false" />
-            <element signature="e#29544#30101#0" expanded="false" />
-            <element signature="e#30181#30950#0" expanded="false" />
-            <element signature="e#31017#32545#0" expanded="false" />
-            <element signature="e#32586#33143#0" expanded="false" />
+            <element signature="e#2260#4785#0" expanded="false" />
+            <element signature="e#4833#6334#0" expanded="false" />
+            <element signature="e#6379#9679#0" expanded="false" />
+            <element signature="e#9726#11148#0" expanded="false" />
+            <element signature="e#11153#11189#0" expanded="false" />
+            <element signature="e#12644#13062#0" expanded="false" />
+            <element signature="e#29512#29722#0" expanded="false" />
+            <element signature="e#29830#30387#0" expanded="false" />
+            <element signature="e#30467#31236#0" expanded="false" />
           </folding>
         </state>
       </provider>
