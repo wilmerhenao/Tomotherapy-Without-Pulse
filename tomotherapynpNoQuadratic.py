@@ -28,6 +28,16 @@ import matplotlib
 
 numcores = 4
 
+def mycallback(model, where):
+    if where == grb.GRB.Callback.MIP:
+        # General MIP callback
+        objbst = model.cbGet(grb.GRB.Callback.MIP_OBJBST)
+        objbnd = model.cbGet(grb.GRB.Callback.MIP_OBJBND)
+        mipgap = 0.02 # Here 0.2 means 2%
+        if abs(objbst - objbnd)/abs(objbst) < mipgap:
+            print('Stop early -', str(mipgap * 100), '% gap achieved')
+            model.terminate()
+
 ## Class definition of the gurobi object that handles creation and execution of the model
 # Original template from Troy Long.
 class tomotherapyNP(object):
@@ -38,16 +48,17 @@ class tomotherapyNP(object):
         print('Constructing Gurobi model object...')
         self.mod = grb.Model()
         self.mod.params.threads = numcores
-        self.mod.params.MIPFocus = 3
+        self.mod.params.MIPFocus = 1
         self.mod.params.PreSparsify = 1
         self.mod.params.Presolve = 1
-        self.mod.params.MIPGapAbs = 0.5
+        self.mod.params.Cuts = 0
+        #self.mod.params.MIPGapABS = 0.2
         #self.mod.params.TimeLimit = 4.0 # Time limit in seconds
         print('done')
         print('Building main decision variables (dose, binaries).')
         self.buildVariables()
-        #self.launchOptimizationPWLOwnImplementation()
-        self.launchOptimizationPWL()
+        self.launchOptimizationPWLOwnImplementation()
+        #self.launchOptimizationPWL()
         self.plotDVH('dvhcheck')
         self.plotSinoGram()
         #self.plotEventsMU()
@@ -290,8 +301,11 @@ class tomotherapyNP(object):
         self.objConstraintsPWLOwnImplementation()
         print('done')
         print('Setting up and launching the optimization...')
-        self.mod.write('pwlcrash2OwnImplementationSmall.mps')
-        self.mod.optimize()
+        #print('zeevar before: ', self.zeeVars[2].X)
+        self.mod.read("solution2.sol")
+        #print('zeevar after: ', self.zeeVars[2].X)
+        self.mod.optimize(mycallback)
+        #self.mod.write("solution2.sol")
         print('done')
 
     def objConstraintsPWL(self):
@@ -502,11 +516,11 @@ class tomodata:
     def __init__(self):
         self.outputDirectory = "output/"
         ## M value. Number of times per beamlet that the switch can be turned on or off
-        self.M = 18
+        self.M = 10
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.sampleevery = 30
+        self.sampleevery = 20
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
