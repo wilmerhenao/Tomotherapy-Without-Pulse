@@ -27,78 +27,126 @@
       <file leaf-file-name="tomotherapynpNoQuadratic.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="132">
-              <caret line="302" column="21" selection-start-line="302" selection-start-column="21" selection-end-line="302" selection-end-column="21" />
+            <state relative-caret-position="219">
+              <caret line="245" column="0" selection-start-line="245" selection-start-column="0" selection-end-line="245" selection-end-column="0" />
               <folding>
                 <element signature="e#68#141#0" expanded="false" />
                 <element signature="e#246#268#0" expanded="true" />
-                <element signature="e#2260#4785#0" expanded="false" />
-                <element signature="e#4833#6334#0" expanded="false" />
-                <element signature="e#6379#9679#0" expanded="false" />
-                <element signature="e#9726#11148#0" expanded="false" />
-                <element signature="e#11153#11189#0" expanded="false" />
-                <element signature="e#12644#13062#0" expanded="false" />
-                <element signature="e#29512#29722#0" expanded="false" />
-                <element signature="e#29830#30387#0" expanded="false" />
-                <element signature="e#30467#31236#0" expanded="false" />
+                <element signature="e#2299#4824#0" expanded="false" />
+                <element signature="e#4872#6373#0" expanded="false" />
+                <element signature="e#6418#9718#0" expanded="false" />
+                <element signature="e#9765#11187#0" expanded="false" />
+                <element signature="e#11192#11228#0" expanded="false" />
+                <element signature="e#12683#13101#0" expanded="false" />
+                <element signature="e#13161#16975#0" expanded="false" />
+                <element signature="e#17614#18649#0" expanded="false" />
+                <element signature="e#18696#18993#0" expanded="false" />
+                <element signature="e#19041#22128#0" expanded="false" />
+                <element signature="e#22181#22792#0" expanded="false" />
+                <element signature="e#22842#23309#0" expanded="false" />
+                <element signature="e#23349#23507#0" expanded="false" />
+                <element signature="e#23568#24683#0" expanded="false" />
+                <element signature="e#24786#25838#0" expanded="false" />
+                <element signature="e#25939#26502#0" expanded="false" />
+                <element signature="e#26544#27095#0" expanded="false" />
+                <element signature="e#27135#27282#0" expanded="false" />
+                <element signature="e#27370#27516#0" expanded="false" />
+                <element signature="e#27647#27837#0" expanded="false" />
+                <element signature="e#29486#29696#0" expanded="false" />
+                <element signature="e#29804#30361#0" expanded="false" />
+                <element signature="e#30441#31210#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dvhcheck.png" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/output/dvhcheck.png">
-          <provider selected="true" editor-type-id="images">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="solution2.sol" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/solution2.sol">
+      <file leaf-file-name="modeltest.mps" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modeltest.mps">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="42902" column="2" selection-start-line="42902" selection-start-column="2" selection-end-line="42902" selection-end-column="2" />
+            <state relative-caret-position="140">
+              <caret line="146415" column="47" selection-start-line="146415" selection-start-column="47" selection-end-line="146415" selection-end-column="47" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="lp.py" pinned="false" current-in-tab="false">
-        <entry file="file://C:/gurobi651/win64/examples/python/lp.py">
+      <file leaf-file-name="modeltuning1.log" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modeltuning1.log">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="20" column="16" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
+            <state relative-caret-position="85">
+              <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="callback.py" pinned="false" current-in-tab="false">
-        <entry file="file://C:/gurobi651/win64/examples/python/callback.py">
+      <file leaf-file-name="modeltuning2.log" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modeltuning2.log">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="437">
-              <caret line="69" column="54" selection-start-line="69" selection-start-column="54" selection-end-line="69" selection-end-column="54" />
-              <folding>
-                <element signature="e#855#865#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="piecewise.py" pinned="false" current-in-tab="false">
-        <entry file="file://C:/gurobi651/win64/examples/python/piecewise.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="439">
-              <caret line="54" column="12" selection-start-line="54" selection-start-column="12" selection-end-line="54" selection-end-column="12" />
+            <state relative-caret-position="510">
+              <caret line="30" column="74" selection-start-line="30" selection-start-column="74" selection-end-line="30" selection-end-column="74" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sinogram.png" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/output/sinogram.png">
-          <provider selected="true" editor-type-id="images">
-            <state />
+      <file leaf-file-name="modeltuning3.log" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modeltuning3.log">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="modeltuning4.log" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modeltuning4.log">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1190">
+              <caret line="70" column="74" selection-start-line="70" selection-start-column="74" selection-end-line="70" selection-end-column="74" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="modeltuning1.prm" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modeltuning1.prm">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="modeltuning2.prm" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modeltuning2.prm">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="modeltuning3.prm" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modeltuning3.prm">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="modeltuning4.prm" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modeltuning4.prm">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
           </provider>
         </entry>
       </file>
@@ -546,13 +594,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00019" summary="Got rid of unnecessary lines of code">
-      <created>1466718926657</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1466718926657</updated>
-    </task>
     <task id="LOCAL-00020" summary="Added minimum target constraint (partially) and created a SmallToBig map that will be needed for this.">
       <created>1466787865254</created>
       <option name="number" value="00020" />
@@ -889,7 +930,14 @@
       <option name="project" value="LOCAL" />
       <updated>1469044171229</updated>
     </task>
-    <option name="localTasksCounter" value="68" />
+    <task id="LOCAL-00068" summary="Corrected a bug. This thing was maximizing my PWL instead of minimizing. The DVH was looking very weird. Now it makes sense">
+      <created>1469051067677</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1469051067677</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -901,7 +949,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.08129176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.50271446" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2334419" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973656" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -946,7 +994,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Created a partial function just in case Gurobi ever decides to allow pickling and I can use multithreading to upload this slow constraints." />
     <MESSAGE value="Spreading functions around" />
     <MESSAGE value="Remove the strange obj argument calls" />
     <MESSAGE value="Updated the last details. Divided functions into some of smaller size" />
@@ -971,79 +1018,16 @@
     <MESSAGE value="My own implementation of a piecewise linear function because gurobi's seems fishy." />
     <MESSAGE value="This version runs under python 2.7 and python 3.5. It's indifferent" />
     <MESSAGE value="added a callback to stop execution early. Also a few tuning parameters" />
-    <option name="LAST_COMMIT_MESSAGE" value="added a callback to stop execution early. Also a few tuning parameters" />
+    <MESSAGE value="Corrected a bug. This thing was maximizing my PWL instead of minimizing. The DVH was looking very weird. Now it makes sense" />
+    <option name="LAST_COMMIT_MESSAGE" value="Corrected a bug. This thing was maximizing my PWL instead of minimizing. The DVH was looking very weird. Now it makes sense" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="12" />
+      <option name="time" value="15" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/docs/TomotherapyHeaders.py" />
-    <entry file="file://$PROJECT_DIR$/docs/index.rst">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/gurobi651/win64/examples/python/custom.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-66">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/gurobi651/win64/examples/data/afiro.mps">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-405">
-          <caret line="18" column="12" selection-start-line="18" selection-start-column="12" selection-end-line="18" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/gurobi651/win64/examples/data/coins.lp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="40" selection-start-line="15" selection-start-column="40" selection-end-line="15" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/gurobi651/win64/examples/python/diet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-82">
-          <caret line="81" column="25" selection-start-line="81" selection-start-column="22" selection-end-line="81" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/gurobi651/win64/examples/python/facility.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1104">
-          <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/gurobi651/win64/examples/python/dietmodel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="622">
-          <caret line="39" column="36" selection-start-line="39" selection-start-column="36" selection-end-line="39" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/gurobi651/win64/examples/python/fixanddive.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/gurobi651/win64/examples/python/netflow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="81" column="12" selection-start-line="81" selection-start-column="12" selection-end-line="81" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4782">
@@ -1269,10 +1253,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/output/dvhcheck.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/solution2.sol">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="42902" column="2" selection-start-line="42902" selection-start-column="2" selection-end-line="42902" selection-end-column="2" />
+        <state relative-caret-position="171">
+          <caret line="42813" column="17" selection-start-line="42813" selection-start-column="17" selection-end-line="42813" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gurobi.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-274036">
+          <caret line="8946" column="0" selection-start-line="8946" selection-start-column="0" selection-end-line="8946" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1287,27 +1284,108 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/output/dvhcheck.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
+    <entry file="file://$PROJECT_DIR$/modeltuning2.prm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modeltuning3.prm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modeltuning4.prm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modeltuning1.prm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modeltuning2.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="30" column="74" selection-start-line="30" selection-start-column="74" selection-end-line="30" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modeltuning3.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modeltuning4.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1190">
+          <caret line="70" column="74" selection-start-line="70" selection-start-column="74" selection-end-line="70" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modeltest.mps">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="146415" column="47" selection-start-line="146415" selection-start-column="47" selection-end-line="146415" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modeltuning1.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="302" column="21" selection-start-line="302" selection-start-column="21" selection-end-line="302" selection-end-column="21" />
+        <state relative-caret-position="219">
+          <caret line="245" column="0" selection-start-line="245" selection-start-column="0" selection-end-line="245" selection-end-column="0" />
           <folding>
             <element signature="e#68#141#0" expanded="false" />
             <element signature="e#246#268#0" expanded="true" />
-            <element signature="e#2260#4785#0" expanded="false" />
-            <element signature="e#4833#6334#0" expanded="false" />
-            <element signature="e#6379#9679#0" expanded="false" />
-            <element signature="e#9726#11148#0" expanded="false" />
-            <element signature="e#11153#11189#0" expanded="false" />
-            <element signature="e#12644#13062#0" expanded="false" />
-            <element signature="e#29512#29722#0" expanded="false" />
-            <element signature="e#29830#30387#0" expanded="false" />
-            <element signature="e#30467#31236#0" expanded="false" />
+            <element signature="e#2299#4824#0" expanded="false" />
+            <element signature="e#4872#6373#0" expanded="false" />
+            <element signature="e#6418#9718#0" expanded="false" />
+            <element signature="e#9765#11187#0" expanded="false" />
+            <element signature="e#11192#11228#0" expanded="false" />
+            <element signature="e#12683#13101#0" expanded="false" />
+            <element signature="e#13161#16975#0" expanded="false" />
+            <element signature="e#17614#18649#0" expanded="false" />
+            <element signature="e#18696#18993#0" expanded="false" />
+            <element signature="e#19041#22128#0" expanded="false" />
+            <element signature="e#22181#22792#0" expanded="false" />
+            <element signature="e#22842#23309#0" expanded="false" />
+            <element signature="e#23349#23507#0" expanded="false" />
+            <element signature="e#23568#24683#0" expanded="false" />
+            <element signature="e#24786#25838#0" expanded="false" />
+            <element signature="e#25939#26502#0" expanded="false" />
+            <element signature="e#26544#27095#0" expanded="false" />
+            <element signature="e#27135#27282#0" expanded="false" />
+            <element signature="e#27370#27516#0" expanded="false" />
+            <element signature="e#27647#27837#0" expanded="false" />
+            <element signature="e#29486#29696#0" expanded="false" />
+            <element signature="e#29804#30361#0" expanded="false" />
+            <element signature="e#30441#31210#0" expanded="false" />
           </folding>
         </state>
       </provider>

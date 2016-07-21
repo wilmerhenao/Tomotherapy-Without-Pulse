@@ -50,6 +50,7 @@ class tomotherapyNP(object):
         self.mod = grb.Model()
         self.mod.params.threads = numcores
         self.mod.params.MIPFocus = 1
+        self.mod.params.NormAdjust = 0
         #self.mod.params.PreSparsify = 1
         #self.mod.params.Presolve = 1
         #self.mod.params.Cuts = 0 # settings of 0, 1, and 2 correspond to no cut generation, conservative cut generation, or aggressive cut generation
@@ -302,11 +303,10 @@ class tomotherapyNP(object):
         self.objConstraintsPWLOwnImplementation()
         print('done')
         print('Setting up and launching the optimization...')
-        #print('zeevar before: ', self.zeeVars[2].X)
-        self.mod.read("solution2.sol")
-        #print('zeevar after: ', self.zeeVars[2].X)
+        #self.mod.read("solution2.sol")
+        self.mod.write("modeltest.mps")
         self.mod.optimize(mycallback)
-        #self.mod.write("solution2.sol")
+        self.mod.write("solution2.sol")
         vbas = self.mod.getAttr("VBasis")
         cbas = self.mod.getAttr("CBasis")
         print('vbas', vbas, 'cbasis',cbas)
