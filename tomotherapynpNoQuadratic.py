@@ -50,20 +50,12 @@ class tomotherapyNP(object):
         self.mod = grb.Model()
         self.mod.params.threads = numcores
         self.mod.params.MIPFocus = 1
-        #self.mod.params.NormAdjust = 0
-        #self.mod.params.PreSparsify = 1
-        #self.mod.params.Presolve = 1
-        #self.mod.params.Cuts = 0 # settings of 0, 1, and 2 correspond to no cut generation, conservative cut generation, or aggressive cut generation
-        #self.mod.params.MIPGapABS = 0.2
-        #self.mod.params.TimeLimit = 4.0 # Time limit in seconds
         print('done')
         print('Building main decision variables (dose, binaries).')
         self.buildVariables()
         self.launchOptimizationPWLOwnImplementation()
-        #self.launchOptimizationPWL()
         self.plotDVH('dvhcheck')
         self.plotSinoGram()
-        #self.plotEventsMU()
         self.plotEventsbinary()
         print('The problem has been completed')
 
@@ -298,22 +290,16 @@ class tomotherapyNP(object):
         self.mod.setObjective(objexpr, grb.GRB.MINIMIZE)  # 1.0 expresses minimization. It is the model sense.
         self.mod.update()
 
-    def assignStartVector(self, solutionfile):
-
-
     def launchOptimizationPWLOwnImplementation(self):
         print('creating VOI constraints and constraints directly associated with the objective...')
         self.objConstraintsPWLOwnImplementation()
         print('done')
         print('Setting up and launching the optimization...')
-        self.mod.read("solution2.sol")
-        self.mod.write("modeltest.mps")
+        # self.mod.write("modeltest.mps")
+        self.mod.read("solutionStep-" + str(self.data.sampleevery) + ".sol")
         print('Value Start binaryVars:', self.binaryVars[0].Start)
         self.mod.optimize(mycallback)
-        self.mod.write("solution2.sol")
-        vbas = self.mod.getAttr("VBasis")
-        cbas = self.mod.getAttr("CBasis")
-        print('vbas', vbas, 'cbasis', cbas)
+        self.mod.write("solutionStep-" + str(self.data.sampleevery) + ".sol")
         print('done')
 
     def objConstraintsPWL(self):
@@ -528,6 +514,7 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
+        self.coarse = 64
         self.sampleevery = 20
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
@@ -573,16 +560,31 @@ class tomodata:
         print('reduced size of voxels', len(self.voxels))
         print('reduced size of Dijs', len(self.Dijs))
 
+    def compareHDandSmallSpace(self, stepcoarse, stephd):
+        om = [ij for ij in range(self.voxelsBigSpace)]
+        # New Map
+        nm = []
+        # indicescoarse contains address in bigvoxelspace of the coarse grid
+        # indiceshd contains address in bigvoxelspace of the hd grid
+        for i in np.arange(0, self.caseSide, stepcoarse):
+            for j in np.arange(0, self.caseSide, stepcoarse):
+                nm.append(om[int(j) + int(i) * self.caseSide])
+            indicescoarse = np.where(np.in1d(self.voxels, nm))[0]
+        for i in np.arange(0, self.caseSide, stephd):
+            for j in np.arange(0, self.caseSide, stephd):
+                nm.append(om[int(j) + int(i) * self.caseSide])
+            indiceshd = np.where(np.in1d(self.voxels, nm))[0]
+
     ## Choose Small Space
     def chooseSmallSpace(self, stepsparse):
         # Original Map
         om = [ij for ij in range(self.voxelsBigSpace)]
         # New Map
         nm = []
-        for i in np.arange(math.ceil(stepsparse/2), self.caseSide, stepsparse):
-            for j in np.arange(math.ceil(stepsparse/2), self.caseSide, stepsparse):
+        for i in np.arange(0, self.caseSide, stepsparse):
+            for j in np.arange(0, self.caseSide, stepsparse):
                 nm.append(om[int(j) + int(i) * self.caseSide])
-        # summary statistics of voxels
+        # Summary statistics of voxels
         print('om', describe(om))
         print('nm', describe(nm))
         print('effectivity of the reduction:', len(om)/len(nm))
@@ -606,7 +608,14 @@ class tomodata:
         print('dijs length: ', len(self.Dijs))
         print('mask length: ', len(self.mask))
         print('remove all values of zeroes... and double checking')
+        # First keep a copy of the high definition space
+        self.bixelsHD = self.bixels
+        self.voxelsHD = self.voxels
+        self.DijsHD = self.Dijs
+        self.maskHD = self.mask
+        #
         self.chooseSmallSpace(self.sampleevery)
+        # Next I am removing the voxels that have a mask of zero (0)
         locats = np.where(0 == self.mask)[0]
         self.mask = np.delete(self.mask, locats)
         print('locats: ', len(locats))
