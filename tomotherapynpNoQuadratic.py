@@ -514,7 +514,7 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.coarse = 64
+        self.coarse = 40
         self.sampleevery = 20
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
@@ -569,11 +569,23 @@ class tomodata:
         for i in np.arange(0, self.caseSide, stepcoarse):
             for j in np.arange(0, self.caseSide, stepcoarse):
                 nm.append(om[int(j) + int(i) * self.caseSide])
-            indicescoarse = np.where(np.in1d(self.voxels, nm))[0]
+        indices = np.where(np.in1d(self.voxels, nm))[0]
+        indicescoarse = np.unique(self.voxels[indices])
+        #print('indicescoarse:', len(indicescoarse), indicescoarse)
+        nm = []
         for i in np.arange(0, self.caseSide, stephd):
             for j in np.arange(0, self.caseSide, stephd):
                 nm.append(om[int(j) + int(i) * self.caseSide])
-            indiceshd = np.where(np.in1d(self.voxels, nm))[0]
+        indices = np.where(np.in1d(self.voxels, nm))[0]
+        indiceshd = np.unique(self.voxels[indices])
+        #print('indiceshd:', len(indiceshd), indiceshd)
+        self.hd = []
+        for i in indiceshd:
+            if 0 == len(np.where(i == indicescoarse)[0]):
+                self.hd.append(None)
+            else:
+                self.hd.append(np.where(i == indicescoarse)[0][0])
+        print('hd: ', self.hd)
 
     ## Choose Small Space
     def chooseSmallSpace(self, stepsparse):
@@ -599,6 +611,7 @@ class tomodata:
     def readWeiguosCase(self):
         self.bixels = getvector('data\\Bixels_out.bin', np.int32)
         self.voxels = getvector('data\\Voxels_out.bin', np.int32)
+        print('voxels what it looks like:', self.voxels)
         self.Dijs = getvector('data\\Dijs_out.bin', np.float32)
         self.mask = getvector('data\\optmask.img', np.int32)
         self.caseSide = 256
@@ -613,7 +626,13 @@ class tomodata:
         self.voxelsHD = self.voxels
         self.DijsHD = self.Dijs
         self.maskHD = self.mask
-        #
+
+        if os.path.isfile("solutionStep-" + str(self.coarse) + ".sol"):
+            print('Existent initial File')
+            self.compareHDandSmallSpace(self.coarse, self.sampleevery)
+        else:
+            print('Nonexistent initial File')
+
         self.chooseSmallSpace(self.sampleevery)
         # Next I am removing the voxels that have a mask of zero (0)
         locats = np.where(0 == self.mask)[0]
