@@ -50,7 +50,7 @@ class tomotherapyNP(object):
         self.mod = grb.Model()
         self.mod.params.threads = numcores
         self.mod.params.MIPFocus = 1
-        self.mod.params.NormAdjust = 0
+        #self.mod.params.NormAdjust = 0
         #self.mod.params.PreSparsify = 1
         #self.mod.params.Presolve = 1
         #self.mod.params.Cuts = 0 # settings of 0, 1, and 2 correspond to no cut generation, conservative cut generation, or aggressive cut generation
@@ -254,17 +254,17 @@ class tomotherapyNP(object):
             if self.data.mask[i] in self.data.TARGETList:
                 T = self.data.TARGETThresholds[np.where(self.data.mask[i] == self.data.TARGETList)[0][0]]
                 self.y1[i] = self.mod.addVar(lb=0.0, ub=T, vtype=grb.GRB.CONTINUOUS,
-                                             name="Auxiliaryy1Voxel" + str(i), column=None)
+                                             name="Auxiliaryy1Voxel_{" + str(i) + "}", column=None)
                 self.y2[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
-                                             name="Auxiliaryy2Voxel" + str(i), column=None)
-                self.wbinary1[i] = self.mod.addVar(vtype=grb.GRB.BINARY, name="wbinaryauxiliar" + str(i), column=None)
+                                             name="Auxiliaryy2Voxel_{" + str(i) + "}", column=None)
+                self.wbinary1[i] = self.mod.addVar(vtype=grb.GRB.BINARY, name="wbinaryauxiliar_{" + str(i) + "}", column=None)
             elif self.data.mask[i] in self.data.OARList:
                 T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0][0]]
                 self.y1[i] = self.mod.addVar(lb=0.0, ub=T, vtype=grb.GRB.CONTINUOUS,
-                                             name="Auxiliaryy1Voxel" + str(i), column=None)
+                                             name="Auxiliaryy1Voxel_{" + str(i) + "}", column=None)
                 self.y2[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
-                                             name="Auxiliaryy2Voxel" + str(i), column=None)
-                self.wbinary1[i] = self.mod.addVar(vtype=grb.GRB.BINARY, name="wbinaryauxiliar" + str(i), column=None)
+                                             name="Auxiliaryy2Voxel_{" + str(i) + "}", column=None)
+                self.wbinary1[i] = self.mod.addVar(vtype=grb.GRB.BINARY, name="wbinaryauxiliar_{" + str(i) + "}", column=None)
         self.mod.update()
 
         # Constraints implementation
@@ -298,18 +298,22 @@ class tomotherapyNP(object):
         self.mod.setObjective(objexpr, grb.GRB.MINIMIZE)  # 1.0 expresses minimization. It is the model sense.
         self.mod.update()
 
+    def assignStartVector(self, solutionfile):
+
+
     def launchOptimizationPWLOwnImplementation(self):
         print('creating VOI constraints and constraints directly associated with the objective...')
         self.objConstraintsPWLOwnImplementation()
         print('done')
         print('Setting up and launching the optimization...')
-        #self.mod.read("solution2.sol")
+        self.mod.read("solution2.sol")
         self.mod.write("modeltest.mps")
+        print('Value Start binaryVars:', self.binaryVars[0].Start)
         self.mod.optimize(mycallback)
         self.mod.write("solution2.sol")
         vbas = self.mod.getAttr("VBasis")
         cbas = self.mod.getAttr("CBasis")
-        print('vbas', vbas, 'cbasis',cbas)
+        print('vbas', vbas, 'cbasis', cbas)
         print('done')
 
     def objConstraintsPWL(self):

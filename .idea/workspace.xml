@@ -27,124 +27,43 @@
       <file leaf-file-name="tomotherapynpNoQuadratic.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="219">
-              <caret line="245" column="0" selection-start-line="245" selection-start-column="0" selection-end-line="245" selection-end-column="0" />
+            <state relative-caret-position="286">
+              <caret line="267" column="25" selection-start-line="267" selection-start-column="25" selection-end-line="267" selection-end-column="25" />
               <folding>
                 <element signature="e#68#141#0" expanded="false" />
                 <element signature="e#246#268#0" expanded="true" />
-                <element signature="e#2299#4824#0" expanded="false" />
-                <element signature="e#4872#6373#0" expanded="false" />
-                <element signature="e#6418#9718#0" expanded="false" />
-                <element signature="e#9765#11187#0" expanded="false" />
-                <element signature="e#11192#11228#0" expanded="false" />
-                <element signature="e#12683#13101#0" expanded="false" />
-                <element signature="e#13161#16975#0" expanded="false" />
-                <element signature="e#17614#18649#0" expanded="false" />
-                <element signature="e#18696#18993#0" expanded="false" />
-                <element signature="e#19041#22128#0" expanded="false" />
-                <element signature="e#22181#22792#0" expanded="false" />
-                <element signature="e#22842#23309#0" expanded="false" />
-                <element signature="e#23349#23507#0" expanded="false" />
-                <element signature="e#23568#24683#0" expanded="false" />
-                <element signature="e#24786#25838#0" expanded="false" />
-                <element signature="e#25939#26502#0" expanded="false" />
-                <element signature="e#26544#27095#0" expanded="false" />
-                <element signature="e#27135#27282#0" expanded="false" />
-                <element signature="e#27370#27516#0" expanded="false" />
-                <element signature="e#27647#27837#0" expanded="false" />
-                <element signature="e#29486#29696#0" expanded="false" />
-                <element signature="e#29804#30361#0" expanded="false" />
-                <element signature="e#30441#31210#0" expanded="false" />
+                <element signature="e#2300#4825#0" expanded="false" />
+                <element signature="e#4873#6374#0" expanded="false" />
+                <element signature="e#6419#9719#0" expanded="false" />
+                <element signature="e#9766#11188#0" expanded="false" />
+                <element signature="e#11193#11229#0" expanded="false" />
+                <element signature="e#12684#13102#0" expanded="false" />
+                <element signature="e#17779#18814#0" expanded="false" />
+                <element signature="e#18861#19158#0" expanded="false" />
+                <element signature="e#19206#22293#0" expanded="false" />
+                <element signature="e#22346#22957#0" expanded="false" />
+                <element signature="e#23007#23474#0" expanded="false" />
+                <element signature="e#23514#23672#0" expanded="false" />
+                <element signature="e#23733#24848#0" expanded="false" />
+                <element signature="e#24951#26003#0" expanded="false" />
+                <element signature="e#26104#26667#0" expanded="false" />
+                <element signature="e#26709#27260#0" expanded="false" />
+                <element signature="e#27300#27447#0" expanded="false" />
+                <element signature="e#27535#27681#0" expanded="false" />
+                <element signature="e#27812#28002#0" expanded="false" />
+                <element signature="e#29651#29861#0" expanded="false" />
+                <element signature="e#29969#30526#0" expanded="false" />
+                <element signature="e#30606#31375#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="modeltest.mps" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modeltest.mps">
+      <file leaf-file-name="solution2.sol" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/solution2.sol">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="140">
-              <caret line="146415" column="47" selection-start-line="146415" selection-start-column="47" selection-end-line="146415" selection-end-column="47" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="modeltuning1.log" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modeltuning1.log">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="modeltuning2.log" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modeltuning2.log">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="30" column="74" selection-start-line="30" selection-start-column="74" selection-end-line="30" selection-end-column="74" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="modeltuning3.log" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modeltuning3.log">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="modeltuning4.log" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modeltuning4.log">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1190">
-              <caret line="70" column="74" selection-start-line="70" selection-start-column="74" selection-end-line="70" selection-end-column="74" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="modeltuning1.prm" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modeltuning1.prm">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="modeltuning2.prm" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modeltuning2.prm">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="modeltuning3.prm" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modeltuning3.prm">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="modeltuning4.prm" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modeltuning4.prm">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="-4543">
+              <caret line="42813" column="17" selection-start-line="42813" selection-start-column="17" selection-end-line="42813" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -594,13 +513,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00020" summary="Added minimum target constraint (partially) and created a SmallToBig map that will be needed for this.">
-      <created>1466787865254</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1466787865254</updated>
-    </task>
     <task id="LOCAL-00021" summary="Added all constraints related to the objective. Next I will set the objective as a function of F and penalizations.">
       <created>1466793258326</created>
       <option name="number" value="00021" />
@@ -937,7 +849,14 @@
       <option name="project" value="LOCAL" />
       <updated>1469051067677</updated>
     </task>
-    <option name="localTasksCounter" value="69" />
+    <task id="LOCAL-00069" summary="Added a new parameter to help in speedup. Norm">
+      <created>1469113757047</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1469113757047</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -949,7 +868,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.08129176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2334419" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36482084" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973656" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -994,7 +913,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Spreading functions around" />
     <MESSAGE value="Remove the strange obj argument calls" />
     <MESSAGE value="Updated the last details. Divided functions into some of smaller size" />
     <MESSAGE value="Included outputsolution function" />
@@ -1019,7 +937,8 @@
     <MESSAGE value="This version runs under python 2.7 and python 3.5. It's indifferent" />
     <MESSAGE value="added a callback to stop execution early. Also a few tuning parameters" />
     <MESSAGE value="Corrected a bug. This thing was maximizing my PWL instead of minimizing. The DVH was looking very weird. Now it makes sense" />
-    <option name="LAST_COMMIT_MESSAGE" value="Corrected a bug. This thing was maximizing my PWL instead of minimizing. The DVH was looking very weird. Now it makes sense" />
+    <MESSAGE value="Added a new parameter to help in speedup. Norm" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a new parameter to help in speedup. Norm" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1258,14 +1177,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/solution2.sol">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="42813" column="17" selection-start-line="42813" selection-start-column="17" selection-end-line="42813" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/gurobi.log">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-274036">
@@ -1279,7 +1190,7 @@
         <state relative-caret-position="437">
           <caret line="69" column="54" selection-start-line="69" selection-start-column="54" selection-end-line="69" selection-end-column="54" />
           <folding>
-            <element signature="e#855#865#0" expanded="true" />
+            <element signature="e#855#865#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1340,14 +1251,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modeltest.mps">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="146415" column="47" selection-start-line="146415" selection-start-column="47" selection-end-line="146415" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modeltuning1.log">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -1356,36 +1259,51 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/modeltest.mps">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2078">
+          <caret line="146415" column="47" selection-start-line="146415" selection-start-column="47" selection-end-line="146415" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/solution2.sol">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4543">
+          <caret line="42813" column="17" selection-start-line="42813" selection-start-column="17" selection-end-line="42813" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="245" column="0" selection-start-line="245" selection-start-column="0" selection-end-line="245" selection-end-column="0" />
+        <state relative-caret-position="286">
+          <caret line="267" column="25" selection-start-line="267" selection-start-column="25" selection-end-line="267" selection-end-column="25" />
           <folding>
             <element signature="e#68#141#0" expanded="false" />
             <element signature="e#246#268#0" expanded="true" />
-            <element signature="e#2299#4824#0" expanded="false" />
-            <element signature="e#4872#6373#0" expanded="false" />
-            <element signature="e#6418#9718#0" expanded="false" />
-            <element signature="e#9765#11187#0" expanded="false" />
-            <element signature="e#11192#11228#0" expanded="false" />
-            <element signature="e#12683#13101#0" expanded="false" />
-            <element signature="e#13161#16975#0" expanded="false" />
-            <element signature="e#17614#18649#0" expanded="false" />
-            <element signature="e#18696#18993#0" expanded="false" />
-            <element signature="e#19041#22128#0" expanded="false" />
-            <element signature="e#22181#22792#0" expanded="false" />
-            <element signature="e#22842#23309#0" expanded="false" />
-            <element signature="e#23349#23507#0" expanded="false" />
-            <element signature="e#23568#24683#0" expanded="false" />
-            <element signature="e#24786#25838#0" expanded="false" />
-            <element signature="e#25939#26502#0" expanded="false" />
-            <element signature="e#26544#27095#0" expanded="false" />
-            <element signature="e#27135#27282#0" expanded="false" />
-            <element signature="e#27370#27516#0" expanded="false" />
-            <element signature="e#27647#27837#0" expanded="false" />
-            <element signature="e#29486#29696#0" expanded="false" />
-            <element signature="e#29804#30361#0" expanded="false" />
-            <element signature="e#30441#31210#0" expanded="false" />
+            <element signature="e#2300#4825#0" expanded="false" />
+            <element signature="e#4873#6374#0" expanded="false" />
+            <element signature="e#6419#9719#0" expanded="false" />
+            <element signature="e#9766#11188#0" expanded="false" />
+            <element signature="e#11193#11229#0" expanded="false" />
+            <element signature="e#12684#13102#0" expanded="false" />
+            <element signature="e#17779#18814#0" expanded="false" />
+            <element signature="e#18861#19158#0" expanded="false" />
+            <element signature="e#19206#22293#0" expanded="false" />
+            <element signature="e#22346#22957#0" expanded="false" />
+            <element signature="e#23007#23474#0" expanded="false" />
+            <element signature="e#23514#23672#0" expanded="false" />
+            <element signature="e#23733#24848#0" expanded="false" />
+            <element signature="e#24951#26003#0" expanded="false" />
+            <element signature="e#26104#26667#0" expanded="false" />
+            <element signature="e#26709#27260#0" expanded="false" />
+            <element signature="e#27300#27447#0" expanded="false" />
+            <element signature="e#27535#27681#0" expanded="false" />
+            <element signature="e#27812#28002#0" expanded="false" />
+            <element signature="e#29651#29861#0" expanded="false" />
+            <element signature="e#29969#30526#0" expanded="false" />
+            <element signature="e#30606#31375#0" expanded="false" />
           </folding>
         </state>
       </provider>
