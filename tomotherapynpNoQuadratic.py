@@ -11,6 +11,8 @@ except ImportError:
 
 #from data import *
 import gurobipy as grb
+from scipy.spatial import KDTree
+import numpy.ma as ma
 import numpy as np
 import scipy.io as sio
 import matplotlib.pyplot as plt
@@ -339,6 +341,8 @@ class tomotherapyNP(object):
             self.mod.setAttr("BranchPriority", self.y1, [1] * self.data.totalsmallvoxels )
             self.mod.setAttr("BranchPriority", self.y2, [1] * self.data.totalsmallvoxels )
             file = open("solutionStep-" + str(self.data.coarse) + ".sol", 'r' )
+            #This container will preserve values to be used as hints
+            zeehintmaker = []
             for linelong in file:
                 linelong = linelong.split()
                 line = linelong[0]
@@ -350,6 +354,9 @@ class tomotherapyNP(object):
                     posnew = np.where(self.hd == posold)[0][0]
                     # Grab character between brackets
                     self.zeeVars[posnew].Start = float(linelong[1])
+                    #self.mod.setAttr("Start", self.zeeVars[posnew], [float(linelong[1])])
+                    self.zeeVars[posnew].setAttr("Start", float(linelong[1]))
+                    zeehintmaker.append(float(linelong[1]))
                     # Reduce this branch to a normal priority
                     self.zeeVars[posnew].BranchPriority = 0
                     print('zee replaced', linelong)
@@ -360,6 +367,7 @@ class tomotherapyNP(object):
                     posnew = np.where(self.hd == posold)[0][0]
                     # Grab character between brackets
                     self.wbinary1[posnew].Start = float(linelong[1])
+                    print('is the binary assignation happening?', self.wbinary1[posnew].getAttr("Start"), float(linelong[1]))
                     # Reduce this branch to a normal priority
                     print('wbi replaced', linelong)
                 elif 'Aux' == token:
@@ -392,15 +400,19 @@ class tomotherapyNP(object):
                     pass
             print('Filling up some hints')
             # First, Get a map of the fake values
-            fakevalues = np.array([None for ij in range(self.data.voxelsBigSpace)])
+            self.mod.update()
+            fill_value = -99
+            fakevalues = np.array([fill_value for ij in range(self.data.voxelsBigSpace)])
+            fakevalues = ma.masked_array(fakevalues, fakevalues==fill_value)
             counter = 0
-            for index in range(self.indicescoarse):
-                fakevalues[index] = self.zeeVars[counter].Start
+            for index in self.indicescoarse:
+                fakevalues[index] = zeehintmaker[counter]
+                print('fake index hintmakerafter', fakevalues[index])
                 counter+=1
+            fakevalues = fakevalues.reshape(self.data.caseSide, self.data.caseSide)
+
             # write suions
             print('fakevalues', fakevalues)
-            print('fakevalues > 0', fakevalues[np.where(fakevalues > 0)])
-            print('fakevalues different: ', np.unique(fakevalues))
         else:
             print('Nonexistent initial file')
 
