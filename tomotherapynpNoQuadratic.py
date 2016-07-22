@@ -25,6 +25,7 @@ from functools import partial
 import math
 from scipy.stats import describe
 import matplotlib
+import re
 
 numcores = 4
 
@@ -290,14 +291,86 @@ class tomotherapyNP(object):
         self.mod.setObjective(objexpr, grb.GRB.MINIMIZE)  # 1.0 expresses minimization. It is the model sense.
         self.mod.update()
 
+    def loadprevioussolution(self):
+        if os.path.isfile("solutionStep-" + str(self.data.coarse) + ".sol"):
+            # Load the previous file, Some values will have to be overwritten later
+            self.mod.read("solutionStep-" + str(self.data.coarse) + ".sol")
+            # Now rewrite the data.
+            print('reWrite invalid data')
+            for i in range(self.data.totalsmallvoxels):
+                self.zeeVars[i].Start = grb.GRB.UNDEFINED
+                self.y1[i].Start = grb.GRB.UNDEFINED
+                self.y2[i].Start = grb.GRB.UNDEFINED
+                self.wbinary1[i].Start = grb.GRB.UNDEFINED
+            print('done rewriting invalid data')
+            # Give these branches the highest priority. Doesn't seem to have a big impact.
+            self.mod.setAttr("BranchPriority", self.zeeVars, [2] * self.data.totalsmallvoxels)
+            self.mod.setAttr("BranchPriority", self.y1, [1] * self.data.totalsmallvoxels)
+            self.mod.setAttr("BranchPriority", self.y2, [1] * self.data.totalsmallvoxels)
+            file = open("solutionStep-" + str(self.data.coarse) + ".sol", 'r')
+            for linelong in file:
+                linelong = linelong.split()
+                line = linelong[0]
+                token = line[:3]
+                if 'zee' == token:
+                    # Get the old position of the line (integer value inside the brackets from the sol file
+                    posold = int(re.sub(r'[\{\}]', ' ', line).split()[1])
+                    # Find where in hd this positiion belongs to.
+                    posnew = np.where(self.data.hd == posold)[0][0]
+                    # Grab character between brackets
+                    self.zeeVars[posnew].Start = float(linelong[1])
+                    # Reduce this branch to a normal priority
+                    self.zeeVars[posnew].BranchPriority = 0
+                    print('zee replaced', linelong)
+                elif 'wbi' == token:
+                    # Get the old position of the line (integer value inside the brackets from the sol file
+                    posold = int(re.sub(r'[\{\}]', ' ', line).split()[1])
+                    # Find where in hd this positiion belongs to.
+                    posnew = np.where(self.data.hd == posold)[0][0]
+                    # Grab character between brackets
+                    self.wbinary1[posnew].Start = float(linelong[1])
+                    # Reduce this branch to a normal priority
+                    print('wbi replaced', linelong)
+                elif 'Aux' == token:
+                    token = line[10]
+                    if '1' == token:
+                        # Get the old position of the line (integer value inside the brackets from the sol file
+                        posold = int(re.sub(r'[\{\}]', ' ', line).split()[1])
+                        # Find where in hd this positiion belongs to.
+                        posnew = np.where(self.data.hd == posold)[0][0]
+                        # Grab character between brackets
+                        self.y1[posnew].Start = float(linelong[1])
+                        # Reduce this branch to a normal priority
+                        self.y1[posnew].BranchPriority = 0
+                        # Reduce this branch to a normal priority
+                        print('Aux1 replaced', linelong)
+                    elif '2' == token:
+                        # Get the old position of the line (integer value inside the brackets from the sol file
+                        posold = int(re.sub(r'[\{\}]', ' ', line).split()[1])
+                        # Find where in hd this positiion belongs to.
+                        posnew = np.where(self.data.hd == posold)[0][0]
+                        # Grab character between brackets
+                        self.y2[posnew].Start = float(linelong[1])
+                        # Reduce this branch to a normal priority
+                        self.y2[posnew].BranchPriority = 0
+                        # Reduce this branch to a normal priority
+                        print('Aux2 replaced', linelong)
+                    else:
+                        print('error. This variable does not make sense', token, line)
+                else:
+                    pass
+
+            # write suions
+        else:
+            print('Nonexistent initial file')
+
     def launchOptimizationPWLOwnImplementation(self):
         print('creating VOI constraints and constraints directly associated with the objective...')
         self.objConstraintsPWLOwnImplementation()
         print('done')
         print('Setting up and launching the optimization...')
         # self.mod.write("modeltest.mps")
-        self.mod.read("solutionStep-" + str(self.data.sampleevery) + ".sol")
-        print('Value Start binaryVars:', self.binaryVars[0].Start)
+        self.loadprevioussolution()
         self.mod.optimize(mycallback)
         self.mod.write("solutionStep-" + str(self.data.sampleevery) + ".sol")
         print('done')
@@ -514,8 +587,8 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.coarse = 40
-        self.sampleevery = 20
+        self.coarse = 32
+        self.sampleevery = 16
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
@@ -585,7 +658,7 @@ class tomodata:
                 self.hd.append(None)
             else:
                 self.hd.append(np.where(i == indicescoarse)[0][0])
-        print('hd: ', self.hd)
+        self.hd = np.array(self.hd)
 
     ## Choose Small Space
     def chooseSmallSpace(self, stepsparse):
