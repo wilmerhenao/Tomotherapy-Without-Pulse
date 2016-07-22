@@ -27,31 +27,33 @@
       <file leaf-file-name="tomotherapynpNoQuadratic.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="62">
-              <caret line="305" column="90" selection-start-line="305" selection-start-column="90" selection-end-line="305" selection-end-column="90" />
+            <state relative-caret-position="109">
+              <caret line="392" column="38" selection-start-line="392" selection-start-column="38" selection-end-line="392" selection-end-column="38" />
               <folding>
                 <element signature="e#68#141#0" expanded="false" />
                 <element signature="e#246#268#0" expanded="true" />
+                <element signature="e#1867#4392#0" expanded="false" />
+                <element signature="e#4440#5941#0" expanded="false" />
                 <element signature="e#5986#9286#0" expanded="false" />
                 <element signature="e#9333#10755#0" expanded="false" />
                 <element signature="e#10760#10796#0" expanded="false" />
                 <element signature="e#12251#12669#0" expanded="false" />
-                <element signature="e#21455#22490#0" expanded="false" />
-                <element signature="e#22537#22834#0" expanded="false" />
-                <element signature="e#22882#25969#0" expanded="false" />
-                <element signature="e#26022#26633#0" expanded="false" />
-                <element signature="e#26683#27150#0" expanded="false" />
-                <element signature="e#27190#27348#0" expanded="false" />
-                <element signature="e#27409#28524#0" expanded="false" />
-                <element signature="e#28627#29679#0" expanded="false" />
-                <element signature="e#29780#30343#0" expanded="false" />
-                <element signature="e#30385#30936#0" expanded="false" />
-                <element signature="e#30976#31123#0" expanded="false" />
-                <element signature="e#31211#31357#0" expanded="false" />
-                <element signature="e#31488#31678#0" expanded="false" />
-                <element signature="e#33352#33562#0" expanded="false" />
-                <element signature="e#33670#34227#0" expanded="false" />
-                <element signature="e#35584#36309#0" expanded="false" />
+                <element signature="e#12729#16591#0" expanded="false" />
+                <element signature="e#22976#23417#0" expanded="false" />
+                <element signature="e#23460#24495#0" expanded="false" />
+                <element signature="e#24542#24839#0" expanded="false" />
+                <element signature="e#24887#27974#0" expanded="false" />
+                <element signature="e#28027#28638#0" expanded="false" />
+                <element signature="e#28688#29155#0" expanded="false" />
+                <element signature="e#29195#29353#0" expanded="false" />
+                <element signature="e#29414#30529#0" expanded="false" />
+                <element signature="e#30632#31684#0" expanded="false" />
+                <element signature="e#31785#32348#0" expanded="false" />
+                <element signature="e#32390#32941#0" expanded="false" />
+                <element signature="e#32981#33128#0" expanded="false" />
+                <element signature="e#33216#33362#0" expanded="false" />
+                <element signature="e#35357#35567#0" expanded="false" />
+                <element signature="e#35675#36232#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -124,10 +126,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1" />
-    <option name="y" value="1" />
-    <option name="width" value="1918" />
-    <option name="height" value="1038" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -532,13 +534,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00024" summary="It is running, but it is running terribly slow. It seems like the += construction of expression on line 163 is slower than I was expecting it.">
-      <created>1466805488187</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1466805488212</updated>
-    </task>
     <task id="LOCAL-00025" summary="Added multi-threads">
       <created>1467046013177</created>
       <option name="number" value="00025" />
@@ -875,19 +870,26 @@
       <option name="project" value="LOCAL" />
       <updated>1469137791098</updated>
     </task>
-    <option name="localTasksCounter" value="73" />
+    <task id="LOCAL-00073" summary="Implemented warm start and Branchpriority. Next I will implement hints for the variables that are not initialized">
+      <created>1469206101971</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1469206101971</updated>
+    </task>
+    <option name="localTasksCounter" value="74" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1" y="1" width="1918" height="1038" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18457447" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18282403" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.08129176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.43189368" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34636265" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973656" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -932,7 +934,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Saved before sending dvh plot the first time" />
     <MESSAGE value="Plots first version of the DVH" />
     <MESSAGE value="Added a missing set of constraints" />
     <MESSAGE value="Double checked details about DVH plot" />
@@ -957,7 +958,8 @@
     <MESSAGE value="Assigned new formats for the names of variables." />
     <MESSAGE value="Changed the starting point of every coarsification" />
     <MESSAGE value="Assigns an HD vector that serves as a map to find previous solutions and map to the new ones." />
-    <option name="LAST_COMMIT_MESSAGE" value="Assigns an HD vector that serves as a map to find previous solutions and map to the new ones." />
+    <MESSAGE value="Implemented warm start and Branchpriority. Next I will implement hints for the variables that are not initialized" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented warm start and Branchpriority. Next I will implement hints for the variables that are not initialized" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1298,31 +1300,33 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="62">
-          <caret line="305" column="90" selection-start-line="305" selection-start-column="90" selection-end-line="305" selection-end-column="90" />
+        <state relative-caret-position="109">
+          <caret line="392" column="38" selection-start-line="392" selection-start-column="38" selection-end-line="392" selection-end-column="38" />
           <folding>
             <element signature="e#68#141#0" expanded="false" />
             <element signature="e#246#268#0" expanded="true" />
+            <element signature="e#1867#4392#0" expanded="false" />
+            <element signature="e#4440#5941#0" expanded="false" />
             <element signature="e#5986#9286#0" expanded="false" />
             <element signature="e#9333#10755#0" expanded="false" />
             <element signature="e#10760#10796#0" expanded="false" />
             <element signature="e#12251#12669#0" expanded="false" />
-            <element signature="e#21455#22490#0" expanded="false" />
-            <element signature="e#22537#22834#0" expanded="false" />
-            <element signature="e#22882#25969#0" expanded="false" />
-            <element signature="e#26022#26633#0" expanded="false" />
-            <element signature="e#26683#27150#0" expanded="false" />
-            <element signature="e#27190#27348#0" expanded="false" />
-            <element signature="e#27409#28524#0" expanded="false" />
-            <element signature="e#28627#29679#0" expanded="false" />
-            <element signature="e#29780#30343#0" expanded="false" />
-            <element signature="e#30385#30936#0" expanded="false" />
-            <element signature="e#30976#31123#0" expanded="false" />
-            <element signature="e#31211#31357#0" expanded="false" />
-            <element signature="e#31488#31678#0" expanded="false" />
-            <element signature="e#33352#33562#0" expanded="false" />
-            <element signature="e#33670#34227#0" expanded="false" />
-            <element signature="e#35584#36309#0" expanded="false" />
+            <element signature="e#12729#16591#0" expanded="false" />
+            <element signature="e#22976#23417#0" expanded="false" />
+            <element signature="e#23460#24495#0" expanded="false" />
+            <element signature="e#24542#24839#0" expanded="false" />
+            <element signature="e#24887#27974#0" expanded="false" />
+            <element signature="e#28027#28638#0" expanded="false" />
+            <element signature="e#28688#29155#0" expanded="false" />
+            <element signature="e#29195#29353#0" expanded="false" />
+            <element signature="e#29414#30529#0" expanded="false" />
+            <element signature="e#30632#31684#0" expanded="false" />
+            <element signature="e#31785#32348#0" expanded="false" />
+            <element signature="e#32390#32941#0" expanded="false" />
+            <element signature="e#32981#33128#0" expanded="false" />
+            <element signature="e#33216#33362#0" expanded="false" />
+            <element signature="e#35357#35567#0" expanded="false" />
+            <element signature="e#35675#36232#0" expanded="false" />
           </folding>
         </state>
       </provider>

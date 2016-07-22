@@ -291,8 +291,39 @@ class tomotherapyNP(object):
         self.mod.setObjective(objexpr, grb.GRB.MINIMIZE)  # 1.0 expresses minimization. It is the model sense.
         self.mod.update()
 
+    def compareHDandSmallSpace(self, stepcoarse, stephd):
+        om = [ij for ij in range(self.data.voxelsBigSpace)]
+        print(om)
+        # New Map
+        nm = []
+        # indicescoarse contains address in bigvoxelspace of the coarse grid
+        # indiceshd contains address in bigvoxelspace of the hd grid
+        for i in np.arange(0, self.data.caseSide, stepcoarse):
+            for j in np.arange(0, self.data.caseSide, stepcoarse):
+                nm.append(om[int(j) + int(i) * self.data.caseSide])
+        indices = np.where(np.in1d(self.data.voxelsHD, nm))[0]
+        self.indicescoarse = np.unique(self.data.voxelsHD[indices])
+
+        print(indices, self.indicescoarse)
+        print('length indicescoarse: ', len(self.indicescoarse) )
+        nm = []
+        for i in np.arange(0, self.data.caseSide, stephd):
+            for j in np.arange(0, self.data.caseSide, stephd):
+                nm.append(om[int(j) + int(i) * self.data.caseSide])
+        indices = np.where(np.in1d(self.data.voxelsHD, nm))[0]
+        indiceshd = np.unique(self.data.voxelsHD[indices])
+        print('length indiceshd: ', len(indiceshd) )
+        self.hd = []
+        for i in indiceshd:
+            if 0 == len(np.where(i == self.indicescoarse)[0]):
+                self.hd.append(None)
+            else:
+                self.hd.append(np.where(i == self.indicescoarse)[0][0])
+        self.hd = np.array(self.hd)
+
     def loadprevioussolution(self):
         if os.path.isfile("solutionStep-" + str(self.data.coarse) + ".sol"):
+            self.compareHDandSmallSpace(self.data.coarse, self.data.sampleevery)
             # Load the previous file, Some values will have to be overwritten later
             self.mod.read("solutionStep-" + str(self.data.coarse) + ".sol")
             # Now rewrite the data.
@@ -304,10 +335,10 @@ class tomotherapyNP(object):
                 self.wbinary1[i].Start = grb.GRB.UNDEFINED
             print('done rewriting invalid data')
             # Give these branches the highest priority. Doesn't seem to have a big impact.
-            self.mod.setAttr("BranchPriority", self.zeeVars, [2] * self.data.totalsmallvoxels)
-            self.mod.setAttr("BranchPriority", self.y1, [1] * self.data.totalsmallvoxels)
-            self.mod.setAttr("BranchPriority", self.y2, [1] * self.data.totalsmallvoxels)
-            file = open("solutionStep-" + str(self.data.coarse) + ".sol", 'r')
+            self.mod.setAttr("BranchPriority", self.zeeVars, [2] * self.data.totalsmallvoxels )
+            self.mod.setAttr("BranchPriority", self.y1, [1] * self.data.totalsmallvoxels )
+            self.mod.setAttr("BranchPriority", self.y2, [1] * self.data.totalsmallvoxels )
+            file = open("solutionStep-" + str(self.data.coarse) + ".sol", 'r' )
             for linelong in file:
                 linelong = linelong.split()
                 line = linelong[0]
@@ -316,7 +347,7 @@ class tomotherapyNP(object):
                     # Get the old position of the line (integer value inside the brackets from the sol file
                     posold = int(re.sub(r'[\{\}]', ' ', line).split()[1])
                     # Find where in hd this positiion belongs to.
-                    posnew = np.where(self.data.hd == posold)[0][0]
+                    posnew = np.where(self.hd == posold)[0][0]
                     # Grab character between brackets
                     self.zeeVars[posnew].Start = float(linelong[1])
                     # Reduce this branch to a normal priority
@@ -326,7 +357,7 @@ class tomotherapyNP(object):
                     # Get the old position of the line (integer value inside the brackets from the sol file
                     posold = int(re.sub(r'[\{\}]', ' ', line).split()[1])
                     # Find where in hd this positiion belongs to.
-                    posnew = np.where(self.data.hd == posold)[0][0]
+                    posnew = np.where(self.hd == posold)[0][0]
                     # Grab character between brackets
                     self.wbinary1[posnew].Start = float(linelong[1])
                     # Reduce this branch to a normal priority
@@ -337,7 +368,7 @@ class tomotherapyNP(object):
                         # Get the old position of the line (integer value inside the brackets from the sol file
                         posold = int(re.sub(r'[\{\}]', ' ', line).split()[1])
                         # Find where in hd this positiion belongs to.
-                        posnew = np.where(self.data.hd == posold)[0][0]
+                        posnew = np.where(self.hd == posold)[0][0]
                         # Grab character between brackets
                         self.y1[posnew].Start = float(linelong[1])
                         # Reduce this branch to a normal priority
@@ -348,7 +379,7 @@ class tomotherapyNP(object):
                         # Get the old position of the line (integer value inside the brackets from the sol file
                         posold = int(re.sub(r'[\{\}]', ' ', line).split()[1])
                         # Find where in hd this positiion belongs to.
-                        posnew = np.where(self.data.hd == posold)[0][0]
+                        posnew = np.where(self.hd == posold)[0][0]
                         # Grab character between brackets
                         self.y2[posnew].Start = float(linelong[1])
                         # Reduce this branch to a normal priority
@@ -359,8 +390,17 @@ class tomotherapyNP(object):
                         print('error. This variable does not make sense', token, line)
                 else:
                     pass
-
+            print('Filling up some hints')
+            # First, Get a map of the fake values
+            fakevalues = np.array([None for ij in range(self.data.voxelsBigSpace)])
+            counter = 0
+            for index in range(self.indicescoarse):
+                fakevalues[index] = self.zeeVars[counter].Start
+                counter+=1
             # write suions
+            print('fakevalues', fakevalues)
+            print('fakevalues > 0', fakevalues[np.where(fakevalues > 0)])
+            print('fakevalues different: ', np.unique(fakevalues))
         else:
             print('Nonexistent initial file')
 
@@ -633,33 +673,6 @@ class tomodata:
         print('reduced size of voxels', len(self.voxels))
         print('reduced size of Dijs', len(self.Dijs))
 
-    def compareHDandSmallSpace(self, stepcoarse, stephd):
-        om = [ij for ij in range(self.voxelsBigSpace)]
-        # New Map
-        nm = []
-        # indicescoarse contains address in bigvoxelspace of the coarse grid
-        # indiceshd contains address in bigvoxelspace of the hd grid
-        for i in np.arange(0, self.caseSide, stepcoarse):
-            for j in np.arange(0, self.caseSide, stepcoarse):
-                nm.append(om[int(j) + int(i) * self.caseSide])
-        indices = np.where(np.in1d(self.voxels, nm))[0]
-        indicescoarse = np.unique(self.voxels[indices])
-        #print('indicescoarse:', len(indicescoarse), indicescoarse)
-        nm = []
-        for i in np.arange(0, self.caseSide, stephd):
-            for j in np.arange(0, self.caseSide, stephd):
-                nm.append(om[int(j) + int(i) * self.caseSide])
-        indices = np.where(np.in1d(self.voxels, nm))[0]
-        indiceshd = np.unique(self.voxels[indices])
-        #print('indiceshd:', len(indiceshd), indiceshd)
-        self.hd = []
-        for i in indiceshd:
-            if 0 == len(np.where(i == indicescoarse)[0]):
-                self.hd.append(None)
-            else:
-                self.hd.append(np.where(i == indicescoarse)[0][0])
-        self.hd = np.array(self.hd)
-
     ## Choose Small Space
     def chooseSmallSpace(self, stepsparse):
         # Original Map
@@ -700,11 +713,11 @@ class tomodata:
         self.DijsHD = self.Dijs
         self.maskHD = self.mask
 
-        if os.path.isfile("solutionStep-" + str(self.coarse) + ".sol"):
-            print('Existent initial File')
-            self.compareHDandSmallSpace(self.coarse, self.sampleevery)
-        else:
-            print('Nonexistent initial File')
+        # if os.path.isfile("solutionStep-" + str(self.coarse) + ".sol"):
+        #     print('Existent initial File')
+        #     self.compareHDandSmallSpace(self.coarse, self.sampleevery)
+        # else:
+        #     print('Nonexistent initial File')
 
         self.chooseSmallSpace(self.sampleevery)
         # Next I am removing the voxels that have a mask of zero (0)
