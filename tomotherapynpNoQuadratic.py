@@ -53,6 +53,7 @@ class tomotherapyNP(object):
         self.mod = grb.Model()
         self.mod.params.threads = numcores
         self.mod.params.MIPFocus = 1
+        self.mod.params.TimeLimit = 120.0
         print('done')
         print('Building main decision variables (dose, binaries).')
         self.buildVariables()
@@ -286,7 +287,7 @@ class tomotherapyNP(object):
                 self.y2constraint1[i] = self.mod.addConstr(self.y2[i], grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
                 self.y2constraint2[i] = self.mod.addConstr(0.0, grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
                 self.sumconstraint[i] = self.mod.addConstr(self.zeeVars[i], grb.GRB.EQUAL, self.y1[i] + self.y2[i])
-                objexpr += T - 1.0 * self.y1[i] + 1000.0 * self.y2[i]
+                objexpr += 0.001 * self.y1[i] + 1000.0 * self.y2[i]
             elif 0 == self.data.mask[i]:
                 print('there is an element in the voxels that is also mask 0')
 
@@ -359,7 +360,7 @@ class tomotherapyNP(object):
                     #self.mod.setAttr("Start", self.zeeVars[posnew], [float(linelong[1])])
                     self.zeeVars[posnew].setAttr("Start", float(linelong[1]))
                     self.zeeVars[posnew].setAttr("VarHintVal", float(linelong[1]))
-                    self.zeeVars[posnew].setAttr("VarHintPri", 10)
+                    self.zeeVars[posnew].setAttr("VarHintPri", 100)
                     zeehintmaker.append(float(linelong[1]))
                     # Reduce this branch to a normal priority
                     self.zeeVars[posnew].BranchPriority = 0
@@ -411,7 +412,6 @@ class tomotherapyNP(object):
             counter = 0
             for index in self.indicescoarse:
                 fakevalues[index] = zeehintmaker[counter]
-                print('fake index hintmakerafter', fakevalues[index])
                 counter += 1
             fakevalues = fakevalues.reshape(self.data.caseSide, self.data.caseSide)
             # Now fill up with guess values
@@ -426,8 +426,8 @@ class tomotherapyNP(object):
                 # Assign the fake value as a hint.
                 self.zeeVars[counter].setAttr("VarHintVal", fakevalues[index])
                 # Assign a lower priority to hints that are not the real value from a previous iteration.
-                if 10 != self.zeeVars[posnew].getAttr("VarHintPri"):
-                    self.zeeVars[counter].setAttr("VarHintPri", 5)
+                if 100 != self.zeeVars[posnew].getAttr("VarHintPri"):
+                    self.zeeVars[counter].setAttr("VarHintPri", 1)
         else:
             print('Nonexistent initial file')
 
@@ -654,8 +654,8 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.coarse = 32
-        self.sampleevery = 16
+        self.coarse = 16
+        self.sampleevery = 8
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
