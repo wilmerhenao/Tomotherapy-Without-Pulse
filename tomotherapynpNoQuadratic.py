@@ -303,7 +303,9 @@ class tomotherapyNP(object):
         for i in np.arange(0, self.data.caseSide, stepcoarse):
             for j in np.arange(0, self.data.caseSide, stepcoarse):
                 nm.append(om[int(j) + int(i) * self.data.caseSide])
+        # indices ONLY contains those indices determined by the step size.
         indices = np.where(np.in1d(self.data.voxelsHD, nm))[0]
+        # indices coarse represents those represented by step size AND which have important data to show.
         self.indicescoarse = np.unique(self.data.voxelsHD[indices])
 
         print(indices, self.indicescoarse)
@@ -313,10 +315,10 @@ class tomotherapyNP(object):
             for j in np.arange(0, self.data.caseSide, stephd):
                 nm.append(om[int(j) + int(i) * self.data.caseSide])
         indices = np.where(np.in1d(self.data.voxelsHD, nm))[0]
-        indiceshd = np.unique(self.data.voxelsHD[indices])
-        print('length indiceshd: ', len(indiceshd) )
+        self.indicesfine = np.unique(self.data.voxelsHD[indices])
+        print('length indiceshd: ', len(self.indicesfine) )
         self.hd = []
-        for i in indiceshd:
+        for i in self.indicesfine:
             if 0 == len(np.where(i == self.indicescoarse)[0]):
                 self.hd.append(None)
             else:
@@ -356,6 +358,8 @@ class tomotherapyNP(object):
                     self.zeeVars[posnew].Start = float(linelong[1])
                     #self.mod.setAttr("Start", self.zeeVars[posnew], [float(linelong[1])])
                     self.zeeVars[posnew].setAttr("Start", float(linelong[1]))
+                    self.zeeVars[posnew].setAttr("VarHintVal", float(linelong[1]))
+                    self.zeeVars[posnew].setAttr("VarHintPri", 10)
                     zeehintmaker.append(float(linelong[1]))
                     # Reduce this branch to a normal priority
                     self.zeeVars[posnew].BranchPriority = 0
@@ -408,14 +412,22 @@ class tomotherapyNP(object):
             for index in self.indicescoarse:
                 fakevalues[index] = zeehintmaker[counter]
                 print('fake index hintmakerafter', fakevalues[index])
-                counter+=1
+                counter += 1
             fakevalues = fakevalues.reshape(self.data.caseSide, self.data.caseSide)
             # Now fill up with guess values
             x, y = np.mgrid[0:fakevalues.shape[0], 0:fakevalues.shape[1]]
             xygood = np.array((x[~fakevalues.mask], y[~fakevalues.mask])).T
             xybad = np.array((x[fakevalues.mask], y[fakevalues.mask])).T
             fakevalues[fakevalues.mask] = fakevalues[~fakevalues.mask][KDTree(xygood).query(xybad)[1]]
+            # Flatten the matrix to a 1 dimensional array.
+            fakevalues = np.ravel(fakevalues)
             # write suions
+            for counter, index in enumerate(self.indicesfine):
+                # Assign the fake value as a hint.
+                self.zeeVars[counter].setAttr("VarHintVal", fakevalues[index])
+                # Assign a lower priority to hints that are not the real value from a previous iteration.
+                if 10 != self.zeeVars[posnew].getAttr("VarHintPri"):
+                    self.zeeVars[counter].setAttr("VarHintPri", 5)
         else:
             print('Nonexistent initial file')
 

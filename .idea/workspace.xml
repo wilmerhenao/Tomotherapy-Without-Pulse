@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py" line="416" mnemonic="5" />
+    <bookmark url="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py" line="420" mnemonic="5" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
@@ -30,8 +30,8 @@
       <file leaf-file-name="tomotherapynpNoQuadratic.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="475">
-              <caret line="415" column="72" selection-start-line="415" selection-start-column="72" selection-end-line="415" selection-end-column="72" />
+            <state relative-caret-position="11">
+              <caret line="412" column="57" selection-start-line="412" selection-start-column="57" selection-end-line="412" selection-end-column="57" />
               <folding>
                 <element signature="e#68#141#0" expanded="false" />
                 <element signature="e#246#268#0" expanded="true" />
@@ -42,22 +42,21 @@
                 <element signature="e#10815#10851#0" expanded="false" />
                 <element signature="e#12306#12724#0" expanded="false" />
                 <element signature="e#12784#16646#0" expanded="false" />
-                <element signature="e#16714#18058#0" expanded="false" />
-                <element signature="e#24438#25473#0" expanded="false" />
-                <element signature="e#25520#25817#0" expanded="false" />
-                <element signature="e#25865#28952#0" expanded="false" />
-                <element signature="e#29005#29616#0" expanded="false" />
-                <element signature="e#29666#30133#0" expanded="false" />
-                <element signature="e#30173#30331#0" expanded="false" />
-                <element signature="e#30392#31507#0" expanded="false" />
-                <element signature="e#31610#32662#0" expanded="false" />
-                <element signature="e#32763#33326#0" expanded="false" />
-                <element signature="e#33368#33919#0" expanded="false" />
-                <element signature="e#33959#34106#0" expanded="false" />
-                <element signature="e#34194#34340#0" expanded="false" />
-                <element signature="e#34471#34661#0" expanded="false" />
-                <element signature="e#36335#36545#0" expanded="false" />
-                <element signature="e#36653#37210#0" expanded="false" />
+                <element signature="e#25332#26367#0" expanded="false" />
+                <element signature="e#26414#26711#0" expanded="false" />
+                <element signature="e#26759#29846#0" expanded="false" />
+                <element signature="e#29899#30510#0" expanded="false" />
+                <element signature="e#30560#31027#0" expanded="false" />
+                <element signature="e#31067#31225#0" expanded="false" />
+                <element signature="e#31286#32401#0" expanded="false" />
+                <element signature="e#32504#33556#0" expanded="false" />
+                <element signature="e#33657#34220#0" expanded="false" />
+                <element signature="e#34262#34813#0" expanded="false" />
+                <element signature="e#34853#35000#0" expanded="false" />
+                <element signature="e#35088#35234#0" expanded="false" />
+                <element signature="e#35365#35555#0" expanded="false" />
+                <element signature="e#37229#37439#0" expanded="false" />
+                <element signature="e#37547#38104#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -143,10 +142,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1" />
-    <option name="y" value="1" />
-    <option name="width" value="1918" />
-    <option name="height" value="1038" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -551,13 +550,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00027" summary="Finished setting up the problem and it is running now. But there is a gurobi problem with the quadratic equality constraint.">
-      <created>1467225378535</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1467225378535</updated>
-    </task>
     <task id="LOCAL-00028" summary="makin sure this works for Weiguo's case too.">
       <created>1467318702296</created>
       <option name="number" value="00028" />
@@ -894,19 +886,26 @@
       <option name="project" value="LOCAL" />
       <updated>1469219993708</updated>
     </task>
-    <option name="localTasksCounter" value="76" />
+    <task id="LOCAL-00076" summary="fakevalues correctly assigned">
+      <created>1469460999269</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1469460999269</updated>
+    </task>
+    <option name="localTasksCounter" value="77" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1" y="1" width="1918" height="1038" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18457447" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18282403" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.08129176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29568106" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33333334" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973656" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -951,7 +950,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Double checked details about DVH plot" />
     <MESSAGE value="Quadratic constraints commented out" />
     <MESSAGE value="found a bug in the assignation of upper boundaries" />
     <MESSAGE value="updated structures for Weiguo's case" />
@@ -976,7 +974,8 @@
     <MESSAGE value="Implemented warm start and Branchpriority. Next I will implement hints for the variables that are not initialized" />
     <MESSAGE value="Assigned existing values to fakevalue variable" />
     <MESSAGE value="set almost everything up, masking values introduced into fakevalues matrix" />
-    <option name="LAST_COMMIT_MESSAGE" value="set almost everything up, masking values introduced into fakevalues matrix" />
+    <MESSAGE value="fakevalues correctly assigned" />
+    <option name="LAST_COMMIT_MESSAGE" value="fakevalues correctly assigned" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1320,8 +1319,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="415" column="72" selection-start-line="415" selection-start-column="72" selection-end-line="415" selection-end-column="72" />
+        <state relative-caret-position="11">
+          <caret line="412" column="57" selection-start-line="412" selection-start-column="57" selection-end-line="412" selection-end-column="57" />
           <folding>
             <element signature="e#68#141#0" expanded="false" />
             <element signature="e#246#268#0" expanded="true" />
@@ -1332,22 +1331,21 @@
             <element signature="e#10815#10851#0" expanded="false" />
             <element signature="e#12306#12724#0" expanded="false" />
             <element signature="e#12784#16646#0" expanded="false" />
-            <element signature="e#16714#18058#0" expanded="false" />
-            <element signature="e#24438#25473#0" expanded="false" />
-            <element signature="e#25520#25817#0" expanded="false" />
-            <element signature="e#25865#28952#0" expanded="false" />
-            <element signature="e#29005#29616#0" expanded="false" />
-            <element signature="e#29666#30133#0" expanded="false" />
-            <element signature="e#30173#30331#0" expanded="false" />
-            <element signature="e#30392#31507#0" expanded="false" />
-            <element signature="e#31610#32662#0" expanded="false" />
-            <element signature="e#32763#33326#0" expanded="false" />
-            <element signature="e#33368#33919#0" expanded="false" />
-            <element signature="e#33959#34106#0" expanded="false" />
-            <element signature="e#34194#34340#0" expanded="false" />
-            <element signature="e#34471#34661#0" expanded="false" />
-            <element signature="e#36335#36545#0" expanded="false" />
-            <element signature="e#36653#37210#0" expanded="false" />
+            <element signature="e#25332#26367#0" expanded="false" />
+            <element signature="e#26414#26711#0" expanded="false" />
+            <element signature="e#26759#29846#0" expanded="false" />
+            <element signature="e#29899#30510#0" expanded="false" />
+            <element signature="e#30560#31027#0" expanded="false" />
+            <element signature="e#31067#31225#0" expanded="false" />
+            <element signature="e#31286#32401#0" expanded="false" />
+            <element signature="e#32504#33556#0" expanded="false" />
+            <element signature="e#33657#34220#0" expanded="false" />
+            <element signature="e#34262#34813#0" expanded="false" />
+            <element signature="e#34853#35000#0" expanded="false" />
+            <element signature="e#35088#35234#0" expanded="false" />
+            <element signature="e#35365#35555#0" expanded="false" />
+            <element signature="e#37229#37439#0" expanded="false" />
+            <element signature="e#37547#38104#0" expanded="false" />
           </folding>
         </state>
       </provider>
