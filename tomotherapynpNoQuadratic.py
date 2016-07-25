@@ -326,7 +326,7 @@ class tomotherapyNP(object):
     def loadprevioussolution(self):
         if os.path.isfile("solutionStep-" + str(self.data.coarse) + ".sol"):
             self.compareHDandSmallSpace(self.data.coarse, self.data.sampleevery)
-            # Load the previous file, Some values will have to be overwritten later
+            # Load the previous file, Some values will have to be overwritten later.
             self.mod.read("solutionStep-" + str(self.data.coarse) + ".sol")
             # Now rewrite the data.
             print('reWrite invalid data')
@@ -410,9 +410,12 @@ class tomotherapyNP(object):
                 print('fake index hintmakerafter', fakevalues[index])
                 counter+=1
             fakevalues = fakevalues.reshape(self.data.caseSide, self.data.caseSide)
-
+            # Now fill up with guess values
+            x, y = np.mgrid[0:fakevalues.shape[0], 0:fakevalues.shape[1]]
+            xygood = np.array((x[~fakevalues.mask], y[~fakevalues.mask])).T
+            xybad = np.array((x[fakevalues.mask], y[fakevalues.mask])).T
+            fakevalues[fakevalues.mask] = fakevalues[~fakevalues.mask][KDTree(xygood).query(xybad)[1]]
             # write suions
-            print('fakevalues', fakevalues)
         else:
             print('Nonexistent initial file')
 

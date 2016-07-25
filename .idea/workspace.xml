@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py" line="416" mnemonic="5" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
@@ -27,33 +30,46 @@
       <file leaf-file-name="tomotherapynpNoQuadratic.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="109">
-              <caret line="392" column="38" selection-start-line="392" selection-start-column="38" selection-end-line="392" selection-end-column="38" />
+            <state relative-caret-position="475">
+              <caret line="415" column="72" selection-start-line="415" selection-start-column="72" selection-end-line="415" selection-end-column="72" />
               <folding>
                 <element signature="e#68#141#0" expanded="false" />
                 <element signature="e#246#268#0" expanded="true" />
-                <element signature="e#1867#4392#0" expanded="false" />
-                <element signature="e#4440#5941#0" expanded="false" />
-                <element signature="e#5986#9286#0" expanded="false" />
-                <element signature="e#9333#10755#0" expanded="false" />
-                <element signature="e#10760#10796#0" expanded="false" />
-                <element signature="e#12251#12669#0" expanded="false" />
-                <element signature="e#12729#16591#0" expanded="false" />
-                <element signature="e#22976#23417#0" expanded="false" />
-                <element signature="e#23460#24495#0" expanded="false" />
-                <element signature="e#24542#24839#0" expanded="false" />
-                <element signature="e#24887#27974#0" expanded="false" />
-                <element signature="e#28027#28638#0" expanded="false" />
-                <element signature="e#28688#29155#0" expanded="false" />
-                <element signature="e#29195#29353#0" expanded="false" />
-                <element signature="e#29414#30529#0" expanded="false" />
-                <element signature="e#30632#31684#0" expanded="false" />
-                <element signature="e#31785#32348#0" expanded="false" />
-                <element signature="e#32390#32941#0" expanded="false" />
-                <element signature="e#32981#33128#0" expanded="false" />
-                <element signature="e#33216#33362#0" expanded="false" />
-                <element signature="e#35357#35567#0" expanded="false" />
-                <element signature="e#35675#36232#0" expanded="false" />
+                <element signature="e#1922#4447#0" expanded="false" />
+                <element signature="e#4495#5996#0" expanded="false" />
+                <element signature="e#6041#9341#0" expanded="false" />
+                <element signature="e#9388#10810#0" expanded="false" />
+                <element signature="e#10815#10851#0" expanded="false" />
+                <element signature="e#12306#12724#0" expanded="false" />
+                <element signature="e#12784#16646#0" expanded="false" />
+                <element signature="e#16714#18058#0" expanded="false" />
+                <element signature="e#24438#25473#0" expanded="false" />
+                <element signature="e#25520#25817#0" expanded="false" />
+                <element signature="e#25865#28952#0" expanded="false" />
+                <element signature="e#29005#29616#0" expanded="false" />
+                <element signature="e#29666#30133#0" expanded="false" />
+                <element signature="e#30173#30331#0" expanded="false" />
+                <element signature="e#30392#31507#0" expanded="false" />
+                <element signature="e#31610#32662#0" expanded="false" />
+                <element signature="e#32763#33326#0" expanded="false" />
+                <element signature="e#33368#33919#0" expanded="false" />
+                <element signature="e#33959#34106#0" expanded="false" />
+                <element signature="e#34194#34340#0" expanded="false" />
+                <element signature="e#34471#34661#0" expanded="false" />
+                <element signature="e#36335#36545#0" expanded="false" />
+                <element signature="e#36653#37210#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="basura.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/basura.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="216">
+              <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="39" />
+              <folding>
+                <element signature="e#0#32#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -62,7 +78,7 @@
       <file leaf-file-name="solutionStep-32.sol" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/solutionStep-32.sol">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
+            <state relative-caret-position="326">
               <caret line="42967" column="0" selection-start-line="42967" selection-start-column="0" selection-end-line="42967" selection-end-column="0" />
               <folding />
             </state>
@@ -121,15 +137,16 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="C:/gurobi651/win64/examples/python/pwexample.py" />
         <option value="C:/gurobi651/win64/examples/python/piecewise.py" />
+        <option value="$PROJECT_DIR$/basura.py" />
         <option value="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1056" />
+    <option name="x" value="1" />
+    <option name="y" value="1" />
+    <option name="width" value="1918" />
+    <option name="height" value="1038" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -267,23 +284,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.tomotherapynpNoQuadratic">
-    <configuration default="false" name="tomotherapynp" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="CaseCreation" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tomotherapynp.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
     <configuration default="false" name="tomotherapynpNoQuadratic" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -348,6 +348,23 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="CaseCreation" />
       <option name="SCRIPT_NAME" value="C:/gurobi651/win64/examples/python/pwexample.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="basura" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="CaseCreation" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/basura.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -504,19 +521,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.tomotherapynp" />
-      <item index="1" class="java.lang.String" itemvalue="Python.tomotherapynpNoQuadratic" />
-      <item index="2" class="java.lang.String" itemvalue="Python.context" />
-      <item index="3" class="java.lang.String" itemvalue="Python.piecewise" />
-      <item index="4" class="java.lang.String" itemvalue="Python.pwexample" />
+      <item index="0" class="java.lang.String" itemvalue="Python.tomotherapynpNoQuadratic" />
+      <item index="1" class="java.lang.String" itemvalue="Python.context" />
+      <item index="2" class="java.lang.String" itemvalue="Python.piecewise" />
+      <item index="3" class="java.lang.String" itemvalue="Python.pwexample" />
+      <item index="4" class="java.lang.String" itemvalue="Python.basura" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Python.tomotherapynpNoQuadratic" />
-        <item index="1" class="java.lang.String" itemvalue="Python.piecewise" />
-        <item index="2" class="java.lang.String" itemvalue="Python.pwexample" />
-        <item index="3" class="java.lang.String" itemvalue="Python.context" />
-        <item index="4" class="java.lang.String" itemvalue="Python.tomotherapynp" />
+        <item index="1" class="java.lang.String" itemvalue="Python.basura" />
+        <item index="2" class="java.lang.String" itemvalue="Python.piecewise" />
+        <item index="3" class="java.lang.String" itemvalue="Python.pwexample" />
+        <item index="4" class="java.lang.String" itemvalue="Python.context" />
       </list>
     </recent_temporary>
   </component>
@@ -533,20 +550,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
-    </task>
-    <task id="LOCAL-00025" summary="Added multi-threads">
-      <created>1467046013177</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1467046013177</updated>
-    </task>
-    <task id="LOCAL-00026" summary="Added a necessary update of the model before inclusioin of a new constraint">
-      <created>1467132130186</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1467132130186</updated>
     </task>
     <task id="LOCAL-00027" summary="Finished setting up the problem and it is running now. But there is a gurobi problem with the quadratic equality constraint.">
       <created>1467225378535</created>
@@ -877,19 +880,33 @@
       <option name="project" value="LOCAL" />
       <updated>1469206101971</updated>
     </task>
-    <option name="localTasksCounter" value="74" />
+    <task id="LOCAL-00074" summary="Assigned existing values to fakevalue variable">
+      <created>1469216515130</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1469216515132</updated>
+    </task>
+    <task id="LOCAL-00075" summary="set almost everything up, masking values introduced into fakevalues matrix">
+      <created>1469219993708</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1469219993708</updated>
+    </task>
+    <option name="localTasksCounter" value="76" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="1" y="1" width="1918" height="1038" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18282403" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18457447" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.08129176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34636265" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29568106" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973656" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -934,8 +951,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Plots first version of the DVH" />
-    <MESSAGE value="Added a missing set of constraints" />
     <MESSAGE value="Double checked details about DVH plot" />
     <MESSAGE value="Quadratic constraints commented out" />
     <MESSAGE value="found a bug in the assignation of upper boundaries" />
@@ -959,22 +974,17 @@
     <MESSAGE value="Changed the starting point of every coarsification" />
     <MESSAGE value="Assigns an HD vector that serves as a map to find previous solutions and map to the new ones." />
     <MESSAGE value="Implemented warm start and Branchpriority. Next I will implement hints for the variables that are not initialized" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented warm start and Branchpriority. Next I will implement hints for the variables that are not initialized" />
+    <MESSAGE value="Assigned existing values to fakevalue variable" />
+    <MESSAGE value="set almost everything up, masking values introduced into fakevalues matrix" />
+    <option name="LAST_COMMIT_MESSAGE" value="set almost everything up, masking values introduced into fakevalues matrix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="15" />
+      <option name="time" value="16" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://C:/gurobi651/win64/examples/python/lpmethod.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="575">
-          <caret line="24" column="38" selection-start-line="24" selection-start-column="38" selection-end-line="24" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/gurobi651/win64/examples/python/lpmod.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="650">
@@ -1259,16 +1269,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/output/dvhcheck.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/solutionStep-20.hnt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1285,6 +1285,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/output/dvhcheck.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/output/sinogram.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/output/beamletdistribution.png">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -1292,41 +1302,52 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/solutionStep-32.sol">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
+        <state relative-caret-position="326">
           <caret line="42967" column="0" selection-start-line="42967" selection-start-column="0" selection-end-line="42967" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/basura.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="109">
-          <caret line="392" column="38" selection-start-line="392" selection-start-column="38" selection-end-line="392" selection-end-column="38" />
+        <state relative-caret-position="475">
+          <caret line="415" column="72" selection-start-line="415" selection-start-column="72" selection-end-line="415" selection-end-column="72" />
           <folding>
             <element signature="e#68#141#0" expanded="false" />
             <element signature="e#246#268#0" expanded="true" />
-            <element signature="e#1867#4392#0" expanded="false" />
-            <element signature="e#4440#5941#0" expanded="false" />
-            <element signature="e#5986#9286#0" expanded="false" />
-            <element signature="e#9333#10755#0" expanded="false" />
-            <element signature="e#10760#10796#0" expanded="false" />
-            <element signature="e#12251#12669#0" expanded="false" />
-            <element signature="e#12729#16591#0" expanded="false" />
-            <element signature="e#22976#23417#0" expanded="false" />
-            <element signature="e#23460#24495#0" expanded="false" />
-            <element signature="e#24542#24839#0" expanded="false" />
-            <element signature="e#24887#27974#0" expanded="false" />
-            <element signature="e#28027#28638#0" expanded="false" />
-            <element signature="e#28688#29155#0" expanded="false" />
-            <element signature="e#29195#29353#0" expanded="false" />
-            <element signature="e#29414#30529#0" expanded="false" />
-            <element signature="e#30632#31684#0" expanded="false" />
-            <element signature="e#31785#32348#0" expanded="false" />
-            <element signature="e#32390#32941#0" expanded="false" />
-            <element signature="e#32981#33128#0" expanded="false" />
-            <element signature="e#33216#33362#0" expanded="false" />
-            <element signature="e#35357#35567#0" expanded="false" />
-            <element signature="e#35675#36232#0" expanded="false" />
+            <element signature="e#1922#4447#0" expanded="false" />
+            <element signature="e#4495#5996#0" expanded="false" />
+            <element signature="e#6041#9341#0" expanded="false" />
+            <element signature="e#9388#10810#0" expanded="false" />
+            <element signature="e#10815#10851#0" expanded="false" />
+            <element signature="e#12306#12724#0" expanded="false" />
+            <element signature="e#12784#16646#0" expanded="false" />
+            <element signature="e#16714#18058#0" expanded="false" />
+            <element signature="e#24438#25473#0" expanded="false" />
+            <element signature="e#25520#25817#0" expanded="false" />
+            <element signature="e#25865#28952#0" expanded="false" />
+            <element signature="e#29005#29616#0" expanded="false" />
+            <element signature="e#29666#30133#0" expanded="false" />
+            <element signature="e#30173#30331#0" expanded="false" />
+            <element signature="e#30392#31507#0" expanded="false" />
+            <element signature="e#31610#32662#0" expanded="false" />
+            <element signature="e#32763#33326#0" expanded="false" />
+            <element signature="e#33368#33919#0" expanded="false" />
+            <element signature="e#33959#34106#0" expanded="false" />
+            <element signature="e#34194#34340#0" expanded="false" />
+            <element signature="e#34471#34661#0" expanded="false" />
+            <element signature="e#36335#36545#0" expanded="false" />
+            <element signature="e#36653#37210#0" expanded="false" />
           </folding>
         </state>
       </provider>
