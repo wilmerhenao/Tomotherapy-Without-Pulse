@@ -53,7 +53,7 @@ class tomotherapyNP(object):
         self.mod = grb.Model()
         self.mod.params.threads = numcores
         self.mod.params.MIPFocus = 1
-        self.mod.params.TimeLimit = 120.0
+        self.mod.params.TimeLimit = 14*3600.0
         print('done')
         print('Building main decision variables (dose, binaries).')
         self.buildVariables()
@@ -266,7 +266,7 @@ class tomotherapyNP(object):
         # Constraints implementation
         self.y1constraint = [None] * self.data.totalsmallvoxels
         self.y2constraint1 = [None] * self.data.totalsmallvoxels
-        self.y2constraint2 = [None] * self.data.totalsmallvoxels
+        #self.y2constraint2 = [None] * self.data.totalsmallvoxels
         self.sumconstraint = [None] * self.data.totalsmallvoxels
         self.interceptions = [None] * self.data.totalsmallvoxels
         objexpr = grb.LinExpr()
@@ -277,7 +277,7 @@ class tomotherapyNP(object):
                 T = self.data.TARGETThresholds[np.where(self.data.mask[i] == self.data.TARGETList)[0][0]]
                 self.y1constraint[i] = self.mod.addConstr(T * self.wbinary1[i], grb.GRB.LESS_EQUAL, self.y1[i])
                 self.y2constraint1[i] = self.mod.addConstr(self.y2[i], grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
-                self.y2constraint2[i] = self.mod.addConstr(0.0, grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
+                #self.y2constraint2[i] = self.mod.addConstr(0.0, grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
                 self.sumconstraint[i] = self.mod.addConstr(self.zeeVars[i], grb.GRB.EQUAL, self.y1[i] + self.y2[i])
                 objexpr += 1000.0 * T - 1000.0 * self.y1[i] + self.y2[i]
             # Constraint on OARs
@@ -285,9 +285,9 @@ class tomotherapyNP(object):
                 T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0][0]]
                 self.y1constraint[i] = self.mod.addConstr(T * self.wbinary1[i], grb.GRB.LESS_EQUAL, self.y1[i])
                 self.y2constraint1[i] = self.mod.addConstr(self.y2[i], grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
-                self.y2constraint2[i] = self.mod.addConstr(0.0, grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
+                #self.y2constraint2[i] = self.mod.addConstr(0.0, grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
                 self.sumconstraint[i] = self.mod.addConstr(self.zeeVars[i], grb.GRB.EQUAL, self.y1[i] + self.y2[i])
-                objexpr += 0.001 * self.y1[i] + 1000.0 * self.y2[i]
+                objexpr += 0.0 * self.y1[i] + 1000.0 * self.y2[i]
             elif 0 == self.data.mask[i]:
                 print('there is an element in the voxels that is also mask 0')
 
@@ -356,8 +356,8 @@ class tomotherapyNP(object):
                     # Find where in hd this positiion belongs to.
                     posnew = np.where(self.hd == posold)[0][0]
                     # Grab character between brackets
-                    self.zeeVars[posnew].Start = float(linelong[1])
                     #self.mod.setAttr("Start", self.zeeVars[posnew], [float(linelong[1])])
+                    print('posnew:', posnew, 'zeeVarslen: ', len(self.zeeVars))
                     self.zeeVars[posnew].setAttr("Start", float(linelong[1]))
                     self.zeeVars[posnew].setAttr("VarHintVal", float(linelong[1]))
                     self.zeeVars[posnew].setAttr("VarHintPri", 100)
@@ -591,8 +591,10 @@ class tomotherapyNP(object):
         norm = matplotlib.colors.Normalize(clip=False)
         cmapper.set_under('black')
         plt.imshow(image, cmap=cmapper, vmin=0.0, vmax=self.data.maxIntensity)
-        plt.axis('off')
+        #plt.axis('off')
         plt.title('Sinogram with ' + str(self.data.sampleevery) + ' subsamples and ' + str(self.data.M) + ' event limit')
+        plt.xlabel('Beamlets')
+        plt.ylabel('Control Points')
         fig.savefig(self.data.outputDirectory + 'sinogram.png', bbox_inches='tight')
 
     ## Show how many times you opened or closed each aperture.
@@ -650,12 +652,12 @@ class tomodata:
     def __init__(self):
         self.outputDirectory = "output/"
         ## M value. Number of times per beamlet that the switch can be turned on or off
-        self.M = 10
+        self.M = 30
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.coarse = 16
-        self.sampleevery = 8
+        self.coarse = 4
+        self.sampleevery = 2
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
@@ -663,11 +665,11 @@ class tomodata:
         ## Number of control points (every 2 degrees)
         self.K = 178
         ## Total number of beamlets
-        ## OARMAX is maximum dose tolerable for organs. 10 in this case
+        ## OARMAX is maximum dose tolerable for organs.
         self.OARMAX = 7.0
         print('Read vectors...')
         #self.readWilmersCase()
-        self.readWeiguosCase()
+        self.readWeiguosCase(  )
         print('done')
         # Create a space in smallvoxel coordinates
         self.smallvoxels = self.BigToSmallCreator()
@@ -739,12 +741,6 @@ class tomodata:
         self.voxelsHD = self.voxels
         self.DijsHD = self.Dijs
         self.maskHD = self.mask
-
-        # if os.path.isfile("solutionStep-" + str(self.coarse) + ".sol"):
-        #     print('Existent initial File')
-        #     self.compareHDandSmallSpace(self.coarse, self.sampleevery)
-        # else:
-        #     print('Nonexistent initial File')
 
         self.chooseSmallSpace(self.sampleevery)
         # Next I am removing the voxels that have a mask of zero (0)
