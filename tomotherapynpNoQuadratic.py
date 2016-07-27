@@ -359,6 +359,7 @@ class tomotherapyNP(object):
                     # Get the old position of the line (integer value inside the brackets from the sol file
                     posold = int(re.sub(r'[\{\}]', ' ', line).split()[1])
                     # Find where in hd this positiion belongs to.
+                    print('zeeVarslen: ', len(self.zeeVars), 'posold:', posold, 'line:', line, 'hd:', self.hd)
                     posnew = np.where(self.hd == posold)[0][0]
                     # Grab character between brackets
                     print('posnew:', posnew, 'zeeVarslen: ', len(self.zeeVars), 'posold:', posold, 'line:', line)
@@ -659,8 +660,8 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.coarse = 8
-        self.sampleevery = 4
+        self.coarse = 4
+        self.sampleevery = 2
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
@@ -690,20 +691,6 @@ class tomodata:
         # Notice that the order of voxels IS preserved. So (1,2,3,80,7) produces c = (0,1,2,4,3)
         a, b, c, d = np.unique(self.voxels, return_index=True, return_inverse=True, return_counts=True)
         return(c)
-
-    ## This function reduces the size of the case by a factor fr
-    def sizereduction(self, fr):
-        maxlimit = max(self.voxels)
-        print('MAXLIMIT: ', maxlimit)
-        existingvoxels = np.arange(0, maxlimit, fr)
-        indices = np.where(np.in1d(self.voxels, existingvoxels))[0]
-        self.bixels = self.bixels[indices]
-        self.voxels = self.voxels[indices]
-        self.Dijs = self.Dijs[indices]
-        self.mask = np.array([self.mask[i] for i in np.arange(0, maxlimit, fr)])
-        print('reduced size of mask', len(self.mask))
-        print('reduced size of voxels', len(self.voxels))
-        print('reduced size of Dijs', len(self.Dijs))
 
     ## Choose Small Space
     def chooseSmallSpace(self, stepsparse):
