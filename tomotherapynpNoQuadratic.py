@@ -36,7 +36,7 @@ def mycallback(model, where):
         # General MIP callback
         objbst = model.cbGet(grb.GRB.Callback.MIP_OBJBST)
         objbnd = model.cbGet(grb.GRB.Callback.MIP_OBJBND)
-        mipgap = 0.02 # Here 0.2 means 2%
+        mipgap = 0.2 # Here 0.2 means 2%
         if 0 != objbst:
             if abs(objbst - objbnd)/abs(objbst) < mipgap:
                 print('Stop early -', str(mipgap * 100), '% gap achieved')
@@ -204,6 +204,7 @@ class tomotherapyNP(object):
                 ## sys.exit('there is a voxel that does not belong anywhere')
         #self.mod.addConstr(self.minDosePTVVar, grb.GRB.GREATER_EQUAL, 8.00)
         self.mod.update()
+
     # def objConstraintsQuadratic(self):
     #     self.QuadDosePTVVar = self.mod.addVar(lb = 0.0, ub = grb.GRB.INFINITY, vtype = grb.GRB.CONTINUOUS,
     #                                          name = "minDosePTV", column = None)
@@ -228,6 +229,7 @@ class tomotherapyNP(object):
     #     self.mod.update()
 
     ## This function builds variables to be included in the model
+
     def buildVariables(self):
         print('\nBuilding Variables related to dose constraints...')
         sys.stdout.flush()
@@ -296,7 +298,6 @@ class tomotherapyNP(object):
 
     def compareHDandSmallSpace(self, stepcoarse, stephd):
         om = [ij for ij in range(self.data.voxelsBigSpace)]
-        print(om)
         # New Map
         nm = []
         # indicescoarse contains address in bigvoxelspace of the coarse grid
@@ -309,8 +310,6 @@ class tomotherapyNP(object):
         # indices coarse represents those represented by step size AND which have important data to show.
         self.indicescoarse = np.unique(self.data.voxelsHD[indices])
 
-        print(indices, self.indicescoarse)
-        print('length indicescoarse: ', len(self.indicescoarse) )
         nm = []
         for i in np.arange(0, self.data.caseSide, stephd):
             for j in np.arange(0, self.data.caseSide, stephd):
@@ -326,12 +325,12 @@ class tomotherapyNP(object):
                 self.hd.append(np.where(i == self.indicescoarse)[0][0])
         self.hd = np.array(self.hd)
 
-    def loadprevioussolution(self):
-        if os.path.isfile("solutionStep-" + str(self.data.coarse) + ".sol"):
+    def loadprevioussolution(self, prevfile):
+        if os.path.isfile(prevfile + "-" + str(self.data.coarse) + ".sol"):
             self.compareHDandSmallSpace(self.data.coarse, self.data.sampleevery)
-            # Load the previous file, Some values will have to be overwritten later.
-            self.mod.read("solutionStep-" + str(self.data.coarse) + ".sol")
-            # Now rewrite the data.
+            # Load the previous file, Some values will have to be overwritten later
+            self.mod.read(prevfile + "-" + str(self.data.coarse) + ".sol")
+            # Now rewrite the data
             print('reWrite invalid data')
             for i in range(self.data.totalsmallvoxels):
                 self.zeeVars[i].Start = grb.GRB.UNDEFINED
@@ -339,11 +338,11 @@ class tomotherapyNP(object):
                 self.y2[i].Start = grb.GRB.UNDEFINED
                 self.wbinary1[i].Start = grb.GRB.UNDEFINED
             print('done rewriting invalid data')
-            # Give these branches the highest priority. Doesn't seem to have a big impact.
+            # Give these branches the highest priority. Doesn't seem to have a big impact
             self.mod.setAttr("BranchPriority", self.zeeVars, [2] * self.data.totalsmallvoxels )
             self.mod.setAttr("BranchPriority", self.y1, [1] * self.data.totalsmallvoxels )
             self.mod.setAttr("BranchPriority", self.y2, [1] * self.data.totalsmallvoxels )
-            file = open("solutionStep-" + str(self.data.coarse) + ".sol", 'r' )
+            file = open(prevfile + "-" + str(self.data.coarse) + ".sol", 'r' )
             #This container will preserve values to be used as hints
             zeehintmaker = []
             for linelong in file:
@@ -356,8 +355,7 @@ class tomotherapyNP(object):
                     # Find where in hd this positiion belongs to.
                     posnew = np.where(self.hd == posold)[0][0]
                     # Grab character between brackets
-                    #self.mod.setAttr("Start", self.zeeVars[posnew], [float(linelong[1])])
-                    print('posnew:', posnew, 'zeeVarslen: ', len(self.zeeVars))
+                    print('posnew:', posnew, 'zeeVarslen: ', len(self.zeeVars), 'posold:', posold, 'line:', line)
                     self.zeeVars[posnew].setAttr("Start", float(linelong[1]))
                     self.zeeVars[posnew].setAttr("VarHintVal", float(linelong[1]))
                     self.zeeVars[posnew].setAttr("VarHintPri", 100)
@@ -437,7 +435,7 @@ class tomotherapyNP(object):
         print('done')
         print('Setting up and launching the optimization...')
         # self.mod.write("modeltest.mps")
-        self.loadprevioussolution()
+        self.loadprevioussolution("solutionStep")
         self.mod.optimize(mycallback)
         self.mod.write("solutionStep-" + str(self.data.sampleevery) + ".sol")
         print('done')
@@ -448,13 +446,13 @@ class tomotherapyNP(object):
             if self.data.mask[i] in self.data.TARGETList:
                 T = self.data.TARGETThresholds[np.where(self.data.mask[i] == self.data.TARGETList)[0]]
                 points = [num for num in range(T - 1, T + 2)]
-                self.mod.setPWLObj(self.zeeVars[i], points, [100, 0, 1])
+                self.mod.setPWLObj(self.zeeVars[i], points, [1000, 0, 1])
             # Constraint on OARs
             elif self.data.mask[i] in self.data.OARList:
                 T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0]]
                 points = [num for num in range(T - 1, T + 2)]
                 print("points:", points)
-                self.mod.setPWLObj(self.zeeVars[i], points, [0, 0, 100])
+                self.mod.setPWLObj(self.zeeVars[i], points, [0, 0, 1000])
             elif 0 == self.data.mask[i]:
                 print('there is an element in the voxels that is also mask 0')
         ## sys.exit('there is a voxel that does not belong anywhere')
@@ -466,8 +464,10 @@ class tomotherapyNP(object):
         self.objConstraintsPWL()
         print('done')
         print('Setting up and launching the optimization...')
-        self.mod.write('pwlcrash.mps')
-        self.mod.optimize()
+        #self.mod.write('pwlcrash.mps')
+        self.loadprevioussolution("solutionPWLStep")
+        self.mod.optimize(mycallback)
+        self.mod.write("solutionPWLStep-" + str(self.data.sampleevery) + ".sol")
         print('done')
 
     def objConstraintsQuadDose(self):
@@ -523,8 +523,8 @@ class tomotherapyNP(object):
             self.objQuad += self.overDoseVar[i] * self.overDoseVar[i] + self.underDoseVar[i] * self.underDoseVar[i]
 
         self.mod.setObjective(self.objQuad, grb.GRB.MINIMIZE) #1.0 expresses minimization. It is the model sense.
-        self.mod.update()
-        self.mod.optimize()
+        self.mod.update( )
+        self.mod.optimize( )
         print('done')
 
     def launchOptimizationMaxMin(self):
@@ -592,7 +592,7 @@ class tomotherapyNP(object):
         cmapper.set_under('black')
         plt.imshow(image, cmap=cmapper, vmin=0.0, vmax=self.data.maxIntensity)
         #plt.axis('off')
-        plt.title('Sinogram with ' + str(self.data.sampleevery) + ' subsamples and ' + str(self.data.M) + ' event limit')
+        plt.title('Sinogram subsamples = ' + str(self.data.sampleevery) + ' and ' + str(self.data.M) + ' events limit')
         plt.xlabel('Beamlets')
         plt.ylabel('Control Points')
         fig.savefig(self.data.outputDirectory + 'sinogram.png', bbox_inches='tight')
