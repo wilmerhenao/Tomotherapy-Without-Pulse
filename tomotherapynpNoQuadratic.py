@@ -557,8 +557,6 @@ class tomotherapyNP(object):
         for o in self.data.OARList:
             voxDict[o] = np.where(self.data.mask == o)[0]
         dose = np.array([self.zeeVars[j].X for j in range(self.data.totalsmallvoxels)])
-        print(max(np.unique(dose)))
-        print('dose: ', len(dose))
         plt.clf()
         for index, sValues in voxDict.items():
             sVoxels = sValues
@@ -661,8 +659,8 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.coarse = 32
-        self.sampleevery = 16
+        self.coarse = 8
+        self.sampleevery = 4
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
