@@ -36,7 +36,7 @@ def mycallback(model, where):
         # General MIP callback
         objbst = model.cbGet(grb.GRB.Callback.MIP_OBJBST)
         objbnd = model.cbGet(grb.GRB.Callback.MIP_OBJBND)
-        mipgap = 0.2 # Here 0.2 means 2%
+        mipgap = 0.5 # Here 0.2 means 2%
         if 0 != objbst:
             if abs(objbst - objbnd)/abs(objbst) < mipgap:
                 print('Stop early -', str(mipgap * 100), '% gap achieved')
@@ -242,60 +242,6 @@ class tomotherapyNP(object):
         # Create a variable that will be the minimum dose to a PTV.
         # Set the objective value
 
-    def objConstraintsPWLOwnImplementation(self):
-        # Create the auxiliary variables first in order to minimize the calls to update
-        self.y1 = [None] * self.data.totalsmallvoxels
-        self.y2 = [None] * self.data.totalsmallvoxels
-        self.wbinary1 = [None] * self.data.totalsmallvoxels
-        # Variable definition
-        for i in range(0, self.data.totalsmallvoxels):
-            if self.data.mask[i] in self.data.TARGETList:
-                T = self.data.TARGETThresholds[np.where(self.data.mask[i] == self.data.TARGETList)[0][0]]
-                self.y1[i] = self.mod.addVar(lb=0.0, ub=T, vtype=grb.GRB.CONTINUOUS,
-                                             name="Auxiliaryy1Voxel_{" + str(i) + "}", column=None)
-                self.y2[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
-                                             name="Auxiliaryy2Voxel_{" + str(i) + "}", column=None)
-                self.wbinary1[i] = self.mod.addVar(vtype=grb.GRB.BINARY, name="wbinaryauxiliar_{" + str(i) + "}", column=None)
-            elif self.data.mask[i] in self.data.OARList:
-                T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0][0]]
-                self.y1[i] = self.mod.addVar(lb=0.0, ub=T, vtype=grb.GRB.CONTINUOUS,
-                                             name="Auxiliaryy1Voxel_{" + str(i) + "}", column=None)
-                self.y2[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
-                                             name="Auxiliaryy2Voxel_{" + str(i) + "}", column=None)
-                self.wbinary1[i] = self.mod.addVar(vtype=grb.GRB.BINARY, name="wbinaryauxiliar_{" + str(i) + "}", column=None)
-        self.mod.update()
-
-        # Constraints implementation
-        self.y1constraint = [None] * self.data.totalsmallvoxels
-        self.y2constraint1 = [None] * self.data.totalsmallvoxels
-        #self.y2constraint2 = [None] * self.data.totalsmallvoxels
-        self.sumconstraint = [None] * self.data.totalsmallvoxels
-        self.interceptions = [None] * self.data.totalsmallvoxels
-        objexpr = grb.LinExpr()
-
-        for i in range(0, self.data.totalsmallvoxels):
-            # Constraint on TARGETS
-            if self.data.mask[i] in self.data.TARGETList:
-                T = self.data.TARGETThresholds[np.where(self.data.mask[i] == self.data.TARGETList)[0][0]]
-                self.y1constraint[i] = self.mod.addConstr(T * self.wbinary1[i], grb.GRB.LESS_EQUAL, self.y1[i])
-                self.y2constraint1[i] = self.mod.addConstr(self.y2[i], grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
-                #self.y2constraint2[i] = self.mod.addConstr(0.0, grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
-                self.sumconstraint[i] = self.mod.addConstr(self.zeeVars[i], grb.GRB.EQUAL, self.y1[i] + self.y2[i])
-                objexpr += 1000.0 * T - 1000.0 * self.y1[i] + self.y2[i]
-            # Constraint on OARs
-            elif self.data.mask[i] in self.data.OARList:
-                T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0][0]]
-                self.y1constraint[i] = self.mod.addConstr(T * self.wbinary1[i], grb.GRB.LESS_EQUAL, self.y1[i])
-                self.y2constraint1[i] = self.mod.addConstr(self.y2[i], grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
-                #self.y2constraint2[i] = self.mod.addConstr(0.0, grb.GRB.LESS_EQUAL, 2.0 * T * self.wbinary1[i])
-                self.sumconstraint[i] = self.mod.addConstr(self.zeeVars[i], grb.GRB.EQUAL, self.y1[i] + self.y2[i])
-                objexpr += 0.0 * self.y1[i] + 1000.0 * self.y2[i]
-            elif 0 == self.data.mask[i]:
-                print('there is an element in the voxels that is also mask 0')
-
-        self.mod.setObjective(objexpr, grb.GRB.MINIMIZE)  # 1.0 expresses minimization. It is the model sense.
-        self.mod.update()
-
     def compareHDandSmallSpace(self, stepcoarse, stephd):
         om = [ij for ij in range(self.data.voxelsBigSpace)]
         # New Map
@@ -435,16 +381,6 @@ class tomotherapyNP(object):
                     self.zeeVars[counter].setAttr("VarHintPri", 1)
         else:
             print('Nonexistent initial file')
-
-    def launchOptimizationPWLOwnImplementation(self):
-        print('creating VOI constraints and constraints directly associated with the objective...')
-        self.objConstraintsPWLOwnImplementation()
-        print('done')
-        print('Setting up and launching the optimization...')
-        self.loadprevioussolution("solutionStep")
-        self.mod.optimize(mycallback)
-        self.mod.write("solutionStep-" + str(self.data.sampleevery) + ".sol")
-        print('done')
 
     def objConstraintsPWL(self):
         for i in range(0, self.data.totalsmallvoxels):
@@ -660,8 +596,8 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.coarse = 16
-        self.sampleevery = 8
+        self.coarse = 8
+        self.sampleevery = 4
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
