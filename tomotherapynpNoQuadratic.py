@@ -305,10 +305,13 @@ class tomotherapyNP(object):
         for i in np.arange(0, self.data.caseSide, stepcoarse):
             for j in np.arange(0, self.data.caseSide, stepcoarse):
                 nm.append(om[int(j) + int(i) * self.data.caseSide])
-        # indices ONLY contains those indices determined by the step size.
+        # indices ONLY contains those indices determined by the step size, notice that this is the address inside the
+        # voxelsHD matrix space. It is not an address in bigvoxelspace
         indices = np.where(np.in1d(self.data.voxelsHD, nm))[0]
+
         # indices coarse represents those represented by step size AND which have important data to show.
         self.indicescoarse = np.unique(self.data.voxelsHD[indices])
+        print('nm: ', nm, 'indices: ', indices, 'indicescoarse:', self.indicescoarse)
 
         nm = []
         for i in np.arange(0, self.data.caseSide, stephd):
@@ -317,13 +320,16 @@ class tomotherapyNP(object):
         indices = np.where(np.in1d(self.data.voxelsHD, nm))[0]
         self.indicesfine = np.unique(self.data.voxelsHD[indices])
         print('length indiceshd: ', len(self.indicesfine) )
+        # hd contains the corresponding directions of matches in indicescoarse. And none, if there is no match in
+        # indicescoarse.
         self.hd = []
         for i in self.indicesfine:
             if 0 == len(np.where(i == self.indicescoarse)[0]):
                 self.hd.append(None)
             else:
                 self.hd.append(np.where(i == self.indicescoarse)[0][0])
-        self.hd = np.array(self.hd)
+        self.hd = np.array(self.hd )
+        print('length hd: ', len(self.hd), 'hd:', self.hd)
 
     def loadprevioussolution(self, prevfile):
         if os.path.isfile(prevfile + "-" + str(self.data.coarse) + ".sol"):
@@ -434,7 +440,6 @@ class tomotherapyNP(object):
         self.objConstraintsPWLOwnImplementation()
         print('done')
         print('Setting up and launching the optimization...')
-        # self.mod.write("modeltest.mps")
         self.loadprevioussolution("solutionStep")
         self.mod.optimize(mycallback)
         self.mod.write("solutionStep-" + str(self.data.sampleevery) + ".sol")
@@ -656,8 +661,8 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.coarse = 4
-        self.sampleevery = 2
+        self.coarse = 32
+        self.sampleevery = 16
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
@@ -736,11 +741,6 @@ class tomodata:
         print('dijs length: ', len(self.Dijs))
         print('mask length: ', len(self.mask))
         print('remove all values of zeroes... and double checking')
-        # First keep a copy of the high definition space
-        self.bixelsHD = self.bixels
-        self.voxelsHD = self.voxels
-        self.DijsHD = self.Dijs
-        self.maskHD = self.mask
 
         self.chooseSmallSpace(self.sampleevery)
         # Next I am removing the voxels that have a mask of zero (0)
@@ -753,6 +753,13 @@ class tomodata:
         self.bixels = np.delete(self.bixels, indices)
         self.voxels = np.delete(self.voxels, indices)
         self.Dijs = np.delete(self.Dijs, indices)
+
+        # First keep a copy of the high definition space after removal of zeroes
+        self.bixelsHD = self.bixels
+        self.voxelsHD = self.voxels
+        self.DijsHD = self.Dijs
+        self.maskHD = self.mask
+
         print('bixels out length: ', len(self.bixels))
         print('VOXELS out length: ', len(self.voxels))
         print('unique voxel elements:', len(np.unique(self.voxels)))

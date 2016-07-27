@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py" line="418" mnemonic="5" />
+    <bookmark url="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py" line="424" mnemonic="5" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
@@ -30,8 +30,8 @@
       <file leaf-file-name="tomotherapynpNoQuadratic.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="311" column="0" selection-start-line="311" selection-start-column="0" selection-end-line="311" selection-end-column="0" />
+            <state relative-caret-position="386">
+              <caret line="664" column="29" selection-start-line="664" selection-start-column="29" selection-end-line="664" selection-end-column="29" />
               <folding>
                 <element signature="e#68#141#0" expanded="false" />
                 <element signature="e#246#268#0" expanded="true" />
@@ -40,26 +40,22 @@
                 <element signature="e#6086#9386#0" expanded="false" />
                 <element signature="e#9433#10855#0" expanded="false" />
                 <element signature="e#10861#10897#0" expanded="false" />
-                <element signature="e#12353#12771#0" expanded="false" />
                 <element signature="e#12831#16692#0" expanded="false" />
-                <element signature="e#24658#25113#0" expanded="false" />
-                <element signature="e#25156#26193#0" expanded="false" />
-                <element signature="e#26240#26682#0" expanded="false" />
-                <element signature="e#26730#29817#0" expanded="false" />
-                <element signature="e#29870#30483#0" expanded="false" />
-                <element signature="e#30533#31000#0" expanded="false" />
-                <element signature="e#31040#31198#0" expanded="false" />
-                <element signature="e#31259#32374#0" expanded="false" />
-                <element signature="e#32477#33596#0" expanded="false" />
-                <element signature="e#33697#34260#0" expanded="false" />
-                <element signature="e#34302#34853#0" expanded="false" />
-                <element signature="e#34893#35040#0" expanded="false" />
-                <element signature="e#35128#35274#0" expanded="false" />
-                <element signature="e#37253#37463#0" expanded="false" />
-                <element signature="e#37571#38128#0" expanded="false" />
-                <element signature="e#38208#38933#0" expanded="false" />
-                <element signature="e#39000#40848#0" expanded="false" />
-                <element signature="e#40889#41446#0" expanded="false" />
+                <element signature="e#25514#26551#0" expanded="false" />
+                <element signature="e#26598#27040#0" expanded="false" />
+                <element signature="e#27088#30175#0" expanded="false" />
+                <element signature="e#30228#30841#0" expanded="false" />
+                <element signature="e#30891#31358#0" expanded="false" />
+                <element signature="e#31398#31556#0" expanded="false" />
+                <element signature="e#31617#32732#0" expanded="false" />
+                <element signature="e#32835#33954#0" expanded="false" />
+                <element signature="e#34055#34618#0" expanded="false" />
+                <element signature="e#34660#35211#0" expanded="false" />
+                <element signature="e#35251#35398#0" expanded="false" />
+                <element signature="e#35486#35632#0" expanded="false" />
+                <element signature="e#37931#38488#0" expanded="false" />
+                <element signature="e#38568#39293#0" expanded="false" />
+                <element signature="e#41275#41832#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -68,7 +64,7 @@
       <file leaf-file-name="solutionStep-4.sol" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/solutionStep-4.sol">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
+            <state relative-caret-position="2607">
               <caret line="2055" column="14" selection-start-line="2055" selection-start-column="14" selection-end-line="2055" selection-end-column="14" />
               <folding />
             </state>
@@ -112,10 +108,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1" />
-    <option name="y" value="1" />
-    <option name="width" value="1918" />
-    <option name="height" value="1038" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -520,13 +516,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00031" summary="updated mu and xi constraints">
-      <created>1467820334880</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1467820334880</updated>
-    </task>
     <task id="LOCAL-00032" summary="Added dose constraints. One per voxel.">
       <created>1467821891793</created>
       <option name="number" value="00032" />
@@ -863,19 +852,26 @@
       <option name="project" value="LOCAL" />
       <updated>1469545865695</updated>
     </task>
-    <option name="localTasksCounter" value="80" />
+    <task id="LOCAL-00080" summary="looking for a bug in posold">
+      <created>1469645567385</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1469645567385</updated>
+    </task>
+    <option name="localTasksCounter" value="81" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1" y="1" width="1918" height="1038" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18457447" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18282403" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.08129176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16389811" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.44408253" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973656" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -920,7 +916,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="exploring the removal of zero values in the masking face for Weiguo's model" />
     <MESSAGE value="I included a sinogram. But I'm not sure if it makes sense" />
     <MESSAGE value="Added a callback" />
     <MESSAGE value="Fixed the sinogram to be black around" />
@@ -945,7 +940,8 @@
     <MESSAGE value="implemented the hints that are supplied to gurobi. Does not seem like it is a huge speedup. I may be slowing things down." />
     <MESSAGE value="Changed the objective function to something that I think makes more sense now." />
     <MESSAGE value="Added axis labels for the sinogram" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added axis labels for the sinogram" />
+    <MESSAGE value="looking for a bug in posold" />
+    <option name="LAST_COMMIT_MESSAGE" value="looking for a bug in posold" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1282,7 +1278,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/solutionStep-4.sol">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
+        <state relative-caret-position="2607">
           <caret line="2055" column="14" selection-start-line="2055" selection-start-column="14" selection-end-line="2055" selection-end-column="14" />
           <folding />
         </state>
@@ -1290,8 +1286,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="311" column="0" selection-start-line="311" selection-start-column="0" selection-end-line="311" selection-end-column="0" />
+        <state relative-caret-position="386">
+          <caret line="664" column="29" selection-start-line="664" selection-start-column="29" selection-end-line="664" selection-end-column="29" />
           <folding>
             <element signature="e#68#141#0" expanded="false" />
             <element signature="e#246#268#0" expanded="true" />
@@ -1300,26 +1296,22 @@
             <element signature="e#6086#9386#0" expanded="false" />
             <element signature="e#9433#10855#0" expanded="false" />
             <element signature="e#10861#10897#0" expanded="false" />
-            <element signature="e#12353#12771#0" expanded="false" />
             <element signature="e#12831#16692#0" expanded="false" />
-            <element signature="e#24658#25113#0" expanded="false" />
-            <element signature="e#25156#26193#0" expanded="false" />
-            <element signature="e#26240#26682#0" expanded="false" />
-            <element signature="e#26730#29817#0" expanded="false" />
-            <element signature="e#29870#30483#0" expanded="false" />
-            <element signature="e#30533#31000#0" expanded="false" />
-            <element signature="e#31040#31198#0" expanded="false" />
-            <element signature="e#31259#32374#0" expanded="false" />
-            <element signature="e#32477#33596#0" expanded="false" />
-            <element signature="e#33697#34260#0" expanded="false" />
-            <element signature="e#34302#34853#0" expanded="false" />
-            <element signature="e#34893#35040#0" expanded="false" />
-            <element signature="e#35128#35274#0" expanded="false" />
-            <element signature="e#37253#37463#0" expanded="false" />
-            <element signature="e#37571#38128#0" expanded="false" />
-            <element signature="e#38208#38933#0" expanded="false" />
-            <element signature="e#39000#40848#0" expanded="false" />
-            <element signature="e#40889#41446#0" expanded="false" />
+            <element signature="e#25514#26551#0" expanded="false" />
+            <element signature="e#26598#27040#0" expanded="false" />
+            <element signature="e#27088#30175#0" expanded="false" />
+            <element signature="e#30228#30841#0" expanded="false" />
+            <element signature="e#30891#31358#0" expanded="false" />
+            <element signature="e#31398#31556#0" expanded="false" />
+            <element signature="e#31617#32732#0" expanded="false" />
+            <element signature="e#32835#33954#0" expanded="false" />
+            <element signature="e#34055#34618#0" expanded="false" />
+            <element signature="e#34660#35211#0" expanded="false" />
+            <element signature="e#35251#35398#0" expanded="false" />
+            <element signature="e#35486#35632#0" expanded="false" />
+            <element signature="e#37931#38488#0" expanded="false" />
+            <element signature="e#38568#39293#0" expanded="false" />
+            <element signature="e#41275#41832#0" expanded="false" />
           </folding>
         </state>
       </provider>
