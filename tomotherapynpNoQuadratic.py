@@ -306,19 +306,19 @@ class tomotherapyNP(object):
             for j in np.arange(0, self.data.caseSide, stepcoarse):
                 nm.append(om[int(j) + int(i) * self.data.caseSide])
         # indices ONLY contains those indices determined by the step size, notice that this is the address inside the
-        # voxelsHD matrix space. It is not an address in bigvoxelspace
-        indices = np.where(np.in1d(self.data.voxelsHD, nm))[0]
+        # voxels matrix space. It is not an address in bigvoxelspace
+        indices = np.where(np.in1d(self.data.voxels, nm))[0]
 
         # indices coarse represents those represented by step size AND which have important data to show.
-        self.indicescoarse = np.unique(self.data.voxelsHD[indices])
+        self.indicescoarse = np.unique(self.data.voxels[indices])
         print('nm: ', nm, 'indices: ', indices, 'indicescoarse:', self.indicescoarse)
 
         nm = []
         for i in np.arange(0, self.data.caseSide, stephd):
             for j in np.arange(0, self.data.caseSide, stephd):
                 nm.append(om[int(j) + int(i) * self.data.caseSide])
-        indices = np.where(np.in1d(self.data.voxelsHD, nm))[0]
-        self.indicesfine = np.unique(self.data.voxelsHD[indices])
+        indices = np.where(np.in1d(self.data.voxels, nm))[0]
+        self.indicesfine = np.unique(self.data.voxels[indices])
         print('length indiceshd: ', len(self.indicesfine) )
         # hd contains the corresponding directions of matches in indicescoarse. And none, if there is no match in
         # indicescoarse.
@@ -660,8 +660,8 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.coarse = 4
-        self.sampleevery = 2
+        self.coarse = 16
+        self.sampleevery = 8
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
@@ -719,6 +719,13 @@ class tomodata:
         print('voxels what it looks like:', self.voxels)
         self.Dijs = getvector('data\\Dijs_out.bin', np.float32)
         self.mask = getvector('data\\optmask.img', np.int32)
+
+        # First keep a copy of the high definition
+        self.bixelsHD = self.bixels
+        self.voxelsHD = self.voxels
+        self.DijsHD = self.Dijs
+        self.maskHD = self.mask
+
         self.caseSide = 256
         self.voxelsBigSpace = self.caseSide ** 2
         print('bixels length: ', len(self.bixels))
@@ -738,12 +745,6 @@ class tomodata:
         self.bixels = np.delete(self.bixels, indices)
         self.voxels = np.delete(self.voxels, indices)
         self.Dijs = np.delete(self.Dijs, indices)
-
-        # First keep a copy of the high definition space after removal of zeroes
-        self.bixelsHD = self.bixels
-        self.voxelsHD = self.voxels
-        self.DijsHD = self.Dijs
-        self.maskHD = self.mask
 
         print('bixels out length: ', len(self.bixels))
         print('VOXELS out length: ', len(self.voxels))
