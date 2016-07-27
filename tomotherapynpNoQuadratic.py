@@ -57,7 +57,7 @@ class tomotherapyNP(object):
         print('done')
         print('Building main decision variables (dose, binaries).')
         self.buildVariables()
-        self.launchOptimizationPWLOwnImplementation()
+        self.launchOptimizationPWL()
         self.plotDVH('dvhcheck')
         self.plotSinoGram()
         self.plotEventsbinary()
@@ -286,14 +286,9 @@ class tomotherapyNP(object):
             print('reWrite invalid data')
             for i in range(self.data.totalsmallvoxels):
                 self.zeeVars[i].Start = grb.GRB.UNDEFINED
-                self.y1[i].Start = grb.GRB.UNDEFINED
-                self.y2[i].Start = grb.GRB.UNDEFINED
-                self.wbinary1[i].Start = grb.GRB.UNDEFINED
             print('done rewriting invalid data')
             # Give these branches the highest priority. Doesn't seem to have a big impact
             self.mod.setAttr("BranchPriority", self.zeeVars, [2] * self.data.totalsmallvoxels )
-            self.mod.setAttr("BranchPriority", self.y1, [1] * self.data.totalsmallvoxels )
-            self.mod.setAttr("BranchPriority", self.y2, [1] * self.data.totalsmallvoxels )
             file = open(prevfile + "-" + str(self.data.coarse) + ".sol", 'r' )
             #This container will preserve values to be used as hints
             zeehintmaker = []
@@ -316,42 +311,6 @@ class tomotherapyNP(object):
                     # Reduce this branch to a normal priority
                     self.zeeVars[posnew].BranchPriority = 0
                     print('zee replaced', linelong)
-                elif 'wbi' == token:
-                    # Get the old position of the line (integer value inside the brackets from the sol file
-                    posold = int(re.sub(r'[\{\}]', ' ', line).split()[1])
-                    # Find where in hd this positiion belongs to.
-                    posnew = np.where(self.hd == posold)[0][0]
-                    # Grab character between brackets
-                    self.wbinary1[posnew].Start = float(linelong[1])
-                    print('is the binary assignation happening?', self.wbinary1[posnew].getAttr("Start"), float(linelong[1]))
-                    # Reduce this branch to a normal priority
-                    print('wbi replaced', linelong)
-                elif 'Aux' == token:
-                    token = line[10]
-                    if '1' == token:
-                        # Get the old position of the line (integer value inside the brackets from the sol file
-                        posold = int(re.sub(r'[\{\}]', ' ', line).split()[1])
-                        # Find where in hd this positiion belongs to.
-                        posnew = np.where(self.hd == posold)[0][0]
-                        # Grab character between brackets
-                        self.y1[posnew].Start = float(linelong[1])
-                        # Reduce this branch to a normal priority
-                        self.y1[posnew].BranchPriority = 0
-                        # Reduce this branch to a normal priority
-                        print('Aux1 replaced', linelong)
-                    elif '2' == token:
-                        # Get the old position of the line (integer value inside the brackets from the sol file
-                        posold = int(re.sub(r'[\{\}]', ' ', line).split()[1])
-                        # Find where in hd this positiion belongs to.
-                        posnew = np.where(self.hd == posold)[0][0]
-                        # Grab character between brackets
-                        self.y2[posnew].Start = float(linelong[1])
-                        # Reduce this branch to a normal priority
-                        self.y2[posnew].BranchPriority = 0
-                        # Reduce this branch to a normal priority
-                        print('Aux2 replaced', linelong)
-                    else:
-                        print('error. This variable does not make sense', token, line)
                 else:
                     pass
             print('Filling up some hints')
@@ -596,8 +555,8 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.coarse = 8
-        self.sampleevery = 4
+        self.coarse = 16
+        self.sampleevery = 32
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
@@ -605,7 +564,7 @@ class tomodata:
         ## Number of control points (every 2 degrees)
         self.K = 178
         ## Total number of beamlets
-        ## OARMAX is maximum dose tolerable for organs.
+        ## OARMAX is maximum dose tolerable for organs
         self.OARMAX = 7.0
         print('Read vectors...')
         #self.readWilmersCase()
@@ -614,7 +573,7 @@ class tomodata:
         # Create a space in smallvoxel coordinates
         self.smallvoxels = self.BigToSmallCreator()
         print('Build sparse matrix.')
-        # The next part uses the case corresponding to either Wilmer or Weiguo's case.
+        # The next part uses the case corresponding to either Wilmer or Weiguo's case
         self.totalbeamlets = self.K * self.N
         self.totalsmallvoxels = max(self.smallvoxels) + 1
         print('totalsmallvoxels: ', self.totalsmallvoxels)
