@@ -48,6 +48,7 @@ class tomotherapyNP(object):
     def __init__(self, datastructure):
         print('Reading in data...')
         self.data = datastructure
+        print('I dont change the voxels object', len(self.data.voxels))
         print('done')
         print('Constructing Gurobi model object...')
         self.mod = grb.Model()
@@ -252,21 +253,27 @@ class tomotherapyNP(object):
             for j in np.arange(0, self.data.caseSide, stepcoarse):
                 nm.append(om[int(j) + int(i) * self.data.caseSide])
         # indices ONLY contains those indices determined by the step size, notice that this is the address inside the
-        # voxels matrix space. It is not an address in bigvoxelspace
-        indices = np.where(np.in1d(self.data.voxels, nm))[0]
-
+        # voxelsHD matrix space. It is not an address in bigvoxelspace
+        print('lennm:', len(nm))
+        indices = np.where(np.in1d(self.data.voxelsHD, nm))[0]
+        print('length indices should match:', len(indices))
         # indices coarse represents those represented by step size AND which have important data to show.
-        self.indicescoarse = np.unique(self.data.voxels[indices])
+        self.indicescoarse = np.unique(self.data.voxelsHD[indices])
         print('nm: ', nm, 'indices: ', indices, 'indicescoarse:', self.indicescoarse)
+        print('length indicescoarse:', len(self.indicescoarse))
 
         nm = []
         for i in np.arange(0, self.data.caseSide, stephd):
             for j in np.arange(0, self.data.caseSide, stephd):
                 nm.append(om[int(j) + int(i) * self.data.caseSide])
-        indices = np.where(np.in1d(self.data.voxels, nm))[0]
-        self.indicesfine = np.unique(self.data.voxels[indices])
-        print('length indiceshd: ', len(self.indicesfine) )
-        # hd contains the corresponding directions of matches in indicescoarse. And none, if there is no match in
+        print('lennm:', len(nm))
+        print('lenvoxelsHD', len(self.data.voxelsHD))
+        indices = np.where(np.in1d(self.data.voxelsHD, nm))[0]
+        print('length indices:', len(indices))
+        self.indicesfine = np.unique(self.data.voxelsHD[indices])
+        print('length indicesfine: ', len(self.indicesfine) )
+        # hd contains the corresponding directions of matches
+        # in indicescoarse. And none, if there is no match in
         # indicescoarse.
         self.hd = []
         for i in self.indicesfine:
@@ -300,7 +307,7 @@ class tomotherapyNP(object):
                     # Get the old position of the line (integer value inside the brackets from the sol file
                     posold = int(re.sub(r'[\{\}]', ' ', line).split()[1])
                     # Find where in hd this positiion belongs to.
-                    print('zeeVarslen: ', len(self.zeeVars), 'posold:', posold, 'line:', line, 'hd:', self.hd)
+                    print('zeeVarslen: ', len(self.zeeVars), 'posold:', posold, 'line:', line, 'hd:', self.hd, 'lenhd:', len(self.hd))
                     posnew = np.where(self.hd == posold)[0][0]
                     # Grab character between brackets
                     print('posnew:', posnew, 'zeeVarslen: ', len(self.zeeVars), 'posold:', posold, 'line:', line)
@@ -345,14 +352,13 @@ class tomotherapyNP(object):
         for i in range(0, self.data.totalsmallvoxels):
             # Constraint on TARGETS
             if self.data.mask[i] in self.data.TARGETList:
-                T = self.data.TARGETThresholds[np.where(self.data.mask[i] == self.data.TARGETList)[0]]
+                T = self.data.TARGETThresholds[np.where(self.data.mask[i] == self.data.TARGETList)[0][0]]
                 points = [num for num in range(T - 1, T + 2)]
                 self.mod.setPWLObj(self.zeeVars[i], points, [1000, 0, 1])
             # Constraint on OARs
             elif self.data.mask[i] in self.data.OARList:
-                T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0]]
+                T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0][0]]
                 points = [num for num in range(T - 1, T + 2)]
-                print("points:", points)
                 self.mod.setPWLObj(self.zeeVars[i], points, [0, 0, 1000])
             elif 0 == self.data.mask[i]:
                 print('there is an element in the voxels that is also mask 0')
@@ -555,8 +561,8 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.coarse = 16
-        self.sampleevery = 32
+        self.coarse = 4
+        self.sampleevery = 2
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
@@ -585,9 +591,11 @@ class tomodata:
     def BigToSmallCreator(self):
         # Notice that the order of voxels IS preserved. So (1,2,3,80,7) produces c = (0,1,2,4,3)
         a, b, c, d = np.unique(self.voxels, return_index=True, return_inverse=True, return_counts=True)
+        print('BigToSmallCreator:size of c. Size of the problem:', len(c))
         return(c)
 
-    ## Choose Small Space
+    ## Choose Small Space is the function that reduces the resolution to work with. voxelsHD will remain to be used for
+    # functions that require high resolution. Mainly when loading the hints.
     def chooseSmallSpace(self, stepsparse):
         # Original Map
         om = [ij for ij in range(self.voxelsBigSpace)]
@@ -601,19 +609,50 @@ class tomodata:
         print('nm', describe(nm))
         print('effectivity of the reduction:', len(om)/len(nm))
         indices = np.where(np.in1d(self.voxels, nm))[0]
+        print('chooseSmallSpace: indices should match the one before the Fine:', len(indices))
         self.bixels = self.bixels[indices]
+        print('checking effectivity1:', len(self.voxels))
         self.voxels = self.voxels[indices]
+        print('checking effectivity2:', len(self.voxels))
         self.Dijs = self.Dijs[indices]
         print(len(self.mask))
         self.mask = np.array([self.mask[i] for i in nm])
+        print('lensbeforeremovezeroes:', len(self.bixels), len(self.voxels), len(self.Dijs), len(self.mask), len(np.unique(self.voxels)))
+        locats = np.where(0 == self.mask)[0]
+        self.mask = np.delete(self.mask, locats)
 
     ## Read Weiguo's Case
+    def removezeroes(self):
+        # print('len mask after:', len(self.mask))
+        # indices = np.where(np.in1d(self.voxels, locats))[0]
+        # self.bixels = np.delete(self.bixels, indices)
+        # print('len voxels before:', len(self.voxels))
+        # self.voxels = np.delete(self.voxels, indices)
+        # print('len voxels after:', len(self.voxels))
+        # self.Dijs = np.delete(self.Dijs, indices)
+        print('lens:', len(self.bixels), len(self.voxels), len(self.Dijs), len(self.mask), len(np.unique(self.voxels)))
+        #-------------------------------------
+        locats = np.where(0 == self.maskHD)[0]
+        print('locats length:', len(locats), 'locats values', locats)
+        print('len mask before HD:', len(self.maskHD))
+        self.maskHD = np.delete(self.maskHD, locats)
+        print('len mask after HD:', len(self.maskHD))
+        indices = np.where(np.in1d(self.voxelsHD, locats))[0]
+        self.bixelsHD = np.delete(self.bixelsHD, indices)
+        print('len voxels before HD:', len(self.voxelsHD))
+        self.voxelsHD = np.delete(self.voxelsHD, indices)
+        print('len voxels after HD:', len(self.voxelsHD))
+        self.DijsHD = np.delete(self.DijsHD, indices)
+        print('lensHD:', len(self.bixelsHD), len(self.voxelsHD), len(self.DijsHD), len(self.maskHD), len(np.unique(self.voxelsHD)))
+
     def readWeiguosCase(self):
         self.bixels = getvector('data\\Bixels_out.bin', np.int32)
         self.voxels = getvector('data\\Voxels_out.bin', np.int32)
         print('voxels what it looks like:', self.voxels)
         self.Dijs = getvector('data\\Dijs_out.bin', np.float32)
         self.mask = getvector('data\\optmask.img', np.int32)
+
+        # Next I am removing the voxels that have a mask of zero (0) because they REALLY complicate things otherwise
 
         # First keep a copy of the high definition
         self.bixelsHD = self.bixels
@@ -628,29 +667,16 @@ class tomodata:
         print('dijs length: ', len(self.Dijs))
         print('mask length: ', len(self.mask))
         print('remove all values of zeroes... and double checking')
-
+        print('1:lenvoxelsHD', len(self.voxelsHD), 'lenvoxels:', len(self.voxels))
         self.chooseSmallSpace(self.sampleevery)
-        # Next I am removing the voxels that have a mask of zero (0)
-        locats = np.where(0 == self.mask)[0]
-        self.mask = np.delete(self.mask, locats)
-        print('locats: ', len(locats))
-        print('mask length: ', len(self.mask))
-        indices = np.where(np.in1d(self.voxels, locats))[0]
-        print('indices', indices)
-        self.bixels = np.delete(self.bixels, indices)
-        self.voxels = np.delete(self.voxels, indices)
-        self.Dijs = np.delete(self.Dijs, indices)
+        print('2:lenvoxelsHD', len(self.voxelsHD), 'lenvoxels:', len(self.voxels))
+        self.removezeroes()
+        print('3:lenvoxelsHD', len(self.voxelsHD), 'lenvoxels:', len(self.voxels))
 
-        print('bixels out length: ', len(self.bixels))
-        print('VOXELS out length: ', len(self.voxels))
-        print('unique voxel elements:', len(np.unique(self.voxels)))
-        print('dijs out length: ', len(self.Dijs))
-        print('mask out length: ', len(self.mask))
         self.OARList = [1, 2, 3]
         self.OARThresholds = [7, 8, 9]
         self.TARGETList = [256]
         self.TARGETThresholds = [14]
-        #print(np.unique(self.mask))
 
     def readWilmersCase(self):
         self.bixels = getvector('data\\myBixels_out.bin', np.int32)
