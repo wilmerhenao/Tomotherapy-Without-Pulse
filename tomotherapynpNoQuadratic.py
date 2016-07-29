@@ -54,6 +54,7 @@ class tomotherapyNP(object):
         self.mod = grb.Model()
         self.mod.params.threads = numcores
         self.mod.params.MIPFocus = 1
+        self.mod.params.Presolve = 0
         self.mod.params.TimeLimit = 14*3600.0
         print('done')
         print('Building main decision variables (dose, binaries).')
@@ -561,8 +562,8 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.coarse = 4
-        self.sampleevery = 2
+        self.coarse = 2
+        self.sampleevery = 1
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
