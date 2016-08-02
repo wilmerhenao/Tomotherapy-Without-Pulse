@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py" line="337" mnemonic="5" />
+    <bookmark url="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py" line="338" mnemonic="5" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" afterPath="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" />
     </list>
     <ignored path="CaseCreation.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,38 +27,62 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="tomotherapynpNoQuadratic.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="tomotherapynpNoQuadratic.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="279">
-              <caret line="625" column="50" selection-start-line="625" selection-start-column="50" selection-end-line="625" selection-end-column="50" />
+            <state relative-caret-position="22">
+              <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
               <folding>
                 <element signature="e#68#141#0" expanded="false" />
                 <element signature="e#246#268#0" expanded="true" />
-                <element signature="e#2022#4547#0" expanded="false" />
-                <element signature="e#4595#6096#0" expanded="false" />
-                <element signature="e#6141#9441#0" expanded="false" />
-                <element signature="e#9488#10910#0" expanded="false" />
-                <element signature="e#10916#10952#0" expanded="false" />
-                <element signature="e#19936#20378#0" expanded="false" />
-                <element signature="e#20426#23513#0" expanded="false" />
-                <element signature="e#23566#24179#0" expanded="false" />
-                <element signature="e#24229#24696#0" expanded="false" />
-                <element signature="e#24736#24894#0" expanded="false" />
-                <element signature="e#24955#25999#0" expanded="false" />
-                <element signature="e#26102#27221#0" expanded="false" />
-                <element signature="e#27322#27885#0" expanded="false" />
-                <element signature="e#27927#28478#0" expanded="false" />
-                <element signature="e#28518#28665#0" expanded="false" />
-                <element signature="e#28753#28899#0" expanded="false" />
-                <element signature="e#35452#36009#0" expanded="false" />
+                <element signature="e#2059#4584#0" expanded="false" />
+                <element signature="e#4632#6133#0" expanded="false" />
+                <element signature="e#6178#9478#0" expanded="false" />
+                <element signature="e#9525#10947#0" expanded="false" />
+                <element signature="e#10953#10989#0" expanded="false" />
+                <element signature="e#19973#20415#0" expanded="false" />
+                <element signature="e#20463#23550#0" expanded="false" />
+                <element signature="e#23603#24216#0" expanded="false" />
+                <element signature="e#24266#24733#0" expanded="false" />
+                <element signature="e#24773#24931#0" expanded="false" />
+                <element signature="e#24992#26036#0" expanded="false" />
+                <element signature="e#26139#27258#0" expanded="false" />
+                <element signature="e#27359#27922#0" expanded="false" />
+                <element signature="e#27964#28515#0" expanded="false" />
+                <element signature="e#28555#28702#0" expanded="false" />
+                <element signature="e#28790#28936#0" expanded="false" />
+                <element signature="e#35489#36046#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tomotherapyColumnGeneration.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="dvhcheck.png" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/output/dvhcheck.png">
+          <provider selected="true" editor-type-id="images">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sinogram.png" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/output/sinogram.png">
+          <provider selected="true" editor-type-id="images">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="beamletdistribution.png" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/output/beamletdistribution.png">
           <provider selected="true" editor-type-id="images">
             <state />
           </provider>
@@ -162,6 +186,9 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches">
+        <subPane />
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -190,14 +217,25 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="output" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tomotherapy-Without-Pulse" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tomotherapy-Without-Pulse" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="data" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
-      </pane>
-      <pane id="Scratches">
-        <subPane />
       </pane>
     </panes>
   </component>
@@ -480,20 +518,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
-    </task>
-    <task id="LOCAL-00038" summary="Corrected a bug in the creation of the D matrix">
-      <created>1467903883170</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1467903883170</updated>
-    </task>
-    <task id="LOCAL-00039" summary="added a counter to the printing of variables">
-      <created>1467904200921</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1467904200921</updated>
     </task>
     <task id="LOCAL-00040" summary="Reduced the dimension of the intensity variable to 1 per control point">
       <created>1467908360193</created>
@@ -824,19 +848,33 @@
       <option name="project" value="LOCAL" />
       <updated>1469660152227</updated>
     </task>
-    <option name="localTasksCounter" value="87" />
+    <task id="LOCAL-00087" summary="Corrected a spot on removezeroes where I was removing positions that were already being removed. This is a huge problem because the data SHOULD be cleaned before and I should work in SMALLVOXELSPACE ALWAYS">
+      <created>1469741582518</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1469741582518</updated>
+    </task>
+    <task id="LOCAL-00088" summary="With the latest changes the program is now running">
+      <created>1469803769263</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1469803769263</updated>
+    </task>
+    <option name="localTasksCounter" value="89" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18282403" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.08129176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.45168296" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23101953" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973656" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -881,8 +919,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Implemented semiquadratic objective functions" />
-    <MESSAGE value="corrected bug in list of OARs" />
     <MESSAGE value="created a template of piecewise linear objective" />
     <MESSAGE value="My own implementation of a piecewise linear function because gurobi's seems fishy." />
     <MESSAGE value="This version runs under python 2.7 and python 3.5. It's indifferent" />
@@ -906,7 +942,9 @@
     <MESSAGE value="changes related to size of the problem and accounting of zeros" />
     <MESSAGE value="Removed my own implementation of PWL because it adds a bunch of binary variables that slow the process down." />
     <MESSAGE value="Had to remove a few loadings of variables that don't make sense anymore&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Had to remove a few loadings of variables that don't make sense anymore&#10;" />
+    <MESSAGE value="Corrected a spot on removezeroes where I was removing positions that were already being removed. This is a huge problem because the data SHOULD be cleaned before and I should work in SMALLVOXELSPACE ALWAYS" />
+    <MESSAGE value="With the latest changes the program is now running" />
+    <option name="LAST_COMMIT_MESSAGE" value="With the latest changes the program is now running" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -915,13 +953,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://C:/gurobi651/win64/examples/python/mip1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/gurobi651/win64/examples/python/mip2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-828">
@@ -990,9 +1021,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4675">
           <caret line="283" column="40" selection-start-line="283" selection-start-column="40" selection-end-line="283" selection-end-column="40" />
-          <folding>
-            <element signature="e#226#244#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1085,7 +1113,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="418">
           <caret line="20" column="16" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1098,7 +1125,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="439">
           <caret line="54" column="12" selection-start-line="54" selection-start-column="12" selection-end-line="54" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1106,7 +1132,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-274036">
           <caret line="8946" column="0" selection-start-line="8946" selection-start-column="0" selection-end-line="8946" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1114,9 +1139,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="437">
           <caret line="69" column="54" selection-start-line="69" selection-start-column="54" selection-end-line="69" selection-end-column="54" />
-          <folding>
-            <element signature="e#855#865#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1124,7 +1146,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1132,7 +1153,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1140,7 +1160,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1148,7 +1167,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1156,7 +1174,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
           <caret line="30" column="74" selection-start-line="30" selection-start-column="74" selection-end-line="30" selection-end-column="74" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1164,7 +1181,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1172,7 +1188,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1190">
           <caret line="70" column="74" selection-start-line="70" selection-start-column="74" selection-end-line="70" selection-end-column="74" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1180,7 +1195,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
           <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1188,7 +1202,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2078">
           <caret line="146415" column="47" selection-start-line="146415" selection-start-column="47" selection-end-line="146415" selection-end-column="47" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1196,7 +1209,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1204,7 +1216,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="501">
           <caret line="42947" column="0" selection-start-line="42947" selection-start-column="0" selection-end-line="42947" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1212,7 +1223,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="484">
           <caret line="42967" column="0" selection-start-line="42967" selection-start-column="0" selection-end-line="42967" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1220,28 +1230,18 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
           <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#32#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/output/beamletdistribution.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/solutionStep-4.sol" />
     <entry file="file://$PROJECT_DIR$/output/sinogram.png">
       <provider selected="true" editor-type-id="images">
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/solutionStep-4.sol">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="77">
-          <caret line="1885" column="33" selection-start-line="1885" selection-start-column="33" selection-end-line="1885" selection-end-column="33" />
-          <folding />
-        </state>
+    <entry file="file://$PROJECT_DIR$/output/beamletdistribution.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/output/dvhcheck.png">
@@ -1251,29 +1251,37 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="279">
-          <caret line="625" column="50" selection-start-line="625" selection-start-column="50" selection-end-line="625" selection-end-column="50" />
+        <state relative-caret-position="22">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
           <folding>
             <element signature="e#68#141#0" expanded="false" />
             <element signature="e#246#268#0" expanded="true" />
-            <element signature="e#2022#4547#0" expanded="false" />
-            <element signature="e#4595#6096#0" expanded="false" />
-            <element signature="e#6141#9441#0" expanded="false" />
-            <element signature="e#9488#10910#0" expanded="false" />
-            <element signature="e#10916#10952#0" expanded="false" />
-            <element signature="e#19936#20378#0" expanded="false" />
-            <element signature="e#20426#23513#0" expanded="false" />
-            <element signature="e#23566#24179#0" expanded="false" />
-            <element signature="e#24229#24696#0" expanded="false" />
-            <element signature="e#24736#24894#0" expanded="false" />
-            <element signature="e#24955#25999#0" expanded="false" />
-            <element signature="e#26102#27221#0" expanded="false" />
-            <element signature="e#27322#27885#0" expanded="false" />
-            <element signature="e#27927#28478#0" expanded="false" />
-            <element signature="e#28518#28665#0" expanded="false" />
-            <element signature="e#28753#28899#0" expanded="false" />
-            <element signature="e#35452#36009#0" expanded="false" />
+            <element signature="e#2059#4584#0" expanded="false" />
+            <element signature="e#4632#6133#0" expanded="false" />
+            <element signature="e#6178#9478#0" expanded="false" />
+            <element signature="e#9525#10947#0" expanded="false" />
+            <element signature="e#10953#10989#0" expanded="false" />
+            <element signature="e#19973#20415#0" expanded="false" />
+            <element signature="e#20463#23550#0" expanded="false" />
+            <element signature="e#23603#24216#0" expanded="false" />
+            <element signature="e#24266#24733#0" expanded="false" />
+            <element signature="e#24773#24931#0" expanded="false" />
+            <element signature="e#24992#26036#0" expanded="false" />
+            <element signature="e#26139#27258#0" expanded="false" />
+            <element signature="e#27359#27922#0" expanded="false" />
+            <element signature="e#27964#28515#0" expanded="false" />
+            <element signature="e#28555#28702#0" expanded="false" />
+            <element signature="e#28790#28936#0" expanded="false" />
+            <element signature="e#35489#36046#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
