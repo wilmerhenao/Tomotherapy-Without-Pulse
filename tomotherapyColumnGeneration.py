@@ -49,8 +49,8 @@ class tomotherapyNP(object):
         self.data = datastructure
         print('done')
         print('Building column generation method')
-        self.ColumnGenerationMain()
         self.thresholds()
+        self.ColumnGenerationMain()
         self.plotDVH('dvhcheck')
         self.plotSinoGram()
         self.plotEventsbinary()
@@ -79,7 +79,7 @@ class tomotherapyNP(object):
     def calcDose(self):
         self.currentDose = np.zeros(self.data.totalsmallvoxels, dtype=float)
         self.currentDose = np.multiply(self.mathCal, self.data.D[:,] * np.repeat(self.yk, self.data.N)
-        self.dZdK = self.mathCal * self.data.D
+        self.dZdK = np.asmatrix(self.mathCal).transpose() * np.asmatrix(self.data.D)
         assert((self.data.totalsmallvoxels, self.data.K) == self.dZdK.shape)
 
     ## This function regularly enters the optimization engine to calculate objective function and gradients
@@ -98,6 +98,12 @@ class tomotherapyNP(object):
         # Notice that I use two types of gradients. One for voxels and one for apertures
         self.voxelgradient = 2 * (oDoseObjGl - uDoseObjGl)
         self.aperturegradient = (np.asmatrix(self.voxelgradient) * self.dZdK).transpose()
+
+    def calcObjGrad(self, x, user_data=None):
+        self.yk = x
+        self.calcDose()
+        self.calcGradientandObjValue()
+        return (self.objectiveValue, self.aperturegradient)
 
     def ColumnGenerationMain(self):
         # Step 1: Assign \mathcal{C} the empty set. Remember to open everytime I add a path.

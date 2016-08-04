@@ -7,7 +7,6 @@
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapyColumnGeneration.py" afterPath="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" afterPath="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" />
     </list>
     <ignored path="CaseCreation.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -57,8 +56,8 @@
       <file leaf-file-name="tomotherapyColumnGeneration.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="92">
-              <caret line="81" column="22" selection-start-line="81" selection-start-column="22" selection-end-line="81" selection-end-column="22" />
+            <state relative-caret-position="300">
+              <caret line="93" column="0" selection-start-line="93" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
               <folding>
                 <element signature="e#226#248#0" expanded="true" />
               </folding>
@@ -519,13 +518,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00042" summary="created the declareVariables function which will serve in the paralellization of this thing.">
-      <created>1467910036323</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1467910036323</updated>
-    </task>
     <task id="LOCAL-00043" summary="Created a partial function just in case Gurobi ever decides to allow pickling and I can use multithreading to upload this slow constraints.">
       <created>1467912689636</created>
       <option name="number" value="00043" />
@@ -862,12 +854,19 @@
       <option name="project" value="LOCAL" />
       <updated>1470257845645</updated>
     </task>
-    <option name="localTasksCounter" value="91" />
+    <task id="LOCAL-00091" summary="Inserted a modelling of the dose, calculation of the objective function and derivatives">
+      <created>1470332615885</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1470332615885</updated>
+    </task>
+    <option name="localTasksCounter" value="92" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18282403" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -919,7 +918,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="This version runs under python 2.7 and python 3.5. It's indifferent" />
     <MESSAGE value="added a callback to stop execution early. Also a few tuning parameters" />
     <MESSAGE value="Corrected a bug. This thing was maximizing my PWL instead of minimizing. The DVH was looking very weird. Now it makes sense" />
     <MESSAGE value="Added a new parameter to help in speedup. Norm" />
@@ -944,7 +942,8 @@
     <MESSAGE value="With the latest changes the program is now running" />
     <MESSAGE value="Added the column generation project as a unique independent file" />
     <MESSAGE value="Cleanup for columngeneration file" />
-    <option name="LAST_COMMIT_MESSAGE" value="Cleanup for columngeneration file" />
+    <MESSAGE value="Inserted a modelling of the dose, calculation of the objective function and derivatives" />
+    <option name="LAST_COMMIT_MESSAGE" value="Inserted a modelling of the dose, calculation of the objective function and derivatives" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1275,8 +1274,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="81" column="22" selection-start-line="81" selection-start-column="22" selection-end-line="81" selection-end-column="22" />
+        <state relative-caret-position="300">
+          <caret line="93" column="0" selection-start-line="93" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
           <folding>
             <element signature="e#226#248#0" expanded="true" />
           </folding>
