@@ -75,7 +75,7 @@ class tomotherapyNP(object):
             self.zeeVars[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
                                                                      name="zee_{" + str(i) + "}",
                                                                      column = None)
-        self.mod.update()
+        self.mod.update( )
         for i in range(0, self.data.totalsmallvoxels):
             if i % 1000 == 0:
                 print(str(i) + ','); sys.stdout.flush()
@@ -101,11 +101,6 @@ class tomotherapyNP(object):
             self.partialdeclareFunc = partial(self.declareVariables, k=k)
             for i in range(0, self.data.N):
                 self.partialdeclareFunc(i)
-                # if __name__ == '__main__':
-                #      pool = Pool(processes=numcores)  # process per MP
-                #      pool.map(self.partialdeclareFunc, range(0, self.data.N))
-                # pool.close()
-                # pool.join()
         # Lazy update of gurobi
         self.mod.update()
 
@@ -575,7 +570,7 @@ class tomodata:
         self.OARMAX = 7.0
         print('Read vectors...')
         #self.readWilmersCase()
-        self.readWeiguosCase(  )
+        self.readWeiguosCase()
         print('done')
         # Create a space in smallvoxel coordinates
         self.smallvoxels = self.BigToSmallCreator()

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py" line="338" mnemonic="5" />
+    <bookmark url="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py" line="333" mnemonic="5" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapyColumnGeneration.py" afterPath="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" afterPath="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" />
     </list>
     <ignored path="CaseCreation.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,27 +31,24 @@
       <file leaf-file-name="tomotherapynpNoQuadratic.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="259">
-              <caret line="246" column="17" selection-start-line="246" selection-start-column="8" selection-end-line="246" selection-end-column="17" />
+            <state relative-caret-position="260">
+              <caret line="19" column="3" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="26" />
               <folding>
                 <element signature="e#68#141#0" expanded="false" />
-                <element signature="e#2059#4584#0" expanded="false" />
-                <element signature="e#4632#6133#0" expanded="false" />
-                <element signature="e#6178#9478#0" expanded="false" />
-                <element signature="e#9525#10947#0" expanded="false" />
-                <element signature="e#10953#10989#0" expanded="false" />
-                <element signature="e#19973#20415#0" expanded="false" />
-                <element signature="e#20463#23550#0" expanded="false" />
-                <element signature="e#23603#24216#0" expanded="false" />
-                <element signature="e#24266#24733#0" expanded="false" />
-                <element signature="e#24773#24931#0" expanded="false" />
-                <element signature="e#24992#26036#0" expanded="false" />
-                <element signature="e#26139#27258#0" expanded="false" />
-                <element signature="e#27359#27922#0" expanded="false" />
-                <element signature="e#27964#28515#0" expanded="false" />
-                <element signature="e#28555#28702#0" expanded="false" />
-                <element signature="e#28790#28936#0" expanded="false" />
-                <element signature="e#35489#36046#0" expanded="false" />
+                <element signature="e#9267#10689#0" expanded="false" />
+                <element signature="e#10695#10731#0" expanded="false" />
+                <element signature="e#19715#20157#0" expanded="false" />
+                <element signature="e#20205#23292#0" expanded="false" />
+                <element signature="e#23345#23958#0" expanded="false" />
+                <element signature="e#24008#24475#0" expanded="false" />
+                <element signature="e#24515#24673#0" expanded="false" />
+                <element signature="e#24734#25778#0" expanded="false" />
+                <element signature="e#25881#27000#0" expanded="false" />
+                <element signature="e#27101#27664#0" expanded="false" />
+                <element signature="e#27706#28257#0" expanded="false" />
+                <element signature="e#28297#28444#0" expanded="false" />
+                <element signature="e#28532#28678#0" expanded="false" />
+                <element signature="e#35229#35786#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -59,10 +57,10 @@
       <file leaf-file-name="tomotherapyColumnGeneration.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+            <state relative-caret-position="92">
+              <caret line="81" column="22" selection-start-line="81" selection-start-column="22" selection-end-line="81" selection-end-column="22" />
               <folding>
-                <element signature="e#246#268#0" expanded="true" />
+                <element signature="e#226#248#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -521,13 +519,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00041" summary="Wrote better output messages to stdout">
-      <created>1467909189813</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1467909189813</updated>
-    </task>
     <task id="LOCAL-00042" summary="created the declareVariables function which will serve in the paralellization of this thing.">
       <created>1467910036323</created>
       <option name="number" value="00042" />
@@ -864,17 +855,24 @@
       <option name="project" value="LOCAL" />
       <updated>1470177631051</updated>
     </task>
-    <option name="localTasksCounter" value="90" />
+    <task id="LOCAL-00090" summary="Cleanup for columngeneration file">
+      <created>1470257845644</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1470257845645</updated>
+    </task>
+    <option name="localTasksCounter" value="91" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18282403" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.09436008" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.09120521" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.08129176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23127036" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -921,7 +919,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="My own implementation of a piecewise linear function because gurobi's seems fishy." />
     <MESSAGE value="This version runs under python 2.7 and python 3.5. It's indifferent" />
     <MESSAGE value="added a callback to stop execution early. Also a few tuning parameters" />
     <MESSAGE value="Corrected a bug. This thing was maximizing my PWL instead of minimizing. The DVH was looking very weird. Now it makes sense" />
@@ -946,7 +943,8 @@
     <MESSAGE value="Corrected a spot on removezeroes where I was removing positions that were already being removed. This is a huge problem because the data SHOULD be cleaned before and I should work in SMALLVOXELSPACE ALWAYS" />
     <MESSAGE value="With the latest changes the program is now running" />
     <MESSAGE value="Added the column generation project as a unique independent file" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added the column generation project as a unique independent file" />
+    <MESSAGE value="Cleanup for columngeneration file" />
+    <option name="LAST_COMMIT_MESSAGE" value="Cleanup for columngeneration file" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1253,37 +1251,34 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
-          <caret line="246" column="17" selection-start-line="246" selection-start-column="8" selection-end-line="246" selection-end-column="17" />
+        <state relative-caret-position="260">
+          <caret line="19" column="3" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="26" />
           <folding>
             <element signature="e#68#141#0" expanded="false" />
-            <element signature="e#2059#4584#0" expanded="false" />
-            <element signature="e#4632#6133#0" expanded="false" />
-            <element signature="e#6178#9478#0" expanded="false" />
-            <element signature="e#9525#10947#0" expanded="false" />
-            <element signature="e#10953#10989#0" expanded="false" />
-            <element signature="e#19973#20415#0" expanded="false" />
-            <element signature="e#20463#23550#0" expanded="false" />
-            <element signature="e#23603#24216#0" expanded="false" />
-            <element signature="e#24266#24733#0" expanded="false" />
-            <element signature="e#24773#24931#0" expanded="false" />
-            <element signature="e#24992#26036#0" expanded="false" />
-            <element signature="e#26139#27258#0" expanded="false" />
-            <element signature="e#27359#27922#0" expanded="false" />
-            <element signature="e#27964#28515#0" expanded="false" />
-            <element signature="e#28555#28702#0" expanded="false" />
-            <element signature="e#28790#28936#0" expanded="false" />
-            <element signature="e#35489#36046#0" expanded="false" />
+            <element signature="e#9267#10689#0" expanded="false" />
+            <element signature="e#10695#10731#0" expanded="false" />
+            <element signature="e#19715#20157#0" expanded="false" />
+            <element signature="e#20205#23292#0" expanded="false" />
+            <element signature="e#23345#23958#0" expanded="false" />
+            <element signature="e#24008#24475#0" expanded="false" />
+            <element signature="e#24515#24673#0" expanded="false" />
+            <element signature="e#24734#25778#0" expanded="false" />
+            <element signature="e#25881#27000#0" expanded="false" />
+            <element signature="e#27101#27664#0" expanded="false" />
+            <element signature="e#27706#28257#0" expanded="false" />
+            <element signature="e#28297#28444#0" expanded="false" />
+            <element signature="e#28532#28678#0" expanded="false" />
+            <element signature="e#35229#35786#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+        <state relative-caret-position="92">
+          <caret line="81" column="22" selection-start-line="81" selection-start-column="22" selection-end-line="81" selection-end-column="22" />
           <folding>
-            <element signature="e#246#268#0" expanded="true" />
+            <element signature="e#226#248#0" expanded="true" />
           </folding>
         </state>
       </provider>

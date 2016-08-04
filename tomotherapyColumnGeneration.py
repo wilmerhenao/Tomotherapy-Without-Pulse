@@ -9,7 +9,6 @@ except ImportError:
     have_mkl = False
     print("Running with normal backends")
 
-#from data import *
 import gurobipy as grb
 from scipy.spatial import KDTree
 import numpy.ma as ma
@@ -42,30 +41,73 @@ def mycallback(model, where):
                 print('Stop early -', str(mipgap * 100), '% gap achieved')
                 model.terminate()
 
-
-
 ## Class definition of the gurobi object that handles creation and execution of the model
 # Original template from Troy Long.
 class tomotherapyNP(object):
     def __init__(self, datastructure):
         print('Reading in data...')
         self.data = datastructure
-        print('I dont change the voxels object', len(self.data.voxels))
         print('done')
-        print('Constructing Gurobi model object...')
-        self.mod = grb.Model()
-        self.mod.params.threads = numcores
-        self.mod.params.MIPFocus = 1
-        self.mod.params.Presolve = 0
-        self.mod.params.TimeLimit = 14*3600.0
-        print('done')
-        print('Building main decision variables (dose, binaries).')
-        self.buildVariables()
-        self.launchOptimizationPWL()
+        print('Building column generation method')
+        self.ColumnGenerationMain()
+        self.thresholds()
         self.plotDVH('dvhcheck')
         self.plotSinoGram()
         self.plotEventsbinary()
         print('The problem has been completed')
+
+    def thresholds(self):
+        self.quadHelperThresh = [None] * self.data.totalsmallvoxels
+        self.quadHelperOver = [None] * self.data.totalsmallvoxels
+        self.quadHelperUnder = [None] * self.data.totalsmallvoxels
+        for i in range(0, self.data.totalsmallvoxels):
+            # Constraint on TARGETS
+            T = None
+            if self.data.mask[i] in self.data.TARGETList:
+                T = self.data.TARGETThresholds[np.where(self.data.mask[i] == self.data.TARGETList)[0][0]]
+                self.quadHelperOver[i] = 1.0
+                self.quadHelperUnder[i] = 1000.0
+            # Constraint on OARs
+            elif self.data.mask[i] in self.data.OARList:
+                T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0][0]]
+                self.quadHelperOver[i] = 1000.0
+                self.quadHelperUnder[i] = 1.0
+            elif 0 == self.data.mask[i]:
+                print('there is an element in the voxels that is also mask 0')
+            self.quadHelperThresh[i] = T
+
+    def calcDose(self):
+        self.currentDose = np.zeros(self.data.totalsmallvoxels, dtype=float)
+        self.currentDose = np.multiply(self.mathCal, self.data.D[:,] * np.repeat(self.yk, self.data.N)
+        self.dZdK = self.mathCal * self.data.D
+        assert((self.data.totalsmallvoxels, self.data.K) == self.dZdK.shape)
+
+    ## This function regularly enters the optimization engine to calculate objective function and gradients
+    def calcGradientandObjValue(self):
+        oDoseObj = self.currentDose - self.quadHelperThresh
+        oDoseObjCl = (oDoseObj > 0) * oDoseObj
+        oDoseObj = oDoseObjCl * oDoseObjCl * self.quadHelperOver
+
+        uDoseObj = self.quadHelperThresh - self.currentDose
+        uDoseObjCl = (uDoseObj > 0) * uDoseObj
+        uDoseObj = uDoseObjCl * uDoseObjCl * self.quadHelperUnder
+
+        self.objectiveValue = sum(oDoseObj + uDoseObj)
+        oDoseObjGl = 2 * oDoseObjCl * self.quadHelperOver
+        uDoseObjGl = 2 * uDoseObjCl * self.quadHelperUnder
+        # Notice that I use two types of gradients. One for voxels and one for apertures
+        self.voxelgradient = 2 * (oDoseObjGl - uDoseObjGl)
+        self.aperturegradient = (np.asmatrix(self.voxelgradient) * self.dZdK).transpose()
+
+    def ColumnGenerationMain(self):
+        # Step 1: Assign \mathcal{C} the empty set. Remember to open everytime I add a path.
+        # mathcal if a zero if this beamlet does not belong and a 1 if it does.
+        self.mathCal = np.zeros(self.data.N)
+        # Matrix with a binary choice for each of the beamlets at each control point.
+        self.binaryVariables = np.ones(self.data.N * self.data.K)
+        # Variable that keeps the intensities at each control point. Initialized at maximum intensity
+        self.yk = np.ones(self.data.K) * self.data.maxIntensity
+        # calculate current dose.
 
     def outputSolution(self):
         outDict = {}
@@ -168,7 +210,6 @@ class tomodata:
         self.voxelsBigSpace = self.caseSide ** 2
         ## Number of control points (every 2 degrees)
         self.K = 178
-        ## Total number of beamlets
         ## OARMAX is maximum dose tolerable for organs
         self.OARMAX = 7.0
         print('Read vectors...')
