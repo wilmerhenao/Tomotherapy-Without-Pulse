@@ -30,8 +30,8 @@
       <file leaf-file-name="tomotherapynpNoQuadratic.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="19" column="3" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="26" />
+            <state relative-caret-position="-3556">
+              <caret line="19" column="26" selection-start-line="19" selection-start-column="26" selection-end-line="19" selection-end-column="26" />
               <folding>
                 <element signature="e#68#141#0" expanded="false" />
                 <element signature="e#9267#10689#0" expanded="false" />
@@ -56,8 +56,8 @@
       <file leaf-file-name="tomotherapyColumnGeneration.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="93" column="0" selection-start-line="93" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
+            <state relative-caret-position="139">
+              <caret line="114" column="44" selection-start-line="114" selection-start-column="44" selection-end-line="114" selection-end-column="44" />
               <folding>
                 <element signature="e#226#248#0" expanded="true" />
               </folding>
@@ -518,13 +518,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00043" summary="Created a partial function just in case Gurobi ever decides to allow pickling and I can use multithreading to upload this slow constraints.">
-      <created>1467912689636</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1467912689636</updated>
-    </task>
     <task id="LOCAL-00044" summary="Spreading functions around">
       <created>1467917525542</created>
       <option name="number" value="00044" />
@@ -861,7 +854,14 @@
       <option name="project" value="LOCAL" />
       <updated>1470332615885</updated>
     </task>
-    <option name="localTasksCounter" value="92" />
+    <task id="LOCAL-00092" summary="added objgrad function">
+      <created>1470337113004</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1470337113004</updated>
+    </task>
+    <option name="localTasksCounter" value="93" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -918,7 +918,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added a callback to stop execution early. Also a few tuning parameters" />
     <MESSAGE value="Corrected a bug. This thing was maximizing my PWL instead of minimizing. The DVH was looking very weird. Now it makes sense" />
     <MESSAGE value="Added a new parameter to help in speedup. Norm" />
     <MESSAGE value="Assigned new formats for the names of variables." />
@@ -943,7 +942,8 @@
     <MESSAGE value="Added the column generation project as a unique independent file" />
     <MESSAGE value="Cleanup for columngeneration file" />
     <MESSAGE value="Inserted a modelling of the dose, calculation of the objective function and derivatives" />
-    <option name="LAST_COMMIT_MESSAGE" value="Inserted a modelling of the dose, calculation of the objective function and derivatives" />
+    <MESSAGE value="added objgrad function" />
+    <option name="LAST_COMMIT_MESSAGE" value="added objgrad function" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1250,8 +1250,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="19" column="3" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="26" />
+        <state relative-caret-position="-3556">
+          <caret line="19" column="26" selection-start-line="19" selection-start-column="26" selection-end-line="19" selection-end-column="26" />
           <folding>
             <element signature="e#68#141#0" expanded="false" />
             <element signature="e#9267#10689#0" expanded="false" />
@@ -1274,8 +1274,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="93" column="0" selection-start-line="93" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
+        <state relative-caret-position="139">
+          <caret line="114" column="44" selection-start-line="114" selection-start-column="44" selection-end-line="114" selection-end-column="44" />
           <folding>
             <element signature="e#226#248#0" expanded="true" />
           </folding>

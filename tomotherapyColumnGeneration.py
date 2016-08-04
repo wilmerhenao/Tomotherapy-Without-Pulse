@@ -78,8 +78,9 @@ class tomotherapyNP(object):
 
     def calcDose(self):
         self.currentDose = np.zeros(self.data.totalsmallvoxels, dtype=float)
-        self.currentDose = np.multiply(self.mathCal, self.data.D[:,] * np.repeat(self.yk, self.data.N)
+        self.currentDose = self.data.D * np.repeat(np.multiply(self.mathCal, self.yk), self.data.N)
         self.dZdK = np.asmatrix(self.mathCal).transpose() * np.asmatrix(self.data.D)
+        # Assert the tuple below
         assert((self.data.totalsmallvoxels, self.data.K) == self.dZdK.shape)
 
     ## This function regularly enters the optimization engine to calculate objective function and gradients
@@ -95,7 +96,8 @@ class tomotherapyNP(object):
         self.objectiveValue = sum(oDoseObj + uDoseObj)
         oDoseObjGl = 2 * oDoseObjCl * self.quadHelperOver
         uDoseObjGl = 2 * uDoseObjCl * self.quadHelperUnder
-        # Notice that I use two types of gradients. One for voxels and one for apertures
+        # Notice that I use two types of gradients. One for voxels and one for apertures. The apertures one will be
+        # sent to the optimizer.
         self.voxelgradient = 2 * (oDoseObjGl - uDoseObjGl)
         self.aperturegradient = (np.asmatrix(self.voxelgradient) * self.dZdK).transpose()
 
@@ -104,6 +106,8 @@ class tomotherapyNP(object):
         self.calcDose()
         self.calcGradientandObjValue()
         return (self.objectiveValue, self.aperturegradient)
+
+
 
     def ColumnGenerationMain(self):
         # Step 1: Assign \mathcal{C} the empty set. Remember to open everytime I add a path.
@@ -114,6 +118,67 @@ class tomotherapyNP(object):
         # Variable that keeps the intensities at each control point. Initialized at maximum intensity
         self.yk = np.ones(self.data.K) * self.data.maxIntensity
         # calculate current dose.
+        gstar = -np.inf
+        while (gstar < 0) & (sum(self.mathCal) < self.data.N):
+            # Step 1 on Fei's paper. Use the information on the current treatment plan to formulate and solve an instance of the PP
+            self.calcDose()
+            self.calcGradientandObjValue()
+            pstar, lm, rm, bestApertureIndex = PricingProblem(C, C2, C3, 0.5, vmax, speedlim, N, M, beamletwidth)
+            # Step 2. If the optimal value of the PP is nonnegative**, go to step 5. Otherwise, denote the optimal solution to the
+            # PP by c and Ac and replace caligraphic C and A = Abar, k \in caligraphicC
+            if gstar >= 0:
+                # This choice includes the case when no aperture was selected
+                print('Program finishes because no beamlet was selected to enter')
+                break
+            else:
+                self.caligraphicC.insertAngle(bestApertureIndex, self.notinC(bestApertureIndex))
+                self.notinC.removeIndex(bestApertureIndex)
+                # Solve the instance of the RMP associated with caligraphicC and Ak = A_k^bar, k \in
+                self.llist[bestApertureIndex] = lm
+                self.rlist[bestApertureIndex] = rm
+                # Precalculate the aperture map to save times.
+                self.openApertureMaps[bestApertureIndex], self.diagmakers[bestApertureIndex], self.strengths[
+                    bestApertureIndex] = updateOpenAperture(bestApertureIndex)
+                rmpres = solveRMC(YU)
+                self.rmpres = rmpres
+                ## List of apertures that was removed in this iteration
+                IndApRemovedThisStep = []
+                for thisindex in range(0, self.numbeams):
+                    if thisindex in self.caligraphicC.loc:  # Only activate what is an aperture
+                        if rmpres.x[thisindex] < eliminationThreshold:
+                            ## Maintain a tally of apertures that are being removed
+                            self.entryCounter += 1
+                            IndApRemovedThisStep.append(thisindex)
+                            # Remove from caligraphicC and add to notinC
+                            self.notinC.insertAngle(thisindex, self.pointtoAngle[thisindex])
+                            self.caligraphicC.removeIndex(thisindex)
+                if len(self.listIndexofAperturesRemovedEachStep) > 1:
+                    ## Check if any element that I'm removing here was removed in the previous iteration and exit
+                    print('thisstep removed: ', IndApRemovedThisStep)
+                    print('removed previously: ', self.listIndexofAperturesRemovedEachStep)
+                    if (np.any(np.in1d(IndApRemovedThisStep, self.listIndexofAperturesRemovedEachStep[
+                            len(self.listIndexofAperturesRemovedEachStep) - 1]))):
+                        print('Program finishes because it keeps selecting the same aperture to add and delete')
+                        break
+                ## Save all apertures that were removed in this step
+                self.listIndexofAperturesRemovedEachStep.append(IndApRemovedThisStep)
+                optimalvalues.append(rmpres.fun)
+                plotcounter = plotcounter + 1
+                # Add everything from notinC to kappa
+                while (False == self.notinC.isEmpty()):
+                    kappa.append(self.notinC.loc[0])
+                    self.notinC.removeIndex(self.notinC.loc[0])
+
+                # Choose a random set of elements in kappa
+                random.seed(13)
+                elemstoinclude = random.sample(kappa, min(initialApertures, len(kappa)))
+                for i in elemstoinclude:
+                    self.notinC.insertAngle(i, self.pointtoAngle[i])
+                    kappa.remove(i)
+                # plotAperture(lm, rm, M, N, '/home/wilmer/Dropbox/Research/VMAT/VMATwPenCode/outputGraphics/', plotcounter, bestApertureIndex)
+                printresults(plotcounter, '/home/wilmer/Dropbox/Research/VMAT/VMATwPenCode/outputGraphics/')
+                # Step 5 on Fei's paper. If necessary complete the treatment plan by identifying feasible apertures at control points c
+                # notinC and denote the final set of fluence rates by yk
 
     def outputSolution(self):
         outDict = {}
