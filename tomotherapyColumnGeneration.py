@@ -10,6 +10,7 @@ except ImportError:
     print("Running with normal backends")
 
 import gurobipy as grb
+from scipy.optimize import minimize
 from scipy.spatial import KDTree
 import numpy.ma as ma
 import numpy as np
@@ -50,7 +51,7 @@ class tomotherapyNP(object):
         print('done')
         print('Building column generation method')
         self.thresholds()
-        self.ColumnGenerationMain()
+        self.ColumnGenerationMain(self.data.M)
         self.plotDVH('dvhcheck')
         self.plotSinoGram()
         self.plotEventsbinary()
@@ -70,7 +71,7 @@ class tomotherapyNP(object):
             # Constraint on OARs
             elif self.data.mask[i] in self.data.OARList:
                 T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0][0]]
-                self.quadHelperOver[i] = 1000.0
+                self.quadHelperOver[i] = 100.0
                 self.quadHelperUnder[i] = 1.0
             elif 0 == self.data.mask[i]:
                 print('there is an element in the voxels that is also mask 0')
@@ -88,7 +89,6 @@ class tomotherapyNP(object):
         oDoseObj = self.currentDose - self.quadHelperThresh
         oDoseObjCl = (oDoseObj > 0) * oDoseObj
         oDoseObj = oDoseObjCl * oDoseObjCl * self.quadHelperOver
-
         uDoseObj = self.quadHelperThresh - self.currentDose
         uDoseObjCl = (uDoseObj > 0) * uDoseObj
         uDoseObj = uDoseObjCl * uDoseObjCl * self.quadHelperUnder
@@ -107,9 +107,52 @@ class tomotherapyNP(object):
         self.calcGradientandObjValue()
         return (self.objectiveValue, self.aperturegradient)
 
+    ## Solves the pricing problem as set up
+    def PricingProblem(self, M):
+        # Prepare the matrix multiplying all the rows times the $\partial F / \partial z_j$ vector
+        matMain = (self.data.D.T * self.voxelgradient).T
+        # And since I just need the sum by columns
+        self.vecMain = matMain.sum(0)
 
+        # Run an optimization problem for each of the different beamlets available
+        candidatebeamlets = np.where(0 == self.mathCal)
+        goalvalues = np.array([np.inf] * self.data.K)
+        goaltargets = np.array([None] * (self.data.K * self.data.N), dtype=bin)
+        for b in candidatebeamlets:
+            # The idea is that for each beamlet I will produce a set of length K of apertures
+            self.mod = grb.Model()
+            self.mod.params.threads = numcores
+            self.mod.params.MIPFocus = 1
+            self.mod.params.Presolve = 0
+            self.mod.params.TimeLimit = 14 * 3600.0
+            self.bins = [None] * (self.data.K)
+            # Define the variables
+            for i in range(0, self.data.K):
+                self.bins[i] = self.mod.addVar(vtype=grb.GRB.BINARY, name="binaryVoxel_{" + str(i) + ", " + str(b) + "}",
+                                               column=None)
+            self.mod.update()
+            expr = grb.LinExpr()
+            for i in range(0, self.data.K):
+                expr += self.bins[i] * self.vecMain[b + i * self.data.N]
+            lessthanConstraints = [None] * (self.data.K - 1)
+            morethanConstraints = [None] * (self.data.K - 1)
+            for i in range(0, self.data.K - 1):
+                lessthanConstraints[i] = self.mod.addConstr(self.bins[i+1] - self.bins[i], grb.GRB.LESS_EQUAL, M,
+                                                            'lessthanConstraint_{' + str(i) + "}")
+                morethanConstraints[i] = self.mod.addConstr(self.bins[i+1] - self.bins[i], grb.GRB.GREATER_EQUAL, M,
+                                                            'morethanConstraint_{' + str(i) + "}")
+            self.mod.update()
+            self.mod.setObjective(expr, grb.GRB.MINIMIZE)
+            self.mod.optimize()
+            # Get the optimal value of the optimization
+            obj = self.mod.getObjective()
+            for i in range(self.data.K):
+                for j in range(self.data.N):
+                    goaltargets = self.mod.bins[i].X
+            goalvalues[b] = obj.getValue( )
+        np.argmin(goalvalues)
 
-    def ColumnGenerationMain(self):
+    def ColumnGenerationMain(self, M):
         # Step 1: Assign \mathcal{C} the empty set. Remember to open everytime I add a path.
         # mathcal if a zero if this beamlet does not belong and a 1 if it does.
         self.mathCal = np.zeros(self.data.N)
@@ -117,13 +160,14 @@ class tomotherapyNP(object):
         self.binaryVariables = np.ones(self.data.N * self.data.K)
         # Variable that keeps the intensities at each control point. Initialized at maximum intensity
         self.yk = np.ones(self.data.K) * self.data.maxIntensity
-        # calculate current dose.
+        # Calculate the boundaries of yk
+        self.boundschoice = [(0, self.data.maxIntensity),] * self.data.K
         gstar = -np.inf
         while (gstar < 0) & (sum(self.mathCal) < self.data.N):
             # Step 1 on Fei's paper. Use the information on the current treatment plan to formulate and solve an instance of the PP
             self.calcDose()
             self.calcGradientandObjValue()
-            pstar, lm, rm, bestApertureIndex = PricingProblem(C, C2, C3, 0.5, vmax, speedlim, N, M, beamletwidth)
+            self.PricingProblem(M)
             # Step 2. If the optimal value of the PP is nonnegative**, go to step 5. Otherwise, denote the optimal solution to the
             # PP by c and Ac and replace caligraphic C and A = Abar, k \in caligraphicC
             if gstar >= 0:
@@ -131,54 +175,16 @@ class tomotherapyNP(object):
                 print('Program finishes because no beamlet was selected to enter')
                 break
             else:
-                self.caligraphicC.insertAngle(bestApertureIndex, self.notinC(bestApertureIndex))
-                self.notinC.removeIndex(bestApertureIndex)
-                # Solve the instance of the RMP associated with caligraphicC and Ak = A_k^bar, k \in
-                self.llist[bestApertureIndex] = lm
-                self.rlist[bestApertureIndex] = rm
-                # Precalculate the aperture map to save times.
-                self.openApertureMaps[bestApertureIndex], self.diagmakers[bestApertureIndex], self.strengths[
-                    bestApertureIndex] = updateOpenAperture(bestApertureIndex)
-                rmpres = solveRMC(YU)
-                self.rmpres = rmpres
-                ## List of apertures that was removed in this iteration
-                IndApRemovedThisStep = []
-                for thisindex in range(0, self.numbeams):
-                    if thisindex in self.caligraphicC.loc:  # Only activate what is an aperture
-                        if rmpres.x[thisindex] < eliminationThreshold:
-                            ## Maintain a tally of apertures that are being removed
-                            self.entryCounter += 1
-                            IndApRemovedThisStep.append(thisindex)
-                            # Remove from caligraphicC and add to notinC
-                            self.notinC.insertAngle(thisindex, self.pointtoAngle[thisindex])
-                            self.caligraphicC.removeIndex(thisindex)
-                if len(self.listIndexofAperturesRemovedEachStep) > 1:
-                    ## Check if any element that I'm removing here was removed in the previous iteration and exit
-                    print('thisstep removed: ', IndApRemovedThisStep)
-                    print('removed previously: ', self.listIndexofAperturesRemovedEachStep)
-                    if (np.any(np.in1d(IndApRemovedThisStep, self.listIndexofAperturesRemovedEachStep[
-                            len(self.listIndexofAperturesRemovedEachStep) - 1]))):
-                        print('Program finishes because it keeps selecting the same aperture to add and delete')
-                        break
-                ## Save all apertures that were removed in this step
-                self.listIndexofAperturesRemovedEachStep.append(IndApRemovedThisStep)
-                optimalvalues.append(rmpres.fun)
-                plotcounter = plotcounter + 1
-                # Add everything from notinC to kappa
-                while (False == self.notinC.isEmpty()):
-                    kappa.append(self.notinC.loc[0])
-                    self.notinC.removeIndex(self.notinC.loc[0])
+                rmpres = self.solveRMC()
 
-                # Choose a random set of elements in kappa
-                random.seed(13)
-                elemstoinclude = random.sample(kappa, min(initialApertures, len(kappa)))
-                for i in elemstoinclude:
-                    self.notinC.insertAngle(i, self.pointtoAngle[i])
-                    kappa.remove(i)
-                # plotAperture(lm, rm, M, N, '/home/wilmer/Dropbox/Research/VMAT/VMATwPenCode/outputGraphics/', plotcounter, bestApertureIndex)
-                printresults(plotcounter, '/home/wilmer/Dropbox/Research/VMAT/VMATwPenCode/outputGraphics/')
-                # Step 5 on Fei's paper. If necessary complete the treatment plan by identifying feasible apertures at control points c
-                # notinC and denote the final set of fluence rates by yk
+    def solveRMC(self):
+        ## IPOPT SOLUTION
+        self.calcObjGrad(self.yk)
+        # Create the boundaries of intensities
+        res = minimize(self.calcObjGrad, self.yk, method='L-BFGS-B', jac=True, bounds=self.boundschoice,
+                       options={'ftol': 1e-3, 'disp': 5, 'maxiter': 200})
+        print('Restricted Master Problem solved in ' + str(time.time() - start) + ' seconds')
+        return (res)
 
     def outputSolution(self):
         outDict = {}
