@@ -54,8 +54,8 @@
       <file leaf-file-name="tomotherapyColumnGeneration.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="479">
-              <caret line="151" column="42" selection-start-line="151" selection-start-column="42" selection-end-line="151" selection-end-column="42" />
+            <state relative-caret-position="-25">
+              <caret line="127" column="46" selection-start-line="127" selection-start-column="46" selection-end-line="127" selection-end-column="46" />
               <folding>
                 <element signature="e#226#248#0" expanded="true" />
               </folding>
@@ -516,13 +516,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00045" summary="Remove the strange obj argument calls">
-      <created>1467918277908</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1467918277908</updated>
-    </task>
     <task id="LOCAL-00046" summary="Updated the last details. Divided functions into some of smaller size">
       <created>1467928163139</created>
       <option name="number" value="00046" />
@@ -859,7 +852,14 @@
       <option name="project" value="LOCAL" />
       <updated>1470339319942</updated>
     </task>
-    <option name="localTasksCounter" value="94" />
+    <task id="LOCAL-00094" summary="Added RMP and now I'm finishing the PP">
+      <created>1470434636445</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1470434636445</updated>
+    </task>
+    <option name="localTasksCounter" value="95" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -916,7 +916,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added a new parameter to help in speedup. Norm" />
     <MESSAGE value="Assigned new formats for the names of variables." />
     <MESSAGE value="Changed the starting point of every coarsification" />
     <MESSAGE value="Assigns an HD vector that serves as a map to find previous solutions and map to the new ones." />
@@ -941,7 +940,8 @@
     <MESSAGE value="Inserted a modelling of the dose, calculation of the objective function and derivatives" />
     <MESSAGE value="added objgrad function" />
     <MESSAGE value="inserted a mock column generation function" />
-    <option name="LAST_COMMIT_MESSAGE" value="inserted a mock column generation function" />
+    <MESSAGE value="Added RMP and now I'm finishing the PP" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added RMP and now I'm finishing the PP" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1270,8 +1270,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="479">
-          <caret line="151" column="42" selection-start-line="151" selection-start-column="42" selection-end-line="151" selection-end-column="42" />
+        <state relative-caret-position="-25">
+          <caret line="127" column="46" selection-start-line="127" selection-start-column="46" selection-end-line="127" selection-end-column="46" />
           <folding>
             <element signature="e#226#248#0" expanded="true" />
           </folding>

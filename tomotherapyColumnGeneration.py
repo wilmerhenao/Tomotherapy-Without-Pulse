@@ -114,7 +114,7 @@ class tomotherapyNP(object):
         # And since I just need the sum by columns
         self.vecMain = matMain.sum(0)
 
-        # Run an optimization problem for each of the different beamlets available
+        # Run an optimization problem for each of the different beamlets available (those that don't let light in)
         candidatebeamlets = np.where(0 == self.mathCal)
         goalvalues = np.array([np.inf] * self.data.K)
         goaltargets = np.array([None] * (self.data.K * self.data.N), dtype=bin)
@@ -146,11 +146,18 @@ class tomotherapyNP(object):
             self.mod.optimize()
             # Get the optimal value of the optimization
             obj = self.mod.getObjective()
-            for i in range(self.data.K):
-                for j in range(self.data.N):
-                    goaltargets = self.mod.bins[i].X
             goalvalues[b] = obj.getValue( )
-        np.argmin(goalvalues)
+            # Assign optimal results of the optimization
+            for i in range(self.data.K):
+                goaltargets = self.mod.bins[i + b * self.data.N].X
+        bestbeamlet = np.argmin(goalvalues)
+        bestgoal = goalvalues[bestbeamlet]
+        # For each of the beamlets. Assign the resulting path to the matrix of binaryVariables if bestgoal < 0
+        if bestgoal < 0.0:
+            self.mathCal[bestbeamlet] = 1
+            for i in range(self.data.K):
+                self.binaryVariables[i + bestbeamlet * self.data.N] = goaltargets[i + bestbeamlet * self.data.N]
+        return(bestgoal)
 
     def ColumnGenerationMain(self, M):
         # Step 1: Assign \mathcal{C} the empty set. Remember to open everytime I add a path.
@@ -167,7 +174,7 @@ class tomotherapyNP(object):
             # Step 1 on Fei's paper. Use the information on the current treatment plan to formulate and solve an instance of the PP
             self.calcDose()
             self.calcGradientandObjValue()
-            self.PricingProblem(M)
+            gstar = self.PricingProblem(M)
             # Step 2. If the optimal value of the PP is nonnegative**, go to step 5. Otherwise, denote the optimal solution to the
             # PP by c and Ac and replace caligraphic C and A = Abar, k \in caligraphicC
             if gstar >= 0:
