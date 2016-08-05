@@ -30,8 +30,8 @@
       <file leaf-file-name="tomotherapynpNoQuadratic.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2852">
-              <caret line="448" column="40" selection-start-line="448" selection-start-column="34" selection-end-line="448" selection-end-column="40" />
+            <state relative-caret-position="365">
+              <caret line="236" column="21" selection-start-line="236" selection-start-column="21" selection-end-line="236" selection-end-column="21" />
               <folding>
                 <element signature="e#68#141#0" expanded="false" />
                 <element signature="e#246#268#0" expanded="true" />
@@ -40,6 +40,7 @@
                 <element signature="e#20205#23292#0" expanded="false" />
                 <element signature="e#23345#23958#0" expanded="false" />
                 <element signature="e#24008#24475#0" expanded="false" />
+                <element signature="e#24515#24673#0" expanded="false" />
                 <element signature="e#25881#27000#0" expanded="false" />
                 <element signature="e#27101#27664#0" expanded="false" />
                 <element signature="e#27706#28257#0" expanded="false" />
@@ -54,8 +55,8 @@
       <file leaf-file-name="tomotherapyColumnGeneration.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-25">
-              <caret line="127" column="46" selection-start-line="127" selection-start-column="46" selection-end-line="127" selection-end-column="46" />
+            <state relative-caret-position="479">
+              <caret line="166" column="40" selection-start-line="166" selection-start-column="40" selection-end-line="166" selection-end-column="40" />
               <folding>
                 <element signature="e#226#248#0" expanded="true" />
               </folding>
@@ -516,13 +517,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00046" summary="Updated the last details. Divided functions into some of smaller size">
-      <created>1467928163139</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1467928163139</updated>
-    </task>
     <task id="LOCAL-00047" summary="Included outputsolution function">
       <created>1467932175754</created>
       <option name="number" value="00047" />
@@ -859,7 +853,14 @@
       <option name="project" value="LOCAL" />
       <updated>1470434636445</updated>
     </task>
-    <option name="localTasksCounter" value="95" />
+    <task id="LOCAL-00095" summary="finished pricing problem">
+      <created>1470435786359</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1470435786359</updated>
+    </task>
+    <option name="localTasksCounter" value="96" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -916,7 +917,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Assigned new formats for the names of variables." />
     <MESSAGE value="Changed the starting point of every coarsification" />
     <MESSAGE value="Assigns an HD vector that serves as a map to find previous solutions and map to the new ones." />
     <MESSAGE value="Implemented warm start and Branchpriority. Next I will implement hints for the variables that are not initialized" />
@@ -941,7 +941,8 @@
     <MESSAGE value="added objgrad function" />
     <MESSAGE value="inserted a mock column generation function" />
     <MESSAGE value="Added RMP and now I'm finishing the PP" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added RMP and now I'm finishing the PP" />
+    <MESSAGE value="finished pricing problem" />
+    <option name="LAST_COMMIT_MESSAGE" value="finished pricing problem" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1248,8 +1249,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2852">
-          <caret line="448" column="40" selection-start-line="448" selection-start-column="34" selection-end-line="448" selection-end-column="40" />
+        <state relative-caret-position="365">
+          <caret line="236" column="21" selection-start-line="236" selection-start-column="21" selection-end-line="236" selection-end-column="21" />
           <folding>
             <element signature="e#68#141#0" expanded="false" />
             <element signature="e#246#268#0" expanded="true" />
@@ -1258,6 +1259,7 @@
             <element signature="e#20205#23292#0" expanded="false" />
             <element signature="e#23345#23958#0" expanded="false" />
             <element signature="e#24008#24475#0" expanded="false" />
+            <element signature="e#24515#24673#0" expanded="false" />
             <element signature="e#25881#27000#0" expanded="false" />
             <element signature="e#27101#27664#0" expanded="false" />
             <element signature="e#27706#28257#0" expanded="false" />
@@ -1270,8 +1272,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-25">
-          <caret line="127" column="46" selection-start-line="127" selection-start-column="46" selection-end-line="127" selection-end-column="46" />
+        <state relative-caret-position="479">
+          <caret line="166" column="40" selection-start-line="166" selection-start-column="40" selection-end-line="166" selection-end-column="40" />
           <folding>
             <element signature="e#226#248#0" expanded="true" />
           </folding>

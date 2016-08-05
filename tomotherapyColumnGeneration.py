@@ -78,9 +78,11 @@ class tomotherapyNP(object):
             self.quadHelperThresh[i] = T
 
     def calcDose(self):
-        self.currentDose = np.zeros(self.data.totalsmallvoxels, dtype=float)
-        self.currentDose = self.data.D * np.repeat(np.multiply(self.mathCal, self.yk), self.data.N)
-        self.dZdK = np.asmatrix(self.mathCal).transpose() * np.asmatrix(self.data.D)
+        # Remember. The '*' operator is elementwise multiplication. Here, ordered by beamlets first, then control points
+        self.currentDose = np.dot(self.data.D ,(np.repeat(self.yk, self.data.N) * self.binaryVariables))
+        matdzdk = self.data.D * self.binaryVariables
+        # Oneshelper adds in the creation of the dzdk it is a matrix of ones that adds the right positions in matdzdk
+        self.dZdK = np.dot(matdzdk, self.oneshelper)
         # Assert the tuple below
         assert((self.data.totalsmallvoxels, self.data.K) == self.dZdK.shape)
 
@@ -159,7 +161,16 @@ class tomotherapyNP(object):
                 self.binaryVariables[i + bestbeamlet * self.data.N] = goaltargets[i + bestbeamlet * self.data.N]
         return(bestgoal)
 
+    def onehelpCreator(self):
+        self.oneshelper = np.zeros(self.data.N * self.data.K , self.data.K)
+        for i in range(self.data.K):
+            for j in range(self.data.N):
+                self.oneshelper[j + i * self.data.K, i] = 1.0
+
+
     def ColumnGenerationMain(self, M):
+        # Create the oneshelper matrix:
+        self.onehelpCreator()
         # Step 1: Assign \mathcal{C} the empty set. Remember to open everytime I add a path.
         # mathcal if a zero if this beamlet does not belong and a 1 if it does.
         self.mathCal = np.zeros(self.data.N)
