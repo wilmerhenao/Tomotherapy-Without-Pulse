@@ -51,7 +51,7 @@ class tomotherapyNP(object):
         print('done')
         print('Building column generation method')
         self.thresholds()
-        self.ColumnGenerationMain(self.data.M)
+        self.rmpres = self.ColumnGenerationMain(self.data.M)
         self.plotDVH('dvhcheck')
         self.plotSinoGram()
         self.plotEventsbinary()
@@ -79,13 +79,10 @@ class tomotherapyNP(object):
 
     def calcDose(self):
         # Remember. The '*' operator is elementwise multiplication. Here, ordered by beamlets first, then control points
-        self.currentDose = np.dot(self.data.D ,(np.repeat(self.yk, self.data.N) * np.asarray(self.binaryVariables)))
-        print('DShape', self.data.D.shape )
-        print('binaryvariablesshape', self.binaryVariables.shape)
-        print('Matrshape', self.binaryMatr.shape)
-        # The line below effectively multiplies each element in data.D by one or zero.
+        intensities = np.multiply(np.repeat(self.yk, self.data.N), self.binaryVariables).transpose()
+        self.currentDose = np.asarray(self.data.D.dot(intensities)) # conversion to array necessary. O/W algebra wrong
+        # The line below effectively multiplies each element in data.D by one or zero. USE THE DENSE VERSION OF D.
         matdzdk = np.multiply(self.data.Ddense, self.binaryMatr)
-        print('matdzdk shape', matdzdk.shape)
         # Oneshelper adds in the creation of the dzdk it is a matrix of ones that adds the right positions in matdzdk
         self.dZdK = np.dot(matdzdk, self.oneshelper)
         # Assert the tuple below
@@ -122,9 +119,9 @@ class tomotherapyNP(object):
         self.vecMain = matMain.sum(0)
 
         # Run an optimization problem for each of the different beamlets available (those that don't let light in)
-        candidatebeamlets = np.where(0 == self.mathCal)
+        candidatebeamlets = np.where(0 == self.mathCal)[0].tolist()
         goalvalues = np.array([np.inf] * self.data.K)
-        goaltargets = np.array([None] * (self.data.K * self.data.N), dtype=bin)
+        goaltargets = np.array([None] * (self.data.K * self.data.N))
         iterpricingprob = 1
         for b in candidatebeamlets:
             print('iteration of pricing problem', iterpricingprob, 'out of ', len(candidatebeamlets))
@@ -137,6 +134,7 @@ class tomotherapyNP(object):
             self.bins = [None] * (self.data.K)
             # Define the variables
             for i in range(0, self.data.K):
+                print("binaryVoxel_{" + str(i) + ", " + str(b) + "}")
                 self.bins[i] = self.mod.addVar(vtype=grb.GRB.BINARY, name="binaryVoxel_{" + str(i) + ", " + str(b) + "}",
                                                column=None)
             self.mod.update()
@@ -154,11 +152,12 @@ class tomotherapyNP(object):
             self.mod.setObjective(expr, grb.GRB.MINIMIZE)
             self.mod.optimize()
             # Get the optimal value of the optimization
-            obj = self.mod.getObjective()
-            goalvalues[b] = obj.getValue( )
-            # Assign optimal results of the optimization
-            for i in range(self.data.K):
-                goaltargets = self.mod.bins[i + b * self.data.N].X
+            if self.mod.status == grb.GRB.Status.OPTIMAL:
+                obj = self.mod.getObjective()
+                goalvalues[b] = obj.getValue( )
+                # Assign optimal results of the optimization
+                for i in range(self.data.K):
+                    goaltargets = self.bins[i + b * self.data.N].X
         bestbeamlet = np.argmin(goalvalues)
         bestgoal = goalvalues[bestbeamlet]
         # For each of the beamlets. Assign the resulting path to the matrix of binaryVariables if bestgoal < 0
@@ -180,7 +179,7 @@ class tomotherapyNP(object):
                 self.oneshelper[j + i * self.data.N, i] = 1.0
 
     def ColumnGenerationMain(self, M):
-        # Create the oneshelper matrix:
+        # Create the ones helper matrix:
         self.onehelpCreator()
         # Step 1: Assign \mathcal{C} the empty set. Remember to open everytime I add a path.
         # mathcal if a zero if this beamlet does not belong and a 1 if it does.
@@ -194,6 +193,7 @@ class tomotherapyNP(object):
         self.boundschoice = [(0, self.data.maxIntensity),] * self.data.K
         gstar = -np.inf
         iterCG = 1
+        rmpres = None
         while (gstar < 0) & (sum(self.mathCal) < self.data.N):
             print('starting iteration of column generation', iterCG)
             iterCG += 1
@@ -209,6 +209,7 @@ class tomotherapyNP(object):
                 break
             else:
                 rmpres = self.solveRMC()
+        return(rmpres)
 
     def solveRMC(self):
         ## IPOPT SOLUTION
