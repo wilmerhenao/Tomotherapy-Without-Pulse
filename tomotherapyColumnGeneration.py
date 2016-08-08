@@ -162,11 +162,15 @@ class tomotherapyNP(object):
         return(bestgoal)
 
     def onehelpCreator(self):
-        self.oneshelper = np.zeros(self.data.N * self.data.K , self.data.K)
+        print(self.data.N)
+        print(self.data.K)
+        print(type(self.data.N))
+        print(type(self.data.K))
+
+        self.oneshelper = np.zeros((self.data.N * self.data.K , self.data.K))
         for i in range(self.data.K):
             for j in range(self.data.N):
                 self.oneshelper[j + i * self.data.K, i] = 1.0
-
 
     def ColumnGenerationMain(self, M):
         # Create the oneshelper matrix:
