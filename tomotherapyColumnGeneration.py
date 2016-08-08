@@ -79,8 +79,13 @@ class tomotherapyNP(object):
 
     def calcDose(self):
         # Remember. The '*' operator is elementwise multiplication. Here, ordered by beamlets first, then control points
-        self.currentDose = np.dot(self.data.D ,(np.repeat(self.yk, self.data.N) * self.binaryVariables))
-        matdzdk = self.data.D * self.binaryVariables
+        self.currentDose = np.dot(self.data.D ,(np.repeat(self.yk, self.data.N) * np.asarray(self.binaryVariables)))
+        print('DShape', self.data.D.shape )
+        print('binaryvariablesshape', self.binaryVariables.shape)
+        print('Matrshape', self.binaryMatr.shape)
+        # The line below effectively multiplies each element in data.D by one or zero.
+        matdzdk = np.multiply(self.data.Ddense, self.binaryMatr)
+        print('matdzdk shape', matdzdk.shape)
         # Oneshelper adds in the creation of the dzdk it is a matrix of ones that adds the right positions in matdzdk
         self.dZdK = np.dot(matdzdk, self.oneshelper)
         # Assert the tuple below
@@ -120,7 +125,9 @@ class tomotherapyNP(object):
         candidatebeamlets = np.where(0 == self.mathCal)
         goalvalues = np.array([np.inf] * self.data.K)
         goaltargets = np.array([None] * (self.data.K * self.data.N), dtype=bin)
+        iterpricingprob = 1
         for b in candidatebeamlets:
+            print('iteration of pricing problem', iterpricingprob, 'out of ', len(candidatebeamlets))
             # The idea is that for each beamlet I will produce a set of length K of apertures
             self.mod = grb.Model()
             self.mod.params.threads = numcores
@@ -158,19 +165,19 @@ class tomotherapyNP(object):
         if bestgoal < 0.0:
             self.mathCal[bestbeamlet] = 1
             for i in range(self.data.K):
-                self.binaryVariables[i + bestbeamlet * self.data.N] = goaltargets[i + bestbeamlet * self.data.N]
+                # Update the beamlets available
+                self.binaryVariables[1, i + bestbeamlet * self.data.N] = goaltargets[i + bestbeamlet * self.data.N]
+            # Update binaryMatr to make things faster.
+            self.binaryMatr = np.tile(self.binaryVariables, (self.data.D.shape[0], 1))
+            print('binaryMatrshape', self.binaryMatr.shape)
         return(bestgoal)
 
+    ## This function creates a matrix that has a column of ones kronecker the identity matrix
     def onehelpCreator(self):
-        print(self.data.N)
-        print(self.data.K)
-        print(type(self.data.N))
-        print(type(self.data.K))
-
         self.oneshelper = np.zeros((self.data.N * self.data.K , self.data.K))
         for i in range(self.data.K):
             for j in range(self.data.N):
-                self.oneshelper[j + i * self.data.K, i] = 1.0
+                self.oneshelper[j + i * self.data.N, i] = 1.0
 
     def ColumnGenerationMain(self, M):
         # Create the oneshelper matrix:
@@ -179,13 +186,17 @@ class tomotherapyNP(object):
         # mathcal if a zero if this beamlet does not belong and a 1 if it does.
         self.mathCal = np.zeros(self.data.N)
         # Matrix with a binary choice for each of the beamlets at each control point.
-        self.binaryVariables = np.ones(self.data.N * self.data.K)
+        self.binaryVariables = np.matrix(np.ones(self.data.N * self.data.K))
+        self.binaryMatr = np.tile(self.binaryVariables, (self.data.D.shape[0], 1))
         # Variable that keeps the intensities at each control point. Initialized at maximum intensity
         self.yk = np.ones(self.data.K) * self.data.maxIntensity
         # Calculate the boundaries of yk
         self.boundschoice = [(0, self.data.maxIntensity),] * self.data.K
         gstar = -np.inf
+        iterCG = 1
         while (gstar < 0) & (sum(self.mathCal) < self.data.N):
+            print('starting iteration of column generation', iterCG)
+            iterCG += 1
             # Step 1 on Fei's paper. Use the information on the current treatment plan to formulate and solve an instance of the PP
             self.calcDose()
             self.calcGradientandObjValue()
@@ -323,7 +334,8 @@ class tomodata:
         self.totalsmallvoxels = max(self.smallvoxels) + 1
         print('totalsmallvoxels: ', self.totalsmallvoxels)
         print('a brief description of Dijs array', describe(self.Dijs))
-        self.D = sps.csc_matrix((self.Dijs, (self.smallvoxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
+        self.D = sps.csr_matrix((self.Dijs, (self.smallvoxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
+        self.Ddense = self.D.todense()
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions
 
     ## Create a map from big to small voxel space, the order of elements is preserved but there is a compression to only
