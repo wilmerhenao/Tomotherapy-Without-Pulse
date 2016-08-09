@@ -131,23 +131,46 @@ class tomotherapyNP(object):
             self.mod.params.MIPFocus = 1
             self.mod.params.Presolve = 0
             self.mod.params.TimeLimit = 14 * 3600.0
-            self.bins = [None] * (self.data.K)
+            self.bins = [None] * self.data.K
+            self.muVars = [None] * (self.data.K - 1)
             # Define the variables
+
             for i in range(0, self.data.K):
-                print("binaryVoxel_{" + str(i) + ", " + str(b) + "}")
                 self.bins[i] = self.mod.addVar(vtype=grb.GRB.BINARY, name="binaryVoxel_{" + str(i) + ", " + str(b) + "}",
                                                column=None)
+                #  The mu variable will register change in the behaviour from one control to the other. Therefore loses 1
+                # degree of freedom
+                if (self.data.K - 1) != i:
+                    self.muVars[i] = self.mod.addVar(vtype=grb.GRB.BINARY,
+                                                                       name="mu_{" + str(i) + "," + str(b) + "}",
+                                                                       column=None)
             self.mod.update()
+            # Add some constraints. This one is about replacing the absolute value with linear expressions
+            self.absoluteValueRemovalConstraint1 = [None] * (self.data.K - 1)
+            self.absoluteValueRemovalConstraint2 = [None] * (self.data.K - 1)
+            #self.sumMaxRestriction = None
+            expr = grb.LinExpr()
+            # Constraints related to absolute value removal from objective function
+            for k in range(0, (self.data.K - 1)):
+                # sum mu variables and restrict their sum to be smaller than M
+                expr += self.muVars[k]
+                # \mu \geq \beta_{i,k+1} - \beta_{i,k}
+                self.absoluteValueRemovalConstraint1[k] = self.mod.addConstr(
+                    self.muVars[k], grb.GRB.GREATER_EQUAL, self.bins[k + 1] - self.bins[k],
+                    name="rmabs1_{" + str(i) + "," + str(b) + "}")
+                # \mu \geq -(\beta_{i,k+1} - \beta_{i,k})
+                self.absoluteValueRemovalConstraint2[k] = self.mod.addConstr(
+                    self.muVars[k], grb.GRB.GREATER_EQUAL, -(self.bins[k + 1] - self.bins[k]),
+                    name="rmabs2_{" + str(i) + "," + str(b) + "}")
+            sumMaxRestriction = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL, M,
+                                                           name="summaxrest_{" + str(i) + "}")
+            self.mod.update() # Wilmer: Is this call really necessary?
+            expr = None
+
             expr = grb.LinExpr()
             for i in range(0, self.data.K):
                 expr += self.bins[i] * self.vecMain[b + i * self.data.N]
-            lessthanConstraints = [None] * (self.data.K - 1)
-            morethanConstraints = [None] * (self.data.K - 1)
-            for i in range(0, self.data.K - 1):
-                lessthanConstraints[i] = self.mod.addConstr(self.bins[i+1] - self.bins[i], grb.GRB.LESS_EQUAL, M,
-                                                            'lessthanConstraint_{' + str(i) + "}")
-                morethanConstraints[i] = self.mod.addConstr(self.bins[i+1] - self.bins[i], grb.GRB.GREATER_EQUAL, M,
-                                                            'morethanConstraint_{' + str(i) + "}")
+
             self.mod.update()
             self.mod.setObjective(expr, grb.GRB.MINIMIZE)
             self.mod.optimize()
@@ -157,7 +180,7 @@ class tomotherapyNP(object):
                 goalvalues[b] = obj.getValue( )
                 # Assign optimal results of the optimization
                 for i in range(self.data.K):
-                    goaltargets = self.bins[i + b * self.data.N].X
+                    goaltargets = self.bins[i].X
         bestbeamlet = np.argmin(goalvalues)
         bestgoal = goalvalues[bestbeamlet]
         # For each of the beamlets. Assign the resulting path to the matrix of binaryVariables if bestgoal < 0
@@ -231,6 +254,8 @@ class tomotherapyNP(object):
             voxDict[t] = np.where(self.data.mask == t)[0]
         for o in self.data.OARList:
             voxDict[o] = np.where(self.data.mask == o)[0]
+        if self.rmpres is None:
+            sys.stderr()
         dose = np.array([self.zeeVars[j].X for j in range(self.data.totalsmallvoxels)])
         plt.clf()
         for index, sValues in voxDict.items():
@@ -258,7 +283,7 @@ class tomotherapyNP(object):
         image = -1 * np.ones(nrows * ncols)
         for k in range(self.data.K):
             for i in range(self.data.N):
-                if 1 == self.binaryVars[i + k * self.data.N].X:
+                if 1 == self.bins[i + k * self.data.N].X:
                     #print('beamlet '+str(i)+' in CP '+str(k)+ ' is open with intensity ', str(self.yVar[k].X))
                     # If this particular beamlet is open. Assign the intensity to it.
                     image[i + self.data.N * k] = self.yVar[k].X
@@ -279,7 +304,7 @@ class tomotherapyNP(object):
         for i in range(self.data.N):
             arrayofevents.append(0)
             for k in range(self.data.K - 1):
-                arrayofevents[-1] += abs(self.binaryVars[i + k * self.data.N].X - self.binaryVars[i + (k + 1) * self.data.N].X)
+                arrayofevents[-1] += abs(self.bins[i + k * self.data.N].X - self.bins[i + (k + 1) * self.data.N].X)
         ind = range(len(arrayofevents))
         plt.clf()
         fig, ax = plt.subplots()

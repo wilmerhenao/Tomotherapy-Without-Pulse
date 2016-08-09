@@ -151,7 +151,7 @@ class tomotherapyNP(object):
                     grb.GRB.GREATER_EQUAL,
                     -(self.binaryVars[i + (k + 1) * self.data.N] - self.binaryVars[i + k * self.data.N]),
                     name = "rmabs2_{" + str(i) + "," + str(k) + "}")
-            self.sumMaxRestriction[i] = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL,self.data.M,
+            self.sumMaxRestriction[i] = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL, self.data.M,
                                                                    name = "summaxrest_{" + str(i) + "}")
             expr = None
 

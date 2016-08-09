@@ -7,6 +7,7 @@
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapyColumnGeneration.py" afterPath="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" afterPath="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" />
     </list>
     <ignored path="CaseCreation.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,10 +31,34 @@
       <file leaf-file-name="tomotherapyColumnGeneration.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="113">
-              <caret line="50" column="21" selection-start-line="50" selection-start-column="21" selection-end-line="50" selection-end-column="21" />
+            <state relative-caret-position="241">
+              <caret line="257" column="0" selection-start-line="257" selection-start-column="0" selection-end-line="257" selection-end-column="0" />
               <folding>
                 <element signature="e#226#248#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tomotherapynpNoQuadratic.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-314">
+              <caret line="134" column="16" selection-start-line="134" selection-start-column="13" selection-end-line="134" selection-end-column="16" />
+              <folding>
+                <element signature="e#68#141#0" expanded="false" />
+                <element signature="e#246#268#0" expanded="true" />
+                <element signature="e#10696#10732#0" expanded="false" />
+                <element signature="e#19716#20158#0" expanded="false" />
+                <element signature="e#20206#23293#0" expanded="false" />
+                <element signature="e#23346#23959#0" expanded="false" />
+                <element signature="e#24009#24476#0" expanded="false" />
+                <element signature="e#24516#24674#0" expanded="false" />
+                <element signature="e#25882#27001#0" expanded="false" />
+                <element signature="e#27102#27665#0" expanded="false" />
+                <element signature="e#27707#28258#0" expanded="false" />
+                <element signature="e#28533#28679#0" expanded="false" />
+                <element signature="e#35230#35787#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -99,10 +124,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1056" />
+    <option name="x" value="1" />
+    <option name="y" value="1" />
+    <option name="width" value="1918" />
+    <option name="height" value="1038" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -493,13 +518,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00050" summary="Added a missing set of constraints">
-      <created>1468248750173</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1468248751098</updated>
-    </task>
     <task id="LOCAL-00051" summary="Double checked details about DVH plot">
       <created>1468253088236</created>
       <option name="number" value="00051" />
@@ -836,19 +854,26 @@
       <option name="project" value="LOCAL" />
       <updated>1470685006357</updated>
     </task>
-    <option name="localTasksCounter" value="99" />
+    <task id="LOCAL-00099" summary="Looks like everything runs minus the plots.">
+      <created>1470693020379</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1470693020379</updated>
+    </task>
+    <option name="localTasksCounter" value="100" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="0" />
+    <frame x="1" y="1" width="1918" height="1038" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.184375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18611987" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.082519" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31378937" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36323366" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17175975" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -893,7 +918,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Assigned existing values to fakevalue variable" />
     <MESSAGE value="set almost everything up, masking values introduced into fakevalues matrix" />
     <MESSAGE value="fakevalues correctly assigned" />
     <MESSAGE value="implemented the hints that are supplied to gurobi. Does not seem like it is a huge speedup. I may be slowing things down." />
@@ -918,7 +942,8 @@
     <MESSAGE value="all done without debugging" />
     <MESSAGE value="corrected a typo in zeros" />
     <MESSAGE value="Changed a few bugs. Latest the numpy multiply issue" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed a few bugs. Latest the numpy multiply issue" />
+    <MESSAGE value="Looks like everything runs minus the plots." />
+    <option name="LAST_COMMIT_MESSAGE" value="Looks like everything runs minus the plots." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1218,28 +1243,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="231" column="13" selection-start-line="231" selection-start-column="8" selection-end-line="231" selection-end-column="26" />
-          <folding>
-            <element signature="e#68#141#0" expanded="false" />
-            <element signature="e#10695#10731#0" expanded="false" />
-            <element signature="e#19715#20157#0" expanded="false" />
-            <element signature="e#20205#23292#0" expanded="false" />
-            <element signature="e#23345#23958#0" expanded="false" />
-            <element signature="e#24008#24475#0" expanded="false" />
-            <element signature="e#24515#24673#0" expanded="false" />
-            <element signature="e#25881#27000#0" expanded="false" />
-            <element signature="e#27101#27664#0" expanded="false" />
-            <element signature="e#27706#28257#0" expanded="false" />
-            <element signature="e#28297#28444#0" expanded="false" />
-            <element signature="e#28532#28678#0" expanded="false" />
-            <element signature="e#35229#35786#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/gurobi651/win64/examples/python/diet.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -1248,10 +1251,32 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-314">
+          <caret line="134" column="16" selection-start-line="134" selection-start-column="13" selection-end-line="134" selection-end-column="16" />
+          <folding>
+            <element signature="e#68#141#0" expanded="false" />
+            <element signature="e#246#268#0" expanded="true" />
+            <element signature="e#10696#10732#0" expanded="false" />
+            <element signature="e#19716#20158#0" expanded="false" />
+            <element signature="e#20206#23293#0" expanded="false" />
+            <element signature="e#23346#23959#0" expanded="false" />
+            <element signature="e#24009#24476#0" expanded="false" />
+            <element signature="e#24516#24674#0" expanded="false" />
+            <element signature="e#25882#27001#0" expanded="false" />
+            <element signature="e#27102#27665#0" expanded="false" />
+            <element signature="e#27707#28258#0" expanded="false" />
+            <element signature="e#28533#28679#0" expanded="false" />
+            <element signature="e#35230#35787#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="113">
-          <caret line="50" column="21" selection-start-line="50" selection-start-column="21" selection-end-line="50" selection-end-column="21" />
+        <state relative-caret-position="241">
+          <caret line="257" column="0" selection-start-line="257" selection-start-column="0" selection-end-line="257" selection-end-column="0" />
           <folding>
             <element signature="e#226#248#0" expanded="true" />
           </folding>
