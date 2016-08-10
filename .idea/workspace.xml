@@ -7,7 +7,6 @@
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapyColumnGeneration.py" afterPath="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" afterPath="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" />
     </list>
     <ignored path="CaseCreation.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,12 +30,19 @@
       <file leaf-file-name="tomotherapyColumnGeneration.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="241">
-              <caret line="257" column="0" selection-start-line="257" selection-start-column="0" selection-end-line="257" selection-end-column="0" />
+            <state relative-caret-position="363">
+              <caret line="106" column="32" selection-start-line="106" selection-start-column="32" selection-end-line="106" selection-end-column="32" />
               <folding>
-                <element signature="e#226#248#0" expanded="true" />
+                <element signature="e#15847#17419#0" expanded="false" />
               </folding>
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dvh-ColumnGeneration.png" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/output/dvh-ColumnGeneration.png">
+          <provider selected="true" editor-type-id="images">
+            <state />
           </provider>
         </entry>
       </file>
@@ -518,13 +524,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00051" summary="Double checked details about DVH plot">
-      <created>1468253088236</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1468253088236</updated>
-    </task>
     <task id="LOCAL-00052" summary="Quadratic constraints commented out">
       <created>1468268163617</created>
       <option name="number" value="00052" />
@@ -861,23 +860,30 @@
       <option name="project" value="LOCAL" />
       <updated>1470693020379</updated>
     </task>
-    <option name="localTasksCounter" value="100" />
+    <task id="LOCAL-00100" summary="Now everything runs and the answers converge to something. Still failing in the plots.">
+      <created>1470759732446</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1470759732446</updated>
+    </task>
+    <option name="localTasksCounter" value="101" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="1" y="1" width="1918" height="1038" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18611987" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16456361" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.082519" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36323366" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.52048725" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17175975" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39176345" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39202657" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -918,7 +924,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="set almost everything up, masking values introduced into fakevalues matrix" />
     <MESSAGE value="fakevalues correctly assigned" />
     <MESSAGE value="implemented the hints that are supplied to gurobi. Does not seem like it is a huge speedup. I may be slowing things down." />
     <MESSAGE value="Changed the objective function to something that I think makes more sense now." />
@@ -943,22 +948,23 @@
     <MESSAGE value="corrected a typo in zeros" />
     <MESSAGE value="Changed a few bugs. Latest the numpy multiply issue" />
     <MESSAGE value="Looks like everything runs minus the plots." />
-    <option name="LAST_COMMIT_MESSAGE" value="Looks like everything runs minus the plots." />
+    <MESSAGE value="Now everything runs and the answers converge to something. Still failing in the plots." />
+    <option name="LAST_COMMIT_MESSAGE" value="Now everything runs and the answers converge to something. Still failing in the plots." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="20" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/tomotherapyColumnGeneration.py</url>
+          <line>98</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="22" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://C:/gurobi651/win64/examples/python/qcp.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data/myDijs_out.bin">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-4029">
@@ -1273,12 +1279,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/output/dvh-ColumnGeneration.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="257" column="0" selection-start-line="257" selection-start-column="0" selection-end-line="257" selection-end-column="0" />
+        <state relative-caret-position="363">
+          <caret line="106" column="32" selection-start-line="106" selection-start-column="32" selection-end-line="106" selection-end-column="32" />
           <folding>
-            <element signature="e#226#248#0" expanded="true" />
+            <element signature="e#15847#17419#0" expanded="false" />
           </folding>
         </state>
       </provider>

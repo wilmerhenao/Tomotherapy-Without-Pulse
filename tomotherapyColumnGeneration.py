@@ -52,7 +52,7 @@ class tomotherapyNP(object):
         print('Building column generation method')
         self.thresholds()
         self.rmpres = self.ColumnGenerationMain(self.data.M)
-        self.plotDVH('dvhcheck')
+        self.plotDVH('dvh-ColumnGeneration')
         self.plotSinoGram()
         self.plotEventsbinary()
         print('The problem has been completed')
@@ -90,20 +90,21 @@ class tomotherapyNP(object):
 
     ## This function regularly enters the optimization engine to calculate objective function and gradients
     def calcGradientandObjValue(self):
-        oDoseObj = self.currentDose - self.quadHelperThresh
+        oDoseObj = self.currentDose.T - self.quadHelperThresh
         oDoseObjCl = (oDoseObj > 0) * oDoseObj
         oDoseObj = oDoseObjCl * oDoseObjCl * self.quadHelperOver
-        uDoseObj = self.quadHelperThresh - self.currentDose
+        uDoseObj = self.quadHelperThresh - self.currentDose.T
         uDoseObjCl = (uDoseObj > 0) * uDoseObj
         uDoseObj = uDoseObjCl * uDoseObjCl * self.quadHelperUnder
-
+        assert(oDoseObj.shape == (1, self.data.totalsmallvoxels))
         self.objectiveValue = sum(oDoseObj + uDoseObj)
         oDoseObjGl = 2 * oDoseObjCl * self.quadHelperOver
         uDoseObjGl = 2 * uDoseObjCl * self.quadHelperUnder
         # Notice that I use two types of gradients. One for voxels and one for apertures. The apertures one will be
-        # sent to the optimizer.
-        self.voxelgradient = 2 * (oDoseObjGl - uDoseObjGl)
-        self.aperturegradient = (np.asmatrix(self.voxelgradient) * self.dZdK).transpose()
+        # sent to the optimizer
+        print('check shape', oDoseObjGl.shape)
+        self.voxelgradient = 2 * (oDoseObjGl - uDoseObjGl) # With respect to doses.
+        self.aperturegradient = np.asmatrix(self.voxelgradient) * self.dZdK
 
     def calcObjGrad(self, x, user_data=None):
         self.yk = x
@@ -111,9 +112,19 @@ class tomotherapyNP(object):
         self.calcGradientandObjValue()
         return (self.objectiveValue, self.aperturegradient)
 
+    def solveRMC(self):
+        self.calcObjGrad(self.yk)
+        # Create the boundaries of intensities
+        res = minimize(self.calcObjGrad, self.yk, method='L-BFGS-B', jac=True, bounds=self.boundschoice,
+                       options={'ftol': 1e-3, 'disp': 5, 'maxiter': 200})
+        #print('Restricted Master Problem solved in ' + str(time.time() - start) + ' seconds')
+        return (res)
+
     ## Solves the pricing problem as set up
     def PricingProblem(self, M):
         # Prepare the matrix multiplying all the rows times the $\partial F / \partial z_j$ vector
+        print('DT shape', self.data.D.T.shape)
+        print('voxelgradient shape', self.voxelgradient.shape)
         matMain = (self.data.D.T * self.voxelgradient).T
         # And since I just need the sum by columns
         self.vecMain = matMain.sum(0)
@@ -124,19 +135,20 @@ class tomotherapyNP(object):
         goaltargets = np.array([None] * (self.data.K * self.data.N))
         iterpricingprob = 1
         for b in candidatebeamlets:
-            print('iteration of pricing problem', iterpricingprob, 'out of ', len(candidatebeamlets))
+            print('iteration of pricing problem', iterpricingprob, 'out of ', len(candidatebeamlets),
+                  ' trying candidate beamlet ', str(b))
             # The idea is that for each beamlet I will produce a set of length K of apertures
             self.mod = grb.Model()
             self.mod.params.threads = numcores
             self.mod.params.MIPFocus = 1
             self.mod.params.Presolve = 0
             self.mod.params.TimeLimit = 14 * 3600.0
-            self.bins = [None] * self.data.K
+            self.binaries = [None] * self.data.K
             self.muVars = [None] * (self.data.K - 1)
             # Define the variables
 
             for i in range(0, self.data.K):
-                self.bins[i] = self.mod.addVar(vtype=grb.GRB.BINARY, name="binaryVoxel_{" + str(i) + ", " + str(b) + "}",
+                self.binaries[i] = self.mod.addVar(vtype=grb.GRB.BINARY, name="binaryVoxel_{" + str(i) + ", " + str(b) + "}",
                                                column=None)
                 #  The mu variable will register change in the behaviour from one control to the other. Therefore loses 1
                 # degree of freedom
@@ -156,11 +168,11 @@ class tomotherapyNP(object):
                 expr += self.muVars[k]
                 # \mu \geq \beta_{i,k+1} - \beta_{i,k}
                 self.absoluteValueRemovalConstraint1[k] = self.mod.addConstr(
-                    self.muVars[k], grb.GRB.GREATER_EQUAL, self.bins[k + 1] - self.bins[k],
+                    self.muVars[k], grb.GRB.GREATER_EQUAL, self.binaries[k + 1] - self.binaries[k],
                     name="rmabs1_{" + str(i) + "," + str(b) + "}")
                 # \mu \geq -(\beta_{i,k+1} - \beta_{i,k})
                 self.absoluteValueRemovalConstraint2[k] = self.mod.addConstr(
-                    self.muVars[k], grb.GRB.GREATER_EQUAL, -(self.bins[k + 1] - self.bins[k]),
+                    self.muVars[k], grb.GRB.GREATER_EQUAL, -(self.binaries[k + 1] - self.binaries[k]),
                     name="rmabs2_{" + str(i) + "," + str(b) + "}")
             sumMaxRestriction = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL, M,
                                                            name="summaxrest_{" + str(i) + "}")
@@ -169,7 +181,7 @@ class tomotherapyNP(object):
 
             expr = grb.LinExpr()
             for i in range(0, self.data.K):
-                expr += self.bins[i] * self.vecMain[b + i * self.data.N]
+                expr += self.binaries[i] * self.vecMain[b + i * self.data.N]
 
             self.mod.update()
             self.mod.setObjective(expr, grb.GRB.MINIMIZE)
@@ -180,18 +192,18 @@ class tomotherapyNP(object):
                 goalvalues[b] = obj.getValue( )
                 # Assign optimal results of the optimization
                 for i in range(self.data.K):
-                    goaltargets = self.bins[i].X
+                    goaltargets[i + b * self.data.N] = self.binaries[i].X
         bestbeamlet = np.argmin(goalvalues)
         bestgoal = goalvalues[bestbeamlet]
+        print('value of best goal was', bestgoal)
         # For each of the beamlets. Assign the resulting path to the matrix of binaryVariables if bestgoal < 0
         if bestgoal < 0.0:
             self.mathCal[bestbeamlet] = 1
             for i in range(self.data.K):
                 # Update the beamlets available
                 self.binaryVariables[1, i + bestbeamlet * self.data.N] = goaltargets[i + bestbeamlet * self.data.N]
-            # Update binaryMatr to make things faster.
+            # Update binaryMatr to make things faster
             self.binaryMatr = np.tile(self.binaryVariables, (self.data.D.shape[0], 1))
-            print('binaryMatrshape', self.binaryMatr.shape)
         return(bestgoal)
 
     ## This function creates a matrix that has a column of ones kronecker the identity matrix
@@ -220,33 +232,21 @@ class tomotherapyNP(object):
         while (gstar < 0) & (sum(self.mathCal) < self.data.N):
             print('starting iteration of column generation', iterCG)
             iterCG += 1
-            # Step 1 on Fei's paper. Use the information on the current treatment plan to formulate and solve an instance of the PP
+            # Step 1 on Fei's paper. Use the information on the current treatment plan to formulate and solve an
+            # instance of the PP
             self.calcDose()
             self.calcGradientandObjValue()
             gstar = self.PricingProblem(M)
-            # Step 2. If the optimal value of the PP is nonnegative**, go to step 5. Otherwise, denote the optimal solution to the
-            # PP by c and Ac and replace caligraphic C and A = Abar, k \in caligraphicC
+            # Step 2. If the optimal value of the PP is nonnegative**, go to step 5. Otherwise, denote the optimal
+            # solution to the PP by c and Ac and replace caligraphic C and A = Abar, k \in caligraphicC
             if gstar >= 0:
                 # This choice includes the case when no aperture was selected
                 print('Program finishes because no beamlet was selected to enter')
                 break
             else:
                 rmpres = self.solveRMC()
+
         return(rmpres)
-
-    def solveRMC(self):
-        ## IPOPT SOLUTION
-        self.calcObjGrad(self.yk)
-        # Create the boundaries of intensities
-        res = minimize(self.calcObjGrad, self.yk, method='L-BFGS-B', jac=True, bounds=self.boundschoice,
-                       options={'ftol': 1e-3, 'disp': 5, 'maxiter': 200})
-        print('Restricted Master Problem solved in ' + str(time.time() - start) + ' seconds')
-        return (res)
-
-    def outputSolution(self):
-        outDict = {}
-        outDict['doseVector'] = np.array([self.zeeVars[j].X for j in range(self.data.totalsmallvoxels)])
-        outDict['obj'] = self.mod.objVal
 
     def plotDVH(self, NameTag='', showPlot=False):
         voxDict = {}
@@ -255,8 +255,9 @@ class tomotherapyNP(object):
         for o in self.data.OARList:
             voxDict[o] = np.where(self.data.mask == o)[0]
         if self.rmpres is None:
-            sys.stderr()
-        dose = np.array([self.zeeVars[j].X for j in range(self.data.totalsmallvoxels)])
+            print('did I enter here?')
+            sys.stderr.write('the master problem does not had a valid solution')
+        dose = np.array([self.currentDose[j] for j in range(self.data.totalsmallvoxels)])
         plt.clf()
         for index, sValues in voxDict.items():
             sVoxels = sValues
@@ -283,17 +284,18 @@ class tomotherapyNP(object):
         image = -1 * np.ones(nrows * ncols)
         for k in range(self.data.K):
             for i in range(self.data.N):
-                if 1 == self.bins[i + k * self.data.N].X:
-                    #print('beamlet '+str(i)+' in CP '+str(k)+ ' is open with intensity ', str(self.yVar[k].X))
+                print('onevalue', self.binaryVariables[i + k * self.data.N])
+                if 1 == self.binaryVariables[1, i + k * self.data.N]:
+                    #print('beamlet '+str(i)+' in CP '+str(k)+ ' is open with intensity ', str(self.yk[k]))
                     # If this particular beamlet is open. Assign the intensity to it.
-                    image[i + self.data.N * k] = self.yVar[k].X
+                    image[i + self.data.N * k] = self.yk[k]
         image = image.reshape((nrows, ncols))
         plt.clf()
         fig = plt.figure(1)
         cmapper = plt.get_cmap("autumn_r")
         norm = matplotlib.colors.Normalize(clip=False)
         cmapper.set_under('black')
-        plt.imshow(image, cmap=cmapper, vmin=0.0, vmax=self.data.maxIntensity)
+        plt.imshow(image, cmap = cmapper, vmin = 0.0, vmax = self.data.maxIntensity)
         plt.title('Sinogram subsamples = ' + str(self.data.sampleevery) + ' and ' + str(self.data.M) + ' events limit')
         plt.xlabel('Beamlets')
         plt.ylabel('Control Points')
@@ -304,18 +306,13 @@ class tomotherapyNP(object):
         for i in range(self.data.N):
             arrayofevents.append(0)
             for k in range(self.data.K - 1):
-                arrayofevents[-1] += abs(self.bins[i + k * self.data.N].X - self.bins[i + (k + 1) * self.data.N].X)
+                arrayofevents[-1] += abs(self.binaries[i + k * self.data.N].X - self.binaries[i + (k + 1) * self.data.N].X)
         ind = range(len(arrayofevents))
         plt.clf()
         fig, ax = plt.subplots()
         rects1 = ax.bar(ind, arrayofevents, 0.6, color='r')
         plt.title('Events per beamlet')
         fig.savefig(self.data.outputDirectory + 'beamletdistribution.png', bbox_inches='tight')
-
-    def outputSolution(self):
-        outDict = {}
-        outDict['doseVector'] = np.array([self.doseVars[j].X for j in range(self.data.nVox)])
-        outDict['obj'] = self.mod.objVal
 
 ## Function that reads the files produced by Weiguo
 def getvector(necfile,dtype):
