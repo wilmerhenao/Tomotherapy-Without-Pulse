@@ -11,23 +11,15 @@ except ImportError:
 
 import gurobipy as grb
 from scipy.optimize import minimize
-from scipy.spatial import KDTree
-import numpy.ma as ma
 import numpy as np
-import scipy.io as sio
 import matplotlib.pyplot as plt
 import sys
 import scipy.sparse as sps
-import os
 import pickle
-from collections import defaultdict
 import time
-from multiprocessing import Pool
-from functools import partial
-import math
+from multiprocessing import Process, Array
 from scipy.stats import describe
 import matplotlib
-import re
 
 numcores = 4
 
@@ -123,7 +115,7 @@ class tomotherapyNP(object):
         return (res)
 
     # Define the variables
-    def defineVariables(self, b):
+    def addVariables(self, b):
         self.binaries = [None] * self.data.K
         self.muVars = [None] * (self.data.K - 1)
         for i in range(0, self.data.K):
@@ -138,15 +130,7 @@ class tomotherapyNP(object):
                                                  column=None)
         self.mod.update()
 
-    def PPoptimization(self, b):
-        # The idea is that for each beamlet I will produce a set of length K of apertures
-        self.mod = grb.Model()
-        # self.mod.params.OutputFlag = 1
-        self.mod.params.threads = numcores
-        self.mod.params.MIPFocus = 1
-        self.mod.params.Presolve = 0
-        # self.mod.params.TimeLimit = 14 * 3600.0
-        self.defineVariables(b)
+    def addConstraints(self, b):
         # Add some constraints. This one is about replacing the absolute value with linear expressions
         self.absoluteValueRemovalConstraint1 = [None] * (self.data.K - 1)
         self.absoluteValueRemovalConstraint2 = [None] * (self.data.K - 1)
@@ -167,15 +151,27 @@ class tomotherapyNP(object):
         self.mod.addConstr(expr, grb.GRB.LESS_EQUAL, self.data.M, name="summaxrest_{" + str(k) + "}")
         self.mod.update()
 
+    def addGoal(self, b):
         expr = grb.LinExpr()
         for i in range(self.data.K):
             expr += self.binaries[i] * self.doseandgradient[b + i * self.data.N, 0]
             # Use this opportunity to initialize the binary variables to something being closed. So that way I will
             # always close the beamlets instead of having them open. This may slow things down.
             # self.binaries[i].Start = 0
-
         self.mod.update()
         self.mod.setObjective(expr, grb.GRB.MINIMIZE)
+
+    def PPoptimization(self, b):
+        # The idea is that for each beamlet I will produce a set of length K of apertures
+        self.mod = grb.Model()
+        # self.mod.params.OutputFlag = 1
+        self.mod.params.threads = 1
+        self.mod.params.MIPFocus = 1
+        self.mod.params.Presolve = 0
+        # self.mod.params.TimeLimit = 14 * 3600.0
+        self.addVariables(b)
+        self.addConstraints(b)
+        self.addGoal(b)
         self.mod.optimize()
         # Get the optimal value of the optimization
         if self.mod.status == grb.GRB.Status.OPTIMAL:
@@ -200,6 +196,7 @@ class tomotherapyNP(object):
             print('iteration of pricing problem', iterpricingprob, 'out of ', len(candidatebeamlets),
                   ' trying candidate beamlet ', str(b))
             self.PPoptimization(b)
+
         bestbeamlet = np.argmin(self.goalvalues)
         bestgoal = self.goalvalues[bestbeamlet]
         print('value of best goal was', bestgoal)
@@ -268,8 +265,6 @@ class tomotherapyNP(object):
         for index, sValues in voxDict.items():
             sVoxels = sValues
             hist, bins = np.histogram(dose[sVoxels], bins=100)
-            print('svoxels', sVoxels)
-            print(sVoxels.shape)
             dvh = 1. - np.cumsum(hist) / float(sVoxels.shape[0])
             dvh = np.insert(dvh, 0, 1)
             plt.plot(bins, dvh, label = "struct " + str(index), linewidth = 2)
@@ -336,12 +331,12 @@ class tomodata:
     def __init__(self):
         self.outputDirectory = "output/"
         ## M value. Number of times per beamlet that the switch can be turned on or off
-        self.M = 30
+        self.M = 180
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.coarse = 16
         self.sampleevery = 8
+        self.coarse = self.sampleevery / 2
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 100
