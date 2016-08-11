@@ -1,5 +1,4 @@
 #!/home/wilmer/anaconda3/bin/python
-
 __author__ = 'wilmer'
 try:
     import mkl
@@ -15,9 +14,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 import scipy.sparse as sps
-import pickle
 import time
-from multiprocessing import Process, Array
 from scipy.stats import describe
 import matplotlib
 
@@ -56,12 +53,12 @@ class tomotherapyNP(object):
             if self.data.mask[i] in self.data.TARGETList:
                 T = self.data.TARGETThresholds[np.where(self.data.mask[i] == self.data.TARGETList)[0][0]]
                 self.quadHelperOver[i] = 1.0
-                self.quadHelperUnder[i] = 100000000.0
+                self.quadHelperUnder[i] = 1000.0
             # Constraint on OARs
             elif self.data.mask[i] in self.data.OARList:
                 T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0][0]]
-                self.quadHelperOver[i] = 100000.0
-                self.quadHelperUnder[i] = 1.0
+                self.quadHelperOver[i] = 100.0
+                self.quadHelperUnder[i] = -0.01
             elif 0 == self.data.mask[i]:
                 print('there is an element in the voxels that is also mask 0')
             self.quadHelperThresh[i] = T
@@ -183,7 +180,7 @@ class tomotherapyNP(object):
         # Prepare the matrix multiplying all the rows times the $\partial F / \partial z_j$ vector
         print('DT shape', self.data.D.T.shape)
         print('voxelgradient shape', self.voxelgradient.shape)
-        self.doseandgradient = -self.data.D.T * self.voxelgradient.T
+        self.doseandgradient = self.data.D.T * self.voxelgradient.T
         # Run an optimization problem for each of the different beamlets available (those that don't let light in)
         candidatebeamlets = np.where(1 == self.mathCal)[0].tolist()
         self.goalvalues = np.array([np.inf] * self.data.N)
@@ -223,7 +220,7 @@ class tomotherapyNP(object):
         self.binaryVariables = np.matrix(np.ones(self.data.N * self.data.K))
         self.binaryMatr = np.tile(self.binaryVariables, (self.data.D.shape[0], 1))
         # Variable that keeps the intensities at each control point. Initialized at maximum intensity
-        self.yk = np.ones(self.data.K) * self.data.maxIntensity
+        self.yk = np.zeros(self.data.K) * self.data.maxIntensity
         # Calculate the boundaries of yk
         self.boundschoice = [(0, self.data.maxIntensity),] * self.data.K
         gstar = -np.inf
@@ -332,12 +329,11 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.sampleevery = 4
+        self.sampleevery = 16
         self.coarse = self.sampleevery * 2
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
-        self.maxIntensity = 100
-        self.maxDosePTV = 999.9
+        self.maxIntensity = 20
         self.caseSide = 256
         self.voxelsBigSpace = self.caseSide ** 2
         ## Number of control points (every 2 degrees)
@@ -345,7 +341,6 @@ class tomodata:
         ## OARMAX is maximum dose tolerable for organs
         self.OARMAX = 7.0
         print('Read vectors...')
-        #self.readWilmersCase()
         self.readWeiguosCase(  )
         print('done')
         # Create a space in smallvoxel coordinates
@@ -421,18 +416,6 @@ class tomodata:
         self.OARThresholds = [7, 8, 9]
         self.TARGETList = [256]
         self.TARGETThresholds = [14]
-
-    def readWilmersCase(self):
-        self.bixels = getvector('data\\myBixels_out.bin', np.int32)
-        self.voxels = getvector('data\\myVoxels_out.bin', np.int32)
-        self.Dijs = getvector('data\\myDijs_out.bin', np.float32)
-        self.mask = getvector('data\\myoptmask.img', np.int32)
-        with open('C:/Users/S170452/PycharmProjects/Tomotherapy-Without-Pulse/data/mydict.pckl', 'rb') as ff:
-            dictdata = pickle.load(ff)
-        self.K = dictdata['K']
-        self.N = dictdata['N']
-        self.OARList = dictdata['OARIDs']
-        self.TARGETList = dictdata['TARGETIDs']
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 start_time = time.time()
