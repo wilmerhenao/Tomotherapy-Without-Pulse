@@ -44,9 +44,6 @@ class tomotherapyNP(object):
         print('Building column generation method')
         self.thresholds()
         self.rmpres = self.ColumnGenerationMain()
-        self.plotDVH('dvh-ColumnGeneration')
-        self.plotSinoGram()
-        self.plotEventsbinary()
         print('The problem has been completed')
 
     def thresholds(self):
@@ -335,13 +332,12 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.sampleevery = 8
-        self.coarse = self.sampleevery / 2
+        self.sampleevery = 4
+        self.coarse = self.sampleevery * 2
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 100
         self.maxDosePTV = 999.9
-        ##
         self.caseSide = 256
         self.voxelsBigSpace = self.caseSide ** 2
         ## Number of control points (every 2 degrees)
@@ -442,4 +438,7 @@ class tomodata:
 start_time = time.time()
 dataobject = tomodata()
 tomoinstance = tomotherapyNP(dataobject)
+tomoinstance.plotDVH('dvh-ColumnGeneration')
+tomoinstance.plotSinoGram()
+tomoinstance.plotEventsbinary()
 print("--- %s seconds ---" % (time.time() - start_time))
