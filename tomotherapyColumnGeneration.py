@@ -37,7 +37,6 @@ class tomotherapyNP(object):
     def __init__(self, datastructure):
         print('Reading in data...')
         self.data = datastructure
-        print('done')
         print('Building column generation method')
         self.thresholds()
         self.rmpres = self.ColumnGenerationMain()
@@ -58,17 +57,17 @@ class tomotherapyNP(object):
             elif self.data.mask[i] in self.data.OARList:
                 T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0][0]]
                 self.quadHelperOver[i] = 100.0
-                self.quadHelperUnder[i] = -0.01
+                self.quadHelperUnder[i] = 0.0
             elif 0 == self.data.mask[i]:
                 print('there is an element in the voxels that is also mask 0')
             self.quadHelperThresh[i] = T
 
     def calcDose(self):
         # Remember. The '*' operator is elementwise multiplication. Here, ordered by beamlets first, then control points
-        intensities = np.multiply(np.repeat(self.yk, self.data.N), self.binaryVariables).transpose()
+        intensities = (self.yk * self.binaryVariables.T).T.reshape(self.data.K * self.data.N, 1)
         self.currentDose = np.asarray(self.data.D.dot(intensities)) # conversion to array necessary. O/W algebra wrong
         # The line below effectively multiplies each element in data.D by one or zero. USE THE DENSE VERSION OF D.
-        matdzdk = np.multiply(self.data.Ddense, self.binaryMatr)
+        matdzdk = np.multiply(self.data.Ddense, self.binaryVariables)
         # Oneshelper adds in the creation of the dzdk it is a matrix of ones that adds the right positions in matdzdk
         self.dZdK = np.dot(matdzdk, self.oneshelper)
         # Assert the tuple below
@@ -173,18 +172,18 @@ class tomotherapyNP(object):
             self.goalvalues[b] = obj.getValue()
             # Assign optimal results of the optimization
             for i in range(self.data.K):
-                self.goaltargets[i + b * self.data.N] = self.binaries[i].X
+                self.goaltargets[i, b] = self.binaries[i].X
 
     ## Solves the pricing problem as set up
     def PricingProblem(self):
         # Prepare the matrix multiplying all the rows times the $\partial F / \partial z_j$ vector
         print('DT shape', self.data.D.T.shape)
         print('voxelgradient shape', self.voxelgradient.shape)
-        self.doseandgradient = self.data.D.T * self.voxelgradient.T
+        self.doseandgradient = -self.data.D.T * self.voxelgradient.T
         # Run an optimization problem for each of the different beamlets available (those that don't let light in)
         candidatebeamlets = np.where(1 == self.mathCal)[0].tolist()
         self.goalvalues = np.array([np.inf] * self.data.N)
-        self.goaltargets = np.array([None] * (self.data.K * self.data.N))
+        self.goaltargets = np.ones(self.data.K, self.data.N) * None
         iterpricingprob = 1
         for b in candidatebeamlets:
             print('iteration of pricing problem', iterpricingprob, 'out of ', len(candidatebeamlets),
@@ -199,9 +198,7 @@ class tomotherapyNP(object):
             self.mathCal[bestbeamlet] = 0
             for i in range(self.data.K):
                 # Update the beamlets available
-                self.binaryVariables[0, i + bestbeamlet * self.data.N] = self.goaltargets[i + bestbeamlet * self.data.N]
-            # Update binaryMatr to make things faster in dose calculations. Just reapeat binaryVariables N times.
-            self.binaryMatr = np.tile(self.binaryVariables, (self.data.D.shape[0], 1))
+                self.binaryVariables[i, bestbeamlet] = self.goaltargets[i, bestbeamlet]
         return(bestgoal)
 
     ## This function creates a matrix that has a column of ones kronecker the identity matrix
@@ -217,17 +214,17 @@ class tomotherapyNP(object):
         # Step 1: Assign \mathcal{C} the empty set. Remember to open everytime I add a path.
         self.mathCal = np.ones(self.data.N, dtype=np.int)
         # Matrix with a binary choice for each of the beamlets at each control point.
-        self.binaryVariables = np.matrix(np.ones(self.data.N * self.data.K))
-        self.binaryMatr = np.tile(self.binaryVariables, (self.data.D.shape[0], 1))
+        self.binaryVariables = np.ones((self.data.K, self.data.N))
         # Variable that keeps the intensities at each control point. Initialized at maximum intensity
-        self.yk = np.zeros(self.data.K) * self.data.maxIntensity
+        self.yk = np.ones(self.data.K) * self.data.maxIntensity
         # Calculate the boundaries of yk
         self.boundschoice = [(0, self.data.maxIntensity),] * self.data.K
         gstar = -np.inf
         iterCG = 1
         rmpres = None
-        while (gstar <= 0) & ( sum(1 - self.mathCal) < self.data.N):
+        while (gstar <= 0) & ( sum(1 - self.mathCal) < self.data.N) & (time.time() - start_time < 500):
             print('starting iteration of column generation', iterCG)
+            self.plotSinoGram(iterCG)
             iterCG += 1
             # Step 1 on Fei's paper. Use the information on the current treatment plan to formulate and solve an
             # instance of the PP
@@ -275,35 +272,31 @@ class tomotherapyNP(object):
         plt.close()
 
     ## Showing the evolution of apertures through control points
-    def plotSinoGram(self):
+    def plotSinoGram(self, thisname=None):
         ## Plotting apertures
         nrows, ncols = self.data.K, self.data.N
-        image = -1 * np.ones(nrows * ncols)
+        image = -1 * np.ones((nrows, ncols))
         for k in range(self.data.K):
             for i in range(self.data.N):
-                #print('onevalue', self.binaryVariables[0, i + k * self.data.N])
-                if 1 == self.binaryVariables[0, i + k * self.data.N]:
-                    #print('beamlet '+str(i)+' in CP '+str(k)+ ' is open with intensity ', str(self.yk[k]))
+                if 1 == self.binaryVariables[k, i]:
                     # If this particular beamlet is open. Assign the intensity to it.
-                    image[i + self.data.N * k] = self.yk[k]
-        image = image.reshape((nrows, ncols))
+                    image[k, i] = self.yk[k]
         plt.clf()
         fig = plt.figure(1)
         cmapper = plt.get_cmap("autumn_r")
-        norm = matplotlib.colors.Normalize(clip=False)
         cmapper.set_under('black')
         plt.imshow(image, cmap = cmapper, vmin = 0.0, vmax = self.data.maxIntensity)
         plt.title('Sinogram subsamples = ' + str(self.data.sampleevery) + ' and ' + str(self.data.M) + ' events limit')
         plt.xlabel('Beamlets')
         plt.ylabel('Control Points')
-        fig.savefig(self.data.outputDirectory + 'sinogram.png', bbox_inches='tight')
+        fig.savefig(self.data.outputDirectory + 'sinogram' + str(thisname) + '.png', bbox_inches='tight')
 
     def plotEventsbinary(self):
         arrayofevents = []
         for i in range(self.data.N):
             arrayofevents.append(0)
             for k in range(self.data.K - 1):
-                arrayofevents[-1] += abs(self.binaryVariables[0, i + k * self.data.N] - self.binaryVariables[0, i + (k + 1) * self.data.N])
+                arrayofevents[-1] += abs(self.binaryVariables[k, i] - self.binaryVariables[k, i])
         ind = range(len(arrayofevents))
         plt.clf()
         fig, ax = plt.subplots()
@@ -329,7 +322,7 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.sampleevery = 16
+        self.sampleevery = 25
         self.coarse = self.sampleevery * 2
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
@@ -338,8 +331,6 @@ class tomodata:
         self.voxelsBigSpace = self.caseSide ** 2
         ## Number of control points (every 2 degrees)
         self.K = 178
-        ## OARMAX is maximum dose tolerable for organs
-        self.OARMAX = 7.0
         print('Read vectors...')
         self.readWeiguosCase(  )
         print('done')
@@ -349,7 +340,7 @@ class tomodata:
         # The next part uses the case corresponding to either Wilmer or Weiguo's case
         self.totalbeamlets = self.K * self.N
         self.totalsmallvoxels = max(self.smallvoxels) + 1
-        print('totalsmallvoxels: ', self.totalsmallvoxels)
+        print('totalsmallvoxels:', self.totalsmallvoxels)
         print('a brief description of Dijs array', describe(self.Dijs))
         self.D = sps.csr_matrix((self.Dijs, (self.smallvoxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
         self.Ddense = self.D.todense()
