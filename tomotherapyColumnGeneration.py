@@ -16,6 +16,7 @@ import sys
 import scipy.sparse as sps
 import time
 from scipy.stats import describe
+import pickle
 import matplotlib
 
 numcores = 4
@@ -52,7 +53,7 @@ class tomotherapyNP(object):
             if self.data.mask[i] in self.data.TARGETList:
                 T = self.data.TARGETThresholds[np.where(self.data.mask[i] == self.data.TARGETList)[0][0]]
                 self.quadHelperOver[i] = 1.0
-                self.quadHelperUnder[i] = 1000.0
+                self.quadHelperUnder[i] = 10000.0
             # Constraint on OARs
             elif self.data.mask[i] in self.data.OARList:
                 T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0][0]]
@@ -67,7 +68,8 @@ class tomotherapyNP(object):
         intensities = (self.yk * self.binaryVariables.T).T.reshape(self.data.K * self.data.N, 1)
         self.currentDose = np.asarray(self.data.D.dot(intensities)) # conversion to array necessary. O/W algebra wrong
         # The line below effectively multiplies each element in data.D by one or zero. USE THE DENSE VERSION OF D.
-        matdzdk = np.multiply(self.data.Ddense, self.binaryVariables)
+        matdzdk = np.multiply(self.data.Ddense, np.tile(self.binaryVariables.reshape(1, self.data.K * self.data.N),
+                                                        (self.data.totalsmallvoxels ,1)))
         # Oneshelper adds in the creation of the dzdk it is a matrix of ones that adds the right positions in matdzdk
         self.dZdK = np.dot(matdzdk, self.oneshelper)
         # Assert the tuple below
@@ -101,8 +103,6 @@ class tomotherapyNP(object):
 
     def solveRMC(self):
         self.calcObjGrad(self.yk)
-        # Create the boundaries of intensities
-        print(type(self.yk.tolist()))
         res = minimize(self.calcObjGrad, self.yk, method='L-BFGS-B', jac=True, bounds=self.boundschoice, options={'ftol': 1e-3, 'disp': 5, 'maxiter': 200})
         print('exiting graciously')
         return (res)
@@ -183,7 +183,8 @@ class tomotherapyNP(object):
         # Run an optimization problem for each of the different beamlets available (those that don't let light in)
         candidatebeamlets = np.where(1 == self.mathCal)[0].tolist()
         self.goalvalues = np.array([np.inf] * self.data.N)
-        self.goaltargets = np.ones(self.data.K, self.data.N) * None
+        self.goaltargets = np.empty((self.data.K, self.data.N))
+        self.goaltargets.fill(None)
         iterpricingprob = 1
         for b in candidatebeamlets:
             print('iteration of pricing problem', iterpricingprob, 'out of ', len(candidatebeamlets),
@@ -208,13 +209,21 @@ class tomotherapyNP(object):
             for j in range(self.data.N):
                 self.oneshelper[j + i * self.data.N, i] = 1.0
 
+    ## Find the locations where the D matrix will just never reach and don't even look at those beamlets
+    def turnoffUnnecessarybeamlets(self):
+        for i in np.unique(self.data.bixels % self.data.N):
+            self.mathCal[i] = 1
+            self.binaryVariables[:, i] = 1.0
+
     def ColumnGenerationMain(self):
         # Create the ones helper matrix:
         self.onehelpCreator()
         # Step 1: Assign \mathcal{C} the empty set. Remember to open everytime I add a path.
-        self.mathCal = np.ones(self.data.N, dtype=np.int)
+        self.mathCal = np.zeros(self.data.N, dtype=np.int)
         # Matrix with a binary choice for each of the beamlets at each control point.
-        self.binaryVariables = np.ones((self.data.K, self.data.N))
+        self.binaryVariables = np.zeros((self.data.K, self.data.N))
+        # Turn off unnecessary beamlest to save time
+        self.turnoffUnnecessarybeamlets()
         # Variable that keeps the intensities at each control point. Initialized at maximum intensity
         self.yk = np.ones(self.data.K) * self.data.maxIntensity
         # Calculate the boundaries of yk
@@ -272,7 +281,7 @@ class tomotherapyNP(object):
         plt.close()
 
     ## Showing the evolution of apertures through control points
-    def plotSinoGram(self, thisname=None):
+    def plotSinoGram(self, thisname=""):
         ## Plotting apertures
         nrows, ncols = self.data.K, self.data.N
         image = -1 * np.ones((nrows, ncols))
@@ -326,7 +335,7 @@ class tomodata:
         self.coarse = self.sampleevery * 2
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
-        self.maxIntensity = 20
+        self.maxIntensity = 100
         self.caseSide = 256
         self.voxelsBigSpace = self.caseSide ** 2
         ## Number of control points (every 2 degrees)
@@ -343,6 +352,14 @@ class tomodata:
         print('totalsmallvoxels:', self.totalsmallvoxels)
         print('a brief description of Dijs array', describe(self.Dijs))
         self.D = sps.csr_matrix((self.Dijs, (self.smallvoxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
+        # pdump = {}
+        # pdump['D'] = self.D
+        # pdump['Dijs'] = self.Dijs
+        # pdump['bixels'] = self.bixels
+        # pdump['smallvoxels'] = self.smallvoxels
+        # pdump['N'] = self.N
+        # pickle.dump(pdump,open('Dsanity.pkl','wb'))
+        # Perform some checks:
         self.Ddense = self.D.todense()
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions
 
