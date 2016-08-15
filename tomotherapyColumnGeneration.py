@@ -52,7 +52,7 @@ class tomotherapyNP(object):
             if self.data.mask[i] in self.data.TARGETList:
                 T = self.data.TARGETThresholds[np.where(self.data.mask[i] == self.data.TARGETList)[0][0]]
                 self.quadHelperOver[i] = 1.0
-                self.quadHelperUnder[i] = 10000.0
+                self.quadHelperUnder[i] = 100.0
             # Constraint on OARs
             elif self.data.mask[i] in self.data.OARList:
                 T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0][0]]
@@ -61,7 +61,6 @@ class tomotherapyNP(object):
             elif 0 == self.data.mask[i]:
                 print('there is an element in the voxels that is also mask 0')
             self.quadHelperThresh[i] = T
-
 
     def calcDose(self):
         # Remember. The '*' operator is elementwise multiplication. Here, ordered by beamlets first, then control points
@@ -103,6 +102,8 @@ class tomotherapyNP(object):
     def solveRMC(self):
         self.calcObjGrad(self.yk)
         res = minimize(self.calcObjGrad, self.yk, method='L-BFGS-B', jac=True, bounds=self.boundschoice, options={'ftol': 1e-3, 'disp': 5, 'maxiter': 200})
+        self.yk = res.x
+        self.calcObjGrad(self.yk)
         print('exiting graciously')
         return (res)
 
@@ -140,7 +141,7 @@ class tomotherapyNP(object):
             self.absoluteValueRemovalConstraint2[k] = self.mod.addConstr(
                 self.muVars[k], grb.GRB.GREATER_EQUAL, -(self.binaries[k + 1] - self.binaries[k]),
                 name="rmabs2_{" + str(k) + "," + str(b) + "}")
-        self.mod.addConstr(expr, grb.GRB.LESS_EQUAL, self.data.M, name="summaxrest_{" + str(k) + "}")
+        lastconstr = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL, self.data.M, name="summaxrest_{" + str(k) + "}")
         self.mod.update()
 
     def addGoal(self, b):
@@ -149,18 +150,13 @@ class tomotherapyNP(object):
             expr += self.binaries[i] * self.doseandgradient[b + i * self.data.N, 0]
             # Use this opportunity to initialize the binary variables to something being closed. So that way I will
             # always close the beamlets instead of having them open. This may slow things down.
-            # self.binaries[i].Start = 0
-        self.mod.update()
+            self.binaries[i].Start = 1
         self.mod.setObjective(expr, grb.GRB.MINIMIZE)
+        self.mod.update()
 
     def PPoptimization(self, b):
         # The idea is that for each beamlet I will produce a set of length K of apertures
         self.mod = grb.Model()
-        # self.mod.params.OutputFlag = 1
-        self.mod.params.threads = 1
-        self.mod.params.MIPFocus = 1
-        self.mod.params.Presolve = 0
-        # self.mod.params.TimeLimit = 14 * 3600.0
         self.addVariables(b)
         self.addConstraints(b)
         self.addGoal(b)
@@ -176,9 +172,7 @@ class tomotherapyNP(object):
     ## Solves the pricing problem as set up
     def PricingProblem(self):
         # Prepare the matrix multiplying all the rows times the $\partial F / \partial z_j$ vector
-        print('DT shape', self.data.D.T.shape)
-        print('voxelgradient shape', self.voxelgradient.shape)
-        self.doseandgradient = -self.data.D.T * self.voxelgradient.T
+        self.doseandgradient = self.data.D.T * self.voxelgradient.T
         # Run an optimization problem for each of the different beamlets available (those that don't let light in)
         candidatebeamlets = np.where(1 == self.mathCal)[0].tolist()
         self.goalvalues = np.array([np.inf] * self.data.N)
@@ -189,14 +183,17 @@ class tomotherapyNP(object):
             print('iteration of pricing problem', iterpricingprob, 'out of ', len(candidatebeamlets),
                   ' trying candidate beamlet ', str(b))
             self.PPoptimization(b)
+            iterpricingprob += 1
 
         bestbeamlet = np.argmin(self.goalvalues)
         bestgoal = self.goalvalues[bestbeamlet]
-        print('value of best goal was', bestgoal)
         # For each of the beamlets. Assign the resulting path to the matrix of binaryVariables if bestgoal < 0
         if bestgoal <= 0.0:
+            print('value of best goal was', bestgoal, 'variable to be introduced is', bestbeamlet)
             self.mathCal[bestbeamlet] = 0
             self.binaryVariables[:, bestbeamlet] = self.goaltargets[:, bestbeamlet]
+        else:
+            print('no values will enter the formulation')
         return(bestgoal)
 
     ## This function creates a matrix that has a column of ones kronecker the identity matrix
@@ -207,20 +204,20 @@ class tomotherapyNP(object):
                 self.oneshelper[j + i * self.data.N, i] = 1.0
 
     ## Find the locations where the D matrix will just never reach and don't even look at those beamlets
-    def turnoffUnnecessarybeamlets(self):
+    def turnOnOnlynecessarybeamlets(self):
         for i in np.unique(self.data.bixels % self.data.N):
-            self.mathCal[i] = 0
-            self.binaryVariables[:, i] = 1.0
+            self.mathCal[i] = 1
+            #self.binaryVariables[:, i] = 1.0
 
     def ColumnGenerationMain(self):
         # Create the ones helper matrix:
         self.onehelpCreator()
-        # Step 1: Assign \mathcal{C} the empty set. Remember to change to 1 everytime I add a path.
-        self.mathCal = np.ones(self.data.N, dtype=np.int)
+        # Step 1: Assign \mathcal{C} the empty set. Remember to change to 1 everytime I add a path
+        self.mathCal = np.zeros(self.data.N, dtype=np.int)
         # Matrix with a binary choice for each of the beamlets at each control point.
-        self.binaryVariables = np.ones((self.data.K, self.data.N))
+        self.binaryVariables = np.zeros((self.data.K, self.data.N))
         # Turn off unnecessary beamlest to save time
-        self.turnoffUnnecessarybeamlets()
+        self.turnOnOnlynecessarybeamlets()
         # Variable that keeps the intensities at each control point. Initialized at maximum intensity
         self.yk = np.ones(self.data.K) * self.data.maxIntensity
         # Calculate the boundaries of yk
@@ -234,8 +231,7 @@ class tomotherapyNP(object):
             iterCG += 1
             # Step 1 on Fei's paper. Use the information on the current treatment plan to formulate and solve an
             # instance of the PP
-            self.calcDose()
-            self.calcGradientandObjValue()
+            self.calcObjGrad(self.yk)
             gstar = self.PricingProblem()
             # Step 2. If the optimal value of the PP is nonnegative**, go to step 5. Otherwise, denote the optimal
             # solution to the PP by c and Ac and replace caligraphic C and A = Abar, k \in caligraphicC
@@ -244,9 +240,10 @@ class tomotherapyNP(object):
                 print('Program finishes because no beamlet was selected to enter')
                 break
             else:
-                rmpres = self.solveRMC()
+                self.rmpres = self.solveRMC()
+                self.plotDVH('dvh-ColumnGeneration' + str(iterCG))
         print('leaving CG')
-        return(rmpres)
+        return(self.rmpres)
 
     def plotDVH(self, NameTag='', showPlot=False):
         voxDict = {}
@@ -332,7 +329,7 @@ class tomodata:
         self.coarse = self.sampleevery * 2
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
-        self.maxIntensity = 100
+        self.maxIntensity = 1000
         self.caseSide = 256
         self.voxelsBigSpace = self.caseSide ** 2
         ## Number of control points (every 2 degrees)

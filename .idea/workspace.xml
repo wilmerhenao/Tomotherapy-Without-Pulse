@@ -4,7 +4,7 @@
     <bookmark url="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py" line="333" mnemonic="5" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="Simplified the th">
+    <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapyColumnGeneration.py" afterPath="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
     </list>
@@ -30,12 +30,11 @@
       <file leaf-file-name="tomotherapyColumnGeneration.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="37">
-              <caret line="221" column="52" selection-start-line="221" selection-start-column="52" selection-end-line="221" selection-end-column="52" />
+            <state relative-caret-position="-6262">
+              <caret line="58" column="43" selection-start-line="58" selection-start-column="43" selection-end-line="58" selection-end-column="43" />
               <folding>
                 <element signature="e#225#247#0" expanded="true" />
-                <element signature="e#11596#11696#0" expanded="false" />
-                <element signature="e#11855#11957#0" expanded="false" />
+                <element signature="e#11734#11836#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -80,9 +79,9 @@
         <option value="C:/gurobi651/win64/examples/python/pwexample.py" />
         <option value="C:/gurobi651/win64/examples/python/piecewise.py" />
         <option value="$PROJECT_DIR$/basura.py" />
-        <option value="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" />
         <option value="C:/Anaconda3/Lib/site-packages/scipy/optimize/lbfgsb.py" />
         <option value="$PROJECT_DIR$/SanityChecker.py" />
+        <option value="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" />
         <option value="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
       </list>
     </option>
@@ -510,13 +509,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00059" summary="Added a histogram frequency plot of the number of events that happen.">
-      <created>1468526381654</created>
-      <option name="number" value="00059" />
-      <option name="presentableId" value="LOCAL-00059" />
-      <option name="project" value="LOCAL" />
-      <updated>1468526381654</updated>
-    </task>
     <task id="LOCAL-00060" summary="chooseSmallSpace was added as a new function that chooses a subsample of voxels">
       <created>1468537281857</created>
       <option name="number" value="00060" />
@@ -853,29 +845,45 @@
       <option name="project" value="LOCAL" />
       <updated>1471033340558</updated>
     </task>
-    <option name="localTasksCounter" value="108" />
+    <task id="LOCAL-00108" summary="changed the role of mathcal, not running at this point">
+      <created>1471277596323</created>
+      <option name="number" value="00108" />
+      <option name="presentableId" value="LOCAL-00108" />
+      <option name="project" value="LOCAL" />
+      <updated>1471277596323</updated>
+    </task>
+    <option name="localTasksCounter" value="109" />
     <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
     <frame x="1" y="1" width="1918" height="1038" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16456361" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16648936" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.08084164" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.082519" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33554816" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1625" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17175975" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28017718" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24090908" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.08084164" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -891,7 +899,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="removed redundant function that wasn't being used" />
     <MESSAGE value="changes related to size of the problem and accounting of zeros" />
     <MESSAGE value="Removed my own implementation of PWL because it adds a bunch of binary variables that slow the process down." />
     <MESSAGE value="Had to remove a few loadings of variables that don't make sense anymore&#10;" />
@@ -916,25 +923,16 @@
     <MESSAGE value="Looks like there is a bug at this point" />
     <MESSAGE value="changed everything to matrices" />
     <MESSAGE value="there are still problems with the restricted master problem" />
-    <option name="LAST_COMMIT_MESSAGE" value="there are still problems with the restricted master problem" />
+    <MESSAGE value="changed the role of mathcal, not running at this point" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed the role of mathcal, not running at this point" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/tomotherapyColumnGeneration.py</url>
-          <line>67</line>
-          <option name="timeStamp" value="49" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/tomotherapyColumnGeneration.py</url>
-          <line>180</line>
-          <option name="timeStamp" value="53" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/tomotherapyColumnGeneration.py</url>
-          <line>222</line>
-          <option name="timeStamp" value="58" />
+          <line>242</line>
+          <option name="timeStamp" value="68" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -944,7 +942,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="59" />
+      <option name="time" value="69" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1126,27 +1124,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="27" column="32" selection-start-line="27" selection-start-column="32" selection-end-line="27" selection-end-column="32" />
-          <folding>
-            <element signature="e#68#141#0" expanded="false" />
-            <element signature="e#10696#10732#0" expanded="false" />
-            <element signature="e#19716#20158#0" expanded="false" />
-            <element signature="e#20206#23293#0" expanded="false" />
-            <element signature="e#23346#23959#0" expanded="false" />
-            <element signature="e#24009#24476#0" expanded="false" />
-            <element signature="e#24516#24674#0" expanded="false" />
-            <element signature="e#25882#27001#0" expanded="false" />
-            <element signature="e#27102#27665#0" expanded="false" />
-            <element signature="e#27707#28258#0" expanded="false" />
-            <element signature="e#28533#28679#0" expanded="false" />
-            <element signature="e#35230#35787#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/output/sinogram 10 event limit.png">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -1247,9 +1224,35 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/output/sinogram.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/output/sinogram1.png">
       <provider selected="true" editor-type-id="images">
         <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="158">
+          <caret line="427" column="48" selection-start-line="427" selection-start-column="48" selection-end-line="427" selection-end-column="48" />
+          <folding>
+            <element signature="e#68#141#0" expanded="false" />
+            <element signature="e#246#268#0" expanded="true" />
+            <element signature="e#10696#10732#0" expanded="false" />
+            <element signature="e#19716#20158#0" expanded="false" />
+            <element signature="e#20206#23293#0" expanded="false" />
+            <element signature="e#24009#24476#0" expanded="false" />
+            <element signature="e#24516#24674#0" expanded="false" />
+            <element signature="e#25882#27001#0" expanded="false" />
+            <element signature="e#27102#27665#0" expanded="false" />
+            <element signature="e#27707#28258#0" expanded="false" />
+            <element signature="e#28533#28679#0" expanded="false" />
+            <element signature="e#35230#35787#0" expanded="false" />
+          </folding>
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/output/dvh-ColumnGeneration.png">
@@ -1257,19 +1260,13 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="37">
-          <caret line="221" column="52" selection-start-line="221" selection-start-column="52" selection-end-line="221" selection-end-column="52" />
+        <state relative-caret-position="-6262">
+          <caret line="58" column="43" selection-start-line="58" selection-start-column="43" selection-end-line="58" selection-end-column="43" />
           <folding>
             <element signature="e#225#247#0" expanded="true" />
-            <element signature="e#11596#11696#0" expanded="false" />
-            <element signature="e#11855#11957#0" expanded="false" />
+            <element signature="e#11734#11836#0" expanded="false" />
           </folding>
         </state>
       </provider>
