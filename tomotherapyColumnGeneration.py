@@ -33,7 +33,6 @@ def mycallback(model, where):
                 model.terminate()
 
 ## Class definition of the gurobi object that handles creation and execution of the model
-# Original template from Troy Long.
 class tomotherapyNP(object):
     def __init__(self, datastructure):
         print('Reading in data...')
@@ -63,15 +62,15 @@ class tomotherapyNP(object):
                 print('there is an element in the voxels that is also mask 0')
             self.quadHelperThresh[i] = T
 
+
     def calcDose(self):
         # Remember. The '*' operator is elementwise multiplication. Here, ordered by beamlets first, then control points
         intensities = (self.yk * self.binaryVariables.T).T.reshape(self.data.K * self.data.N, 1)
         self.currentDose = np.asarray(self.data.D.dot(intensities)) # conversion to array necessary. O/W algebra wrong
-        # The line below effectively multiplies each element in data.D by one or zero. USE THE DENSE VERSION OF D.
-        matdzdk = np.multiply(self.data.Ddense, np.tile(self.binaryVariables.reshape(1, self.data.K * self.data.N),
-                                                        (self.data.totalsmallvoxels ,1)))
+        # The line below effectively multiplies each element in data.D by one or zero. USE THE DENSE VERSION OF D
+        matdzdk = np.multiply(self.data.Ddense, np.tile(self.binaryVariables.reshape(1, self.data.K * self.data.N), (self.data.totalsmallvoxels ,1)))
         # Oneshelper adds in the creation of the dzdk it is a matrix of ones that adds the right positions in matdzdk
-        self.dZdK = np.dot(matdzdk, self.oneshelper)
+        self.dZdK = np.dot( matdzdk, self.oneshelper )
         # Assert the tuple below
         assert((self.data.totalsmallvoxels, self.data.K) == self.dZdK.shape)
 
@@ -197,9 +196,7 @@ class tomotherapyNP(object):
         # For each of the beamlets. Assign the resulting path to the matrix of binaryVariables if bestgoal < 0
         if bestgoal <= 0.0:
             self.mathCal[bestbeamlet] = 0
-            for i in range(self.data.K):
-                # Update the beamlets available
-                self.binaryVariables[i, bestbeamlet] = self.goaltargets[i, bestbeamlet]
+            self.binaryVariables[:, bestbeamlet] = self.goaltargets[:, bestbeamlet]
         return(bestgoal)
 
     ## This function creates a matrix that has a column of ones kronecker the identity matrix
@@ -212,16 +209,16 @@ class tomotherapyNP(object):
     ## Find the locations where the D matrix will just never reach and don't even look at those beamlets
     def turnoffUnnecessarybeamlets(self):
         for i in np.unique(self.data.bixels % self.data.N):
-            self.mathCal[i] = 1
+            self.mathCal[i] = 0
             self.binaryVariables[:, i] = 1.0
 
     def ColumnGenerationMain(self):
         # Create the ones helper matrix:
         self.onehelpCreator()
-        # Step 1: Assign \mathcal{C} the empty set. Remember to open everytime I add a path.
-        self.mathCal = np.zeros(self.data.N, dtype=np.int)
+        # Step 1: Assign \mathcal{C} the empty set. Remember to change to 1 everytime I add a path.
+        self.mathCal = np.ones(self.data.N, dtype=np.int)
         # Matrix with a binary choice for each of the beamlets at each control point.
-        self.binaryVariables = np.zeros((self.data.K, self.data.N))
+        self.binaryVariables = np.ones((self.data.K, self.data.N))
         # Turn off unnecessary beamlest to save time
         self.turnoffUnnecessarybeamlets()
         # Variable that keeps the intensities at each control point. Initialized at maximum intensity
@@ -247,7 +244,7 @@ class tomotherapyNP(object):
                 print('Program finishes because no beamlet was selected to enter')
                 break
             else:
-                rmpres = self.solveRMC(  )
+                rmpres = self.solveRMC()
         print('leaving CG')
         return(rmpres)
 
@@ -259,7 +256,7 @@ class tomotherapyNP(object):
             voxDict[o] = np.where(self.data.mask == o)[0]
         if self.rmpres is None:
             print('did I enter here?')
-            sys.stderr.write('the master problem does not had a valid solution')
+            sys.stderr.write('the master problem does not have a valid solution')
         dose = np.array([self.currentDose[j] for j in range(self.data.totalsmallvoxels)])
         plt.clf()
         for index, sValues in voxDict.items():
