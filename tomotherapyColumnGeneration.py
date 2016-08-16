@@ -52,11 +52,11 @@ class tomotherapyNP(object):
             if self.data.mask[i] in self.data.TARGETList:
                 T = self.data.TARGETThresholds[np.where(self.data.mask[i] == self.data.TARGETList)[0][0]]
                 self.quadHelperOver[i] = 1.0
-                self.quadHelperUnder[i] = 100.0
+                self.quadHelperUnder[i] = 1000000.0
             # Constraint on OARs
             elif self.data.mask[i] in self.data.OARList:
                 T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0][0]]
-                self.quadHelperOver[i] = 100.0
+                self.quadHelperOver[i] = 10000.0
                 self.quadHelperUnder[i] = 0.0
             elif 0 == self.data.mask[i]:
                 print('there is an element in the voxels that is also mask 0')
@@ -99,9 +99,9 @@ class tomotherapyNP(object):
         #print('types', type(self.objectiveValue), self.aperturegradient.shape)
         return(self.objectiveValue, np.array(self.aperturegradient))
 
-    def solveRMC(self):
+    def solveRMC(self, precision = 1e-2):
         self.calcObjGrad(self.yk)
-        res = minimize(self.calcObjGrad, self.yk, method='L-BFGS-B', jac=True, bounds=self.boundschoice, options={'ftol': 1e-3, 'disp': 5, 'maxiter': 200})
+        res = minimize(self.calcObjGrad, self.yk, method='L-BFGS-B', jac=True, bounds=self.boundschoice, options={'ftol': precision, 'disp': 5, 'maxiter': 200})
         self.yk = res.x
         self.calcObjGrad(self.yk)
         print('exiting graciously')
@@ -184,7 +184,6 @@ class tomotherapyNP(object):
                   ' trying candidate beamlet ', str(b))
             self.PPoptimization(b)
             iterpricingprob += 1
-
         bestbeamlet = np.argmin(self.goalvalues)
         bestgoal = self.goalvalues[bestbeamlet]
         # For each of the beamlets. Assign the resulting path to the matrix of binaryVariables if bestgoal < 0
@@ -207,14 +206,38 @@ class tomotherapyNP(object):
     def turnOnOnlynecessarybeamlets(self):
         for i in np.unique(self.data.bixels % self.data.N):
             self.mathCal[i] = 1
-            #self.binaryVariables[:, i] = 1.0
+
+    def refinesolution(self, iterCG):
+        gstar = -np.inf
+        numrefinements = 1
+        self.mathCal = self.originalMathCal
+        while (gstar <= 0) & ( numrefinements < 6):
+            print('starting iteration of column generation', iterCG)
+            # Step 1 on Fei's paper. Use the information on the current treatment plan to formulate and solve an
+            # instance of the PP
+            self.calcObjGrad(self.yk)
+            gstar = self.PricingProblem()
+            iterCG += 1
+            print('this is refinement' + str(iterCG))
+            self.plotSinoGram(iterCG)
+            # Step 2. If the optimal value of the PP is nonnegative**, go to step 5. Otherwise, denote the optimal
+            # solution to the PP by c and Ac and replace caligraphic C and A = Abar, k \in caligraphicC
+            if gstar >= 0:
+                # This choice includes the case when no aperture was selected
+                print('Program finishes because no beamlet was selected to enter')
+                break
+            else:
+                self.rmpres = self.solveRMC()
+                self.plotDVH('dvh-ColumnGeneration' + str(iterCG))
+        print('leaving solution refinement')
 
     def ColumnGenerationMain(self):
         # Create the ones helper matrix:
         self.onehelpCreator()
         # Step 1: Assign \mathcal{C} the empty set. Remember to change to 1 everytime I add a path
         self.mathCal = np.zeros(self.data.N, dtype=np.int)
-        # Matrix with a binary choice for each of the beamlets at each control point.
+        self.originalMathCal = self.mathCal
+        # Matrix with a binary choice for each of the beamlets at each control point
         self.binaryVariables = np.zeros((self.data.K, self.data.N))
         # Turn off unnecessary beamlest to save time
         self.turnOnOnlynecessarybeamlets()
@@ -224,7 +247,7 @@ class tomotherapyNP(object):
         self.boundschoice = [(0, self.data.maxIntensity),] * self.data.K
         gstar = -np.inf
         iterCG = 1
-        rmpres = None
+        self.rmpres = None
         while (gstar <= 0) & ( sum(1 - self.mathCal) < self.data.N) & (time.time() - start_time < 500):
             print('starting iteration of column generation', iterCG)
             self.plotSinoGram(iterCG)
@@ -242,9 +265,13 @@ class tomotherapyNP(object):
             else:
                 self.rmpres = self.solveRMC()
                 self.plotDVH('dvh-ColumnGeneration' + str(iterCG))
+        print('starting solution refinement')
+        self.refinesolution(iterCG)
+        self.rmpres = self.solveRMC(1E-5)
         print('leaving CG')
         return(self.rmpres)
 
+    # Plot the dose volume histogram
     def plotDVH(self, NameTag='', showPlot=False):
         voxDict = {}
         for t in self.data.TARGETList:
@@ -262,7 +289,6 @@ class tomotherapyNP(object):
             dvh = 1. - np.cumsum(hist) / float(sVoxels.shape[0])
             dvh = np.insert(dvh, 0, 1)
             plt.plot(bins, dvh, label = "struct " + str(index), linewidth = 2)
-
         lgd = plt.legend(fancybox = True, framealpha = 0.5, bbox_to_anchor = (1.05, 1), loc = 2)
         plt.title('DVH')
         plt.grid(True)
@@ -299,12 +325,13 @@ class tomotherapyNP(object):
         for i in range(self.data.N):
             arrayofevents.append(0)
             for k in range(self.data.K - 1):
-                arrayofevents[-1] += abs(self.binaryVariables[k, i] - self.binaryVariables[k, i])
+                arrayofevents[-1] += abs(self.binaryVariables[k+1, i] - self.binaryVariables[k, i])
         ind = range(len(arrayofevents))
         plt.clf()
         fig, ax = plt.subplots()
-        rects1 = ax.bar(ind, arrayofevents, 0.6, color='r')
+        ax.bar(ind, arrayofevents, 0.6, color='r')
         plt.title('Events per beamlet')
+        print(arrayofevents)
         fig.savefig(self.data.outputDirectory + 'beamletdistribution.png', bbox_inches='tight')
 
 ## Function that reads the files produced by Weiguo
@@ -325,7 +352,7 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.sampleevery = 25
+        self.sampleevery = 4
         self.coarse = self.sampleevery * 2
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
@@ -346,14 +373,6 @@ class tomodata:
         print('totalsmallvoxels:', self.totalsmallvoxels)
         print('a brief description of Dijs array', describe(self.Dijs))
         self.D = sps.csr_matrix((self.Dijs, (self.smallvoxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
-        # pdump = {}
-        # pdump['D'] = self.D
-        # pdump['Dijs'] = self.Dijs
-        # pdump['bixels'] = self.bixels
-        # pdump['smallvoxels'] = self.smallvoxels
-        # pdump['N'] = self.N
-        # pickle.dump(pdump,open('Dsanity.pkl','wb'))
-        # Perform some checks:
         self.Ddense = self.D.todense()
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions
 
@@ -415,9 +434,9 @@ class tomodata:
 
         # Assign structures and thresholds for each of them
         self.OARList = [1, 2, 3]
-        self.OARThresholds = [7, 8, 9]
+        self.OARThresholds = [10, 15, 20]
         self.TARGETList = [256]
-        self.TARGETThresholds = [14]
+        self.TARGETThresholds = [70]
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 start_time = time.time()
