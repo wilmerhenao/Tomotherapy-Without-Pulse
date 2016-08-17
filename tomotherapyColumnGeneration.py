@@ -206,16 +206,17 @@ class tomotherapyNP(object):
     def turnOnOnlynecessarybeamlets(self):
         for i in np.unique(self.data.bixels % self.data.N):
             self.mathCal[i] = 1
+        self.originalMathCal = np.array([i for i in self.mathCal])
 
     def refinesolution(self, iterCG):
         gstar = -np.inf
         numrefinements = 1
         self.mathCal = self.originalMathCal
-        while (gstar <= 0) & ( numrefinements < 6):
+        while (gstar <= 0) & ( numrefinements < 10):
             print('starting iteration of column generation', iterCG)
             # Step 1 on Fei's paper. Use the information on the current treatment plan to formulate and solve an
             # instance of the PP
-            self.calcObjGrad(self.yk)
+            numrefinements += 1
             gstar = self.PricingProblem()
             iterCG += 1
             print('this is refinement' + str(iterCG))
@@ -236,7 +237,6 @@ class tomotherapyNP(object):
         self.onehelpCreator()
         # Step 1: Assign \mathcal{C} the empty set. Remember to change to 1 everytime I add a path
         self.mathCal = np.zeros(self.data.N, dtype=np.int)
-        self.originalMathCal = self.mathCal
         # Matrix with a binary choice for each of the beamlets at each control point
         self.binaryVariables = np.zeros((self.data.K, self.data.N))
         # Turn off unnecessary beamlest to save time
@@ -251,7 +251,6 @@ class tomotherapyNP(object):
         while (gstar <= 0) & ( sum(1 - self.mathCal) < self.data.N) & (time.time() - start_time < 500):
             print('starting iteration of column generation', iterCG)
             self.plotSinoGram(iterCG)
-            iterCG += 1
             # Step 1 on Fei's paper. Use the information on the current treatment plan to formulate and solve an
             # instance of the PP
             self.calcObjGrad(self.yk)
@@ -265,6 +264,7 @@ class tomotherapyNP(object):
             else:
                 self.rmpres = self.solveRMC()
                 self.plotDVH('dvh-ColumnGeneration' + str(iterCG))
+            iterCG += 1
         print('starting solution refinement')
         self.refinesolution(iterCG)
         self.rmpres = self.solveRMC(1E-5)
@@ -288,8 +288,8 @@ class tomotherapyNP(object):
             hist, bins = np.histogram(dose[sVoxels], bins=100)
             dvh = 1. - np.cumsum(hist) / float(sVoxels.shape[0])
             dvh = np.insert(dvh, 0, 1)
-            plt.plot(bins, dvh, label = "struct " + str(index), linewidth = 2)
-        lgd = plt.legend(fancybox = True, framealpha = 0.5, bbox_to_anchor = (1.05, 1), loc = 2)
+            plt.plot(bins, dvh, label="struct " + str(index), linewidth=2)
+        lgd = plt.legend(fancybox=True, framealpha=0.5, bbox_to_anchor=(1.05, 1), loc=2)
         plt.title('DVH')
         plt.grid(True)
         plt.xlabel('Dose Gray')
@@ -352,7 +352,7 @@ class tomodata:
         ## C Value in the objective function
         self.C = 1.0
         ## ry this number of observations
-        self.sampleevery = 4
+        self.sampleevery = 2
         self.coarse = self.sampleevery * 2
         ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80

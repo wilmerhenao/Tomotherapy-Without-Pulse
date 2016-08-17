@@ -30,11 +30,11 @@
       <file leaf-file-name="tomotherapyColumnGeneration.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7">
-              <caret line="273" column="36" selection-start-line="273" selection-start-column="36" selection-end-line="273" selection-end-column="36" />
+            <state relative-caret-position="349">
+              <caret line="258" column="103" selection-start-line="258" selection-start-column="103" selection-end-line="258" selection-end-column="103" />
               <folding>
                 <element signature="e#225#247#0" expanded="true" />
-                <element signature="e#12966#13068#0" expanded="false" />
+                <element signature="e#12960#13062#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -502,13 +502,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00061" summary="A small change to aid in the flow of the thought process">
-      <created>1468599685537</created>
-      <option name="number" value="00061" />
-      <option name="presentableId" value="LOCAL-00061" />
-      <option name="project" value="LOCAL" />
-      <updated>1468599685537</updated>
-    </task>
     <task id="LOCAL-00062" summary="Implemented semiquadratic objective functions">
       <created>1468608145125</created>
       <option name="number" value="00062" />
@@ -845,7 +838,14 @@
       <option name="project" value="LOCAL" />
       <updated>1471288362167</updated>
     </task>
-    <option name="localTasksCounter" value="110" />
+    <task id="LOCAL-00110" summary="added a refinement step, but it doesn't seem to ever get used">
+      <created>1471374872270</created>
+      <option name="number" value="00110" />
+      <option name="presentableId" value="LOCAL-00110" />
+      <option name="project" value="LOCAL" />
+      <updated>1471374872270</updated>
+    </task>
+    <option name="localTasksCounter" value="111" />
     <servers />
   </component>
   <component name="TodoView">
@@ -867,11 +867,11 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.08084164" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.082519" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15701559" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34075725" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17175975" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3908686" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44204545" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -892,7 +892,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Removed my own implementation of PWL because it adds a bunch of binary variables that slow the process down." />
     <MESSAGE value="Had to remove a few loadings of variables that don't make sense anymore&#10;" />
     <MESSAGE value="Corrected a spot on removezeroes where I was removing positions that were already being removed. This is a huge problem because the data SHOULD be cleaned before and I should work in SMALLVOXELSPACE ALWAYS" />
     <MESSAGE value="With the latest changes the program is now running" />
@@ -917,15 +916,16 @@
     <MESSAGE value="there are still problems with the restricted master problem" />
     <MESSAGE value="changed the role of mathcal, not running at this point" />
     <MESSAGE value="works perfect. Going to try new sizes" />
-    <option name="LAST_COMMIT_MESSAGE" value="works perfect. Going to try new sizes" />
+    <MESSAGE value="added a refinement step, but it doesn't seem to ever get used" />
+    <option name="LAST_COMMIT_MESSAGE" value="added a refinement step, but it doesn't seem to ever get used" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/tomotherapyColumnGeneration.py</url>
-          <line>265</line>
-          <option name="timeStamp" value="68" />
+          <line>213</line>
+          <option name="timeStamp" value="73" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -935,7 +935,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="70" />
+      <option name="time" value="75" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1254,11 +1254,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7">
-          <caret line="273" column="36" selection-start-line="273" selection-start-column="36" selection-end-line="273" selection-end-column="36" />
+        <state relative-caret-position="349">
+          <caret line="258" column="103" selection-start-line="258" selection-start-column="103" selection-end-line="258" selection-end-column="103" />
           <folding>
             <element signature="e#225#247#0" expanded="true" />
-            <element signature="e#12966#13068#0" expanded="false" />
+            <element signature="e#12960#13062#0" expanded="false" />
           </folding>
         </state>
       </provider>
