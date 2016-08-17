@@ -202,12 +202,6 @@ class tomotherapyNP(object):
             for j in range(self.data.N):
                 self.oneshelper[j + i * self.data.N, i] = 1.0
 
-    ## Find the locations where the D matrix will just never reach and don't even look at those beamlets
-    def turnOnOnlynecessarybeamlets(self):
-        for i in np.unique(self.data.bixels % self.data.N):
-            self.mathCal[i] = 1
-        self.originalMathCal = np.array([i for i in self.mathCal])
-
     def refinesolution(self, iterCG):
         gstar = -np.inf
         numrefinements = 1
@@ -231,6 +225,26 @@ class tomotherapyNP(object):
                 self.rmpres = self.solveRMC()
                 self.plotDVH('dvh-ColumnGeneration' + str(iterCG))
         print('leaving solution refinement')
+
+    ## Find the locations where the D matrix will just never reach and don't even look at those beamlets
+    def turnOnOnlynecessarybeamlets(self):
+        for i in np.unique(self.data.bixels % self.data.N):
+            self.mathCal[i] = 1
+            #self.binaryVariables[:, i ] = 1
+        # Save a copy of the original mathcal to be used in the refinement later
+        self.originalMathCal = np.array([i for i in self.mathCal])
+        # Fill with zeros wherever it encounters an OAR.
+        # for o in self.data.OARList:
+        #     oarposns = np.where(self.data.mask == o)[0]
+        #     oarvoxels = self.data.smallvoxels[oarposns]
+        #     # Now try and protect each voxel
+        #     for voxel in oarvoxels:
+        #         evilbeamlets = np.where(self.data.Ddense[70,:] > 0.0)[1]
+        #         for evilbeamlet in evilbeamlets:
+        #             j = evilbeamlet % self.data.N
+        #             i = int(np.floor(evilbeamlet / self.data.N))
+        #             self.binaryVariables[i, j] = 0
+
 
     def ColumnGenerationMain(self):
         # Create the ones helper matrix:
@@ -347,19 +361,19 @@ class tomodata:
     ## Initialization of the data
     def __init__(self):
         self.outputDirectory = "output/"
-        ## M value. Number of times per beamlet that the switch can be turned on or off
+        # M value. Number of times per beamlet that the switch can be turned on or off
         self.M = 180
-        ## C Value in the objective function
+        # C Value in the objective function
         self.C = 1.0
-        ## ry this number of observations
-        self.sampleevery = 2
+        # ry this number of observations
+        self.sampleevery = 20
         self.coarse = self.sampleevery * 2
-        ## N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
+        # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
         self.caseSide = 256
         self.voxelsBigSpace = self.caseSide ** 2
-        ## Number of control points (every 2 degrees)
+        # Number of control points (every 2 degrees)
         self.K = 178
         print('Read vectors...')
         self.readWeiguosCase(  )
