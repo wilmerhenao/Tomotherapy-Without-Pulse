@@ -39,7 +39,7 @@ class tomotherapyNP(object):
         self.data = datastructure
         print('Building column generation method')
         self.thresholds()
-        self.rmpres = self.ColumnGenerationMain()
+        self.rmpres = self.FMO()
         print('The problem has been completed')
 
     def thresholds(self):
@@ -245,7 +245,7 @@ class tomotherapyNP(object):
         #             i = int(np.floor(evilbeamlet / self.data.N))
         #             self.binaryVariables[i, j] = 0
 
-    def ColumnGenerationMain(self):
+    def FMO(self):
         # Create the ones helper matrix:
         self.onehelpCreator()
         # Step 1: Assign \mathcal{C} the empty set. Remember to change to 1 everytime I add a path
@@ -380,6 +380,22 @@ class tomodata:
         # Create a space in smallvoxel coordinates
         self.smallvoxels = self.BigToSmallCreator()
         print('Build sparse matrix.')
+        print("Now, let's only get 51 control points:")
+        # New number of control points.
+        newCPsNr = 51
+        smallCP = self.getlistof51(newCPsNr)
+        # Filter out those positions in the D matrix that do not correspond to the 21 points.
+        availbixels = []
+        for i in smallCP:
+            print(i, type(i))
+            availbixels += [i * self.N + j for j in range(self.N)]
+
+        print(len(self.bixels), len(self.smallvoxels), len(self.Dijs))
+        newpos = np.where(np.in1d(self.bixels, availbixels))[0]
+        self.bixels = self.bixels[newpos]
+        self.smallvoxels = self.smallvoxels[newpos]
+        self.Dijs = self.Dijs[newpos]
+        print(len(self.bixels), len(self.smallvoxels), len(self.Dijs))
         # The next part uses the case corresponding to either Wilmer or Weiguo's case
         self.totalbeamlets = self.K * self.N
         self.totalsmallvoxels = max(self.smallvoxels) + 1
@@ -388,6 +404,14 @@ class tomodata:
         self.D = sps.csr_matrix((self.Dijs, (self.smallvoxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
         self.Ddense = self.D.todense()
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions
+
+    ## Get 51 control Points
+    def getlistof51(self, m = 51):
+        epts = np.linspace(0, self.K, m + 1, endpoint=True)
+        halfsteps = (epts[1:] - epts[:-1]) / 2
+        midpoints = epts[:-1] + halfsteps
+        sampleCP = np.around(midpoints, decimals=0)
+        return(sampleCP)
 
     ## Create a map from big to small voxel space, the order of elements is preserved but there is a compression to only
     # one element in between.
