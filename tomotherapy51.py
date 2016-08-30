@@ -62,11 +62,25 @@ class tomotherapyNP(object):
                 print('there is an element in the voxels that is also mask 0')
             self.quadHelperThresh[i] = T
 
+    def FiniteDifferenceBeamletGradient(self, epsilon):
+        self.calcDose()
+        dydx = []
+        basevalue = self.objectiveValue
+        for i in range(self.data.K * self.data.N):
+            self.currentIntensities[i] += epsilon
+            self.calcDose() # calculate dose with new intensities
+            self.calculateVoxelGradient()
+            dydx = (basevalue - self.objectiveValue) / epsilon
+            # Return to the previous state
+            self.currentIntensities[i] -= epsilon
+
+        differences = dydx - self.beamletgradient
+        print(differences)
+
     def calcDose(self):
         self.currentDose = np.asarray(self.data.D.dot(self.currentIntensities)) # conversion to array necessary. O/W algebra wrong
 
-    ## This function regularly enters the optimization engine to calculate objective function and gradients
-    def calcGradientandObjValue(self):
+    def calculateVoxelGradient(self):
         oDoseObj = self.currentDose - self.quadHelperThresh
         oDoseObjCl = (oDoseObj > 0) * oDoseObj
         oDoseObj = oDoseObjCl * oDoseObjCl * self.quadHelperOver
@@ -74,33 +88,33 @@ class tomotherapyNP(object):
         uDoseObjCl = (uDoseObj > 0) * uDoseObj
         uDoseObj = uDoseObjCl * uDoseObjCl * self.quadHelperUnder
         self.objectiveValue = np.sum(oDoseObj + uDoseObj)
-        oDoseObjGl = 2 * oDoseObjCl * self.quadHelperOver
-        uDoseObjGl = 2 * uDoseObjCl * self.quadHelperUnder
-        # Notice that I use two types of gradients
-        # One for voxels and one for apertures. The apertures one will be
-        # sent to the optimizer
-        self.voxelgradient = 2 * (oDoseObjGl - uDoseObjGl) # With respect to doses
-        self.beamletgradient = np.asmatrix(self.voxelgradient * self.data.Ddense).transpose() # If not, then fortran won't understand
-        print('linalg.norm:' , np.linalg.norm(self.beamletgradient) , 'len' , len(self.beamletgradient))
+        self.oDoseObjGl = 2 * oDoseObjCl * self.quadHelperOver
+        self.uDoseObjGl = 2 * uDoseObjCl * self.quadHelperUnder
+        self.voxelgradient = np.asmatrix(2 * (self.oDoseObjGl - self.uDoseObjGl)).transpose()  # With respect to doses
+
+    ## This function regularly enters the optimization engine to calculate objective function and gradients
+    def calcGradientandObjValue(self):
+        self.calculateVoxelGradient()
+        self.beamletgradient = np.asmatrix(self.data.D.transpose().dot(self.voxelgradient)).transpose() # If not, then fortran won't understand
+        self.FiniteDifferenceBeamletGradient(1e-3)
         assert( len(self.voxelgradient) == self.data.totalsmallvoxels)
-        assert(len(self.beamletgradient) == self.data.K * self.data.N)
+        assert(self.beamletgradient.shape == (1, self.data.K * self.data.N))
 
     def calcObjGrad(self, x, user_data=None):
         self.yk = x
         self.calcDose()
         self.calcGradientandObjValue()
-        return (self.objectiveValue)
-#        return(self.objectiveValue, np.array(self.beamletgradient) )
+        #return (self.objectiveValue)
+        return(self.objectiveValue, np.array(self.beamletgradient) )
 
     def FMO(self):
         self.currentIntensities = np.zeros(self.data.K * self.data.N)
-        self.calcObjGrad(self.currentIntensities)
         # Create the boundaries making sure that the only free variables are the ones with perfectly defined apertures.
         boundschoice = []
         for thisindex in range(0, self.data.K * self.data.N):
             boundschoice.append((0, self.data.maxIntensity))
-        res = minimize(self.calcObjGrad, self.currentIntensities, method='L-BFGS-B', jac=False, bounds=boundschoice,
-                       options={'ftol': 1e-4, 'disp': 5, 'maxiter': 200})
+        res = minimize(self.calcObjGrad, self.currentIntensities, method='L-BFGS-B', jac=True, bounds=boundschoice,
+                       options={'ftol': 1e-3, 'disp': 5, 'maxiter': 200})
         return(res)
 
     # Plot the dose volume histogram
