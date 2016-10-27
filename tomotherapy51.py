@@ -275,10 +275,10 @@ class tomodata:
 
     ## Read Weiguo's Case
     def readWeiguosCase(self):
-        self.bixels = getvector('data\\Bixels_out.bin', np.int32)
-        self.voxels = getvector('data\\Voxels_out.bin', np.int32)
-        self.Dijs = getvector('data\\Dijs_out.bin', np.float32)
-        self.mask = getvector('data\\optmask.img', np.int32)
+        self.bixels = getvector('data/Bixels_out.bin', np.int32)
+        self.voxels = getvector('data/Voxels_out.bin', np.int32)
+        self.Dijs = getvector('data/Dijs_out.bin', np.float32)
+        self.mask = getvector('data/optmask.img', np.int32)
 
         # First keep a copy of the high definition
         self.bixelsHD = self.bixels

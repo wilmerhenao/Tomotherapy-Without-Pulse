@@ -365,7 +365,7 @@ class tomodata:
         # C Value in the objective function
         self.C = 1.0
         # ry this number of observations
-        self.sampleevery = 2
+        self.sampleevery = 20
         self.coarse = self.sampleevery * 2
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80

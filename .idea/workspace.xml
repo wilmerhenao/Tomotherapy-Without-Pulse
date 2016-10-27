@@ -5,8 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/CaseCreation.iml" afterPath="$PROJECT_DIR$/.idea/CaseCreation.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapy51.py" afterPath="$PROJECT_DIR$/tomotherapy51.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapyColumnGeneration.py" afterPath="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="CaseCreation.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -21,18 +26,45 @@
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
     <favorites_list name="CaseCreation" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="tomotherapy51.py" pinned="false" current-in-tab="true">
+    <leaf>
+      <file leaf-file-name="tomotherapy51.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tomotherapy51.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="37">
-              <caret line="65" column="22" selection-start-line="65" selection-start-column="22" selection-end-line="65" selection-end-column="22" />
+            <state vertical-scroll-proportion="-6.0833335" vertical-offset="1700" max-vertical-offset="5738">
+              <caret line="110" column="18" selection-start-line="110" selection-start-column="18" selection-end-line="110" selection-end-column="18" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tomotherapyColumnGeneration.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-0.5376147" vertical-offset="7266" max-vertical-offset="8873">
+              <caret line="367" column="29" selection-start-line="367" selection-start-column="29" selection-end-line="367" selection-end-column="29" />
+              <folding>
+                <element signature="e#225#247#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="greedyVMATsampling.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../../VMAT/VMATwPenCode/greedyVMATsampling.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-5.0277777" vertical-offset="17108" max-vertical-offset="20468">
+              <caret line="1017" column="79" selection-start-line="1017" selection-start-column="79" selection-end-line="1017" selection-end-column="79" />
+              <folding>
+                <element signature="e#226#241#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -72,17 +104,17 @@
         <option value="C:/Anaconda3/Lib/site-packages/scipy/optimize/lbfgsb.py" />
         <option value="$PROJECT_DIR$/SanityChecker.py" />
         <option value="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" />
-        <option value="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
         <option value="$PROJECT_DIR$/basura2.py" />
+        <option value="$PROJECT_DIR$/../../VMAT/VMATwPenCode/greedyVMATsampling.py" />
         <option value="$PROJECT_DIR$/tomotherapy51.py" />
+        <option value="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1" />
-    <option name="y" value="1" />
-    <option name="width" value="1918" />
-    <option name="height" value="1038" />
+    <option name="y" value="24" />
+    <option name="width" value="1920" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -105,8 +137,6 @@
       <autoscrollToSource />
       <autoscrollFromSource />
       <sortByType />
-      <manualOrder />
-      <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
       <pane id="ProjectPane">
@@ -117,77 +147,10 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tomotherapy-Without-Pulse" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tomotherapy-Without-Pulse" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tomotherapy-Without-Pulse" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tomotherapy-Without-Pulse" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tests" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tomotherapy-Without-Pulse" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tomotherapy-Without-Pulse" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sample" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tomotherapy-Without-Pulse" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tomotherapy-Without-Pulse" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="output" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tomotherapy-Without-Pulse" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tomotherapy-Without-Pulse" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="data" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
       <pane id="Scope">
-        <subPane subId="Problems" />
-        <subPane subId="Changed Files">
+        <subPane subId="Default">
           <PATH>
             <PATH_ELEMENT USER_OBJECT="Root">
               <option name="myItemId" value="" />
@@ -195,6 +158,7 @@
             </PATH_ELEMENT>
           </PATH>
         </subPane>
+        <subPane subId="Problems" />
         <subPane subId="Project Files">
           <PATH>
             <PATH_ELEMENT USER_OBJECT="Root">
@@ -207,7 +171,7 @@
             </PATH_ELEMENT>
           </PATH>
         </subPane>
-        <subPane subId="Default">
+        <subPane subId="Changed Files">
           <PATH>
             <PATH_ELEMENT USER_OBJECT="Root">
               <option name="myItemId" value="" />
@@ -224,7 +188,17 @@
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="editor.preferences.appearance" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
-    <property name="last_opened_file_path" value="C:/gurobi651/win64/examples/python/diet.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
+    <property name="recentsLimit" value="5" />
+    <property name="options.lastSelected" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="FullScreen" value="false" />
+  </component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings />
+    </option>
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -234,23 +208,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.tomotherapy51">
-    <configuration default="false" name="tomotherapynpNoQuadratic" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="CaseCreation" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tomotherapynpNoQuadratic.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
     <configuration default="false" name="tomotherapyColumnGeneration" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -266,6 +223,10 @@
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
+      <RunnerSettings RunnerId="PyDebugRunner" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PyDebugRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
     <configuration default="false" name="SanityChecker" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -317,133 +278,27 @@
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tomotherapy51.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+    <configuration default="false" name="greedyVMATsampling" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../../VMAT/VMATwPenCode" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="CaseCreation" />
-      <option name="SCRIPT_NAME" value="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../../VMAT/VMATwPenCode/greedyVMATsampling.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="Tox" factoryName="Tox">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="CaseCreation" />
-      <method />
-    </configuration>
-    <configuration default="true" type="docs" factoryName="Sphinx task">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="CaseCreation" />
-      <option name="docutils_input_file" value="" />
-      <option name="docutils_output_file" value="" />
-      <option name="docutils_params" value="" />
-      <option name="docutils_task" value="" />
-      <option name="docutils_open_in_browser" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Attests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="CaseCreation" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Doctests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="CaseCreation" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Nosetests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="CaseCreation" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Unittests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="CaseCreation" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PUREUNITTEST" value="true" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="py.test">
@@ -470,26 +325,139 @@
       <option name="USE_KEYWORD" value="false" />
       <method />
     </configuration>
+    <configuration default="true" type="tests" factoryName="Nosetests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="CaseCreation" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="CaseCreation" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="docs" factoryName="Sphinx task">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="CaseCreation" />
+      <option name="docutils_input_file" value="" />
+      <option name="docutils_output_file" value="" />
+      <option name="docutils_params" value="" />
+      <option name="docutils_task" value="" />
+      <option name="docutils_open_in_browser" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="CaseCreation" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="CaseCreation" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Attests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="CaseCreation" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.tomotherapynpNoQuadratic" />
-      <item index="1" class="java.lang.String" itemvalue="Python.tomotherapyColumnGeneration" />
-      <item index="2" class="java.lang.String" itemvalue="Python.SanityChecker" />
-      <item index="3" class="java.lang.String" itemvalue="Python.basura2" />
-      <item index="4" class="java.lang.String" itemvalue="Python.tomotherapy51" />
+      <item index="0" class="java.lang.String" itemvalue="Python.tomotherapyColumnGeneration" />
+      <item index="1" class="java.lang.String" itemvalue="Python.SanityChecker" />
+      <item index="2" class="java.lang.String" itemvalue="Python.basura2" />
+      <item index="3" class="java.lang.String" itemvalue="Python.tomotherapy51" />
+      <item index="4" class="java.lang.String" itemvalue="Python.greedyVMATsampling" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Python.tomotherapy51" />
-        <item index="1" class="java.lang.String" itemvalue="Python.basura2" />
+        <item index="1" class="java.lang.String" itemvalue="Python.greedyVMATsampling" />
         <item index="2" class="java.lang.String" itemvalue="Python.tomotherapyColumnGeneration" />
-        <item index="3" class="java.lang.String" itemvalue="Python.SanityChecker" />
-        <item index="4" class="java.lang.String" itemvalue="Python.tomotherapynpNoQuadratic" />
+        <item index="3" class="java.lang.String" itemvalue="Python.basura2" />
+        <item index="4" class="java.lang.String" itemvalue="Python.SanityChecker" />
       </list>
     </recent_temporary>
   </component>
-  <component name="ShelveChangesManager" show_recycled="false">
-    <option name="remove_strategy" value="false" />
-  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -498,349 +466,299 @@
       <changelist id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="" />
       <created>1465575876920</created>
       <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
     <task id="LOCAL-00067" summary="added a callback to stop execution early. Also a few tuning parameters">
       <created>1469044171225</created>
       <option name="number" value="00067" />
-      <option name="presentableId" value="LOCAL-00067" />
       <option name="project" value="LOCAL" />
       <updated>1469044171229</updated>
     </task>
     <task id="LOCAL-00068" summary="Corrected a bug. This thing was maximizing my PWL instead of minimizing. The DVH was looking very weird. Now it makes sense">
       <created>1469051067677</created>
       <option name="number" value="00068" />
-      <option name="presentableId" value="LOCAL-00068" />
       <option name="project" value="LOCAL" />
       <updated>1469051067677</updated>
     </task>
     <task id="LOCAL-00069" summary="Added a new parameter to help in speedup. Norm">
       <created>1469113757047</created>
       <option name="number" value="00069" />
-      <option name="presentableId" value="LOCAL-00069" />
       <option name="project" value="LOCAL" />
       <updated>1469113757047</updated>
     </task>
     <task id="LOCAL-00070" summary="Assigned new formats for the names of variables.">
       <created>1469118966447</created>
       <option name="number" value="00070" />
-      <option name="presentableId" value="LOCAL-00070" />
       <option name="project" value="LOCAL" />
       <updated>1469118966447</updated>
     </task>
     <task id="LOCAL-00071" summary="Changed the starting point of every coarsification">
       <created>1469131595491</created>
       <option name="number" value="00071" />
-      <option name="presentableId" value="LOCAL-00071" />
       <option name="project" value="LOCAL" />
       <updated>1469131595491</updated>
     </task>
     <task id="LOCAL-00072" summary="Assigns an HD vector that serves as a map to find previous solutions and map to the new ones.">
       <created>1469137791098</created>
       <option name="number" value="00072" />
-      <option name="presentableId" value="LOCAL-00072" />
       <option name="project" value="LOCAL" />
       <updated>1469137791098</updated>
     </task>
     <task id="LOCAL-00073" summary="Implemented warm start and Branchpriority. Next I will implement hints for the variables that are not initialized">
       <created>1469206101971</created>
       <option name="number" value="00073" />
-      <option name="presentableId" value="LOCAL-00073" />
       <option name="project" value="LOCAL" />
       <updated>1469206101971</updated>
     </task>
     <task id="LOCAL-00074" summary="Assigned existing values to fakevalue variable">
       <created>1469216515130</created>
       <option name="number" value="00074" />
-      <option name="presentableId" value="LOCAL-00074" />
       <option name="project" value="LOCAL" />
       <updated>1469216515132</updated>
     </task>
     <task id="LOCAL-00075" summary="set almost everything up, masking values introduced into fakevalues matrix">
       <created>1469219993708</created>
       <option name="number" value="00075" />
-      <option name="presentableId" value="LOCAL-00075" />
       <option name="project" value="LOCAL" />
       <updated>1469219993708</updated>
     </task>
     <task id="LOCAL-00076" summary="fakevalues correctly assigned">
       <created>1469460999269</created>
       <option name="number" value="00076" />
-      <option name="presentableId" value="LOCAL-00076" />
       <option name="project" value="LOCAL" />
       <updated>1469460999269</updated>
     </task>
     <task id="LOCAL-00077" summary="implemented the hints that are supplied to gurobi. Does not seem like it is a huge speedup. I may be slowing things down.">
       <created>1469463725626</created>
       <option name="number" value="00077" />
-      <option name="presentableId" value="LOCAL-00077" />
       <option name="project" value="LOCAL" />
       <updated>1469463725626</updated>
     </task>
     <task id="LOCAL-00078" summary="Changed the objective function to something that I think makes more sense now.">
       <created>1469472627816</created>
       <option name="number" value="00078" />
-      <option name="presentableId" value="LOCAL-00078" />
       <option name="project" value="LOCAL" />
       <updated>1469472627816</updated>
     </task>
     <task id="LOCAL-00079" summary="Added axis labels for the sinogram">
       <created>1469545865695</created>
       <option name="number" value="00079" />
-      <option name="presentableId" value="LOCAL-00079" />
       <option name="project" value="LOCAL" />
       <updated>1469545865695</updated>
     </task>
     <task id="LOCAL-00080" summary="looking for a bug in posold">
       <created>1469645567385</created>
       <option name="number" value="00080" />
-      <option name="presentableId" value="LOCAL-00080" />
       <option name="project" value="LOCAL" />
       <updated>1469645567385</updated>
     </task>
     <task id="LOCAL-00081" summary="First attempt at correcting the bug. Do not work with boxes marked zero at all.">
       <created>1469650010376</created>
       <option name="number" value="00081" />
-      <option name="presentableId" value="LOCAL-00081" />
       <option name="project" value="LOCAL" />
       <updated>1469650010376</updated>
     </task>
     <task id="LOCAL-00082" summary="machine specifications document added. Include specifics about a typical tomotherapy machine">
       <created>1469652260034</created>
       <option name="number" value="00082" />
-      <option name="presentableId" value="LOCAL-00082" />
       <option name="project" value="LOCAL" />
       <updated>1469652260034</updated>
     </task>
     <task id="LOCAL-00083" summary="removed redundant function that wasn't being used">
       <created>1469655009398</created>
       <option name="number" value="00083" />
-      <option name="presentableId" value="LOCAL-00083" />
       <option name="project" value="LOCAL" />
       <updated>1469655009398</updated>
     </task>
     <task id="LOCAL-00084" summary="changes related to size of the problem and accounting of zeros">
       <created>1469655744721</created>
       <option name="number" value="00084" />
-      <option name="presentableId" value="LOCAL-00084" />
       <option name="project" value="LOCAL" />
       <updated>1469655744721</updated>
     </task>
     <task id="LOCAL-00085" summary="Removed my own implementation of PWL because it adds a bunch of binary variables that slow the process down.">
       <created>1469656294062</created>
       <option name="number" value="00085" />
-      <option name="presentableId" value="LOCAL-00085" />
       <option name="project" value="LOCAL" />
       <updated>1469656294062</updated>
     </task>
     <task id="LOCAL-00086" summary="Had to remove a few loadings of variables that don't make sense anymore&#10;">
       <created>1469660152227</created>
       <option name="number" value="00086" />
-      <option name="presentableId" value="LOCAL-00086" />
       <option name="project" value="LOCAL" />
       <updated>1469660152227</updated>
     </task>
     <task id="LOCAL-00087" summary="Corrected a spot on removezeroes where I was removing positions that were already being removed. This is a huge problem because the data SHOULD be cleaned before and I should work in SMALLVOXELSPACE ALWAYS">
       <created>1469741582518</created>
       <option name="number" value="00087" />
-      <option name="presentableId" value="LOCAL-00087" />
       <option name="project" value="LOCAL" />
       <updated>1469741582518</updated>
     </task>
     <task id="LOCAL-00088" summary="With the latest changes the program is now running">
       <created>1469803769263</created>
       <option name="number" value="00088" />
-      <option name="presentableId" value="LOCAL-00088" />
       <option name="project" value="LOCAL" />
       <updated>1469803769263</updated>
     </task>
     <task id="LOCAL-00089" summary="Added the column generation project as a unique independent file">
       <created>1470177631050</created>
       <option name="number" value="00089" />
-      <option name="presentableId" value="LOCAL-00089" />
       <option name="project" value="LOCAL" />
       <updated>1470177631051</updated>
     </task>
     <task id="LOCAL-00090" summary="Cleanup for columngeneration file">
       <created>1470257845644</created>
       <option name="number" value="00090" />
-      <option name="presentableId" value="LOCAL-00090" />
       <option name="project" value="LOCAL" />
       <updated>1470257845645</updated>
     </task>
     <task id="LOCAL-00091" summary="Inserted a modelling of the dose, calculation of the objective function and derivatives">
       <created>1470332615885</created>
       <option name="number" value="00091" />
-      <option name="presentableId" value="LOCAL-00091" />
       <option name="project" value="LOCAL" />
       <updated>1470332615885</updated>
     </task>
     <task id="LOCAL-00092" summary="added objgrad function">
       <created>1470337113004</created>
       <option name="number" value="00092" />
-      <option name="presentableId" value="LOCAL-00092" />
       <option name="project" value="LOCAL" />
       <updated>1470337113004</updated>
     </task>
     <task id="LOCAL-00093" summary="inserted a mock column generation function">
       <created>1470339319942</created>
       <option name="number" value="00093" />
-      <option name="presentableId" value="LOCAL-00093" />
       <option name="project" value="LOCAL" />
       <updated>1470339319942</updated>
     </task>
     <task id="LOCAL-00094" summary="Added RMP and now I'm finishing the PP">
       <created>1470434636445</created>
       <option name="number" value="00094" />
-      <option name="presentableId" value="LOCAL-00094" />
       <option name="project" value="LOCAL" />
       <updated>1470434636445</updated>
     </task>
     <task id="LOCAL-00095" summary="finished pricing problem">
       <created>1470435786359</created>
       <option name="number" value="00095" />
-      <option name="presentableId" value="LOCAL-00095" />
       <option name="project" value="LOCAL" />
       <updated>1470435786359</updated>
     </task>
     <task id="LOCAL-00096" summary="all done without debugging">
       <created>1470438522899</created>
       <option name="number" value="00096" />
-      <option name="presentableId" value="LOCAL-00096" />
       <option name="project" value="LOCAL" />
       <updated>1470438522900</updated>
     </task>
     <task id="LOCAL-00097" summary="corrected a typo in zeros">
       <created>1470668309918</created>
       <option name="number" value="00097" />
-      <option name="presentableId" value="LOCAL-00097" />
       <option name="project" value="LOCAL" />
       <updated>1470668309918</updated>
     </task>
     <task id="LOCAL-00098" summary="Changed a few bugs. Latest the numpy multiply issue">
       <created>1470685006357</created>
       <option name="number" value="00098" />
-      <option name="presentableId" value="LOCAL-00098" />
       <option name="project" value="LOCAL" />
       <updated>1470685006357</updated>
     </task>
     <task id="LOCAL-00099" summary="Looks like everything runs minus the plots.">
       <created>1470693020379</created>
       <option name="number" value="00099" />
-      <option name="presentableId" value="LOCAL-00099" />
       <option name="project" value="LOCAL" />
       <updated>1470693020379</updated>
     </task>
     <task id="LOCAL-00100" summary="Now everything runs and the answers converge to something. Still failing in the plots.">
       <created>1470759732446</created>
       <option name="number" value="00100" />
-      <option name="presentableId" value="LOCAL-00100" />
       <option name="project" value="LOCAL" />
       <updated>1470759732446</updated>
     </task>
     <task id="LOCAL-00101" summary="Corrected the matrices that go into the dose and gradient calculation. Changed from lists to matrices">
       <created>1470847077074</created>
       <option name="number" value="00101" />
-      <option name="presentableId" value="LOCAL-00101" />
       <option name="project" value="LOCAL" />
       <updated>1470847077074</updated>
     </task>
     <task id="LOCAL-00102" summary="Running version. I'm trying to parallelize the pricing problem">
       <created>1470929889439</created>
       <option name="number" value="00102" />
-      <option name="presentableId" value="LOCAL-00102" />
       <option name="project" value="LOCAL" />
       <updated>1470929889441</updated>
     </task>
     <task id="LOCAL-00103" summary="Running version with a few modifications">
       <created>1470939071373</created>
       <option name="number" value="00103" />
-      <option name="presentableId" value="LOCAL-00103" />
       <option name="project" value="LOCAL" />
       <updated>1470939071373</updated>
     </task>
     <task id="LOCAL-00104" summary="Separated some methods away from the initialization because it makes more sense this way.">
       <created>1470939300757</created>
       <option name="number" value="00104" />
-      <option name="presentableId" value="LOCAL-00104" />
       <option name="project" value="LOCAL" />
       <updated>1470939300757</updated>
     </task>
     <task id="LOCAL-00105" summary="Looks like there is a bug at this point">
       <created>1470950642359</created>
       <option name="number" value="00105" />
-      <option name="presentableId" value="LOCAL-00105" />
       <option name="project" value="LOCAL" />
       <updated>1470950642359</updated>
     </task>
     <task id="LOCAL-00106" summary="changed everything to matrices">
       <created>1471016221618</created>
       <option name="number" value="00106" />
-      <option name="presentableId" value="LOCAL-00106" />
       <option name="project" value="LOCAL" />
       <updated>1471016221618</updated>
     </task>
     <task id="LOCAL-00107" summary="there are still problems with the restricted master problem">
       <created>1471033340558</created>
       <option name="number" value="00107" />
-      <option name="presentableId" value="LOCAL-00107" />
       <option name="project" value="LOCAL" />
       <updated>1471033340558</updated>
     </task>
     <task id="LOCAL-00108" summary="changed the role of mathcal, not running at this point">
       <created>1471277596323</created>
       <option name="number" value="00108" />
-      <option name="presentableId" value="LOCAL-00108" />
       <option name="project" value="LOCAL" />
       <updated>1471277596323</updated>
     </task>
     <task id="LOCAL-00109" summary="works perfect. Going to try new sizes">
       <created>1471288362166</created>
       <option name="number" value="00109" />
-      <option name="presentableId" value="LOCAL-00109" />
       <option name="project" value="LOCAL" />
       <updated>1471288362167</updated>
     </task>
     <task id="LOCAL-00110" summary="added a refinement step, but it doesn't seem to ever get used">
       <created>1471374872270</created>
       <option name="number" value="00110" />
-      <option name="presentableId" value="LOCAL-00110" />
       <option name="project" value="LOCAL" />
       <updated>1471374872270</updated>
     </task>
     <task id="LOCAL-00111" summary="refinement already working">
       <created>1471450089595</created>
       <option name="number" value="00111" />
-      <option name="presentableId" value="LOCAL-00111" />
       <option name="project" value="LOCAL" />
       <updated>1471450089595</updated>
     </task>
     <task id="LOCAL-00112" summary="tried a refirenement done preallocation but it doesn't really fly. It's commented out within function turnOnOnly... in case I wanna try it out later">
       <created>1471458498448</created>
       <option name="number" value="00112" />
-      <option name="presentableId" value="LOCAL-00112" />
       <option name="project" value="LOCAL" />
       <updated>1471458498449</updated>
     </task>
     <task id="LOCAL-00113" summary="Added a new file to simulate how things would work on a coarse grid">
       <created>1471537955776</created>
       <option name="number" value="00113" />
-      <option name="presentableId" value="LOCAL-00113" />
       <option name="project" value="LOCAL" />
       <updated>1471537955776</updated>
     </task>
     <task id="LOCAL-00114" summary="Changed the data to only 51 control points.">
       <created>1471988549028</created>
       <option name="number" value="00114" />
-      <option name="presentableId" value="LOCAL-00114" />
       <option name="project" value="LOCAL" />
       <updated>1471988549028</updated>
     </task>
     <task id="LOCAL-00115" summary="Changed the data to only 51 control points. Does not converge">
       <created>1472155805343</created>
       <option name="number" value="00115" />
-      <option name="presentableId" value="LOCAL-00115" />
       <option name="project" value="LOCAL" />
       <updated>1472155805344</updated>
     </task>
@@ -857,45 +775,47 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1" y="1" width="1918" height="1038" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="24" width="1920" height="1056" extended-state="6" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.110106386" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.082519" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39545456" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17175975" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2590909" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.08084164" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32975295" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32899022" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17175975" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.099103846" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25886145" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26530612" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.082519" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.08084164" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.082519" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3070078" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16491044" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.08084164" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17175975" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33259177" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32899022" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.08084164" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33259177" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.082519" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17175975" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16491044" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3070078" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -910,6 +830,9 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="myTodoPanelSettings">
+      <TodoPanelSettings />
+    </option>
     <MESSAGE value="Inserted a modelling of the dose, calculation of the objective function and derivatives" />
     <MESSAGE value="added objgrad function" />
     <MESSAGE value="inserted a mock column generation function" />
@@ -968,234 +891,78 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://C:/gurobi651/win64/examples/python/piecewise.py">
+    <entry file="file://$PROJECT_DIR$/tomotherapy51.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="439">
-          <caret line="54" column="12" selection-start-line="54" selection-start-column="12" selection-end-line="54" selection-end-column="12" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1005" max-vertical-offset="4530">
+          <caret line="76" column="16" selection-start-line="76" selection-start-column="16" selection-end-line="76" selection-end-column="16" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gurobi.log">
+    <entry file="file://$PROJECT_DIR$/../../VMAT/VMATwPenCode/greedyVMATsampling.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-274036">
-          <caret line="8946" column="0" selection-start-line="8946" selection-start-column="0" selection-end-line="8946" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/gurobi651/win64/examples/python/callback.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="69" column="54" selection-start-line="69" selection-start-column="54" selection-end-line="69" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modeltuning2.prm">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="17805">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#226#241#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modeltuning3.prm">
+    <entry file="file://$PROJECT_DIR$/tomotherapy51.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1005" max-vertical-offset="4530">
+          <caret line="76" column="16" selection-start-line="76" selection-start-column="16" selection-end-line="76" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../VMAT/VMATwPenCode/greedyVMATsampling.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="17805">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#226#241#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modeltuning4.prm">
+    <entry file="file://$PROJECT_DIR$/tomotherapy51.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
+        <state vertical-scroll-proportion="0.0" vertical-offset="840" max-vertical-offset="4530">
+          <caret line="65" column="22" selection-start-line="65" selection-start-column="22" selection-end-line="65" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="7005">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#225#247#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modeltuning1.prm">
+    <entry file="file://$PROJECT_DIR$/tomotherapy51.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4530">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modeltuning2.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="30" column="74" selection-start-line="30" selection-start-column="74" selection-end-line="30" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modeltuning3.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modeltuning4.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1190">
-          <caret line="70" column="74" selection-start-line="70" selection-start-column="74" selection-end-line="70" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modeltuning1.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modeltest.mps">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2078">
-          <caret line="146415" column="47" selection-start-line="146415" selection-start-column="47" selection-end-line="146415" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/solutionStep-20.hnt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/solution2.sol">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="501">
-          <caret line="42947" column="0" selection-start-line="42947" selection-start-column="0" selection-end-line="42947" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/solutionStep-32.sol">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="42967" column="0" selection-start-line="42967" selection-start-column="0" selection-end-line="42967" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basura.py" />
-    <entry file="file://$PROJECT_DIR$/solutionStep-4.sol" />
-    <entry file="file://$PROJECT_DIR$/output/dvhcheck.png" />
-    <entry file="file://C:/Anaconda3/Lib/site-packages/scipy/optimize/lbfgsb.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="316" column="12" selection-start-line="316" selection-start-column="12" selection-end-line="316" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Anaconda3/Lib/site-packages/scipy/sparse/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="960">
-          <caret line="354" column="0" selection-start-line="354" selection-start-column="0" selection-end-line="354" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wilmertest.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="15" column="17" selection-start-line="15" selection-start-column="17" selection-end-line="15" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/gurobi651/win64/examples/python/diet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="101" column="36" selection-start-line="101" selection-start-column="36" selection-end-line="101" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram 10 event limit.png" />
-    <entry file="file://$PROJECT_DIR$/output/sinogram-4to-2-percentgap.png" />
-    <entry file="file://$PROJECT_DIR$/output/sinogram27.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram26.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram25.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/beamletdistribution.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/SanityChecker.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
           <caret line="25" column="22" selection-start-line="25" selection-start-column="22" selection-end-line="25" selection-end-column="22" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram5.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram9.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram11.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram12.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram15.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram6.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram4.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram8.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram13.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram16.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/dvh-ColumnGeneration.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
           <caret line="510" column="32" selection-start-line="510" selection-start-column="32" selection-end-line="511" selection-end-column="59" />
           <folding>
             <element signature="e#68#141#0" expanded="false" />
@@ -1213,56 +980,46 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram1.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram2.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogram3.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basura2.py" />
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
           <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/anaconda3/lib/python3.5/site-packages/numpy/core/numeric.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5714286" vertical-offset="42765" max-vertical-offset="43395">
+          <caret line="2886" column="6" selection-start-line="2886" selection-start-column="6" selection-end-line="2886" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../VMAT/VMATwPenCode/greedyVMATsampling.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.0277777" vertical-offset="17108" max-vertical-offset="20468">
+          <caret line="1017" column="79" selection-start-line="1017" selection-start-column="79" selection-end-line="1017" selection-end-column="79" />
+          <folding>
+            <element signature="e#226#241#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tomotherapy51.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.0833335" vertical-offset="1700" max-vertical-offset="5738">
+          <caret line="110" column="18" selection-start-line="110" selection-start-column="18" selection-end-line="110" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="64" column="23" selection-start-line="64" selection-start-column="23" selection-end-line="64" selection-end-column="23" />
+        <state vertical-scroll-proportion="-0.5376147" vertical-offset="7266" max-vertical-offset="8873">
+          <caret line="367" column="29" selection-start-line="367" selection-start-column="29" selection-end-line="367" selection-end-column="29" />
           <folding>
             <element signature="e#225#247#0" expanded="true" />
-            <element signature="e#13706#13808#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/sinogramFMO.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/dvh-FMO.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tomotherapy51.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="37">
-          <caret line="65" column="22" selection-start-line="65" selection-start-column="22" selection-end-line="65" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
