@@ -111,6 +111,7 @@ class tomotherapyNP(object):
     def addVariables(self, b):
         self.binaries = [None] * self.data.K
         self.muVars = [None] * (self.data.K - 1)
+        self.zjs = [None] * (len(self.zbar)) ## Wilmer: Check that this is length of zbar. 14240?
         for i in range(0, self.data.K):
             self.binaries[i] = self.mod.addVar(vtype=grb.GRB.BINARY,
                                                name="binaryVoxel_{" + str(i) + ", " + str(b) + "}",
@@ -121,6 +122,10 @@ class tomotherapyNP(object):
                 self.muVars[i] = self.mod.addVar(vtype=grb.GRB.BINARY,
                                                  name="mu_{" + str(i) + "," + str(b) + "}",
                                                  column=None)
+        for i in range(0, len(self.zbar)):
+            self.zjs[i] = self.mod.addVar(vtype=grb.GRB.CONTINUOUS,
+                                          name="dose_{" + str(i) + "}",
+                                          column=None, lb=0.0)
         self.mod.update()
 
     def addConstraints(self, b):
@@ -142,6 +147,15 @@ class tomotherapyNP(object):
                 self.muVars[k], grb.GRB.GREATER_EQUAL, -(self.binaries[k + 1] - self.binaries[k]),
                 name="rmabs2_{" + str(k) + "," + str(b) + "}")
         lastconstr = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL, self.data.M, name="summaxrest_{" + str(k) + "}")
+        # Constraints related to dose.
+        for j in range(0, len(self.zjs)):
+            expr = grb.LinExpr()
+            expr += self.zjs[j] - self.zbar[j]
+            for k in range(0, (self.data.K - 1)):
+                expr += self.data.Ddense[:,k] * self.yk  * self.binaries
+            self.mod.addConstr(expr, grb.GRB.EQUAL, 0, name="z_j{" + str(j) + "}")
+
+
         self.mod.update()
 
     def addGoal(self, b):
@@ -154,12 +168,26 @@ class tomotherapyNP(object):
         self.mod.setObjective(expr, grb.GRB.MINIMIZE)
         self.mod.update()
 
+    def addGoalExact(self, b):
+        expr = grb.LinExpr()
+        for i in range(self.data.K):
+            expr += self.binaries[i] * self.doseandgradient[b + i * self.data.N, 0]
+            # Use this opportunity to initialize the binary variables to something being closed. So that way I will
+            # always close the beamlets instead of having them open. This may slow things down.
+            self.binaries[i].Start = 1
+        self.mod.setObjective(expr, grb.GRB.MINIMIZE)
+        self.mod.update()
+
     def PPoptimization(self, b):
         # The idea is that for each beamlet I will produce a set of length K of apertures
         self.mod = grb.Model()
+        # Fix a vector z bar as explained on equation 21 in the document.
+        self.zbar = 0
+        self.calcDose()
+        self.zbar = self.currentDose
         self.addVariables(b)
         self.addConstraints(b)
-        self.addGoal(b)
+        self.addGoalExact(b)
         self.mod.optimize()
         # Get the optimal value of the optimization
         if self.mod.status == grb.GRB.Status.OPTIMAL:
@@ -365,8 +393,7 @@ class tomodata:
         # C Value in the objective function
         self.C = 1.0
         # ry this number of observations
-        self.sampleevery = 20
-        self.coarse = self.sampleevery * 2
+        self.sampleevery = 35
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
@@ -430,10 +457,10 @@ class tomodata:
 
     ## Read Weiguo's Case
     def readWeiguosCase(self):
-        self.bixels = getvector('data\\Bixels_out.bin', np.int32)
-        self.voxels = getvector('data\\Voxels_out.bin', np.int32)
-        self.Dijs = getvector('data\\Dijs_out.bin', np.float32)
-        self.mask = getvector('data\\optmask.img', np.int32)
+        self.bixels = getvector('data/Bixels_out.bin', np.int32)
+        self.voxels = getvector('data/Voxels_out.bin', np.int32)
+        self.Dijs = getvector('data/Dijs_out.bin', np.float32)
+        self.mask = getvector('data/optmask.img', np.int32)
 
         # First keep a copy of the high definition
         self.bixelsHD = self.bixels
