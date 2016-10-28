@@ -11,6 +11,8 @@ except ImportError:
 import gurobipy as grb
 from scipy.optimize import minimize
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import sys
 import scipy.sparse as sps
@@ -148,33 +150,37 @@ class tomotherapyNP(object):
                 name="rmabs2_{" + str(k) + "," + str(b) + "}")
         lastconstr = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL, self.data.M, name="summaxrest_{" + str(k) + "}")
         # Constraints related to dose.
+        # First of all create a submatrix of sparse D.
+        indices = []
+        for i in range(0, self.data.K):
+            indices.append(self.data.N * i + b)
+        restrictedIntensity = (self.data.D.tocsc()[:,indices])
+        # Multiply times the intensity in each of the different columns (this is y bar)
+        for i in range(0, self.data.K):
+            restrictedIntensity[:,i] *= self.yk[i]
+
         for j in range(0, len(self.zjs)):
             expr = grb.LinExpr()
             expr += self.zjs[j] - self.zbar[j]
             for k in range(0, (self.data.K - 1)):
-                expr += self.data.Ddense[:,k] * self.yk  * self.binaries
+                expr += restrictedIntensity[j, k]  * self.binaries[k]
             self.mod.addConstr(expr, grb.GRB.EQUAL, 0, name="z_j{" + str(j) + "}")
-
-
         self.mod.update()
 
-    def addGoal(self, b):
-        expr = grb.LinExpr()
-        for i in range(self.data.K):
-            expr += self.binaries[i] * self.doseandgradient[b + i * self.data.N, 0]
-            # Use this opportunity to initialize the binary variables to something being closed. So that way I will
-            # always close the beamlets instead of having them open. This may slow things down.
-            self.binaries[i].Start = 1
-        self.mod.setObjective(expr, grb.GRB.MINIMIZE)
-        self.mod.update()
+        ## This function regularly enters the optimization engine to calculate objective function and gradients
+    def calcObjValue(self):
+        oDoseObj = self.currentDose.T - self.quadHelperThresh
+        oDoseObjCl = (oDoseObj > 0) * oDoseObj
+        oDoseObj = oDoseObjCl * oDoseObjCl * self.quadHelperOver
+        uDoseObj = self.quadHelperThresh - self.currentDose.T
+        uDoseObjCl = (uDoseObj > 0) * uDoseObj
+        uDoseObj = uDoseObjCl * uDoseObjCl * self.quadHelperUnder
+        self.objectiveValue = np.sum(oDoseObj + uDoseObj)
 
     def addGoalExact(self, b):
-        expr = grb.LinExpr()
-        for i in range(self.data.K):
-            expr += self.binaries[i] * self.doseandgradient[b + i * self.data.N, 0]
-            # Use this opportunity to initialize the binary variables to something being closed. So that way I will
-            # always close the beamlets instead of having them open. This may slow things down.
-            self.binaries[i].Start = 1
+        expr = grb.QuadExpr()
+        for i in range(0,len(self.zjs)):
+            expr += (self.zjs[i] - self.quadHelperThresh[i]) * (self.zjs[i] - self.quadHelperThresh[i])
         self.mod.setObjective(expr, grb.GRB.MINIMIZE)
         self.mod.update()
 
