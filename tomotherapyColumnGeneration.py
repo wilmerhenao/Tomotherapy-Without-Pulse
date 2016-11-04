@@ -11,8 +11,8 @@ except ImportError:
 import gurobipy as grb
 from scipy.optimize import minimize
 import numpy as np
-import matplotlib
-matplotlib.use('Agg')
+# import matplotlib
+# matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import sys
 import scipy.sparse as sps
@@ -113,7 +113,9 @@ class tomotherapyNP(object):
     def addVariables(self, b):
         self.binaries = [None] * self.data.K
         self.muVars = [None] * (self.data.K - 1)
-        self.zjs = [None] * (len(self.zbar)) ## Wilmer: Check that this is length of zbar. 14240?
+        self.zjs = [None] * (len(self.zbar))
+        self.xiplus = [None] * (len(self.zbar))
+        self.ximinus = [None] * (len(self.zbar))
         for i in range(0, self.data.K):
             self.binaries[i] = self.mod.addVar(vtype=grb.GRB.BINARY,
                                                name="binaryVoxel_{" + str(i) + ", " + str(b) + "}",
@@ -128,6 +130,13 @@ class tomotherapyNP(object):
             self.zjs[i] = self.mod.addVar(vtype=grb.GRB.CONTINUOUS,
                                           name="dose_{" + str(i) + "}",
                                           column=None, lb=0.0)
+            self.xiplus[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
+                                             name="xiplus_{" + str(i) + "}",
+                                             column=None)
+            self.ximinus[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
+                                             name="ximinus_{" + str(i) + "}",
+                                             column=None)
+
         self.mod.update()
 
     def addConstraints(self, b):
@@ -163,24 +172,15 @@ class tomotherapyNP(object):
             expr = grb.LinExpr()
             expr += self.zjs[j] - self.zbar[j]
             for k in range(0, (self.data.K - 1)):
-                expr += restrictedIntensity[j, k]  * self.binaries[k]
+                expr -= restrictedIntensity[j, k]  * self.binaries[k]
             self.mod.addConstr(expr, grb.GRB.EQUAL, 0, name="z_j{" + str(j) + "}")
+            self.mod.addConstr(self.zjs[j] - self.quadHelperThresh[j], grb.GRB.EQUAL, self.xiplus[j] - self.ximinus[j], name="xis{" + str(j) + "}")
         self.mod.update()
-
-        ## This function regularly enters the optimization engine to calculate objective function and gradients
-    def calcObjValue(self):
-        oDoseObj = self.currentDose.T - self.quadHelperThresh
-        oDoseObjCl = (oDoseObj > 0) * oDoseObj
-        oDoseObj = oDoseObjCl * oDoseObjCl * self.quadHelperOver
-        uDoseObj = self.quadHelperThresh - self.currentDose.T
-        uDoseObjCl = (uDoseObj > 0) * uDoseObj
-        uDoseObj = uDoseObjCl * uDoseObjCl * self.quadHelperUnder
-        self.objectiveValue = np.sum(oDoseObj + uDoseObj)
 
     def addGoalExact(self, b):
         expr = grb.QuadExpr()
         for i in range(0,len(self.zjs)):
-            expr += (self.zjs[i] - self.quadHelperThresh[i]) * (self.zjs[i] - self.quadHelperThresh[i])
+            expr += self.quadHelperOver[i] * self.xiplus[i] * self.xiplus[i] + self.quadHelperUnder[i] * self.ximinus[i] * self.ximinus[i]
         self.mod.setObjective(expr, grb.GRB.MINIMIZE)
         self.mod.update()
 
@@ -221,7 +221,7 @@ class tomotherapyNP(object):
         bestbeamlet = np.argmin(self.goalvalues)
         bestgoal = self.goalvalues[bestbeamlet]
         # For each of the beamlets. Assign the resulting path to the matrix of binaryVariables if bestgoal < 0
-        if bestgoal <= 0.0:
+        if bestgoal < self.objectiveValue:
             print('value of best goal was', bestgoal, 'variable to be introduced is', bestbeamlet)
             self.mathCal[bestbeamlet] = 0
             self.binaryVariables[:, bestbeamlet] = self.goaltargets[:, bestbeamlet]
