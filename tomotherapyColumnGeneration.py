@@ -1,4 +1,4 @@
-#!/home/wilmer/anaconda3/bin/python
+#!/home/wilmer/local/anaconda3/bin/python
 __author__ = 'wilmer'
 try:
     import mkl
@@ -8,7 +8,8 @@ except ImportError:
     have_mkl = False
     print("Running with normal backends")
 
-import gurobipy as grb
+#import gurobipy as grb
+import pandas as pds
 from scipy.optimize import minimize
 import numpy as np
 # import matplotlib
@@ -395,11 +396,11 @@ class tomodata:
     def __init__(self):
         self.outputDirectory = "output/"
         # M value. Number of times per beamlet that the switch can be turned on or off
-        self.M = 180
+        self.M = 8
         # C Value in the objective function
         self.C = 1.0
         # ry this number of observations
-        self.sampleevery = 35
+        self.sampleevery = 1
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 1000
@@ -487,6 +488,51 @@ class tomodata:
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 start_time = time.time()
 dataobject = tomodata()
+## This part is for AMPL's implementation:
+def printAMPLfile(data):
+    f = open("tomononlinear.dat", "w")
+    print('param numvoxels :=', len(data.mask), ';', file = f)
+    print('param: VOXELS: thethreshold :=', file = f)
+    quadHelperThresh = np.zeros(len(data.mask))
+    quadHelperUnder = np.zeros(len(data.mask))
+    quadHelperOver = np.zeros(len(data.mask))
+    #######################################3
+    for i in range(len(data.mask)):
+        # Constraint on TARGETS
+        T = None
+        if data.mask[i] in data.TARGETList:
+            T = data.TARGETThresholds[np.where(data.mask[i] == data.TARGETList)[0][0]]
+            quadHelperOver[i] = 1.0
+            quadHelperUnder[i] = 10000.0
+        # Constraint on OARs
+        elif data.mask[i] in data.OARList:
+            T = data.OARThresholds[np.where(data.mask[i] == data.OARList)[0][0]]
+            quadHelperOver[i] = 10000.0
+            quadHelperUnder[i] = 0.0
+        elif 0 == data.mask[i]:
+            print('there is an element in the voxels that is also mask 0')
+        quadHelperThresh[i] = T
+    ########################
+    thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': quadHelperThresh})
+    print(thrs.to_string(index=False, header = False), file = f)
+    print(";", file=f)
+    print('param: quadHelperOver :=', file = f)
+    thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': quadHelperOver})
+    print(thrs.to_string(index=False, header = False), file = f)
+    print(";", file=f)
+    print('param: quadHelperUnder :=', file=f)
+    thrs = pds.DataFrame(data={'A': np.arange(len(data.mask)), 'B': quadHelperUnder})
+    print(thrs.to_string(index=False, header = False), file=f)
+    print(";", file=f)
+    print('param: KNJPARAMETERS: D:=' , file = f)
+    leafs = (data.bixels % data.N).astype(int)
+    projections = np.floor(data.bixels / data.N).astype(int)
+    sparseinfo = pds.DataFrame(data = {'LEAVES' : leafs, 'PROJECTIONS' : projections, 'VOXELS' : data.smallvoxels, 'ZDOSES' : data.Dijs})
+    print(sparseinfo.to_string(index=False, header=False), file = f)
+    print(";", file = f)
+    f.close()
+
+printAMPLfile(dataobject)
 tomoinstance = tomotherapyNP(dataobject)
 tomoinstance.plotDVH('dvh-ColumnGeneration')
 tomoinstance.plotSinoGram()
