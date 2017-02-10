@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/tomotherapyIteration.py" line="492" mnemonic="5" />
+    <bookmark url="file://$PROJECT_DIR$/tomotherapyIteration.py" line="472" mnemonic="5" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tomotherapyIteration.py" />
+    <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="Doing some damage to the code.">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapyIterative.py" afterPath="$PROJECT_DIR$/tomotherapyIterative.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapyIteration.py" afterPath="$PROJECT_DIR$/tomotherapyIteration.py" />
     </list>
     <ignored path="CaseCreation.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,8 +29,8 @@
       <file leaf-file-name="tomotherapyIteration.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapyIteration.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="263">
-              <caret line="194" column="67" lean-forward="false" selection-start-line="194" selection-start-column="67" selection-end-line="194" selection-end-column="67" />
+            <state relative-caret-position="396">
+              <caret line="114" column="77" lean-forward="false" selection-start-line="114" selection-start-column="77" selection-end-line="114" selection-end-column="77" />
               <folding />
             </state>
           </provider>
@@ -473,13 +472,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00076" summary="fakevalues correctly assigned">
-      <created>1469460999269</created>
-      <option name="number" value="00076" />
-      <option name="presentableId" value="LOCAL-00076" />
-      <option name="project" value="LOCAL" />
-      <updated>1469460999269</updated>
-    </task>
     <task id="LOCAL-00077" summary="implemented the hints that are supplied to gurobi. Does not seem like it is a huge speedup. I may be slowing things down.">
       <created>1469463725626</created>
       <option name="number" value="00077" />
@@ -816,7 +808,14 @@
       <option name="project" value="LOCAL" />
       <updated>1486748504929</updated>
     </task>
-    <option name="localTasksCounter" value="125" />
+    <task id="LOCAL-00125" summary="Doing some damage to the code.">
+      <created>1486765089350</created>
+      <option name="number" value="00125" />
+      <option name="presentableId" value="LOCAL-00125" />
+      <option name="project" value="LOCAL" />
+      <updated>1486765089350</updated>
+    </task>
+    <option name="localTasksCounter" value="126" />
     <servers />
   </component>
   <component name="TodoView">
@@ -888,7 +887,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Looks like everything runs minus the plots." />
     <MESSAGE value="Now everything runs and the answers converge to something. Still failing in the plots." />
     <MESSAGE value="Corrected the matrices that go into the dose and gradient calculation. Changed from lists to matrices" />
     <MESSAGE value="Running version. I'm trying to parallelize the pricing problem" />
@@ -913,7 +911,8 @@
     <MESSAGE value="Adding the iterative procedure&#10;" />
     <MESSAGE value="added the iterative procedure, running fast" />
     <MESSAGE value="Removed the double creation of the threshold coefficients." />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed the double creation of the threshold coefficients." />
+    <MESSAGE value="Doing some damage to the code." />
+    <option name="LAST_COMMIT_MESSAGE" value="Doing some damage to the code." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1397,8 +1396,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyIteration.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="194" column="67" lean-forward="false" selection-start-line="194" selection-start-column="67" selection-end-line="194" selection-end-column="67" />
+        <state relative-caret-position="396">
+          <caret line="114" column="77" lean-forward="false" selection-start-line="114" selection-start-column="77" selection-end-line="114" selection-end-column="77" />
           <folding />
         </state>
       </provider>

@@ -96,22 +96,23 @@ class tomotherapyNP(object):
         return (res)
 
     # Define the variables
-    def addVariables(self, b):
-        self.binaries = [None] * self.data.K
-        self.muVars = [None] * (self.data.K - 1)
+    def addVariables(self):
+        self.binaries = [None] * self.data.K * self.data.N
+        self.muVars = [None] * (self.data.K - 1) * self.data.N
         self.zjs = [None] * (len(self.zbar))
         self.xiplus = [None] * (len(self.zbar))
         self.ximinus = [None] * (len(self.zbar))
         for i in range(0, self.data.K):
-            self.binaries[i] = self.mod.addVar(vtype=grb.GRB.BINARY,
-                                               name="binaryVoxel_{" + str(i) + ", " + str(b) + "}",
-                                               column=None)
-            #  The mu variable will register change in the behaviour from one control to the other. Therefore loses 1
-            # degree of freedom
-            if (self.data.K - 1) != i:
-                self.muVars[i] = self.mod.addVar(vtype=grb.GRB.BINARY,
-                                                 name="mu_{" + str(i) + "," + str(b) + "}",
-                                                 column=None)
+            for b in range(0, self.data.N):
+                self.binaries[i + b * self.data.K] = self.mod.addVar(vtype=grb.GRB.BINARY,
+                                                   name="binaryVoxel_{" + str(i) + ", " + str(b) + "}",
+                                                   column=None)
+                #  The mu variable will register change in the behaviour from one control to the other. Therefore loses 1
+                # degree of freedom
+                if (self.data.K - 1) != i:
+                    self.muVars[i + b * (self.data.K - 1)] = self.mod.addVar(vtype=grb.GRB.BINARY,
+                                                                             name="mu_{" + str(i) + "," + str(b) + "}",
+                                                                             column=None)
         for i in range(0, len(self.zbar)):
             self.zjs[i] = self.mod.addVar(vtype=grb.GRB.CONTINUOUS,
                                           name="dose_{" + str(i) + "}",
@@ -170,16 +171,16 @@ class tomotherapyNP(object):
         self.mod.setObjective(expr, grb.GRB.MINIMIZE)
         self.mod.update()
 
-    def PPoptimization(self, b):
+    def PricingProblem(self):
         # The idea is that for each beamlet I will produce a set of length K of apertures
         self.mod = grb.Model()
         # Fix a vector z bar as explained on equation 21 in the document
         self.zbar = 0
         self.calcDose()
         self.zbar = self.currentDose
-        self.addVariables(b)
-        self.addConstraints(b)
-        self.addGoalExact(b)
+        self.addVariables()
+        self.addConstraints()
+        self.addGoalExact()
         self.mod.optimize()
         # Get the optimal value of the optimization
         if self.mod.status == grb.GRB.Status.OPTIMAL:
@@ -188,27 +189,6 @@ class tomotherapyNP(object):
             # Assign optimal results of the optimization
             for i in range(self.data.K):
                 self.goaltargets[i, b] = self.binaries[i].X
-
-    ## Solves the pricing problem as set up
-    def PricingProblem(self):
-        # Prepare the matrix multiplying all the rows times the $\partial F / \partial z_j$ vector
-        self.doseandgradient = self.data.D.T * self.voxelgradient.T
-        iterpricingprob = 1
-        for b in candidatebeamlets:
-            print('iteration of pricing problem', iterpricingprob, 'out of ', len(candidatebeamlets),
-                  ' trying candidate beamlet ', str(b))
-            self.PPoptimization(b)
-            iterpricingprob += 1
-        bestbeamlet = np.argmin(self.goalvalues)
-        bestgoal = self.goalvalues[bestbeamlet]
-        # For each of the beamlets. Assign the resulting path to the matrix of binaryVariables if bestgoal < 0
-        if bestgoal < self.objectiveValue:
-            print('value of best goal was', bestgoal, 'variable to be introduced is', bestbeamlet)
-            self.mathCal[bestbeamlet] = 0
-            self.binaryVariables[:, bestbeamlet] = self.goaltargets[:, bestbeamlet]
-        else:
-            print('no values will enter the formulation')
-        return(bestgoal)
 
     ## This function creates a matrix that has a column of ones kronecker the identity matrix
     def onehelpCreator(self):
