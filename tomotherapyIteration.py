@@ -19,7 +19,8 @@ import sys
 import scipy.sparse as sps
 import time
 from scipy.stats import describe
-import math
+import pickle
+import matplotlib
 
 numcores = 4
 
@@ -41,28 +42,13 @@ class tomotherapyNP(object):
         self.data = datastructure
         print('Building column generation method')
         self.thresholds()
-        self.rmpres = self.iterationMain()
+        self.rmpres = self.IterativeMain()
         print('The problem has been completed')
 
     def thresholds(self):
-        self.quadHelperThresh = [None] * self.data.totalsmallvoxels
-        self.quadHelperOver = [None] * self.data.totalsmallvoxels
-        self.quadHelperUnder = [None] * self.data.totalsmallvoxels
-        for i in range(0, self.data.totalsmallvoxels):
-            # Constraint on TARGETS
-            T = None
-            if self.data.mask[i] in self.data.TARGETList:
-                T = self.data.TARGETThresholds[np.where(self.data.mask[i] == self.data.TARGETList)[0][0]]
-                self.quadHelperOver[i] = 0.001
-                self.quadHelperUnder[i] = 0.05
-            # Constraint on OARs
-            elif self.data.mask[i] in self.data.OARList:
-                T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0][0]]
-                self.quadHelperOver[i] = 0.06
-                self.quadHelperUnder[i] = 0.0
-            elif 0 == self.data.mask[i]:
-                print('there is an element in the voxels that is also mask 0')
-            self.quadHelperThresh[i] = T
+        self.quadHelperThresh = self.data.quadHelperThresh
+        self.quadHelperOver = self.data.quadHelperOver
+        self.quadHelperUnder = self.data.quadHelperUnder
 
     def calcDose(self):
         # Remember. The '*' operator is elementwise multiplication. Here, ordered by beamlets first, then control points
@@ -110,21 +96,21 @@ class tomotherapyNP(object):
         return (res)
 
     # Define the variables
-    def addVariables(self):
-        self.binaries = [None] * self.data.K * self.data.N
-        self.muVars = [None] * (self.data.K - 1) * self.data.N
+    def addVariables(self, b):
+        self.binaries = [None] * self.data.K
+        self.muVars = [None] * (self.data.K - 1)
         self.zjs = [None] * (len(self.zbar))
         self.xiplus = [None] * (len(self.zbar))
         self.ximinus = [None] * (len(self.zbar))
-        for i in range(0, self.data.K * self.data.N):
+        for i in range(0, self.data.K):
             self.binaries[i] = self.mod.addVar(vtype=grb.GRB.BINARY,
-                                               name="binaryVoxel_{" + str(i) + ", " + "}",
+                                               name="binaryVoxel_{" + str(i) + ", " + str(b) + "}",
                                                column=None)
             #  The mu variable will register change in the behaviour from one control to the other. Therefore loses 1
             # degree of freedom
-        for i in range(0, (self.data.K - 1) * self.data.N):
-            self.muVars[i] = self.mod.addVar(vtype=grb.GRB.BINARY,
-                                                 name="mu_{" + str(i) + ","+ "}",
+            if (self.data.K - 1) != i:
+                self.muVars[i] = self.mod.addVar(vtype=grb.GRB.BINARY,
+                                                 name="mu_{" + str(i) + "," + str(b) + "}",
                                                  column=None)
         for i in range(0, len(self.zbar)):
             self.zjs[i] = self.mod.addVar(vtype=grb.GRB.CONTINUOUS,
@@ -139,88 +125,90 @@ class tomotherapyNP(object):
 
         self.mod.update()
 
-    def addConstraints(self):
+    def addConstraints(self, b):
         # Add some constraints. This one is about replacing the absolute value with linear expressions
-        self.absoluteValueRemovalConstraint1 = [None] * (self.data.K - 1) * self.data.N
-        self.absoluteValueRemovalConstraint2 = [None] * (self.data.K - 1) * self.data.N
-        self.lastconstraint = [None] * self.data.N
+        self.absoluteValueRemovalConstraint1 = [None] * (self.data.K - 1)
+        self.absoluteValueRemovalConstraint2 = [None] * (self.data.K - 1)
+        # self.sumMaxRestriction = None
+        expr = grb.LinExpr()
         # Constraints related to absolute value removal from objective function
-        muvarindex = 0
-        for n in range(0, self.data.N-1):
-            expr = grb.LinExpr()
-            for k in range(0, (self.data.K - 1)):
-                # sum mu variables and restrict their sum to be smaller than M
-                expr += self.muVars[k]
-                #
-                self.absoluteValueRemovalConstraint1[muvarindex] = self.mod.addConstr(self.muVars[muvarindex], grb.GRB.GREATER_EQUAL,
-                                                                             self.binaries[k + 1 + n * self.data.K] - self.binaries[k + n * self.data.K],
-                                                                             name="rmabs1_{" + str(k) + "," + str(n) + "}")
-                # \mu \geq -(\beta_{i,k+1} - \beta_{i,k})
-                self.absoluteValueRemovalConstraint2[muvarindex] = self.mod.addConstr(self.muVars[muvarindex], grb.GRB.GREATER_EQUAL,
-                                                                         -(self.binaries[k + 1 + n * self.data.K] - self.binaries[k + n * self.data.K]),
-                                                                         name="rmabs2_{" + str(k) + "," + str(n) + "}")
-                muvarindex += 1
-            self.lastconstraint[n] = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL, self.data.M, name="summaxrest_{" + str(k) + "}")
+        for k in range(0, (self.data.K - 1)):
+            # sum mu variables and restrict their sum to be smaller than M
+            expr += self.muVars[k]
+            # \mu \geq \beta_{i,k+1} - \beta_{i,k}
+            self.absoluteValueRemovalConstraint1[k] = self.mod.addConstr(
+                self.muVars[k], grb.GRB.GREATER_EQUAL, self.binaries[k + 1] - self.binaries[k],
+                name="rmabs1_{" + str(k) + "," + str(b) + "}")
+            # \mu \geq -(\beta_{i,k+1} - \beta_{i,k})
+            self.absoluteValueRemovalConstraint2[k] = self.mod.addConstr(
+                self.muVars[k], grb.GRB.GREATER_EQUAL, -(self.binaries[k + 1] - self.binaries[k]),
+                name="rmabs2_{" + str(k) + "," + str(b) + "}")
+        lastconstr = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL, self.data.M, name="summaxrest_{" + str(k) + "}")
         # Constraints related to dose.
         # First of all create a submatrix of sparse D.
         indices = []
-        for b in range(0, self.data.N):
-            for i in range(0, self.data.K):
-                indices.append(self.data.N * i + b)
-        restrictedIntensity = (self.data.D.tocsc()[:, indices])
+        for i in range(0, self.data.K):
+            indices.append(self.data.N * i + b)
+        restrictedIntensity = (self.data.D.tocsc()[:,indices])
         # Multiply times the intensity in each of the different columns (this is y bar)
         for i in range(0, self.data.K):
             restrictedIntensity[:,i] *= self.yk[i]
 
         for j in range(0, len(self.zjs)):
             expr = grb.LinExpr()
-            expr += self.zjs[j]
-            for n in range(0, self.data.N):
-                for k in range(0, (self.data.K)):
-                    #print(restrictedIntensity)
-                    #print(k + n * self.data.K, k, n)
-                    expr -= restrictedIntensity[j, k + n * self.data.K] * self.binaries[k + n * self.data.K]
+            expr += self.zjs[j] - self.zbar[j]
+            for k in range(0, (self.data.K - 1)):
+                expr -= restrictedIntensity[j, k]  * self.binaries[k]
             self.mod.addConstr(expr, grb.GRB.EQUAL, 0, name="z_j{" + str(j) + "}")
             self.mod.addConstr(self.zjs[j] - self.quadHelperThresh[j], grb.GRB.EQUAL, self.xiplus[j] - self.ximinus[j], name="xis{" + str(j) + "}")
         self.mod.update()
 
-    def addGoalExact(self):
+    def addGoalExact(self, b):
         expr = grb.QuadExpr()
         for i in range(0,len(self.zjs)):
             expr += self.quadHelperOver[i] * self.xiplus[i] * self.xiplus[i] + self.quadHelperUnder[i] * self.ximinus[i] * self.ximinus[i]
         self.mod.setObjective(expr, grb.GRB.MINIMIZE)
         self.mod.update()
 
-    def PPoptimization(self):
+    def PPoptimization(self, b):
         # The idea is that for each beamlet I will produce a set of length K of apertures
         self.mod = grb.Model()
-        # Fix a vector z bar as explained on equation 21 in the document.
+        # Fix a vector z bar as explained on equation 21 in the document
         self.zbar = 0
         self.calcDose()
         self.zbar = self.currentDose
-        self.addVariables()
-        self.addConstraints()
-        self.addGoalExact()
+        self.addVariables(b)
+        self.addConstraints(b)
+        self.addGoalExact(b)
         self.mod.optimize()
         # Get the optimal value of the optimization
-        myobj = 0.0
         if self.mod.status == grb.GRB.Status.OPTIMAL:
-            myobj = self.mod.getObjective()
-            return(myobj)
-        return(myobj)
+            obj = self.mod.getObjective()
+            self.goalvalues[b] = obj.getValue()
+            # Assign optimal results of the optimization
+            for i in range(self.data.K):
+                self.goaltargets[i, b] = self.binaries[i].X
 
     ## Solves the pricing problem as set up
     def PricingProblem(self):
         # Prepare the matrix multiplying all the rows times the $\partial F / \partial z_j$ vector
         self.doseandgradient = self.data.D.T * self.voxelgradient.T
-        # Run an optimization problem for each of the different beamlets available (those that don't let light in)
-        myobj = self.PPoptimization()
+        iterpricingprob = 1
+        for b in candidatebeamlets:
+            print('iteration of pricing problem', iterpricingprob, 'out of ', len(candidatebeamlets),
+                  ' trying candidate beamlet ', str(b))
+            self.PPoptimization(b)
+            iterpricingprob += 1
+        bestbeamlet = np.argmin(self.goalvalues)
+        bestgoal = self.goalvalues[bestbeamlet]
         # For each of the beamlets. Assign the resulting path to the matrix of binaryVariables if bestgoal < 0
-        self.binaryVariables = np.empty([self.data.K, self.data.N])
-        for n in range(0, self.data.N):
-            for k in range(0, self.data.K):
-                self.binaryVariables[k, n] = self.binaries[k + self.data.K * n].X
-        return(myobj)
+        if bestgoal < self.objectiveValue:
+            print('value of best goal was', bestgoal, 'variable to be introduced is', bestbeamlet)
+            self.mathCal[bestbeamlet] = 0
+            self.binaryVariables[:, bestbeamlet] = self.goaltargets[:, bestbeamlet]
+        else:
+            print('no values will enter the formulation')
+        return(bestgoal)
 
     ## This function creates a matrix that has a column of ones kronecker the identity matrix
     def onehelpCreator(self):
@@ -257,58 +245,43 @@ class tomotherapyNP(object):
     def turnOnOnlynecessarybeamlets(self):
         for i in np.unique(self.data.bixels % self.data.N):
             self.mathCal[i] = 1
-            #self.binaryVariables[:, i ] = 1
-        # Save a copy of the original mathcal to be used in the refinement later
-        self.originalMathCal = np.array([i for i in self.mathCal])
-        # Fill with zeros wherever it encounters an OAR.
-        # for o in self.data.OARList:
-        #     oarposns = np.where(self.data.mask == o)[0]
-        #     oarvoxels = self.data.smallvoxels[oarposns]
-        #     # Now try and protect each voxel
-        #     for voxel in oarvoxels:
-        #         evilbeamlets = np.where(self.data.Ddense[70,:] > 0.0)[1]
-        #         for evilbeamlet in evilbeamlets:
-        #             j = evilbeamlet % self.data.N
-        #             i = int(np.floor(evilbeamlet / self.data.N))
-        #             self.binaryVariables[i, j] = 0
 
-    def iterationMain(self):
+    def IterativeMain(self):
         # Create the ones helper matrix:
         self.onehelpCreator()
-        # Step 1: Assign \mathcal{C} the empty set. Remember to change to 1 everytime I add a path
-        self.mathCal = np.zeros(self.data.N, dtype=np.int)
+
         # Matrix with a binary choice for each of the beamlets at each control point
         self.binaryVariables = np.zeros((self.data.K, self.data.N))
         # Turn off unnecessary beamlest to save time
         self.turnOnOnlynecessarybeamlets()
-        # Variable that keeps the intensities at each control point. Initialized at medium intensity
-        self.yk = np.ones(self.data.K) * self.data.maxIntensity/2.0
+        # Variable that keeps the intensities at each control point. Initialized at maximum intensity
+        self.yk = np.ones(self.data.K) * self.data.maxIntensity
         # Calculate the boundaries of yk
         self.boundschoice = [(0, self.data.maxIntensity),] * self.data.K
-        gstar = -np.inf
+        oldobj = np.Inf
+        newobj = np.Inf
         iterCG = 1
         self.rmpres = None
-        newobj = np.Inf
-        oldobj = np.Inf
-        print('before')
-        while ((np.absolute(newobj - oldobj) > 1E-1) | math.isnan(newobj - oldobj)) & (time.time() - start_time < 500):
+        while (True):
+            oldobj = newobj
             print('starting iteration of column generation', iterCG)
             self.plotSinoGram(iterCG)
             # Step 1 on Fei's paper. Use the information on the current treatment plan to formulate and solve an
             # instance of the PP
             self.calcObjGrad(self.yk)
-            thisobj = self.PricingProblem()
-            # Step 2. Take the optimal betas from the pricing problem and find a new set of intensities
+            gstar = self.PricingProblem()
+            # Step 2. If the optimal value of the PP is nonnegative**, go to step 5. Otherwise, denote the optimal
+            # solution to the PP by c and Ac and replace caligraphic C and A = Abar, k \in caligraphicC
             self.rmpres = self.solveRMC()
-            oldobj = newobj
-            newobj = thisobj
-            print('old objective value', oldobj)
-            print('new objective value', newobj)
-            print('New objective at iteration', iterCG, 'is:', newobj)
+            newobj = self.rmpres.fun
             self.plotDVH('dvh-ColumnGeneration' + str(iterCG))
-            iterCG += 1
+
+            if(abs(newobj - oldobj)/oldobj < 0.01)
+                break
+            else
+                iterCG += 1
         print('starting solution refinement')
-        #self.refinesolution(iterCG)
+        self.refinesolution(iterCG)
         self.rmpres = self.solveRMC(1E-5)
         print('leaving CG')
         return(self.rmpres)
@@ -393,9 +366,9 @@ class tomodata:
         self.M = 50
         # C Value in the objective function
         self.C = 1.0
-        # ry this number of observations
+        # ry this number of observat
+        # ions
         self.sampleevery = 32
-
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 10
@@ -416,6 +389,26 @@ class tomodata:
         print('a brief description of Dijs array', describe(self.Dijs))
         self.D = sps.csr_matrix((self.Dijs, (self.smallvoxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
         self.Ddense = self.D.todense()
+        self.quadHelperThresh = np.zeros(len(self.mask))
+        self.quadHelperUnder = np.zeros(len(self.mask))
+        self.quadHelperOver = np.zeros(len(self.mask))
+        #######################################3
+        for i in range(len(self.mask)):
+            # Constraint on TARGETS
+            T = None
+            if self.mask[i] in self.TARGETList:
+                T = self.TARGETThresholds[np.where(self.mask[i] == self.TARGETList)[0][0]]
+                self.quadHelperOver[i] = 0.01
+                self.quadHelperUnder[i] = 0.6
+            # Constraint on OARs
+            elif self.mask[i] in self.OARList:
+                T = self.OARThresholds[np.where(self.mask[i] == self.OARList)[0][0]]
+                self.quadHelperOver[i] = 0.001
+                self.quadHelperUnder[i] = 0.00
+            elif 0 == self.mask[i]:
+                print('there is an element in the voxels that is also mask 0')
+            self.quadHelperThresh[i] = T
+            ########################
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions
 
     ## Create a map from big to small voxel space, the order of elements is preserved but there is a compression to only
@@ -449,6 +442,7 @@ class tomodata:
 
     def removezeroes(self):
         # Next I am removing the voxels that have a mask of zero (0) because they REALLY complicate things otherwise
+        # Making the problem larger.
         #-------------------------------------
         locats = np.where(0 == self.maskHD)[0]
         self.maskHD = np.delete(self.maskHD, locats)
@@ -481,42 +475,20 @@ class tomodata:
         self.TARGETThresholds = [70]
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
-start_time = time.time()
-dataobject = tomodata()
 ## This part is for AMPL's implementation:
 def printAMPLfile(data):
     f = open("tomononlinear.dat", "w")
     print('param numvoxels :=', len(data.mask), ';', file = f)
     print('param: VOXELS: thethreshold :=', file = f)
-    quadHelperThresh = np.zeros(len(data.mask))
-    quadHelperUnder = np.zeros(len(data.mask))
-    quadHelperOver = np.zeros(len(data.mask))
-    #######################################3
-    for i in range(len(data.mask)):
-        # Constraint on TARGETS
-        T = None
-        if data.mask[i] in data.TARGETList:
-            T = data.TARGETThresholds[np.where(data.mask[i] == data.TARGETList)[0][0]]
-            quadHelperOver[i] = 0.001
-            quadHelperUnder[i] = 0.06
-        # Constraint on OARs
-        elif data.mask[i] in data.OARList:
-            T = data.OARThresholds[np.where(data.mask[i] == data.OARList)[0][0]]
-            quadHelperOver[i] = 0.001
-            quadHelperUnder[i] = 0.05
-        elif 0 == data.mask[i]:
-            print('there is an element in the voxels that is also mask 0')
-        quadHelperThresh[i] = T
-    ########################
-    thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': quadHelperThresh})
+    thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': data.quadHelperThresh})
     print(thrs.to_string(index=False, header = False), file = f)
     print(";", file=f)
     print('param: quadHelperOver :=', file = f)
-    thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': quadHelperOver})
+    thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': data.quadHelperOver})
     print(thrs.to_string(index=False, header = False), file = f)
     print(";", file=f)
     print('param: quadHelperUnder :=', file=f)
-    thrs = pds.DataFrame(data={'A': np.arange(len(data.mask)), 'B': quadHelperUnder})
+    thrs = pds.DataFrame(data={'A': np.arange(len(data.mask)), 'B': data.quadHelperUnder})
     print(thrs.to_string(index=False, header = False), file=f)
     print(";", file=f)
     print('param: KNJPARAMETERS: D:=' , file = f)
@@ -527,9 +499,10 @@ def printAMPLfile(data):
     print(";", file = f)
     f.close()
 
+start_time = time.time()
+dataobject = tomodata()
 printAMPLfile(dataobject)
 tomoinstance = tomotherapyNP(dataobject)
-print('printing dvh')
 tomoinstance.plotDVH('dvh-ColumnGeneration')
 tomoinstance.plotSinoGram()
 tomoinstance.plotEventsbinary()
