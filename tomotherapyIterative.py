@@ -203,21 +203,24 @@ class tomotherapyNP(object):
         self.addGoalExact()
         self.mod.optimize()
         # Get the optimal value of the optimization
+        myobj = 0.0
         if self.mod.status == grb.GRB.Status.OPTIMAL:
-            obj = self.mod.getObjective()
+            myobj = self.mod.getObjective()
+            return(myobj)
+        return(myobj)
 
     ## Solves the pricing problem as set up
     def PricingProblem(self):
         # Prepare the matrix multiplying all the rows times the $\partial F / \partial z_j$ vector
         self.doseandgradient = self.data.D.T * self.voxelgradient.T
         # Run an optimization problem for each of the different beamlets available (those that don't let light in)
-        self.PPoptimization()
+        myobj = self.PPoptimization()
         # For each of the beamlets. Assign the resulting path to the matrix of binaryVariables if bestgoal < 0
         self.binaryVariables = np.empty([self.data.K, self.data.N])
         for n in range(0, self.data.N):
             for k in range(0, self.data.K):
                 self.binaryVariables[k, n] = self.binaries[k + self.data.K * n].X
-
+        return(myobj)
 
     ## This function creates a matrix that has a column of ones kronecker the identity matrix
     def onehelpCreator(self):
@@ -288,17 +291,19 @@ class tomotherapyNP(object):
         newobj = np.Inf
         oldobj = np.Inf
         print('before')
-        while ((newobj - oldobj > 1E-5) | math.isnan(newobj - oldobj)) & (time.time() - start_time < 500):
+        while ((np.absolute(newobj - oldobj) > 1E-1) | math.isnan(newobj - oldobj)) & (time.time() - start_time < 500):
             print('starting iteration of column generation', iterCG)
             self.plotSinoGram(iterCG)
             # Step 1 on Fei's paper. Use the information on the current treatment plan to formulate and solve an
             # instance of the PP
             self.calcObjGrad(self.yk)
-            gstar = self.PricingProblem()
+            thisobj = self.PricingProblem()
             # Step 2. Take the optimal betas from the pricing problem and find a new set of intensities
             self.rmpres = self.solveRMC()
             oldobj = newobj
-            newobj = self.rmpres.fun
+            newobj = thisobj
+            print('old objective value', oldobj)
+            print('new objective value', newobj)
             print('New objective at iteration', iterCG, 'is:', newobj)
             self.plotDVH('dvh-ColumnGeneration' + str(iterCG))
             iterCG += 1
@@ -389,7 +394,7 @@ class tomodata:
         # C Value in the objective function
         self.C = 1.0
         # ry this number of observations
-        self.sampleevery = 4
+        self.sampleevery = 32
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 10
@@ -523,6 +528,7 @@ def printAMPLfile(data):
 
 printAMPLfile(dataobject)
 tomoinstance = tomotherapyNP(dataobject)
+print('printing dvh')
 tomoinstance.plotDVH('dvh-ColumnGeneration')
 tomoinstance.plotSinoGram()
 tomoinstance.plotEventsbinary()

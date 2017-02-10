@@ -23,7 +23,7 @@ import pickle
 import matplotlib
 
 numcores = 4
-
+numloops = 2
 def mycallback(model, where):
     if where == grb.GRB.Callback.MIP:
         # General MIP callback
@@ -46,12 +46,27 @@ class tomotherapyNP(object):
         print('The problem has been completed')
 
     def thresholds(self):
-        self.quadHelperThresh = self.data.quadHelperThresh
-        self.quadHelperOver = self.data.quadHelperOver
-        self.quadHelperUnder = self.data.quadHelperUnder
+        self.quadHelperThresh = [None] * self.data.totalsmallvoxels
+        self.quadHelperOver = [None] * self.data.totalsmallvoxels
+        self.quadHelperUnder = [None] * self.data.totalsmallvoxels
+        for i in range(0, self.data.totalsmallvoxels):
+            # Constraint on TARGETS
+            T = None
+            if self.data.mask[i] in self.data.TARGETList:
+                T = self.data.TARGETThresholds[np.where(self.data.mask[i] == self.data.TARGETList)[0][0]]
+                self.quadHelperOver[i] = 0.001
+                self.quadHelperUnder[i] = 0.05
+            # Constraint on OARs
+            elif self.data.mask[i] in self.data.OARList:
+                T = self.data.OARThresholds[np.where(self.data.mask[i] == self.data.OARList)[0][0]]
+                self.quadHelperOver[i] = 0.06
+                self.quadHelperUnder[i] = 0.0
+            elif 0 == self.data.mask[i]:
+                print('there is an element in the voxels that is also mask 0')
+            self.quadHelperThresh[i] = T
 
     def calcDose(self):
-        # Remember. The '*' operator is elementwise multiplication. Here, ordered by beamlets first, then control points
+        # Remember. The '*' operator is element-wise multiplication. Here, ordered by beamlets first, then control points
         intensities = (self.yk * self.binaryVariables.T).T.reshape(self.data.K * self.data.N, 1)
         self.currentDose = np.asarray(self.data.D.dot(intensities)) # conversion to array necessary. O/W algebra wrong
         # The line below effectively multiplies each element in data.D by one or zero. USE THE DENSE VERSION OF D
@@ -271,13 +286,13 @@ class tomotherapyNP(object):
         # Step 1: Assign \mathcal{C} the empty set. Remember to change to 1 everytime I add a path
         self.mathCal = np.zeros(self.data.N, dtype=np.int)
         # Matrix with a binary choice for each of the beamlets at each control point
-        self.binaryVariables = np.zeros((self.data.K, self.data.N))
+        self.binaryVariables = np.zeros((numloops * self.data.K, self.data.N))
         # Turn off unnecessary beamlest to save time
         self.turnOnOnlynecessarybeamlets()
         # Variable that keeps the intensities at each control point. Initialized at maximum intensity
-        self.yk = np.ones(self.data.K) * self.data.maxIntensity
+        self.yk = np.ones(numloops * self.data.K) * self.data.maxIntensity
         # Calculate the boundaries of yk
-        self.boundschoice = [(0, self.data.maxIntensity),] * self.data.K
+        self.boundschoice = [(0, self.data.maxIntensity),] * self.data.K * numloops
         gstar = -np.inf
         iterCG = 1
         self.rmpres = None
@@ -336,10 +351,10 @@ class tomotherapyNP(object):
     ## Showing the evolution of apertures through control points
     def plotSinoGram(self, thisname=""):
         ## Plotting apertures
-        nrows, ncols = self.data.K, self.data.N
+        nrows, ncols = numloops * self.data.K, self.data.N
         image = -1 * np.ones((nrows, ncols))
         for k in range(self.data.K):
-            for i in range(self.data.N):
+            for i in range(self.data.N * numloops):
                 if 1 == self.binaryVariables[k, i]:
                     # If this particular beamlet is open. Assign the intensity to it.
                     image[k, i] = self.yk[k]
@@ -384,8 +399,7 @@ class tomodata:
         self.M = 50
         # C Value in the objective function
         self.C = 1.0
-        # ry this number of observat
-        # ions
+        # ry this number of observations
         self.sampleevery = 32
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
@@ -407,26 +421,6 @@ class tomodata:
         print('a brief description of Dijs array', describe(self.Dijs))
         self.D = sps.csr_matrix((self.Dijs, (self.smallvoxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
         self.Ddense = self.D.todense()
-        self.quadHelperThresh = np.zeros(len(self.mask))
-        self.quadHelperUnder = np.zeros(len(self.mask))
-        self.quadHelperOver = np.zeros(len(self.mask))
-        #######################################3
-        for i in range(len(self.mask)):
-            # Constraint on TARGETS
-            T = None
-            if self.mask[i] in self.TARGETList:
-                T = self.TARGETThresholds[np.where(self.mask[i] == self.TARGETList)[0][0]]
-                self.quadHelperOver[i] = 0.01
-                self.quadHelperUnder[i] = 0.6
-            # Constraint on OARs
-            elif self.mask[i] in self.OARList:
-                T = self.OARThresholds[np.where(self.mask[i] == self.OARList)[0][0]]
-                self.quadHelperOver[i] = 0.001
-                self.quadHelperUnder[i] = 0.00
-            elif 0 == self.mask[i]:
-                print('there is an element in the voxels that is also mask 0')
-            self.quadHelperThresh[i] = T
-            ########################
         ## This is the total number of voxels that there are in the body. Not all voxels from all directions
 
     ## Create a map from big to small voxel space, the order of elements is preserved but there is a compression to only
@@ -460,7 +454,6 @@ class tomodata:
 
     def removezeroes(self):
         # Next I am removing the voxels that have a mask of zero (0) because they REALLY complicate things otherwise
-        # Making the problem larger.
         #-------------------------------------
         locats = np.where(0 == self.maskHD)[0]
         self.maskHD = np.delete(self.maskHD, locats)
@@ -493,20 +486,42 @@ class tomodata:
         self.TARGETThresholds = [70]
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
+start_time = time.time()
+dataobject = tomodata()
 ## This part is for AMPL's implementation:
 def printAMPLfile(data):
     f = open("tomononlinear.dat", "w")
     print('param numvoxels :=', len(data.mask), ';', file = f)
     print('param: VOXELS: thethreshold :=', file = f)
-    thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': data.quadHelperThresh})
+    quadHelperThresh = np.zeros(len(data.mask))
+    quadHelperUnder = np.zeros(len(data.mask))
+    quadHelperOver = np.zeros(len(data.mask))
+    #######################################3
+    for i in range(len(data.mask)):
+        # Constraint on TARGETS
+        T = None
+        if data.mask[i] in data.TARGETList:
+            T = data.TARGETThresholds[np.where(data.mask[i] == data.TARGETList)[0][0]]
+            quadHelperOver[i] = 0.001
+            quadHelperUnder[i] = 0.06
+        # Constraint on OARs
+        elif data.mask[i] in data.OARList:
+            T = data.OARThresholds[np.where(data.mask[i] == data.OARList)[0][0]]
+            quadHelperOver[i] = 0.001
+            quadHelperUnder[i] = 0.00
+        elif 0 == data.mask[i]:
+            print('there is an element in the voxels that is also mask 0')
+        quadHelperThresh[i] = T
+    ########################
+    thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': quadHelperThresh})
     print(thrs.to_string(index=False, header = False), file = f)
     print(";", file=f)
     print('param: quadHelperOver :=', file = f)
-    thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': data.quadHelperOver})
+    thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': quadHelperOver})
     print(thrs.to_string(index=False, header = False), file = f)
     print(";", file=f)
     print('param: quadHelperUnder :=', file=f)
-    thrs = pds.DataFrame(data={'A': np.arange(len(data.mask)), 'B': data.quadHelperUnder})
+    thrs = pds.DataFrame(data={'A': np.arange(len(data.mask)), 'B': quadHelperUnder})
     print(thrs.to_string(index=False, header = False), file=f)
     print(";", file=f)
     print('param: KNJPARAMETERS: D:=' , file = f)
@@ -517,8 +532,6 @@ def printAMPLfile(data):
     print(";", file = f)
     f.close()
 
-start_time = time.time()
-dataobject = tomodata()
 printAMPLfile(dataobject)
 tomoinstance = tomotherapyNP(dataobject)
 tomoinstance.plotDVH('dvh-ColumnGeneration')

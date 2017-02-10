@@ -4,8 +4,10 @@
     <bookmark url="file://$PROJECT_DIR$/tomotherapynpNoQuadratic.py" line="333" mnemonic="5" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
+    <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="added the iterative procedure, running fast">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tomotherapyColumnGeneration2loops.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapyColumnGeneration.py" afterPath="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapyIterative.py" afterPath="$PROJECT_DIR$/tomotherapyIterative.py" />
     </list>
     <ignored path="CaseCreation.iws" />
@@ -26,11 +28,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="tomotherapyColumnGeneration.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="tomotherapyColumnGeneration.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="208">
-              <caret line="206" column="41" lean-forward="true" selection-start-line="204" selection-start-column="41" selection-end-line="204" selection-end-column="54" />
+            <state relative-caret-position="394">
+              <caret line="45" column="37" lean-forward="false" selection-start-line="45" selection-start-column="37" selection-end-line="45" selection-end-column="37" />
               <folding>
                 <element signature="e#190#212#0" expanded="true" />
               </folding>
@@ -38,11 +40,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tomotherapyIterative.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="tomotherapyColumnGeneration2loops.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration2loops.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="7260">
+              <caret line="496" column="46" lean-forward="false" selection-start-line="496" selection-start-column="46" selection-end-line="496" selection-end-column="46" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tomotherapyIterative.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tomotherapyIterative.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6970">
-              <caret line="444" column="116" lean-forward="true" selection-start-line="444" selection-start-column="116" selection-end-line="444" selection-end-column="116" />
+            <state relative-caret-position="15">
+              <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
               <folding>
                 <element signature="e#190#212#0" expanded="true" />
               </folding>
@@ -61,12 +73,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>80</find>
-      <find>self.N</find>
-      <find>self.data.N</find>
-      <find>OARThresholds</find>
-      <find>voxels</find>
-      <find>PPoptimization</find>
       <find>ColumnGenerationMain</find>
       <find>sampleevery</find>
       <find>PricingProblem</find>
@@ -78,11 +84,25 @@
       <find>self.data.D</find>
       <find>restrictedin</find>
       <find>refinesolution</find>
-      <find>solveRMC</find>
-      <find>binaryVariables</find>
       <find>np.empty</find>
       <find>self.binaryVariables</find>
+      <find>plotdvh</find>
+      <find>outputDirectory</find>
       <find>self.binaries</find>
+      <find>50</find>
+      <find>newobj</find>
+      <find>newob</find>
+      <find>new</find>
+      <find>old objective</find>
+      <find>columngene</find>
+      <find>plotsinogram</find>
+      <find>calcObjGrad</find>
+      <find>calcdose</find>
+      <find>binaryVariables</find>
+      <find>0.6</find>
+      <find>0.06</find>
+      <find>solveRMC</find>
+      <find>getvector</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -116,13 +136,14 @@
         <option value="$PROJECT_DIR$/../../VMAT/VMATwPenCode/picklereader.py" />
         <option value="$PROJECT_DIR$/../../VMAT/VMATwPenCode/greedyVMATsampling.py" />
         <option value="$PROJECT_DIR$/basura.py" />
-        <option value="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
         <option value="$PROJECT_DIR$/tomotherapyIterative.py" />
+        <option value="$PROJECT_DIR$/tomotherapyColumnGeneration2loops.py" />
+        <option value="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-3" />
+    <option name="x" value="1363" />
     <option name="width" value="1926" />
     <option name="height" value="1083" />
   </component>
@@ -141,6 +162,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -155,13 +177,24 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="Tomotherapy-Without-Pulse">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="PyConsoleConfigurable.Python Console" />
-    <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../codes/twosigma/bin/hdf5reader.py" />
     <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -184,7 +217,7 @@
       <recent name="C:\Users\S170452\PycharmProjects\pythonTemplate" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.tomotherapyIterative">
+  <component name="RunManager" selected="Python.tomotherapyColumnGeneration">
     <configuration default="false" name="greedyVMATsampling" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -442,8 +475,8 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.tomotherapyIterative" />
-        <item index="1" class="java.lang.String" itemvalue="Python.tomotherapyColumnGeneration" />
+        <item index="0" class="java.lang.String" itemvalue="Python.tomotherapyColumnGeneration" />
+        <item index="1" class="java.lang.String" itemvalue="Python.tomotherapyIterative" />
         <item index="2" class="java.lang.String" itemvalue="Python.picklereader" />
         <item index="3" class="java.lang.String" itemvalue="Python.greedyVMATsampling" />
         <item index="4" class="java.lang.String" itemvalue="Python.grader" />
@@ -463,13 +496,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
-    </task>
-    <task id="LOCAL-00074" summary="Assigned existing values to fakevalue variable">
-      <created>1469216515130</created>
-      <option name="number" value="00074" />
-      <option name="presentableId" value="LOCAL-00074" />
-      <option name="project" value="LOCAL" />
-      <updated>1469216515132</updated>
     </task>
     <task id="LOCAL-00075" summary="set almost everything up, masking values introduced into fakevalues matrix">
       <created>1469219993708</created>
@@ -807,7 +833,14 @@
       <option name="project" value="LOCAL" />
       <updated>1484183953569</updated>
     </task>
-    <option name="localTasksCounter" value="123" />
+    <task id="LOCAL-00123" summary="added the iterative procedure, running fast">
+      <created>1484249732951</created>
+      <option name="number" value="00123" />
+      <option name="presentableId" value="LOCAL-00123" />
+      <option name="project" value="LOCAL" />
+      <updated>1484249732951</updated>
+    </task>
+    <option name="localTasksCounter" value="124" />
     <servers />
   </component>
   <component name="TodoView">
@@ -820,19 +853,17 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-3" y="0" width="1926" height="1083" extended-state="6" />
-    <editor active="true" />
+    <frame x="1363" y="0" width="1926" height="1083" extended-state="6" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1046875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18385416" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2612903" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2308478" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17102315" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17083333" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.412666" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22663802" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -840,9 +871,11 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33503574" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.08084164" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.412666" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22663802" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -879,7 +912,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="corrected a typo in zeros" />
     <MESSAGE value="Changed a few bugs. Latest the numpy multiply issue" />
     <MESSAGE value="Looks like everything runs minus the plots." />
     <MESSAGE value="Now everything runs and the answers converge to something. Still failing in the plots." />
@@ -904,7 +936,8 @@
     <MESSAGE value="I have changed the cycling rule and reused picklereader" />
     <MESSAGE value="create AMPL files on the fly" />
     <MESSAGE value="Adding the iterative procedure&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding the iterative procedure&#10;" />
+    <MESSAGE value="added the iterative procedure, running fast" />
+    <option name="LAST_COMMIT_MESSAGE" value="added the iterative procedure, running fast" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -924,6 +957,11 @@
           <line>68</line>
           <option name="timeStamp" value="126" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tomotherapyColumnGeneration2loops.py</url>
+          <line>303</line>
+          <option name="timeStamp" value="128" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -932,21 +970,11 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="128" />
+      <option name="time" value="129" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#190#212#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../VMAT/VMATwPenCode/picklereader.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1370,20 +1398,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
+    <entry file="file://$PROJECT_DIR$/tomotherapyIterative.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="206" column="41" lean-forward="true" selection-start-line="204" selection-start-column="41" selection-end-line="204" selection-end-column="54" />
+        <state relative-caret-position="15">
+          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
           <folding>
             <element signature="e#190#212#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tomotherapyIterative.py">
+    <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration2loops.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6970">
-          <caret line="444" column="116" lean-forward="true" selection-start-line="444" selection-start-column="116" selection-end-line="444" selection-end-column="116" />
+        <state relative-caret-position="7260">
+          <caret line="496" column="46" lean-forward="false" selection-start-line="496" selection-start-column="46" selection-end-line="496" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="394">
+          <caret line="45" column="37" lean-forward="false" selection-start-line="45" selection-start-column="37" selection-end-line="45" selection-end-column="37" />
           <folding>
             <element signature="e#190#212#0" expanded="true" />
           </folding>
