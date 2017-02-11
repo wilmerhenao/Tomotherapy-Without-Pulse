@@ -128,38 +128,31 @@ class tomotherapyNP(object):
 
     def addConstraints(self, b):
         # Add some constraints. This one is about replacing the absolute value with linear expressions
-        self.absoluteValueRemovalConstraint1 = [None] * (self.data.K - 1)
-        self.absoluteValueRemovalConstraint2 = [None] * (self.data.K - 1)
+        self.abs_greater = [None] * (self.data.K - 1) * self.data.N
+        self.abs_smaller = [None] * (self.data.K - 1) * self.data.N
+        self.Mlimits = [None] * (self.data.N)
         # self.sumMaxRestriction = None
         expr = grb.LinExpr()
         # Constraints related to absolute value removal from objective function
-        for k in range(0, (self.data.K - 1)):
-            # sum mu variables and restrict their sum to be smaller than M
-            expr += self.muVars[k]
-            # \mu \geq \beta_{i,k+1} - \beta_{i,k}
-            self.absoluteValueRemovalConstraint1[k] = self.mod.addConstr(
-                self.muVars[k], grb.GRB.GREATER_EQUAL, self.binaries[k + 1] - self.binaries[k],
-                name="rmabs1_{" + str(k) + "," + str(b) + "}")
-            # \mu \geq -(\beta_{i,k+1} - \beta_{i,k})
-            self.absoluteValueRemovalConstraint2[k] = self.mod.addConstr(
-                self.muVars[k], grb.GRB.GREATER_EQUAL, -(self.binaries[k + 1] - self.binaries[k]),
-                name="rmabs2_{" + str(k) + "," + str(b) + "}")
-        lastconstr = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL, self.data.M, name="summaxrest_{" + str(k) + "}")
+        for n in range(0, (self.data.N)):
+            expr = None
+            for k in range(0, (self.data.K - 1)):
+                # sum mu variables and restrict their sum to be smaller than M
+                expr += self.muVars[k + n * (self.data.K - 1)]
+                self.abs_greater[k + n * (self.data.K - 1)] = self.mod.addConstr(self.muVars[k + n * (self.data.K - 1)], grb.GRB.GREATER_EQUAL,
+                                                         self.binaries[(k+1) + n * (self.data.K - 1)] - self.binaries[k + n * (self.data.K - 1)],
+                                                         name="rmabs_greater{" + str(n) + "," + str(k) + "}")
+                self.abs_smaller[k + n * (self.data.K - 1)] = self.mod.addConstr(
+                    self.muVars[k + n * (self.data.K - 1)], grb.GRB.GREATER_EQUAL, -(self.binaries[(k+1) + n * (self.data.K - 1)] - self.binaries[k + n * (self.data.K - 1)]),
+                    name="rmabs_smaller{" + str(n) + "," + str(k) + "}")
+            lastconstr[n] = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL, self.data.M, name="summaxrestleaf_{" + str(n) + "}")
         # Constraints related to dose.
-        # First of all create a submatrix of sparse D.
-        indices = []
-        for i in range(0, self.data.K):
-            indices.append(self.data.N * i + b)
-        restrictedIntensity = (self.data.D.tocsc()[:,indices])
-        # Multiply times the intensity in each of the different columns (this is y bar)
-        for i in range(0, self.data.K):
-            restrictedIntensity[:,i] *= self.yk[i]
-
-        for j in range(0, len(self.zjs)):
+        longintensitiesvector = np.dot(self.oneshelper.T, np.multiply(self.yk, self.binaries)) # Map available intensities
+        restrictedintensity = np.multiply(self.data.D.tocsc(), longintensitiesvector) #Map all doses.
+        for j in range(0, len(self.zjs)): #len of voxels
             expr = grb.LinExpr()
             expr += self.zjs[j] - self.zbar[j]
-            for k in range(0, (self.data.K - 1)):
-                expr -= restrictedIntensity[j, k]  * self.binaries[k]
+            expr -= sum(restrictedintensity[j,:])
             self.mod.addConstr(expr, grb.GRB.EQUAL, 0, name="z_j{" + str(j) + "}")
             self.mod.addConstr(self.zjs[j] - self.quadHelperThresh[j], grb.GRB.EQUAL, self.xiplus[j] - self.ximinus[j], name="xis{" + str(j) + "}")
         self.mod.update()
