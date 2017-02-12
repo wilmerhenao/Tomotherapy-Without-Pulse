@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/tomotherapyIteration.py" line="467" mnemonic="5" />
+    <bookmark url="file://$PROJECT_DIR$/tomotherapyIteration.py" line="442" mnemonic="5" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
@@ -39,8 +39,8 @@
       <file leaf-file-name="tomotherapyIteration.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapyIteration.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="335" column="11" lean-forward="false" selection-start-line="335" selection-start-column="11" selection-end-line="335" selection-end-column="11" />
+            <state relative-caret-position="302">
+              <caret line="205" column="37" lean-forward="true" selection-start-line="205" selection-start-column="37" selection-end-line="205" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -57,7 +57,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>newobj</find>
       <find>newob</find>
       <find>new</find>
       <find>old objective</find>
@@ -87,6 +86,7 @@
       <find>ampl</find>
       <find>binaryVariables</find>
       <find>goaltargets</find>
+      <find>refinesolution</find>
     </findStrings>
     <replaceStrings>
       <replace>self.data.K</replace>
@@ -481,13 +481,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00084" summary="changes related to size of the problem and accounting of zeros">
-      <created>1469655744721</created>
-      <option name="number" value="00084" />
-      <option name="presentableId" value="LOCAL-00084" />
-      <option name="project" value="LOCAL" />
-      <updated>1469655744721</updated>
-    </task>
     <task id="LOCAL-00085" summary="Removed my own implementation of PWL because it adds a bunch of binary variables that slow the process down.">
       <created>1469656294062</created>
       <option name="number" value="00085" />
@@ -824,7 +817,14 @@
       <option name="project" value="LOCAL" />
       <updated>1486876508909</updated>
     </task>
-    <option name="localTasksCounter" value="133" />
+    <task id="LOCAL-00133" summary="Ran for the first time">
+      <created>1486938535890</created>
+      <option name="number" value="00133" />
+      <option name="presentableId" value="LOCAL-00133" />
+      <option name="project" value="LOCAL" />
+      <updated>1486938535890</updated>
+    </task>
+    <option name="localTasksCounter" value="134" />
     <servers />
   </component>
   <component name="TodoView">
@@ -845,7 +845,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2612903" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.47088867" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36159346" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17083333" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -946,6 +946,11 @@
           <line>303</line>
           <option name="timeStamp" value="128" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tomotherapyIteration.py</url>
+          <line>191</line>
+          <option name="timeStamp" value="130" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -954,7 +959,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="130" />
+      <option name="time" value="131" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1403,8 +1408,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyIteration.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="335" column="11" lean-forward="false" selection-start-line="335" selection-start-column="11" selection-end-line="335" selection-end-column="11" />
+        <state relative-caret-position="302">
+          <caret line="205" column="37" lean-forward="true" selection-start-line="205" selection-start-column="37" selection-end-line="205" selection-end-column="37" />
           <folding />
         </state>
       </provider>

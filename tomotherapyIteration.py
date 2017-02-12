@@ -191,29 +191,6 @@ class tomotherapyNP(object):
             for j in range(self.data.N):
                 self.oneshelper[j + i * self.data.N, i] = 1.0
 
-    def refinesolution(self, iterCG):
-        gstar = -np.inf
-        numrefinements = 1
-        while (gstar <= 0) & ( numrefinements < 100):
-            print('starting iteration of column generation', iterCG)
-            # Step 1 on Fei's paper. Use the information on the current treatment plan to formulate and solve an
-            # instance of the PP
-            numrefinements += 1
-            gstar = self.PricingProblem()
-            iterCG += 1
-            print('this is refinement' + str(iterCG))
-            self.plotSinoGram(iterCG)
-            # Step 2. If the optimal value of the PP is nonnegative**, go to step 5. Otherwise, denote the optimal
-            # solution to the PP by c and Ac and replace caligraphic C and A = Abar, k \in caligraphicC
-            if gstar >= 0:
-                # This choice includes the case when no aperture was selected
-                print('Program finishes because no beamlet was selected to enter')
-                break
-            else:
-                self.rmpres = self.solveRMC()
-                self.plotDVH('dvh-ColumnGeneration' + str(iterCG))
-        print('leaving solution refinement')
-
     def fixbinaries(self):
         for k in range(self.data.K):
             for n in range(self.data.N):
@@ -256,8 +233,6 @@ class tomotherapyNP(object):
             else:
                 iterCG += 1
         print('starting solution refinement')
-        #self.refinesolution(iterCG)
-        #self.rmpres = self.solveRMC(1E-5)
         print('leaving CG')
         return(self.rmpres)
 
