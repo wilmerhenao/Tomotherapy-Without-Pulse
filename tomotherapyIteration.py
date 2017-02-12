@@ -126,16 +126,14 @@ class tomotherapyNP(object):
 
         self.mod.update()
 
-    def addConstraints(self, b):
+    def addConstraints(self):
         # Add some constraints. This one is about replacing the absolute value with linear expressions
         self.abs_greater = [None] * (self.data.K - 1) * self.data.N
         self.abs_smaller = [None] * (self.data.K - 1) * self.data.N
         self.Mlimits = [None] * (self.data.N)
-        # self.sumMaxRestriction = None
-        expr = grb.LinExpr()
         # Constraints related to absolute value removal from objective function
         for n in range(0, (self.data.N)):
-            expr = None
+            expr = grb.LinExpr()
             for k in range(0, (self.data.K - 1)):
                 # sum mu variables and restrict their sum to be smaller than M
                 expr += self.muVars[k + n * (self.data.K - 1)]
@@ -145,19 +143,27 @@ class tomotherapyNP(object):
                 self.abs_smaller[k + n * (self.data.K - 1)] = self.mod.addConstr(
                     self.muVars[k + n * (self.data.K - 1)], grb.GRB.GREATER_EQUAL, -(self.binaries[(k+1) + n * (self.data.K - 1)] - self.binaries[k + n * (self.data.K - 1)]),
                     name="rmabs_smaller{" + str(n) + "," + str(k) + "}")
-            lastconstr[n] = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL, self.data.M, name="summaxrestleaf_{" + str(n) + "}")
+            self.Mlimits[n] = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL, self.data.M, name="summaxrestleaf_{" + str(n) + "}")
         # Constraints related to dose.
-        longintensitiesvector = np.dot(self.oneshelper.T, np.multiply(self.yk, self.binaries)) # Map available intensities
-        restrictedintensity = np.multiply(self.data.D.tocsc(), longintensitiesvector) #Map all doses.
+        # Fortranize the binaries. Make leaves the faster changing variable and projection the slowest.
+        # longintensitiesvector = np.dot(self.oneshelper.T, np.repeat(self.yk, 80)) # Map available intensities
+        restrictedintensity = np.multiply(self.data.D.todense(), np.repeat(self.yk, 80)) #Map all doses.
+        print(restrictedintensity.shape)
+        print(restrictedintensity[0])
+        print(self.data.D.shape)
+        print(np.repeat(self.yk, 80).shape)
         for j in range(0, len(self.zjs)): #len of voxels
             expr = grb.LinExpr()
             expr += self.zjs[j] - self.zbar[j]
-            expr -= sum(restrictedintensity[j,:])
+            for k in range(0, self.data.K):
+                for n in range(0, self.data.N):
+                    # Notice that the order of the indices is different
+                    expr -= restrictedintensity[j, n + k * self.data.N] * self.binaries[k + n * self.data.K]
             self.mod.addConstr(expr, grb.GRB.EQUAL, 0, name="z_j{" + str(j) + "}")
             self.mod.addConstr(self.zjs[j] - self.quadHelperThresh[j], grb.GRB.EQUAL, self.xiplus[j] - self.ximinus[j], name="xis{" + str(j) + "}")
         self.mod.update()
 
-    def addGoalExact(self, b):
+    def addGoalExact(self):
         expr = grb.QuadExpr()
         for i in range(0,len(self.zjs)):
             expr += self.quadHelperOver[i] * self.xiplus[i] * self.xiplus[i] + self.quadHelperUnder[i] * self.ximinus[i] * self.ximinus[i]
@@ -176,12 +182,10 @@ class tomotherapyNP(object):
         self.addGoalExact()
         self.mod.optimize()
         # Get the optimal value of the optimization
+        obj = None
         if self.mod.status == grb.GRB.Status.OPTIMAL:
             obj = self.mod.getObjective()
-            self.goalvalues[b] = obj.getValue()
-            # Assign optimal results of the optimization
-            for i in range(self.data.K):
-                self.goaltargets[i, b] = self.binaries[i].X
+        return(obj)
 
     ## This function creates a matrix that has a column of ones kronecker the identity matrix
     def onehelpCreator(self):
@@ -198,7 +202,6 @@ class tomotherapyNP(object):
             # Step 1 on Fei's paper. Use the information on the current treatment plan to formulate and solve an
             # instance of the PP
             numrefinements += 1
-            self.mathCal = np.array([i for i in self.originalMathCal])
             gstar = self.PricingProblem()
             iterCG += 1
             print('this is refinement' + str(iterCG))
@@ -214,19 +217,13 @@ class tomotherapyNP(object):
                 self.plotDVH('dvh-ColumnGeneration' + str(iterCG))
         print('leaving solution refinement')
 
-    ## Find the locations where the D matrix will just never reach and don't even look at those beamlets
-    def turnOnOnlynecessarybeamlets(self):
-        for i in np.unique(self.data.bixels % self.data.N):
-            self.mathCal[i] = 1
-
     def IterativeMain(self):
         # Create the ones helper matrix:
         self.onehelpCreator()
-
         # Matrix with a binary choice for each of the beamlets at each control point
         self.binaryVariables = np.zeros((self.data.K, self.data.N))
         # Turn off unnecessary beamlest to save time
-        self.turnOnOnlynecessarybeamlets()
+        # self.turnOnOnlynecessarybeamlets()
         # Variable that keeps the intensities at each control point. Initialized at maximum intensity
         self.yk = np.ones(self.data.K) * self.data.maxIntensity
         # Calculate the boundaries of yk
@@ -237,7 +234,7 @@ class tomotherapyNP(object):
         self.rmpres = None
         while (True):
             oldobj = newobj
-            print('starting iteration of column generation', iterCG)
+            print('starting iteration #', iterCG)
             self.plotSinoGram(iterCG)
             # Step 1 on Fei's paper. Use the information on the current treatment plan to formulate and solve an
             # instance of the PP
@@ -249,13 +246,13 @@ class tomotherapyNP(object):
             newobj = self.rmpres.fun
             self.plotDVH('dvh-ColumnGeneration' + str(iterCG))
 
-            if(abs(newobj - oldobj)/oldobj < 0.01)
+            if(abs(newobj - oldobj)/oldobj < 0.01):
                 break
-            else
+            else:
                 iterCG += 1
         print('starting solution refinement')
-        self.refinesolution(iterCG)
-        self.rmpres = self.solveRMC(1E-5)
+        #self.refinesolution(iterCG)
+        #self.rmpres = self.solveRMC(1E-5)
         print('leaving CG')
         return(self.rmpres)
 
