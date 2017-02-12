@@ -102,16 +102,16 @@ class tomotherapyNP(object):
         self.zjs = [None] * (len(self.zbar))
         self.xiplus = [None] * (len(self.zbar))
         self.ximinus = [None] * (len(self.zbar))
-        for i in range(0, self.data.K):
-            for b in range(0, self.data.N):
-                self.binaries[i + b * self.data.K] = self.mod.addVar(vtype=grb.GRB.BINARY,
-                                                   name="binaryVoxel_{" + str(i) + ", " + str(b) + "}",
+        for k in range(self.data.K):
+            for n in range(self.data.N):
+                self.binaries[k + n * self.data.K] = self.mod.addVar(vtype=grb.GRB.BINARY,
+                                                   name="binaryVoxel_{" + str(k) + ", " + str(n) + "}",
                                                    column=None)
                 #  The mu variable will register change in the behaviour from one control to the other. Therefore loses 1
                 # degree of freedom
-                if (self.data.K - 1) != i:
-                    self.muVars[i + b * (self.data.K - 1)] = self.mod.addVar(vtype=grb.GRB.BINARY,
-                                                                             name="mu_{" + str(i) + "," + str(b) + "}",
+                if (self.data.K - 1) != k:
+                    self.muVars[k + n * (self.data.K - 1)] = self.mod.addVar(vtype=grb.GRB.BINARY,
+                                                                             name="mu_{" + str(k) + "," + str(n) + "}",
                                                                              column=None)
         for i in range(0, len(self.zbar)):
             self.zjs[i] = self.mod.addVar(vtype=grb.GRB.CONTINUOUS,
@@ -148,10 +148,6 @@ class tomotherapyNP(object):
         # Fortranize the binaries. Make leaves the faster changing variable and projection the slowest.
         # longintensitiesvector = np.dot(self.oneshelper.T, np.repeat(self.yk, 80)) # Map available intensities
         restrictedintensity = np.multiply(self.data.D.todense(), np.repeat(self.yk, 80)) #Map all doses.
-        print(restrictedintensity.shape)
-        print(restrictedintensity[0])
-        print(self.data.D.shape)
-        print(np.repeat(self.yk, 80).shape)
         for j in range(0, len(self.zjs)): #len of voxels
             expr = grb.LinExpr()
             expr += self.zjs[j] - self.zbar[j]
@@ -184,7 +180,8 @@ class tomotherapyNP(object):
         # Get the optimal value of the optimization
         obj = None
         if self.mod.status == grb.GRB.Status.OPTIMAL:
-            obj = self.mod.getObjective()
+            obj = self.mod.ObjVal
+        print('pricing problem objective is', obj)
         return(obj)
 
     ## This function creates a matrix that has a column of ones kronecker the identity matrix
@@ -217,6 +214,11 @@ class tomotherapyNP(object):
                 self.plotDVH('dvh-ColumnGeneration' + str(iterCG))
         print('leaving solution refinement')
 
+    def fixbinaries(self):
+        for k in range(self.data.K):
+            for n in range(self.data.N):
+                self.binaryVariables[k, n] = self.binaries[k + n * self.data.K].X
+
     def IterativeMain(self):
         # Create the ones helper matrix:
         self.onehelpCreator()
@@ -240,6 +242,8 @@ class tomotherapyNP(object):
             # instance of the PP
             self.calcObjGrad(self.yk)
             gstar = self.PricingProblem()
+            # Pass binary values from gurobi format to python
+            self.fixbinaries()
             # Step 2. If the optimal value of the PP is nonnegative**, go to step 5. Otherwise, denote the optimal
             # solution to the PP by c and Ac and replace caligraphic C and A = Abar, k \in caligraphicC
             self.rmpres = self.solveRMC()
@@ -247,6 +251,7 @@ class tomotherapyNP(object):
             self.plotDVH('dvh-ColumnGeneration' + str(iterCG))
 
             if(abs(newobj - oldobj)/oldobj < 0.01):
+                print('achieved the tolerance.')
                 break
             else:
                 iterCG += 1
@@ -341,7 +346,7 @@ class tomodata:
         self.sampleevery = 32
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
-        self.maxIntensity = 10
+        self.maxIntensity = 20
         self.caseSide = 256
         self.voxelsBigSpace = self.caseSide ** 2
         # Number of control points (every 2 degrees)
