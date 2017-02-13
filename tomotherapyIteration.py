@@ -168,6 +168,74 @@ class tomotherapyNP(object):
             self.mod.addConstr(self.zjs[j] - self.quadHelperThresh[j], grb.GRB.EQUAL, self.xiplus[j] - self.ximinus[j], name="xis{" + str(j) + "}")
         self.mod.update()
 
+    # Define the variables
+    def addVariablesColumn(self):
+        self.binaries = [None] * self.data.K * self.data.N
+        self.muVars = [None] * (self.data.K - 1) * self.data.N
+        self.zjs = [None] * (len(self.zbar))
+        self.xiplus = [None] * (len(self.zbar))
+        self.ximinus = [None] * (len(self.zbar))
+
+                #  The mu variable will register change in the behaviour from one control to the other. Therefore loses 1
+                # degree of freedom
+        for k in range(self.data.K-1):
+            for n in range(self.data.N):
+                self.muVars[k + n * (self.data.K - 1)] = self.mod.addVar(vtype=grb.GRB.BINARY,
+                                                                             name="mu_{" + str(k) + "," + str(n) + "}",
+                                                                             column=None)
+        for i in range(0, len(self.zbar)):
+            self.zjs[i] = self.mod.addVar(vtype=grb.GRB.CONTINUOUS,
+                                          name="dose_{" + str(i) + "}",
+                                          column=None, lb=0.0)
+            self.xiplus[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
+                                             name="xiplus_{" + str(i) + "}",
+                                             column=None)
+            self.ximinus[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
+                                             name="ximinus_{" + str(i) + "}",
+                                             column=None)
+
+        self.mod.update()
+
+    def addConstraintsColumn(self):
+        # Add some constraints. This one is about replacing the absolute value with linear expressions
+        # Constraints related to dose.
+        # Fortranize the binaries. Make leaves the faster changing variable and projection the slowest.
+        # restrictedintensity has dimension j x N*K Fastest changing is N dimension. K goes slow
+        self.doseConstraints = [None] * len(self.zjs)
+        restrictedintensity = self.data.D.tocsc().multiply(np.repeat(self.yk, self.data.N))
+
+        # fortranize the order of binaries.
+        for j in range(0, len(self.zjs)): #len of voxels
+            expr = grb.LinExpr()
+            expr -= self.zjs[j] - self.zbar[j]
+            self.doseConstraints[j] = self.mod.addConstr(expr, grb.GRB.EQUAL, 0, name="z_j{" + str(j) + "}")
+            self.mod.addConstr(self.zjs[j] - self.quadHelperThresh[j], grb.GRB.EQUAL, self.xiplus[j] - self.ximinus[j],
+                               name="xis{" + str(j) + "}")
+        for k in range(self.data.K):
+            for n in range(self.data.N):
+                self.binaries[k + n * self.data.K] = self.mod.addVar(vtype=grb.GRB.BINARY,
+                                                   name="binaryVoxel_{" + str(k) + ", " + str(n) + "}",
+                                                   column=grb.Column(np.array(restrictedintensity[:,n + k * self.data.N].flatten().tolist()[0]), self.doseConstraints))
+        # Constraints related to absolute value removal from objective function
+        self.abs_greater = [None] * (self.data.K - 1) * self.data.N
+        self.abs_smaller = [None] * (self.data.K - 1) * self.data.N
+        self.Mlimits = [None] * (self.data.N)
+        apoint = time.time()
+        for n in range(0, (self.data.N)):
+            expr = grb.LinExpr()
+            for k in range(0, (self.data.K - 1)):
+                # sum mu variables and restrict their sum to be smaller than M
+                expr += self.muVars[k + n * (self.data.K - 1)]
+                self.abs_greater[k + n * (self.data.K - 1)] = self.mod.addConstr(self.muVars[k + n * (self.data.K - 1)], grb.GRB.GREATER_EQUAL,
+                                                         self.binaries[(k+1) + n * (self.data.K - 1)] - self.binaries[k + n * (self.data.K - 1)],
+                                                         name="rmabs_greater{" + str(n) + "," + str(k) + "}")
+                self.abs_smaller[k + n * (self.data.K - 1)] = self.mod.addConstr(
+                    self.muVars[k + n * (self.data.K - 1)], grb.GRB.GREATER_EQUAL, -(self.binaries[(k+1) + n * (self.data.K - 1)] - self.binaries[k + n * (self.data.K - 1)]),
+                    name="rmabs_smaller{" + str(n) + "," + str(k) + "}")
+            self.Mlimits[n] = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL, self.data.M, name="summaxrestleaf_{" + str(n) + "}")
+
+        self.mod.update()
+
     def addGoalExact(self):
         expr = grb.QuadExpr()
         for i in range(0,len(self.zjs)):
@@ -182,8 +250,8 @@ class tomotherapyNP(object):
         self.zbar = 0
         self.calcDose()
         self.zbar = self.currentDose
-        self.addVariables()
-        self.addConstraints()
+        self.addVariablesColumn()
+        self.addConstraintsColumn()
         self.addGoalExact()
         self.mod.optimize()
         # Get the optimal value of the optimization
