@@ -40,7 +40,7 @@ class tomotherapyNP(object):
     def __init__(self, datastructure):
         print('Reading in data...')
         self.data = datastructure
-        print('Building column generation method')
+        print('Building iterative method')
         self.thresholds()
         self.rmpres = self.IterativeMain()
         print('The problem has been completed')
@@ -132,6 +132,7 @@ class tomotherapyNP(object):
         self.abs_smaller = [None] * (self.data.K - 1) * self.data.N
         self.Mlimits = [None] * (self.data.N)
         # Constraints related to absolute value removal from objective function
+        apoint = time.time()
         for n in range(0, (self.data.N)):
             expr = grb.LinExpr()
             for k in range(0, (self.data.K - 1)):
@@ -146,15 +147,23 @@ class tomotherapyNP(object):
             self.Mlimits[n] = self.mod.addConstr(expr, grb.GRB.LESS_EQUAL, self.data.M, name="summaxrestleaf_{" + str(n) + "}")
         # Constraints related to dose.
         # Fortranize the binaries. Make leaves the faster changing variable and projection the slowest.
-        # longintensitiesvector = np.dot(self.oneshelper.T, np.repeat(self.yk, 80)) # Map available intensities
-        restrictedintensity = np.multiply(self.data.D.todense(), np.repeat(self.yk, 80)) #Map all doses.
+        # restrictedintensity = np.multiply(self.data.D, np.repeat(self.yk, 80)) #Map all doses.
+        restrictedintensity = self.data.D.tocsc().multiply(np.repeat(self.yk, self.data.N))
+        [rowindex, colindex, vals] = sps.find(restrictedintensity)
+
+        # fortranize the order of binaries.
         for j in range(0, len(self.zjs)): #len of voxels
             expr = grb.LinExpr()
             expr += self.zjs[j] - self.zbar[j]
-            for k in range(0, self.data.K):
-                for n in range(0, self.data.N):
-                    # Notice that the order of the indices is different
-                    expr -= restrictedintensity[j, n + k * self.data.N] * self.binaries[k + n * self.data.K]
+            # Find only the members that are relevant to this voxel
+            jguys = np.where(rowindex == j)[0]
+            #print('jguys:', jguys)
+            for jguy in jguys:
+                # Extract the real coordinates of this particular "jguy"
+                k = np.int(colindex[jguy]/self.data.N)
+                n = colindex[jguy] % self.data.N
+                # Sum over all nonzero members relevant to this voxel.
+                expr -= vals[jguy] * self.binaries[k + n * self.data.K]
             self.mod.addConstr(expr, grb.GRB.EQUAL, 0, name="z_j{" + str(j) + "}")
             self.mod.addConstr(self.zjs[j] - self.quadHelperThresh[j], grb.GRB.EQUAL, self.xiplus[j] - self.ximinus[j], name="xis{" + str(j) + "}")
         self.mod.update()
@@ -226,8 +235,9 @@ class tomotherapyNP(object):
             self.rmpres = self.solveRMC()
             newobj = self.rmpres.fun
             self.plotDVH('dvh-ColumnGeneration' + str(iterCG))
-
-            if(abs(newobj - oldobj)/oldobj < 0.01):
+            if(np.isinf(oldobj)):
+                continue
+            elif(abs(newobj - oldobj)/oldobj < 0.01):
                 print('achieved the tolerance.')
                 break
             else:
@@ -314,10 +324,6 @@ class tomodata:
         self.outputDirectory = "output/"
         # M value. Number of times per beamlet that the switch can be turned on or off
         self.M = 50
-        # C Value in the objective function
-        self.C = 1.0
-        # ry this number of observat
-        # ions
         self.sampleevery = 32
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
