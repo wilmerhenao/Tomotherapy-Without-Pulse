@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/tomotherapyIteration.py" line="516" mnemonic="5" />
+    <bookmark url="file://$PROJECT_DIR$/tomotherapyIteration.py" mnemonic="5" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapyColumnGeneration.py" afterPath="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapyIteration.py" afterPath="$PROJECT_DIR$/tomotherapyIteration.py" />
     </list>
     <ignored path="CaseCreation.iws" />
@@ -29,9 +30,11 @@
       <file leaf-file-name="tomotherapyColumnGeneration.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
-              <caret line="151" column="50" lean-forward="true" selection-start-line="151" selection-start-column="50" selection-end-line="151" selection-end-column="50" />
-              <folding />
+            <state relative-caret-position="347">
+              <caret line="527" column="1" lean-forward="false" selection-start-line="527" selection-start-column="1" selection-end-line="527" selection-end-column="1" />
+              <folding>
+                <element signature="e#190#212#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -39,9 +42,11 @@
       <file leaf-file-name="tomotherapyIteration.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapyIteration.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="488">
-              <caret line="218" column="79" lean-forward="true" selection-start-line="218" selection-start-column="79" selection-end-line="218" selection-end-column="79" />
-              <folding />
+            <state relative-caret-position="233">
+              <caret line="576" column="0" lean-forward="true" selection-start-line="576" selection-start-column="0" selection-end-line="576" selection-end-column="0" />
+              <folding>
+                <element signature="e#190#212#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -57,20 +62,12 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>old objective</find>
-      <find>columngene</find>
-      <find>plotsinogram</find>
-      <find>calcObjGrad</find>
-      <find>calcdose</find>
-      <find>0.6</find>
       <find>0.06</find>
       <find>solveRMC</find>
       <find>getvector</find>
       <find>3</find>
       <find>thresholds</find>
       <find>turnononly</find>
-      <find>addVariables</find>
-      <find>xiplus</find>
       <find>self.data.k</find>
       <find>addConstraints</find>
       <find>onehelpCreator</find>
@@ -79,14 +76,22 @@
       <find>turnono</find>
       <find>starting iteration of column generation</find>
       <find>self.binaries</find>
-      <find>muVars</find>
       <find>pricing problem objective is</find>
-      <find>ampl</find>
       <find>binaryVariables</find>
       <find>goaltargets</find>
       <find>refinesolution</find>
       <find>self.D</find>
       <find>self.data.D</find>
+      <find>muVars</find>
+      <find>addVariables</find>
+      <find>xiplus</find>
+      <find>zbar</find>
+      <find>parameters</find>
+      <find>pricingp</find>
+      <find>xis</find>
+      <find>ampl</find>
+      <find>rmabs</find>
+      <find>heuristi</find>
     </findStrings>
     <replaceStrings>
       <replace>self.data.K</replace>
@@ -124,16 +129,16 @@
         <option value="$PROJECT_DIR$/../../VMAT/VMATwPenCode/greedyVMATsampling.py" />
         <option value="$PROJECT_DIR$/basura.py" />
         <option value="$PROJECT_DIR$/tomotherapyColumnGeneration2loops.py" />
-        <option value="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
         <option value="$PROJECT_DIR$/tomotherapyIterative.py" />
         <option value="$PROJECT_DIR$/tomotherapyIteration.py" />
+        <option value="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1363" />
+    <option name="x" value="3837" />
     <option name="width" value="1926" />
-    <option name="height" value="1083" />
+    <option name="height" value="1203" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -150,6 +155,20 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tomotherapy-Without-Pulse" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tomotherapy-Without-Pulse" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="Scope">
         <subPane subId="Project Files">
           <PATH>
@@ -165,20 +184,6 @@
         </subPane>
       </pane>
       <pane id="Scratches" />
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tomotherapy-Without-Pulse" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tomotherapy-Without-Pulse" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -460,8 +465,8 @@
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Python.tomotherapyIteration" />
-        <item index="1" class="java.lang.String" itemvalue="Python.tomotherapyIterative" />
-        <item index="2" class="java.lang.String" itemvalue="Python.tomotherapyColumnGeneration" />
+        <item index="1" class="java.lang.String" itemvalue="Python.tomotherapyColumnGeneration" />
+        <item index="2" class="java.lang.String" itemvalue="Python.tomotherapyIterative" />
         <item index="3" class="java.lang.String" itemvalue="Python.picklereader" />
         <item index="4" class="java.lang.String" itemvalue="Python.greedyVMATsampling" />
       </list>
@@ -480,13 +485,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
-    </task>
-    <task id="LOCAL-00087" summary="Corrected a spot on removezeroes where I was removing positions that were already being removed. This is a huge problem because the data SHOULD be cleaned before and I should work in SMALLVOXELSPACE ALWAYS">
-      <created>1469741582518</created>
-      <option name="number" value="00087" />
-      <option name="presentableId" value="LOCAL-00087" />
-      <option name="project" value="LOCAL" />
-      <updated>1469741582518</updated>
     </task>
     <task id="LOCAL-00088" summary="With the latest changes the program is now running">
       <created>1469803769263</created>
@@ -824,7 +822,14 @@
       <option name="project" value="LOCAL" />
       <updated>1487007000328</updated>
     </task>
-    <option name="localTasksCounter" value="136" />
+    <task id="LOCAL-00136" summary="Constraints established as columns to addvar">
+      <created>1487026120380</created>
+      <option name="number" value="00136" />
+      <option name="presentableId" value="LOCAL-00136" />
+      <option name="project" value="LOCAL" />
+      <updated>1487026120380</updated>
+    </task>
+    <option name="localTasksCounter" value="137" />
     <servers />
   </component>
   <component name="TodoView">
@@ -837,19 +842,19 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1363" y="0" width="1926" height="1083" extended-state="6" />
+    <frame x="3837" y="0" width="1926" height="1203" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.0546875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.10989583" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2612903" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23901941" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39945406" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17083333" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.360572" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43403095" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22663802" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -896,7 +901,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Looks like there is a bug at this point" />
     <MESSAGE value="changed everything to matrices" />
     <MESSAGE value="there are still problems with the restricted master problem" />
     <MESSAGE value="changed the role of mathcal, not running at this point" />
@@ -921,7 +925,8 @@
     <MESSAGE value="Ran for the first time" />
     <MESSAGE value="Removed refine function. Everything seems to run fine now. But it's really slow." />
     <MESSAGE value="It's a lot faster. But still below AMPL" />
-    <option name="LAST_COMMIT_MESSAGE" value="It's a lot faster. But still below AMPL" />
+    <MESSAGE value="Constraints established as columns to addvar" />
+    <option name="LAST_COMMIT_MESSAGE" value="Constraints established as columns to addvar" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -948,8 +953,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tomotherapyIteration.py</url>
-          <line>213</line>
-          <option name="timeStamp" value="135" />
+          <line>569</line>
+          <option name="timeStamp" value="139" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -959,7 +964,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="136" />
+      <option name="time" value="140" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1003,16 +1008,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="74" column="46" lean-forward="false" selection-start-line="74" selection-start-column="46" selection-end-line="74" selection-end-column="75" />
-          <folding>
-            <element signature="e#246#268#0" expanded="false" />
-            <element signature="e#19716#20158#0" expanded="false" />
-            <element signature="e#24009#24476#0" expanded="false" />
-            <element signature="e#24516#24674#0" expanded="false" />
-            <element signature="e#25882#27001#0" expanded="false" />
-            <element signature="e#27707#28258#0" expanded="false" />
-            <element signature="e#28533#28679#0" expanded="false" />
-            <element signature="e#35230#35787#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1020,7 +1015,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="281" column="28" lean-forward="false" selection-start-line="281" selection-start-column="8" selection-end-line="281" selection-end-column="28" />
-          <folding />
+          <folding>
+            <element signature="e#190#212#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1056,16 +1053,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="74" column="46" lean-forward="false" selection-start-line="74" selection-start-column="46" selection-end-line="74" selection-end-column="75" />
-          <folding>
-            <element signature="e#246#268#0" expanded="false" />
-            <element signature="e#19716#20158#0" expanded="false" />
-            <element signature="e#24009#24476#0" expanded="false" />
-            <element signature="e#24516#24674#0" expanded="false" />
-            <element signature="e#25882#27001#0" expanded="false" />
-            <element signature="e#27707#28258#0" expanded="false" />
-            <element signature="e#28533#28679#0" expanded="false" />
-            <element signature="e#35230#35787#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1073,7 +1060,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="28" column="57" lean-forward="false" selection-start-line="28" selection-start-column="57" selection-end-line="28" selection-end-column="57" />
-          <folding />
+          <folding>
+            <element signature="e#190#212#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1102,16 +1091,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="74" column="46" lean-forward="false" selection-start-line="74" selection-start-column="46" selection-end-line="74" selection-end-column="75" />
-          <folding>
-            <element signature="e#246#268#0" expanded="false" />
-            <element signature="e#19716#20158#0" expanded="false" />
-            <element signature="e#24009#24476#0" expanded="false" />
-            <element signature="e#24516#24674#0" expanded="false" />
-            <element signature="e#25882#27001#0" expanded="false" />
-            <element signature="e#27707#28258#0" expanded="false" />
-            <element signature="e#28533#28679#0" expanded="false" />
-            <element signature="e#35230#35787#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1119,7 +1098,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="28" column="57" lean-forward="false" selection-start-line="28" selection-start-column="57" selection-end-line="28" selection-end-column="57" />
-          <folding />
+          <folding>
+            <element signature="e#190#212#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1148,16 +1129,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="74" column="46" lean-forward="false" selection-start-line="74" selection-start-column="46" selection-end-line="74" selection-end-column="75" />
-          <folding>
-            <element signature="e#246#268#0" expanded="false" />
-            <element signature="e#19716#20158#0" expanded="false" />
-            <element signature="e#24009#24476#0" expanded="false" />
-            <element signature="e#24516#24674#0" expanded="false" />
-            <element signature="e#25882#27001#0" expanded="false" />
-            <element signature="e#27707#28258#0" expanded="false" />
-            <element signature="e#28533#28679#0" expanded="false" />
-            <element signature="e#35230#35787#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1165,7 +1136,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#190#212#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1187,16 +1160,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="74" column="46" lean-forward="false" selection-start-line="74" selection-start-column="46" selection-end-line="74" selection-end-column="75" />
-          <folding>
-            <element signature="e#246#268#0" expanded="false" />
-            <element signature="e#19716#20158#0" expanded="false" />
-            <element signature="e#24009#24476#0" expanded="false" />
-            <element signature="e#24516#24674#0" expanded="false" />
-            <element signature="e#25882#27001#0" expanded="false" />
-            <element signature="e#27707#28258#0" expanded="false" />
-            <element signature="e#28533#28679#0" expanded="false" />
-            <element signature="e#35230#35787#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1212,7 +1175,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#190#212#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1265,7 +1230,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#190#212#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1310,16 +1277,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="74" column="46" lean-forward="false" selection-start-line="74" selection-start-column="46" selection-end-line="74" selection-end-column="75" />
-          <folding>
-            <element signature="e#246#268#0" expanded="false" />
-            <element signature="e#19716#20158#0" expanded="false" />
-            <element signature="e#24009#24476#0" expanded="false" />
-            <element signature="e#24516#24674#0" expanded="false" />
-            <element signature="e#25882#27001#0" expanded="false" />
-            <element signature="e#27707#28258#0" expanded="false" />
-            <element signature="e#28533#28679#0" expanded="false" />
-            <element signature="e#35230#35787#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1376,27 +1333,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="151" column="50" lean-forward="true" selection-start-line="151" selection-start-column="50" selection-end-line="151" selection-end-column="50" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../VMAT/VMATwPenCode/greedyVMAT.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="373">
           <caret line="374" column="43" lean-forward="true" selection-start-line="374" selection-start-column="43" selection-end-line="374" selection-end-column="43" />
-          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tomotherapyColumnGeneration.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="347">
+          <caret line="527" column="1" lean-forward="false" selection-start-line="527" selection-start-column="1" selection-end-line="527" selection-end-column="1" />
+          <folding>
+            <element signature="e#190#212#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyIteration.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="488">
-          <caret line="218" column="79" lean-forward="true" selection-start-line="218" selection-start-column="79" selection-end-line="218" selection-end-column="79" />
-          <folding />
+        <state relative-caret-position="233">
+          <caret line="576" column="0" lean-forward="true" selection-start-line="576" selection-start-column="0" selection-end-line="576" selection-end-column="0" />
+          <folding>
+            <element signature="e#190#212#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

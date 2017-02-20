@@ -21,6 +21,7 @@ import time
 from scipy.stats import describe
 import pickle
 import matplotlib
+import os
 
 numcores = 4
 
@@ -95,13 +96,55 @@ class tomotherapyNP(object):
         print('exiting graciously')
         return (res)
 
+    def addVariablesRMCGurobi(self):
+        self.yg = [None] * (len(self.yk))
+        self.zjs = [None] * (len(self.currentDose))
+        self.xiplus = [None] * (len(self.currentDose))
+        self.ximinus = [None] * (len(self.currentDose))
+        for i in range(0, len(self.currentDose)):
+            self.zjs[i] = self.mod.addVar(vtype=grb.GRB.CONTINUOUS,
+                                          name="dose_{" + str(i) + "}",
+                                          column=None, lb=0.0)
+            self.xiplus[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
+                                             name="xiplus_{" + str(i) + "}",
+                                             column=None)
+            self.ximinus[i] = self.mod.addVar(lb=0.0, ub=grb.GRB.INFINITY, vtype=grb.GRB.CONTINUOUS,
+                                             name="ximinus_{" + str(i) + "}",
+                                             column=None)
+        for i in range(len(self.yk)):
+            self.yg[i] = self.mod.addVar(vtype=grb.GRB.CONTINUOUS, name="dose_{" + str(i) + "}", column=None, lb=0.0, ub=self.data.maxIntensity)
+        self.mod.update()
+
+    def addConstraintsRMCGurobi(self):  # Add some constraints. This one is about replacing the absolute value with linear expressions
+
+        # fortranize the order of binaries.
+        for j in range(0, len(self.zjs)):  # len of voxels
+            self.mod.addConstr(self.zjs[j] - self.quadHelperThresh[j], grb.GRB.EQUAL, self.xiplus[j] - self.ximinus[j],
+                               name="xis{" + str(j) + "}")
+        self.mod.update()
+
+    def solveRMCgurobi(self, precision = 1e-2):
+        # The idea is that for each beamlet I will produce a set of length K of apertures
+        self.mod = grb.Model()
+        # Fix a vector z bar as explained on equation 21 in the document
+        self.addVariablesRMCGurobi()
+        self.addConstraintsRMCGurobi()
+        #self.addGoalExactGurobi()
+        #self.mod.optimize()
+        # Get the optimal value of the optimization
+        obj = None
+        if self.mod.status == grb.GRB.Status.OPTIMAL:
+            obj = self.mod.ObjVal
+        print('pricing problem objective is', obj)
+        return(obj)
+
     # Define the variables
     def addVariables(self):
         self.binaries = [None] * self.data.K * self.data.N
         self.muVars = [None] * (self.data.K - 1) * self.data.N
-        self.zjs = [None] * (len(self.zbar))
-        self.xiplus = [None] * (len(self.zbar))
-        self.ximinus = [None] * (len(self.zbar))
+        self.zjs = [None] * (len(self.currentDose))
+        self.xiplus = [None] * (len(self.currentDose))
+        self.ximinus = [None] * (len(self.currentDose))
         for k in range(self.data.K):
             for n in range(self.data.N):
                 self.binaries[k + n * self.data.K] = self.mod.addVar(vtype=grb.GRB.BINARY,
@@ -113,7 +156,7 @@ class tomotherapyNP(object):
                     self.muVars[k + n * (self.data.K - 1)] = self.mod.addVar(vtype=grb.GRB.BINARY,
                                                                              name="mu_{" + str(k) + "," + str(n) + "}",
                                                                              column=None)
-        for i in range(0, len(self.zbar)):
+        for i in range(0, len(self.currentDose)):
             self.zjs[i] = self.mod.addVar(vtype=grb.GRB.CONTINUOUS,
                                           name="dose_{" + str(i) + "}",
                                           column=None, lb=0.0)
@@ -154,7 +197,7 @@ class tomotherapyNP(object):
         # fortranize the order of binaries.
         for j in range(0, len(self.zjs)): #len of voxels
             expr = grb.LinExpr()
-            expr += self.zjs[j] - self.zbar[j]
+            expr += self.zjs[j]
             # Find only the members that are relevant to this voxel
             jguys = np.where(rowindex == j)[0]
             #print('jguys:', jguys)
@@ -172,10 +215,9 @@ class tomotherapyNP(object):
     def addVariablesColumn(self):
         self.binaries = [None] * self.data.K * self.data.N
         self.muVars = [None] * (self.data.K - 1) * self.data.N
-        self.zjs = [None] * (len(self.zbar))
-        self.xiplus = [None] * (len(self.zbar))
-        self.ximinus = [None] * (len(self.zbar))
-
+        self.zjs = [None] * (len(self.currentDose))
+        self.xiplus = [None] * (len(self.currentDose))
+        self.ximinus = [None] * (len(self.currentDose))
                 #  The mu variable will register change in the behaviour from one control to the other. Therefore loses 1
                 # degree of freedom
         for k in range(self.data.K-1):
@@ -183,7 +225,7 @@ class tomotherapyNP(object):
                 self.muVars[k + n * (self.data.K - 1)] = self.mod.addVar(vtype=grb.GRB.BINARY,
                                                                              name="mu_{" + str(k) + "," + str(n) + "}",
                                                                              column=None)
-        for i in range(0, len(self.zbar)):
+        for i in range(0, len(self.currentDose)):
             self.zjs[i] = self.mod.addVar(vtype=grb.GRB.CONTINUOUS,
                                           name="dose_{" + str(i) + "}",
                                           column=None, lb=0.0)
@@ -207,7 +249,7 @@ class tomotherapyNP(object):
         # fortranize the order of binaries.
         for j in range(0, len(self.zjs)): #len of voxels
             expr = grb.LinExpr()
-            expr -= self.zjs[j] - self.zbar[j]
+            expr -= self.zjs[j]
             self.doseConstraints[j] = self.mod.addConstr(expr, grb.GRB.EQUAL, 0, name="z_j{" + str(j) + "}")
             self.mod.addConstr(self.zjs[j] - self.quadHelperThresh[j], grb.GRB.EQUAL, self.xiplus[j] - self.ximinus[j],
                                name="xis{" + str(j) + "}")
@@ -246,19 +288,22 @@ class tomotherapyNP(object):
     def PricingProblem(self):
         # The idea is that for each beamlet I will produce a set of length K of apertures
         self.mod = grb.Model()
+        self.mod.setParam("outlev", 1)
         # Fix a vector z bar as explained on equation 21 in the document
-        self.zbar = 0
         self.calcDose()
-        self.zbar = self.currentDose
         self.addVariablesColumn()
         self.addConstraintsColumn()
         self.addGoalExact()
         self.mod.optimize()
+        self.mod.write("out.rew")
+        self.mod.write("out.lp")
+        self.mod.write("out.rlp")
         # Get the optimal value of the optimization
         obj = None
         if self.mod.status == grb.GRB.Status.OPTIMAL:
             obj = self.mod.ObjVal
         print('pricing problem objective is', obj)
+        sys.exit()
         return(obj)
 
     ## This function creates a matrix that has a column of ones kronecker the identity matrix
@@ -296,12 +341,15 @@ class tomotherapyNP(object):
             # instance of the PP
             self.calcObjGrad(self.yk)
             gstar = self.PricingProblem()
+            #input("Press Enter to continue...")
             # Pass binary values from gurobi format to python
             self.fixbinaries()
             # Step 2. If the optimal value of the PP is nonnegative**, go to step 5. Otherwise, denote the optimal
             # solution to the PP by c and Ac and replace caligraphic C and A = Abar, k \in caligraphicC
             self.rmpres = self.solveRMC()
             newobj = self.rmpres.fun
+            print('RMC objective is: ', newobj)
+            #input("Press Enter to continue...")
             self.plotDVH('dvh-ColumnGeneration' + str(iterCG))
             if(np.isinf(oldobj)):
                 continue
@@ -395,7 +443,7 @@ class tomodata:
         self.sampleevery = 32
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
-        self.maxIntensity = 20
+        self.maxIntensity = 50
         self.caseSide = 256
         self.voxelsBigSpace = self.caseSide ** 2
         # Number of control points (every 2 degrees)
@@ -422,8 +470,8 @@ class tomodata:
             T = None
             if self.mask[i] in self.TARGETList:
                 T = self.TARGETThresholds[np.where(self.mask[i] == self.TARGETList)[0][0]]
-                self.quadHelperOver[i] = 0.01
-                self.quadHelperUnder[i] = 0.6
+                self.quadHelperOver[i] = 0.001
+                self.quadHelperUnder[i] = 0.06
             # Constraint on OARs
             elif self.mask[i] in self.OARList:
                 T = self.OARThresholds[np.where(self.mask[i] == self.OARList)[0][0]]
@@ -516,6 +564,7 @@ def printAMPLfile(data):
     print(thrs.to_string(index=False, header = False), file=f)
     print(";", file=f)
     print('param: KNJPARAMETERS: D:=' , file = f)
+    pds.set_option('precision', 16)
     leafs = (data.bixels % data.N).astype(int)
     projections = np.floor(data.bixels / data.N).astype(int)
     sparseinfo = pds.DataFrame(data = {'LEAVES' : leafs, 'PROJECTIONS' : projections, 'VOXELS' : data.smallvoxels, 'ZDOSES' : data.Dijs})
@@ -523,11 +572,15 @@ def printAMPLfile(data):
     print(";", file = f)
     f.close()
 
+def runAMPL():
+    os.system("ampl heuristic.run")
+
 start_time = time.time()
 dataobject = tomodata()
 printAMPLfile(dataobject)
-tomoinstance = tomotherapyNP(dataobject)
-tomoinstance.plotDVH('dvh-ColumnGeneration')
-tomoinstance.plotSinoGram()
-tomoinstance.plotEventsbinary()
+runAMPL()
+#tomoinstance = tomotherapyNP(dataobject)
+#tomoinstance.plotDVH('dvh-ColumnGeneration')
+#tomoinstance.plotSinoGram()
+#tomoinstance.plotEventsbinary()
 print("--- %s seconds ---" % (time.time() - start_time))

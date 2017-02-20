@@ -21,6 +21,8 @@ import time
 from scipy.stats import describe
 import pickle
 import matplotlib
+#from subprocess import call
+import os
 
 numcores = 4
 
@@ -517,9 +519,13 @@ def printAMPLfile(data):
     print(";", file = f)
     f.close()
 
+def runAMPL():
+    os.system("ampl heuristic.run")
+
 start_time = time.time()
 dataobject = tomodata()
 printAMPLfile(dataobject)
+#runAMPL()
 tomoinstance = tomotherapyNP(dataobject)
 tomoinstance.plotDVH('dvh-ColumnGeneration')
 tomoinstance.plotSinoGram()
