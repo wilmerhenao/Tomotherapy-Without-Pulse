@@ -1,0 +1,67 @@
+reset;
+model heuristic.mod;
+data tomononlinear.dat;
+option solver gurobi, solution_round 3;
+option gurobi_options 'outlev 1';
+problem CMP: y, z, z_plus, z_minus, ObjectiveFunction, doses_to_j, positive_only;
+problem PP: mu, betas, z, z_plus, z_minus, ObjectiveFunction, doses_to_j_yparam, positive_only, Mlimits, abs_greater, abs_smaller;
+let numloops := 0;
+for {0..0}{
+let numloops := numloops + 1;
+print "----- Running now with these many loops --:";
+print numloops;
+# Initialize to default values
+let {n in LEAVES, k in PROJECTIONS } betasparam[n,k] := 0;	# All closed
+let {k in PROJECTIONS} yparam[k] := U; 		     	#Mid-Intensity
+let {k in PROJECTIONS} yBar[k] := yparam[k]; 		     	#Mid-Intensity for the yBar too.
+let oldobj := 9999999;
+let newobj := 9999999;
+let PPtimekeeper := 0;
+let CMPtimekeeper := 0;
+let numberOfIterations := 1;
+repeat {
+        let oldobj := newobj;
+
+	## PP procedure
+	print "Run the PP";
+	let timeflagold := _total_solve_time;
+	solve PP;
+	display ObjectiveFunction;
+	let proctime := _total_solve_time - timeflagold;
+	#print "PP time was: ";
+	#print proctime;
+	let PPtimekeeper := PPtimekeeper + proctime;
+	print "Done running the PP";
+	
+	let {n in LEAVES, k in PROJECTIONS } betasparam [n, k] := betas[n,k];
+
+	print "Run the CMP";
+	## CMP procedure
+	let timeflagold := _total_solve_time;
+	solve CMP;
+	let proctime := _total_solve_time - timeflagold;
+	#print "CMP time was: ";
+	#print proctime;
+	let CMPtimekeeper := CMPtimekeeper + proctime;
+	print "Done running the CMP";
+
+	## Y bar assignment
+	let {k in PROJECTIONS} yBar[k] :=(1- 1/(numberOfIterations+1)) * y[k] +  1/(numberOfIterations+1) * yBar[k];
+	#let {k in PROJECTIONS} yBar[k] :=(1- 1/2) * y[k] +  1/2 * yBar[k];
+	let {k in PROJECTIONS} yparam[k] := yBar[k];
+
+	# Exit condition
+	let newobj := ObjectiveFunction;
+	if abs(newobj - oldobj)/oldobj < 0.01 then break;
+	else let numberOfIterations := numberOfIterations + 1;
+}
+solve;
+#display z;
+#display z_plus;
+#display z_minus;
+#display thethreshold;
+#display positive_only;
+#display PPtimekeeper;
+#display CMPtimekeeper;
+#display numberOfIterations;
+}
