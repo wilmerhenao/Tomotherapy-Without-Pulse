@@ -22,6 +22,7 @@ from scipy.stats import describe
 import pickle
 import matplotlib
 import os
+import re
 
 numcores = 4
 
@@ -575,10 +576,56 @@ def printAMPLfile(data):
 def runAMPL():
     os.system("ampl heuristic.run")
 
+def readDosefromtext(z):
+    f = open("heuristicresults.txt", "r")
+    next(f)
+    for line in f:
+        l = []
+        for t in line.split():
+            try:
+                l.append(float(t))
+            except ValueError:
+                pass
+        if len(l) > 0:
+            for i in range(int(len(l)/2)):
+                z[int(l[int(2 * i)])] = l[int(2 * i + 1)]
+    f.close()
+    print(z)
+    return(z)
+
+# Plot the dose volume histogram
+def plotDVHNoClass(data, z, NameTag='', showPlot=False):
+    voxDict = {}
+    for t in data.TARGETList:
+        voxDict[t] = np.where(data.mask == t)[0]
+    for o in data.OARList:
+        voxDict[o] = np.where(data.mask == o)[0]
+    dose = np.array([z[j] for j in range(data.totalsmallvoxels)])
+    plt.clf()
+    for index, sValues in voxDict.items():
+        sVoxels = sValues
+        hist, bins = np.histogram(dose[sVoxels], bins=100)
+        dvh = 1. - np.cumsum(hist) / float(sVoxels.shape[0])
+        dvh = np.insert(dvh, 0, 1)
+        plt.plot(bins, dvh, label="struct " + str(index), linewidth=2)
+    lgd = plt.legend(fancybox=True, framealpha=0.5, bbox_to_anchor=(1.05, 1), loc=2)
+    plt.title('DVH')
+    plt.grid(True)
+    plt.xlabel('Dose Gray')
+    plt.ylabel('Fractional Volume')
+    plt.savefig(data.outputDirectory + NameTag + '.png',
+                    bbox_extra_artists=(lgd,), bbox_inches='tight')
+    if showPlot:
+        plt.show()
+    plt.close()
+
 start_time = time.time()
 dataobject = tomodata()
 printAMPLfile(dataobject)
+z = np.zeros(len(dataobject.mask))
 runAMPL()
+z = readDosefromtext(z)
+plotDVHNoClass(dataobject, z, 'dvh')
 #tomoinstance = tomotherapyNP(dataobject)
 #tomoinstance.plotDVH('dvh-ColumnGeneration')
 #tomoinstance.plotSinoGram()

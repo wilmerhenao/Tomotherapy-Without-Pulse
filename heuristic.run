@@ -56,7 +56,7 @@ repeat {
 	else let numberOfIterations := numberOfIterations + 1;
 }
 solve;
-#display z;
+display z > heuristicresults.txt;
 #display z_plus;
 #display z_minus;
 #display thethreshold;
