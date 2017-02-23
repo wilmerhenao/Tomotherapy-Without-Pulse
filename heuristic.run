@@ -2,7 +2,7 @@ reset;
 model heuristic.mod;
 data tomononlinear.dat;
 option solver gurobi, solution_round 3;
-option gurobi_options 'outlev 1';
+#option gurobi_options 'outlev 1';
 problem CMP: y, z, z_plus, z_minus, ObjectiveFunction, doses_to_j, positive_only;
 problem PP: mu, betas, z, z_plus, z_minus, ObjectiveFunction, doses_to_j_yparam, positive_only, Mlimits, abs_greater, abs_smaller;
 let numloops := 0;
@@ -56,7 +56,7 @@ repeat {
 	else let numberOfIterations := numberOfIterations + 1;
 }
 solve;
-display z > heuristicresults.txt;
+display z;
 #display z_plus;
 #display z_minus;
 #display thethreshold;

@@ -15,6 +15,7 @@ import scipy.sparse as sps
 import time
 from scipy.stats import describe
 import os
+import subprocess
 
 numcores = 4
 
@@ -36,7 +37,7 @@ class tomodata:
         self.sampleevery = 32
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
-        self.maxIntensity = 50
+        self.maxIntensity = 500
         self.caseSide = 256
         self.voxelsBigSpace = self.caseSide ** 2
         # Number of control points (every 2 degrees)
@@ -166,23 +167,28 @@ def printAMPLfile(data):
     f.close()
 
 def runAMPL():
-    os.system("ampl heuristic.run")
+    procstring = subprocess.check_output(['ampl', 'heuristic.run'])
+    return(procstring)
 
-def readDosefromtext(z):
-    f = open("heuristicresults.txt", "r")
-    next(f)
-    for line in f:
-        l = []
-        for t in line.split():
-            try:
-                l.append(float(t))
-            except ValueError:
-                pass
-        if len(l) > 0:
-            for i in range(int(len(l)/2)):
-                z[int(l[int(2 * i)])] = l[int(2 * i + 1)]
-    f.close()
-    print(z)
+def readDosefromtext(pstring):
+    strstring = pstring.decode("utf-8") # decode the bytes stringst
+    print(strstring)
+    lines = strstring.split('\n')
+    linecontainssolution = False
+    for line in lines:
+        if linecontainssolution:
+            l = []
+            for t in line.split():
+                try:
+                    l.append(float(t))
+                except ValueError:
+                    pass
+            if len(l) > 0:
+                for i in range(int(len(l) / 2)):
+                    z[int(l[int(2 * i)])] = l[int(2 * i + 1)]
+        else:
+            if ('z [*] :=' in line):
+                linecontainssolution = True
     return(z)
 
 # Plot the dose volume histogram
@@ -215,7 +221,7 @@ start_time = time.time()
 dataobject = tomodata()
 printAMPLfile(dataobject)
 z = np.zeros(len(dataobject.mask))
-runAMPL()
-z = readDosefromtext(z)
+pstring = runAMPL()
+z = readDosefromtext(pstring)
 plotDVHNoClass(dataobject, z, 'dvh')
 print("--- %s seconds ---" % (time.time() - start_time))
