@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/dij/img_structure_plotting.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="CaseCreation.iws" />
@@ -484,13 +483,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00093" summary="inserted a mock column generation function">
-      <created>1470339319942</created>
-      <option name="number" value="00093" />
-      <option name="presentableId" value="LOCAL-00093" />
-      <option name="project" value="LOCAL" />
-      <updated>1470339319942</updated>
-    </task>
     <task id="LOCAL-00094" summary="Added RMP and now I'm finishing the PP">
       <created>1470434636445</created>
       <option name="number" value="00094" />
@@ -827,7 +819,14 @@
       <option name="project" value="LOCAL" />
       <updated>1487882199148</updated>
     </task>
-    <option name="localTasksCounter" value="142" />
+    <task id="LOCAL-00142" summary="file sent by Troy to read Weiguo's data">
+      <created>1499385609018</created>
+      <option name="number" value="00142" />
+      <option name="presentableId" value="LOCAL-00142" />
+      <option name="project" value="LOCAL" />
+      <updated>1499385609022</updated>
+    </task>
+    <option name="localTasksCounter" value="143" />
     <servers />
   </component>
   <component name="TodoView">
@@ -899,7 +898,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added a refinement step, but it doesn't seem to ever get used" />
     <MESSAGE value="refinement already working" />
     <MESSAGE value="tried a refirenement done preallocation but it doesn't really fly. It's commented out within function turnOnOnly... in case I wanna try it out later" />
     <MESSAGE value="Added a new file to simulate how things would work on a coarse grid" />
@@ -924,7 +922,8 @@
     <MESSAGE value="Automatically runs the ampl code and prints the results." />
     <MESSAGE value="This new version only works with AMPL" />
     <MESSAGE value="Got rid of the results file. Now the results go to a string." />
-    <option name="LAST_COMMIT_MESSAGE" value="Got rid of the results file. Now the results go to a string." />
+    <MESSAGE value="file sent by Troy to read Weiguo's data" />
+    <option name="LAST_COMMIT_MESSAGE" value="file sent by Troy to read Weiguo's data" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
