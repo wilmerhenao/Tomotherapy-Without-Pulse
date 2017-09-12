@@ -17,7 +17,6 @@ from scipy.stats import describe
 import os
 import os.path
 import subprocess
-import sys
 
 numcores = 4
 
@@ -45,25 +44,30 @@ def get_structure_mask(struct_id_list, struct_img_arr):
 class tomodata:
     ## Initialization of the data
     def __init__(self):
-        #self.base_dir = 'data/dij/HelicalGyn/'
-        self.base_dir = 'data/dij/prostate/'#153
+        self.base_dir = 'data/dij/HelicalGyn/'
+        self.base_dir = 'data/dij/prostate/'
         self.img_filename = 'samplemask.img'
         self.header_filename = 'samplemask.header'
         self.struct_img_filename = 'roimask.img'
         self.struct_img_header = 'roimask.header'
         self.outputDirectory = "output/"
+        # Are we going to sample?
+        self.sampleevery = 32
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
-        self.maxIntensity = 200
-        self.get_dim(self.base_dir, 'samplemask.header')
-        self.get_totalbeamlets(self.base_dir, 'dij/Size_out.txt')
-        self.roimask_reader(self.base_dir, 'roimask.header')
+        self.maxIntensity = 500
+        self.caseSideX = 256  ## Wilmer what is going on here.
+        self.caseSideY = 256
+        self.caseSideZ = 193
+        self.voxelsBigSpace = self.caseSideX * self.caseSideY * self.caseSideZ
         print('Read vectors...')
         self.readWeiguosCase(  )
         print('done')
         # Create a space in smallvoxel coordinates
         self.smallvoxels = self.BigToSmallCreator()
         print('Build sparse matrix.')
+        # The next part uses the case corresponding to either Wilmer or Weiguo's case
+        self.totalbeamlets = 33792
         self.totalsmallvoxels = max(self.smallvoxels) + 1 #12648448
         print('totalsmallvoxels:', self.totalsmallvoxels)
         print('a brief description of Dijs array', describe(self.Dijs))
@@ -78,68 +82,18 @@ class tomodata:
             T = None
             if self.mask[i] in self.TARGETList:
                 T = self.TARGETThresholds[np.where(self.mask[i] == self.TARGETList)[0][0]]
-                self.quadHelperOver[i] = 0.00001
+                self.quadHelperOver[i] = 0.0001
                 self.quadHelperUnder[i] = 0.006
             # Constraint on OARs
             elif self.mask[i] in self.OARList:
                 T = self.OARThresholds[np.where(self.mask[i] == self.OARList)[0][0]]
-                self.quadHelperOver[i] = 0.00001
+                self.quadHelperOver[i] = 0.0001
                 self.quadHelperUnder[i] = 0.00
             elif 0 == self.mask[i]:
                 print('there is an element in the voxels that is also mask 0')
             self.quadHelperThresh[i] = T
             ########################
-
-    def roimask_reader(self, base, fname):
-        self.OARDict = {}
-        self.TARGETDict = {}
-        self.SUPPORTDict = {}
-        with open(base + fname, 'r') as rmrd:
-            for line in rmrd:
-                if 'ROIIndex =' in line:
-                    roiidx = int(line.split(' ')[2])
-                elif 'ROIName =' in line:
-                    roiname = line.split(' ')[2]
-                elif 'RTROIInterpretedType =' in line:
-                    roitype = line.split(' ')[2]
-                    if 'SUPPORT' in roitype:
-                        self.SUPPORTDict[roiidx] = roiname
-                    elif 'ORGAN' in roitype:
-                        self.OARDict[roiidx] = roiname
-                    elif 'PTV' in roitype:
-                        self.TARGETDict[roiidx] = roiname
-                    else:
-                        sys.exit('ERROR, roi type not defined')
-                else:
-                    pass
-        rmrd.closed
-        #Merge all dictionaries
-        self.AllDict = dict(self.SUPPORTDict)
-        self.AllDict.update(self.OARDict)
-        self.AllDict.update(self.TARGETDict)
-
-    ## Get the total number of beamlets
-    def get_totalbeamlets(self, base, fname):
-        with open(base + fname, 'r') as szout:
-            for i, line in enumerate(szout):
-                if 1 == i:
-                    self.totalbeamlets = int(line)
-        szout.closed
-
-
-    ## Get the dimensions of the voxel big space
-    def get_dim(self, base, fname):
-        with open(base + fname, 'r') as header:
-            dim_xyz = [0] * 3
-            for i, line in enumerate(header):
-                if 'x_dim' in line:
-                    dim_x = int(line.split(' ')[2])
-                if 'y_dim' in line:
-                    dim_y = int(line.split(' ')[2])
-                if 'z_dim' in line:
-                    dim_z = int(line.split(' ')[2])
-        header.closed
-        self.voxelsBigSpace = dim_x * dim_y * dim_z
+        ## This is the total number of voxels that there are in the body. Not all voxels from all directions
 
     ## Create a map from big to small voxel space, the order of elements is preserved but there is a compression to only
     # one element in between.
@@ -197,9 +151,18 @@ class tomodata:
         self.voxels = np.delete(self.voxels, indices)
         self.Dijs = np.delete(self.Dijs, indices)
 
+    def convertmasktobasic(self):
+        ## Get only the basic bit from the mask.
+        inorgan = [100] * (len(self.mask))
+        for i in reversed(self.ALLList):
+            print(i)
+            inorgan = [i if self.mask[n] & 2**(i-1) else inorgan[n] for n in range(len(self.mask))]
+        self.mask = inorgan
+        np.save('data/dij/prostate/dij/roimaskClean', arr=self.mask, allow_pickle=False)
+
     ## Read Weiguo's Case
     def readWeiguosCase(self):
-        if self.base_dir=='data/dij/prostate/':#153
+        if self.base_dir=='data/dij/prostate/':
             dtype=np.uint32
             # Assign structures and thresholds for each of them
             self.OARList = [21, 6, 11, 13, 14, 8, 12, 15, 7, 9, 5, 4, 20, 19, 18, 10, 22]
@@ -211,7 +174,7 @@ class tomodata:
             self.OARList = [21, 6, 11, 13, 14, 8, 12, 15, 7, 9, 5, 4, 20, 19, 18, 10, 22]
             self.OARThresholds = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
             self.TARGETList = [2]
-            self.TARGETThresholds = [80]
+            self.TARGETThresholds = [78]
 
         self.bixels = getvector(self.base_dir + 'dij/Bixels_out.bin', np.int32)
         self.voxels = getvector(self.base_dir + 'dij/Voxels_out.bin', np.int32)
@@ -230,6 +193,7 @@ class tomodata:
         # Select only the voxels that exist in the small voxel space provided.
         self.mask = self.longmask[np.unique(self.voxels)]
         self.removezeroes()
+        #self.convertmasktobasic()
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 ## This part is for AMPL's implementation:
@@ -261,7 +225,7 @@ def printAMPLfile(data):
     f.close()
 
 def runAMPL():
-    procstring = subprocess.check_output(['ampl', 'heuristicRealCases.run'])
+    procstring = subprocess.check_output(['ampl', 'heuristicRealCasesDPfirst.run'])
     return(procstring)
 
 def readDosefromtext(pstring):
@@ -301,7 +265,7 @@ def plotDVHNoClass(data, z, NameTag='', showPlot=False):
         hist, bins = np.histogram(dose[sVoxels], bins=100)
         dvh = 1. - np.cumsum(hist) / float(sVoxels.shape[0])
         dvh = np.insert(dvh, 0, 1)
-        plt.plot(bins, dvh, label=data.AllDict[index], linewidth=2)
+        plt.plot(bins, dvh, label="struct " + str(index), linewidth=2)
     lgd = plt.legend(fancybox=True, framealpha=0.5, bbox_to_anchor=(1.05, 1), loc=2)
     plt.title('DVH')
     plt.grid(True)
