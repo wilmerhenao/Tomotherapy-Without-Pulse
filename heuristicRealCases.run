@@ -25,6 +25,7 @@ print "CMP time was: ";
 print proctime;
 ## Y bar assignment
 let {k in PROJECTIONS} yparam[k] := y[k];
+let {k in PROJECTIONS} yBar[k] := yparam[k]; 
 let newobj := ObjectiveFunction;
 #################
 repeat {

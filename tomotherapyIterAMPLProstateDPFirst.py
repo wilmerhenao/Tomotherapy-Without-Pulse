@@ -41,6 +41,13 @@ def get_structure_mask(struct_id_list, struct_img_arr):
         img_struct[np.where(struct_img_arr & 2 ** (s - 1))] = s
     return np.copy(img_struct)
 
+def get_sub_sub_sample(subsampling_img, numelems):
+    sub_sub = np.zeros_like(subsampling_img)
+    locations = np.where(subsampling_img)
+    #sublocations = locations[np.arange(0,len(locations),len(locations)/numelems)]
+    #sub_sub[sublocations] = 1
+    return(sub_sub)
+
 class tomodata:
     ## Initialization of the data
     def __init__(self):
@@ -184,6 +191,7 @@ class tomodata:
 
         # get subsample mask
         img_arr = getvector(self.base_dir + self.img_filename, dtype=dtype)
+        get_sub_sub_sample(img_arr, 500)
         # get structure file
         struct_img_arr = getvector(self.base_dir + self.struct_img_filename, dtype=dtype)
         # Convert the mask into a list of unitary structures. A voxel gets assigned to only one place.
