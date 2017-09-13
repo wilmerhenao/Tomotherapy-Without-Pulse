@@ -195,22 +195,16 @@ class tomodata:
 
         # get subsample mask
         img_arr = getvector(self.base_dir + self.img_filename, dtype=dtype)
-        print('lenimgarr before', len(img_arr))
-        print(np.unique(img_arr))
-        print(sum(img_arr))
         img_arr = get_sub_sub_sample(img_arr, 30)
-        print('lenimgarr after', len(img_arr))
-        print(np.unique(img_arr))
-        print(sum(img_arr))
         # get structure file
         struct_img_arr = getvector(self.base_dir + self.struct_img_filename, dtype=dtype)
         # Convert the mask into a list of unitary structures. A voxel gets assigned to only one place.
         img_struct = get_structure_mask(reversed(self.ALLList), struct_img_arr)
         # Get the subsampled list of voxels.
         self.longmask = get_subsampled_mask(img_struct, img_arr)
-        print('how many nonzeroes', len(np.nonzero(self.longmask)[0]))
         # Select only the voxels that exist in the small voxel space provided.
-        self.mask = self.longmask[np.unique(self.voxels)]
+        #self.mask = self.longmask[np.unique(self.voxels)]
+        self.mask = self.longmask
         self.removezeroes()
         #self.convertmasktobasic()
 
