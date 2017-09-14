@@ -14,8 +14,6 @@ import matplotlib.pyplot as plt
 import scipy.sparse as sps
 import time
 from scipy.stats import describe
-import os
-import os.path
 import subprocess
 
 numcores = 4
@@ -114,27 +112,6 @@ class tomodata:
         print('BigToSmallCreator:size of c. Size of the problem:', len(c))
         return(c)
 
-    ## Choose Small Space is the function that reduces the resolution to work with. voxelsHD will remain to be used for
-    # functions that require high resolution. Mainly when loading the hints.
-    def chooseSmallSpace(self, stepsparse):
-        # Original Map
-        om = [ij for ij in range(self.voxelsBigSpace)]
-        # New Map
-        nm = []
-        for i in np.arange(0, self.caseSide, stepsparse):
-            for j in np.arange(0, self.caseSide, stepsparse):
-                nm.append(om[int(j) + int(i) * self.caseSide])
-        # Summary statistics of voxels
-        print('effectivity of the reduction:', len(om)/len(nm))
-        indices = np.where(np.in1d(self.voxels, nm))[0]
-        self.bixels = self.bixels[indices]
-        self.voxels = self.voxels[indices]
-        self.Dijs = self.Dijs[indices]
-        print(len(self.mask))
-        self.mask = np.array([self.mask[i] for i in nm])
-        locats = np.where(0 == self.mask)[0]
-        self.mask = np.delete(self.mask, locats)
-
     def getNumProjections(self):
         with open(self.base_dir + 'motion.txt') as f:
             for i, l in enumerate(f):
@@ -145,22 +122,19 @@ class tomodata:
         # Next I am removing the voxels that have a mask of zero (0) because they REALLY complicate things otherwise
         # Making the problem larger.
         #-------------------------------------
+        # Cut the mask to only the elements contained in the voxel list
+        voxelindex = np.zeros_like(self.mask)
+        voxelindex[np.unique(self.voxels)] = 1
+        self.mask = np.multiply(voxelindex, self.mask)
         locats = np.where(0 == self.mask)[0]
         self.mask = np.delete(self.mask, locats)
+        # intersection of voxels and nonzero
         indices = np.where(np.in1d(self.voxels, locats))[0]
+        # Cut whatever is not in the voxels.
         self.bixels = np.delete(self.bixels, indices)
         self.voxels = np.delete(self.voxels, indices)
         self.Dijs = np.delete(self.Dijs, indices)
-
-    def removecouch(self):
-        # Next I am removing the voxels that have a mask of zero (22) because they are the couch
-        #-------------------------------------
-        locats = np.where(22 == self.mask)[0]
-        self.mask = np.delete(self.mask, locats)
-        indices = np.where(np.in1d(self.voxels, locats))[0]
-        self.bixels = np.delete(self.bixels, indices)
-        self.voxels = np.delete(self.voxels, indices)
-        self.Dijs = np.delete(self.Dijs, indices)
+        #self.mask = np.delete(self.mask, indices)
 
     def convertmasktobasic(self):
         ## Get only the basic bit from the mask.
@@ -195,16 +169,14 @@ class tomodata:
 
         # get subsample mask
         img_arr = getvector(self.base_dir + self.img_filename, dtype=dtype)
-        img_arr = get_sub_sub_sample(img_arr, 30)
+        img_arr = get_sub_sub_sample(img_arr, 90)
         # get structure file
         struct_img_arr = getvector(self.base_dir + self.struct_img_filename, dtype=dtype)
         # Convert the mask into a list of unitary structures. A voxel gets assigned to only one place.
         img_struct = get_structure_mask(reversed(self.ALLList), struct_img_arr)
         # Get the subsampled list of voxels.
-        self.longmask = get_subsampled_mask(img_struct, img_arr)
+        self.mask = get_subsampled_mask(img_struct, img_arr)
         # Select only the voxels that exist in the small voxel space provided.
-        #self.mask = self.longmask[np.unique(self.voxels)]
-        self.mask = self.longmask
         self.removezeroes()
         #self.convertmasktobasic()
 

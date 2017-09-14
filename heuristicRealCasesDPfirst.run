@@ -3,7 +3,7 @@ model heuristicRealCases.mod;
 data tomononlinearRealCases.dat;
 option solver gurobi, solution_round 1;
 option gurobi_options 'outlev 1';
-option gurobi_options 'Degenmoves 100000'; # Limits degenerate simplex moves. These moves are performed to improve the integrality of the current relaxation solution
+#option gurobi_options 'Degenmoves 100000'; # Limits degenerate simplex moves. These moves are performed to improve the integrality of the current relaxation solution
 option gurobi_options 'mipgap 0.5';
 problem CMP: y, z, z_plus, z_minus, ObjectiveFunction, doses_to_j, positive_only;
 problem DP: mu, betas, z, z_plus, z_minus, ObjectiveFunction, doses_to_j_yparam, positive_only, Mlimits, abs_greater, abs_smaller;
@@ -62,7 +62,7 @@ repeat {
 }
 solve;
 display y;
-#display z;
+display z;
 #display z_plus;
 #display z_minus;
 #display thethreshold;
