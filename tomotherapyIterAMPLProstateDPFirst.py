@@ -69,7 +69,7 @@ class tomodata:
         self.caseSideY = 256
         self.caseSideZ = 193
         # The number of loops to be used in this case
-        self.numloops = 8.27
+        self.ProjectionsPerLoop = 51
         self.voxelsBigSpace = self.caseSideX * self.caseSideY * self.caseSideZ
         print('Read vectors...')
         self.readWeiguosCase(  )
@@ -198,6 +198,11 @@ def printAMPLfile(data):
     print('param numvoxels :=', len(data.mask), ';', file = f)
     print('param U :=', data.maxIntensity, ';', file = f)
     print('param numLeaves :=', data.N, ';', file=f)
+    pds.set_option('precision', 16)
+    leafs = (data.bixels % data.N).astype(int)
+    projections = np.floor(data.bixels / data.N).astype(int)
+    myloops = np.floor(projections / data.ProjectionsPerLoop).astype(int)
+    print('param numLoops :=', max(myloops), ';', file = f)
     print('param: VOXELS: thethreshold :=', file = f)
     thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': data.quadHelperThresh})
     print(thrs.to_string(index=False, header = False), file = f)
@@ -211,10 +216,7 @@ def printAMPLfile(data):
     print(thrs.to_string(index=False, header = False), file=f)
     print(";", file=f)
     print('param: KNJPARAMETERS: D:=' , file = f)
-    pds.set_option('precision', 16)
-    leafs = (data.bixels % data.N).astype(int)
-    projections = np.floor(data.bixels / data.N).astype(int)
-    sparseinfo = pds.DataFrame(data = {'LEAVES' : leafs, 'PROJECTIONS' : projections, 'VOXELS' : data.smallvoxels, 'ZDOSES' : data.Dijs})
+    sparseinfo = pds.DataFrame(data = {'LEAVES' : leafs, 'PROJECTIONS' : projections, 'VOXELS' : data.smallvoxels, 'LOOPS' : myloops, 'ZDOSES' : data.Dijs})
     print(sparseinfo.to_string(index=False, header=False), file = f)
     print(";", file = f)
     f.close()
