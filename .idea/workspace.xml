@@ -30,8 +30,8 @@
       <file leaf-file-name="tomotherapyIterAMPLProstateDPFirst.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirst.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
-              <caret line="205" column="37" lean-forward="true" selection-start-line="205" selection-start-column="37" selection-end-line="205" selection-end-column="37" />
+            <state relative-caret-position="260">
+              <caret line="208" column="22" lean-forward="true" selection-start-line="208" selection-start-column="22" selection-end-line="208" selection-end-column="22" />
               <folding>
                 <element signature="e#190#210#0" expanded="true" />
               </folding>
@@ -496,13 +496,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00106" summary="changed everything to matrices">
-      <created>1471016221618</created>
-      <option name="number" value="00106" />
-      <option name="presentableId" value="LOCAL-00106" />
-      <option name="project" value="LOCAL" />
-      <updated>1471016221618</updated>
-    </task>
     <task id="LOCAL-00107" summary="there are still problems with the restricted master problem">
       <created>1471033340558</created>
       <option name="number" value="00107" />
@@ -839,7 +832,14 @@
       <option name="project" value="LOCAL" />
       <updated>1505939983396</updated>
     </task>
-    <option name="localTasksCounter" value="155" />
+    <task id="LOCAL-00155" summary="updated mod file, still working in relation with previous commit">
+      <created>1505943016733</created>
+      <option name="number" value="00155" />
+      <option name="presentableId" value="LOCAL-00155" />
+      <option name="project" value="LOCAL" />
+      <updated>1505943016733</updated>
+    </task>
+    <option name="localTasksCounter" value="156" />
     <servers />
   </component>
   <component name="TodoView">
@@ -911,7 +911,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Adding the iterative procedure&#10;" />
     <MESSAGE value="added the iterative procedure, running fast" />
     <MESSAGE value="Removed the double creation of the threshold coefficients." />
     <MESSAGE value="Doing some damage to the code." />
@@ -936,7 +935,8 @@
     <MESSAGE value="changed the dat file format" />
     <MESSAGE value="Updated and work. Next I will add the new constraints" />
     <MESSAGE value="added the mod file" />
-    <option name="LAST_COMMIT_MESSAGE" value="added the mod file" />
+    <MESSAGE value="updated mod file, still working in relation with previous commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated mod file, still working in relation with previous commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1361,8 +1361,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirst.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="205" column="37" lean-forward="true" selection-start-line="205" selection-start-column="37" selection-end-line="205" selection-end-column="37" />
+        <state relative-caret-position="260">
+          <caret line="208" column="22" lean-forward="true" selection-start-line="208" selection-start-column="22" selection-end-line="208" selection-end-column="22" />
           <folding>
             <element signature="e#190#210#0" expanded="true" />
           </folding>

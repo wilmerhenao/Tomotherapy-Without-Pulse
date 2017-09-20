@@ -25,6 +25,7 @@ set KNJMPARAMETERS within {n in LEAVES, k in PROJECTIONS, m in LOOPS, j in VOXEL
 # Parameters
 param D {KNJMPARAMETERS} >= 0;
 param Mbar = numProjections / 3;
+param Loopbar = 20;
 param thethreshold {VOXELS} >= 0;
 param quadHelperOver {VOXELS} >= 0;
 param quadHelperUnder {VOXELS} >= 0;
@@ -35,7 +36,7 @@ param yBar{k in PROJECTIONS} >= 0, <= U;
 # Variables
 var betas {n in LEAVES, k in PROJECTIONS, m in LOOPS} binary;
 var mu{n in LEAVES, k in PROJECTIONSM1} binary;
-#var xi{n in LEAVES, k in PROJECTIONSM1, m in LOOPS} binary;
+var xi{n in LEAVES, k in PROJECTIONSM1, m in LOOPS} binary;
 var y {k in PROJECTIONS} >= 0, <= U;
 var z {j in VOXELS} >= 0;
 var z_plus {j in VOXELS} >= 0;
@@ -56,4 +57,9 @@ subject to doses_to_j_yparam {j in VOXELS}: z[j] = sum{ (n,k,m,j) in KNJMPARAMET
 subject to Mlimits {n in LEAVES}: sum{k in PROJECTIONSM1} mu[n,k] <= Mbar;
 subject to abs_greater {n in LEAVES, k in PROJECTIONSM1}: mu[n,k] >= sum{m in LOOPS} (betas[n, k+1, m] - betas[n,k, m]);
 subject to abs_smaller {n in LEAVES, k in PROJECTIONSM1}: mu[n,k] >= sum{m in LOOPS} -(betas[n, k+1, m] - betas[n,k,m]);
-#subject to MlimitsperLoop{}
+
+# per loop constraints:
+
+subject to Mlimits_perLoop{n in LEAVES, m in LOOPS}: sum{k in PROJECTIONSM1} xi[n,k,m] <= Loopbar;
+subject to abs_greater_perloop {n in LEAVES, k in PROJECTIONSM1, m in LOOPS}: xi[n,k,m] >= betas[n, k+1, m] - betas[n,k, m];
+subject to abs_smaller_perloop {n in LEAVES, k in PROJECTIONSM1, m in LOOPS}: xi[n,k,m] >= betas[n, k+1, m] - betas[n,k, m];
