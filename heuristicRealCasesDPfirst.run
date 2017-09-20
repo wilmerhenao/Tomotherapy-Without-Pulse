@@ -9,9 +9,9 @@ problem CMP: y, z, z_plus, z_minus, ObjectiveFunction, doses_to_j, positive_only
 problem DP: mu, betas, z, z_plus, z_minus, ObjectiveFunction, doses_to_j_yparam, positive_only, Mlimits, abs_greater, abs_smaller;
 
 # Initialize to default values
-let {n in LEAVES, k in PROJECTIONS } betasparam[n,k] := 0;	# All closed
-let {k in PROJECTIONS} yparam[k] := U; 		     		#Mid-Intensity
-let {k in PROJECTIONS} yBar[k] := yparam[k]; 		     	#Mid-Intensity for the yBar too.
+let {n in LEAVES, k in PROJECTIONS , m in LOOPS} betasparam[n,k,m] := 0;		# All closed
+let {k in PROJECTIONS} yparam[k] := U; 	  	 		   	     		#Mid-Intensity
+let {k in PROJECTIONS} yBar[k] := yparam[k];						#Mid-Intensity for the yBar too.
 let oldobj := 9999999999;
 let newobj := 9999999999;
 let DPtimekeeper := 0;
@@ -31,7 +31,7 @@ repeat {
 	let DPtimekeeper := DPtimekeeper + proctime;
 	print "Done running the DP";
 	
-	let {n in LEAVES, k in PROJECTIONS } betasparam [n, k] := betas[n,k];
+	let {n in LEAVES, k in PROJECTIONS , m in LOOPS} betasparam [n, k, m] := betas[n,k,m];
 
 	print "Run the Continuous Master Problem";
 	## CMP procedure
