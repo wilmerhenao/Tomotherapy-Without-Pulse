@@ -68,6 +68,8 @@ class tomodata:
         self.caseSideX = 256  ## Wilmer what is going on here.
         self.caseSideY = 256
         self.caseSideZ = 193
+        # The number of loops to be used in this case
+        self.numloops = 8.27
         self.voxelsBigSpace = self.caseSideX * self.caseSideY * self.caseSideZ
         print('Read vectors...')
         self.readWeiguosCase(  )
@@ -136,6 +138,13 @@ class tomodata:
         self.Dijs = np.delete(self.Dijs, indices)
         #self.mask = np.delete(self.mask, indices)
 
+    def removebixels(self, pitch):
+        bixelkill = np.where(0 != (self.bixels % pitch) )
+        self.bixels = np.delete(self.bixels, bixelkill)
+        self.voxels = np.delete(self.voxels, bixelkill)
+        self.Dijs = np.delete(self.Dijs, bixelkill)
+
+
     def convertmasktobasic(self):
         ## Get only the basic bit from the mask.
         inorgan = [100] * (len(self.mask))
@@ -179,6 +188,7 @@ class tomodata:
         # Select only the voxels that exist in the small voxel space provided.
         self.removezeroes()
         #self.convertmasktobasic()
+        self.removebixels(5)
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 ## This part is for AMPL's implementation:
