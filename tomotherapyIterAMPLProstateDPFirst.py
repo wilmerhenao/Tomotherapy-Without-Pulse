@@ -220,6 +220,35 @@ def printAMPLfile(data):
                                columns = ['LEAVES', 'PROJECTIONS', 'LOOPS', 'VOXELS', 'ZDOSES'])
     print(sparseinfo.to_string(index=False, header=False), file = f)
     print(";", file = f)
+    print('set NK:=' , file = f)
+    setinfo = pds.DataFrame(data = {'LEAVES' : leafs, 'PROJECTIONS' : projections},
+                               columns = ['LEAVES', 'PROJECTIONS'])
+    print(setinfo.to_string(index=False, header=False), file = f)
+    print(";", file = f)
+    print('set LL:=' , file = f)
+    setinfo = pds.DataFrame(data = {'LEAVES' : leafs, 'LOOPS' : myloops},
+                               columns = ['LEAVES', 'LOOPS'])
+    print(setinfo.to_string(index=False, header=False), file = f)
+    print(";", file = f)
+    print('set NKM:=' , file = f)
+    setinfo = pds.DataFrame(data = {'LEAVES' : leafs, 'PROJECTIONS' : projections, 'LOOPS' : myloops},
+                               columns = ['LEAVES', 'PROJECTIONS', 'LOOPS'])
+    print(setinfo.to_string(index=False, header=False), file = f)
+    print(";", file = f)
+    PtoEliminate = data.ProjectionsPerLoop * (1 + max(myloops))
+    locats = np.where(projections == PtoEliminate)[0]
+    projectionsM1 = np.delete(projections, locats)
+    myloopsM1 = np.floor(projectionsM1 / data.ProjectionsPerLoop).astype(int)
+    print('set NKM1:=' , file = f)
+    setinfo = pds.DataFrame(data = {'LEAVES' : leafs, 'PROJECTIONSM1' : projections, 'LOOPSM1' : myloopsM1},
+                               columns = ['LEAVES', 'PROJECTIONSM1', 'LOOPSM1'])
+    print(setinfo.to_string(index=False, header=False), file = f)
+    print(";", file = f)
+    print('set NK1:=' , file = f)
+    setinfo = pds.DataFrame(data = {'LEAVES' : leafs, 'PROJECTIONSM1' : projections},
+                               columns = ['LEAVES', 'PROJECTIONSM1'])
+    print(setinfo.to_string(index=False, header=False), file = f)
+    print(";", file = f)
     f.close()
 
 def runAMPL():
