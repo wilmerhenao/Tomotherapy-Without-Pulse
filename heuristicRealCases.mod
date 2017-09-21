@@ -21,11 +21,12 @@ set LEAVES = {0..(numLeaves - 1)};
 set LOOPS = {0..numLoops};
 set VOXELS;
 set KNJMPARAMETERS within {n in LEAVES, k in PROJECTIONS, j in VOXELS};
+set POSSIBLEPL within {k in PROJECTIONSM1, m in LOOPS};
 
 # Parameters
 param D {KNJMPARAMETERS} >= 0;
 param Mbar = numProjections / 3;
-param Loopbar = 20;
+param Loopbar = 10;
 param thethreshold {VOXELS} >= 0;
 param quadHelperOver {VOXELS} >= 0;
 param quadHelperUnder {VOXELS} >= 0;
