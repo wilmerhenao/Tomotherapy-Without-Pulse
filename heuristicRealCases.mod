@@ -63,3 +63,9 @@ subject to abs_smaller {n in LEAVES, k in PROJECTIONSM1}: mu[n,k] >= -(betas[n, 
 # -------------------------------------------------------------------
 
 subject to Nlimits {n in LEAVES, m in LOOPS}: sum{k in PROJECTIONSM1: (k, m) in POSSIBLEPL} mu[n,k] <= Loopbar;
+
+# -------------------------------------------------------------------
+## Per voxel constraint
+# -------------------------------------------------------------------
+
+subject to alphalimits {n in LEAVES, j in VOXELS}: sum{k in PROJECTIONSM1: (n,k,j) in KNJMPARAMETERS} mu[n, k] <= 5;

@@ -39,6 +39,8 @@ def get_structure_mask(struct_id_list, struct_img_arr):
         img_struct[np.where(struct_img_arr & 2 ** (s - 1))] = s
     return np.copy(img_struct)
 
+## Function that selects roughly the number numelems as a sample. (You get substantially less)
+## Say you input numelems=90. Then you get less than 90 voxels in your case.
 def get_sub_sub_sample(subsampling_img, numelems):
     sub_sub = np.zeros_like(subsampling_img)
     locations = np.where(subsampling_img)[0]
@@ -60,8 +62,6 @@ class tomodata:
         self.struct_img_filename = 'roimask.img'
         self.struct_img_header = 'roimask.header'
         self.outputDirectory = "output/"
-        # Are we going to sample?
-        self.sampleevery = 32
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
         self.maxIntensity = 500
@@ -178,7 +178,7 @@ class tomodata:
 
         # get subsample mask
         img_arr = getvector(self.base_dir + self.img_filename, dtype=dtype)
-        img_arr = get_sub_sub_sample(img_arr, 90)
+        img_arr = get_sub_sub_sample(img_arr, 130)
         # get structure file
         struct_img_arr = getvector(self.base_dir + self.struct_img_filename, dtype=dtype)
         # Convert the mask into a list of unitary structures. A voxel gets assigned to only one place.
@@ -282,15 +282,19 @@ def plotDVHNoClass(data, z, NameTag='', showPlot=False):
         plt.show()
     plt.close()
 
-start_time = time.time()
 dataobject = tomodata()
 printAMPLfile(dataobject)
 z = np.zeros(len(dataobject.mask))
+start_time = time.time()
 pstring = runAMPL()
 z = readDosefromtext(pstring)
-plotDVHNoClass(dataobject, z, 'dvh')
+print("--- %s seconds running the AMPL part---" % (time.time() - start_time))
+# Ignore errors that correspond to DVH Plot
+try:
+    plotDVHNoClass(dataobject, z, 'dvh')
+except IndexError:
+    print("Index is out of bounds and no DVH plot will be generated. However, I am ignoring this error for now.")
 # Output ampl results for the next run in case something fails.
 text_output = open("amploutput.txt", "wb")
 text_output.write(pstring)
 text_output.close()
-print("--- %s seconds ---" % (time.time() - start_time))

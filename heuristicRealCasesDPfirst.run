@@ -6,7 +6,7 @@ option gurobi_options 'outlev 1';
 #option gurobi_options 'Degenmoves 100000'; # Limits degenerate simplex moves. These moves are performed to improve the integrality of the current relaxation solution
 option gurobi_options 'mipgap 0.5';
 problem CMP: y, z, z_plus, z_minus, ObjectiveFunction, doses_to_j, positive_only;
-problem DP: mu, betas, z, z_plus, z_minus, ObjectiveFunction, doses_to_j_yparam, positive_only, Mlimits, abs_greater, abs_smaller, Nlimits;
+problem DP: mu, betas, z, z_plus, z_minus, ObjectiveFunction, doses_to_j_yparam, positive_only, Mlimits, abs_greater, abs_smaller, alphalimits;#, Nlimits;#
 
 # Initialize to default values
 let {n in LEAVES, k in PROJECTIONS} betasparam[n,k] := 0;		# All closed
