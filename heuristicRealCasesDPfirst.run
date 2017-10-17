@@ -6,11 +6,12 @@ option gurobi_options 'outlev 1';
 #option gurobi_options 'Degenmoves 100000'; # Limits degenerate simplex moves. These moves are performed to improve the integrality of the current relaxation solution
 option gurobi_options 'mipgap 0.5';
 problem CMP: y, z, z_plus, z_minus, ObjectiveFunction, doses_to_j, positive_only;
-problem DP: mu, betas, z, z_plus, z_minus, ObjectiveFunction, doses_to_j_yparam, positive_only, Mlimits, abs_greater, abs_smaller, alphalimits;#, Nlimits;#
+problem DP: mu, betas, z, z_plus, z_minus, ObjectiveFunction, doses_to_j_yparam, positive_only, Mlimits, abs_greater, abs_smaller, Nlimits; #alphalimits
 
 # Initialize to default values
 let {n in LEAVES, k in PROJECTIONS} betasparam[n,k] := 0;		# All closed
-let {k in PROJECTIONS} yparam[k] := U; 	  	 		   	     		#Mid-Intensity
+let {k in PROJECTIONS} yparam[k] := U/20; 	  	 		   	     		#Mid-Intensity
+let realU := 0;
 let {k in PROJECTIONS} yBar[k] := yparam[k];						#Mid-Intensity for the yBar too.
 let oldobj := 9999999999;
 let newobj := 9999999999;
@@ -19,46 +20,53 @@ let CMPtimekeeper := 0;
 let numberOfIterations := 1;
 #################
 repeat {
-    let oldobj := newobj;
-    print "Iteration Number:", numberOfIterations;
-	## DP procedure
-	print "Run the Discrete Problem";
-	let timeflagold := _total_solve_time;
-	solve DP;
-	let proctime := _total_solve_time - timeflagold;
-	print "DP running time was: ";
-	print proctime;
-	let DPtimekeeper := DPtimekeeper + proctime;
-	print "Done running the DP";
-	
-	let {n in LEAVES, k in PROJECTIONS , m in LOOPS} betasparam [n, k] := betas[n,k];
+    repeat {
+        let oldobj := newobj;
+        print "Iteration Number:", numberOfIterations;
+        ## DP procedure
+        print "Run the Discrete Problem";
+        let timeflagold := _total_solve_time;
+        solve DP;
+        let proctime := _total_solve_time - timeflagold;
+        print "DP running time was: ";
+        print proctime;
+        let DPtimekeeper := DPtimekeeper + proctime;
+        print "Done running the DP";
 
-	print "Run the Continuous Master Problem";
-	## CMP procedure
-	let timeflagold := _total_solve_time;
-	solve CMP;
-	let proctime := _total_solve_time - timeflagold;
-	print "CMP time was: ";
-	print proctime;
-	let CMPtimekeeper := CMPtimekeeper + proctime;
-	print "Done running the CMP";
+        let {n in LEAVES, k in PROJECTIONS , m in LOOPS} betasparam [n, k] := betas[n,k];
 
-	## Y bar assignment
-	#let {k in PROJECTIONS} yBar[k] :=(1- 1/(numberOfIterations+1)) * y[k] +  1/(numberOfIterations+1) * yBar[k];
-	let {k in PROJECTIONS} yBar[k] :=(1- 1/2) * y[k] +  1/2 * yBar[k];
-	let {k in PROJECTIONS} yparam[k] := yBar[k];
+        print "Run the Continuous Master Problem";
+        ## CMP procedure
+        let timeflagold := _total_solve_time;
+        solve CMP;
+        let proctime := _total_solve_time - timeflagold;
+        print "CMP time was: ";
+        print proctime;
+        let CMPtimekeeper := CMPtimekeeper + proctime;
+        print "Done running the CMP";
 
-	let newobj := ObjectiveFunction;
+        ## Y bar assignment
+        #let {k in PROJECTIONS} yBar[k] :=(1- 1/(numberOfIterations+1)) * y[k] +  1/(numberOfIterations+1) * yBar[k];
+        let {k in PROJECTIONS} yBar[k] :=(1- 1/2) * y[k] +  1/2 * yBar[k];
+        let {k in PROJECTIONS} yparam[k] := yBar[k];
 
-	# Change gurobi conditions
-	if abs(newobj - oldobj)/oldobj < 0.1 then
-	   option gurobi_options 'mipgap 0.001';
-	else
-	   option gurobi_options 'mipgap 0.1';
+        let newobj := ObjectiveFunction;
 
-    # Exit condition
-	if abs(newobj - oldobj)/oldobj < 0.01 then break;
-	else let numberOfIterations := numberOfIterations + 1;
+        # Change gurobi conditions
+        if abs(newobj - oldobj)/oldobj < 0.1 then
+           option gurobi_options 'mipgap 0.001';
+        else
+           option gurobi_options 'mipgap 0.1';
+
+        # Exit condition
+        if abs(newobj - oldobj)/oldobj < 0.01 then break;
+        else let numberOfIterations := numberOfIterations + 1;
+    }
+    let {k in PROJECTIONS} yparam[k] := U;
+    if (0 == realU) then
+        let realU := 1;
+    else
+        break;
 }
 solve;
 display y;

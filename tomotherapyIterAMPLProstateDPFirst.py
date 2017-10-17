@@ -64,8 +64,8 @@ class tomodata:
         self.outputDirectory = "output/"
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
-        self.maxIntensity = 500
-        self.caseSideX = 256  ## Wilmer what is going on here.
+        self.maxIntensity = 300
+        self.caseSideX = 256
         self.caseSideY = 256
         self.caseSideZ = 193
         # The number of loops to be used in this case
@@ -178,7 +178,7 @@ class tomodata:
 
         # get subsample mask
         img_arr = getvector(self.base_dir + self.img_filename, dtype=dtype)
-        img_arr = get_sub_sub_sample(img_arr, 130)
+        img_arr = get_sub_sub_sample(img_arr, 90)
         # get structure file
         struct_img_arr = getvector(self.base_dir + self.struct_img_filename, dtype=dtype)
         # Convert the mask into a list of unitary structures. A voxel gets assigned to only one place.
@@ -188,7 +188,7 @@ class tomodata:
         # Select only the voxels that exist in the small voxel space provided.
         self.removezeroes()
         #self.convertmasktobasic()
-        self.removebixels(5)
+        #self.removebixels(5)
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 ## This part is for AMPL's implementation:

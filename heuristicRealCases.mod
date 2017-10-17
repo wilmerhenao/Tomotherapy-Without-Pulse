@@ -12,6 +12,7 @@ param CMPtimekeeper >= 0;
 param numberOfIterations integer > 0;
 param numProjections > 0;
 param U > 0;
+param realU binary;
 param numLeaves integer > 0;
 param numLoops integer > 0;
 
