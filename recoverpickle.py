@@ -17,42 +17,7 @@ from scipy.stats import describe
 import subprocess
 import pickle
 
-numcores = 4
-
-## Function that reads the files produced by Weiguo
-def getvector(necfile,dtype):
-    with open(necfile, 'rb') as f:
-        try:
-            data = np.fromfile(f, dtype=dtype)
-        finally:
-            f.close()
-    return(data)
-
-def get_subsampled_mask(struct_img_mask_full_res, subsampling_img):
-    sub_sampled_img_struct = np.zeros_like(struct_img_mask_full_res)
-    sub_sampled_img_struct[np.where(subsampling_img)] =  struct_img_mask_full_res[np.where(subsampling_img)]
-    return np.copy(sub_sampled_img_struct)
-# In[5]:
-
-def get_structure_mask(struct_id_list, struct_img_arr):
-    img_struct = np.zeros_like(struct_img_arr)
-    for s in struct_id_list:
-        img_struct[np.where(struct_img_arr & 2 ** (s - 1))] = s
-    return np.copy(img_struct)
-
-## Function that selects roughly the number numelems as a sample. (You get substantially less)
-## Say you input numelems=90. Then you get less than 90 voxels in your case.
-def get_sub_sub_sample(subsampling_img, numelems):
-    sub_sub = np.zeros_like(subsampling_img)
-    locations = np.where(subsampling_img)[0]
-    print(locations)
-    print('number of elements', len(locations))
-    a = np.arange(0,len(locations), int(len(locations)/numelems))
-    print(a)
-    sublocations = locations[a]
-    sub_sub[sublocations] = 1
-    return(sub_sub)
-
+## Make the class available
 class tomodata:
     ## Initialization of the data
     def __init__(self):
@@ -66,7 +31,7 @@ class tomodata:
         self.roinames = {}
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
-        self.maxIntensity = 300
+        self.maxIntensity = 500
         self.caseSideX = 256
         self.caseSideY = 256
         self.caseSideZ = 193
@@ -79,19 +44,12 @@ class tomodata:
         print('done')
         # Create a space in smallvoxel coordinates
         self.smallvoxels = self.BigToSmallCreator()
-        # Now remove bixels carefully
-        self.removebixels(5)
-        # Do the smallvoxels again:
-        blaa, blab, self.smallvoxels, blad = np.unique(self.smallvoxels, return_index=True, return_inverse=True, return_counts=True)
         print('Build sparse matrix.')
         # The next part uses the case corresponding to either Wilmer or Weiguo's case
         self.totalbeamlets = 33792
         self.totalsmallvoxels = max(self.smallvoxels) + 1 #12648448
         print('totalsmallvoxels:', self.totalsmallvoxels)
         print('a brief description of Dijs array', describe(self.Dijs))
-        print(len(self.Dijs))
-        print(len(self.bixels))
-        print(len(self.smallvoxels))
         self.D = sps.csr_matrix((self.Dijs, (self.smallvoxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
         self.quadHelperThresh = np.zeros(len(self.mask))
         self.quadHelperUnder = np.zeros(len(self.mask))
@@ -168,9 +126,9 @@ class tomodata:
     def removebixels(self, pitch):
         bixelkill = np.where(0 != (self.bixels % pitch) )
         self.bixels = np.delete(self.bixels, bixelkill)
-        self.smallvoxels = np.delete(self.smallvoxels, bixelkill)
+        self.voxels = np.delete(self.voxels, bixelkill)
         self.Dijs = np.delete(self.Dijs, bixelkill)
-        self.mask = self.mask[np.unique(self.smallvoxels)]
+
 
     def convertmasktobasic(self):
         ## Get only the basic bit from the mask.
@@ -205,7 +163,7 @@ class tomodata:
 
         # get subsample mask
         img_arr = getvector(self.base_dir + self.img_filename, dtype=dtype)
-        img_arr = get_sub_sub_sample(img_arr, 1000)
+        img_arr = get_sub_sub_sample(img_arr, 10000)
         # get structure file
         struct_img_arr = getvector(self.base_dir + self.struct_img_filename, dtype=dtype)
         # Convert the mask into a list of unitary structures. A voxel gets assigned to only one place.
@@ -215,70 +173,19 @@ class tomodata:
         # Select only the voxels that exist in the small voxel space provided.
         self.removezeroes(0)
         #self.convertmasktobasic()
+        self.removebixels(5)
 
-## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
-## This part is for AMPL's implementation:
-def printAMPLfile(data):
-    f = open("tomononlinearRealCases.dat", "w")
-    print('param numProjections :=', data.numProjections, ';', file = f)
-    print('param numvoxels :=', len(data.mask), ';', file = f)
-    print('param U :=', data.maxIntensity, ';', file = f)
-    print('param numLeaves :=', data.N, ';', file=f)
-    pds.set_option('precision', 16)
-    leafs = (data.bixels % data.N).astype(int)
-    projections = np.floor(data.bixels / data.N).astype(int)
-    myloops = np.floor(projections / data.ProjectionsPerLoop).astype(int)
-    print('param numLoops :=', max(myloops), ';', file=f)
-    print('param: VOXELS: thethreshold :=', file = f)
-    thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': data.quadHelperThresh})
-    print(thrs.to_string(index=False, header = False), file = f)
-    print(";", file=f)
-    print('param: quadHelperOver :=', file = f)
-    thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': data.quadHelperOver})
-    print(thrs.to_string(index=False, header = False), file = f)
-    print(";", file=f)
-    print('param: quadHelperUnder :=', file=f)
-    thrs = pds.DataFrame(data={'A': np.arange(len(data.mask)), 'B': data.quadHelperUnder})
-    print(thrs.to_string(index=False, header = False), file=f)
-    print(";", file=f)
-    print('param: KNJMPARAMETERS: D:=' , file = f)
-    sparseinfo = pds.DataFrame(data = {'LEAVES' : leafs, 'PROJECTIONS' : projections, 'VOXELS' : data.smallvoxels, 'ZDOSES' : data.Dijs},
-                               columns = ['LEAVES', 'PROJECTIONS', 'VOXELS', 'ZDOSES'])
-    print(sparseinfo.to_string(index=False, header=False), file = f)
-    print(";", file = f)
-    PM1 = np.array(list(range(data.ProjectionsPerLoop * (1 + max(myloops)))))
-    myloopsM1 = np.floor(PM1 / data.ProjectionsPerLoop).astype(int)
-    print('set POSSIBLEPL:=' , file = f)
-    setinfo = pds.DataFrame(data = {'PROJECTIONSM1' : PM1, 'LOOPSM1' : myloopsM1},
-                               columns = ['PROJECTIONSM1', 'LOOPSM1'])
-    print(setinfo.to_string(index=False, header=False), file = f)
-    print(";", file = f)
-    f.close()
+output2 = open('z.pkl', 'rb')
+z = pickle.load(output2)
+output2.close()
 
-def runAMPL():
-    procstring = subprocess.check_output(['ampl', 'heuristicRealCasesDPfirst.run'])
-    return(procstring)
+output = open('dataobject.pkl', 'rb')
+dataobject = pickle.load(output)
+output.close()
 
-def readDosefromtext(pstring):
-    strstring = pstring.decode("utf-8") # decode the bytes stringst
-    print(strstring)
-    lines = strstring.split('\n')
-    linecontainssolution = False
-    for line in lines:
-        if linecontainssolution:
-            l = []
-            for t in line.split():
-                try:
-                    l.append(float(t))
-                except ValueError:
-                    pass
-            if len(l) > 0:
-                for i in range(int(len(l) / 2)):
-                    z[int(l[int(2 * i)])] = l[int(2 * i + 1)]
-        else:
-            if ('z [*] :=' in line):
-                linecontainssolution = True
-    return(z)
+output3 = open('a.pkl', 'rb')
+a = pickle.load(output3)
+output3.close()
 
 # Plot the dose volume histogram
 def plotDVHNoClass(data, z, NameTag='', showPlot=False):
@@ -308,25 +215,7 @@ def plotDVHNoClass(data, z, NameTag='', showPlot=False):
         plt.show()
     plt.close()
 
-dataobject = tomodata()
-printAMPLfile(dataobject)
-z = np.zeros(len(dataobject.mask))
-start_time = time.time()
-pstring = runAMPL()
-z = readDosefromtext(pstring)
-output2 = open('z.pkl', 'wb')
-pickle.dump(z, output2)
-output2.close()
-output = open('dataobject.pkl', 'wb')
-pickle.dump(dataobject, output)
-output.close()
-print("--- %s seconds running the AMPL part---" % (time.time() - start_time))
-# Ignore errors that correspond to DVH Plot
-try:
-    plotDVHNoClass(dataobject, z, 'dvh')
-except IndexError:
-    print("Index is out of bounds and no DVH plot will be generated. However, I am ignoring this error for now.")
-# Output ampl results for the next run in case something fails.
-text_output = open("amploutput.txt", "wb")
-text_output.write(pstring)
-text_output.close()
+
+#z = z[a]
+dataobject.mask = dataobject.mask[a]
+plotDVHNoClass(dataobject, z, 'dvh')

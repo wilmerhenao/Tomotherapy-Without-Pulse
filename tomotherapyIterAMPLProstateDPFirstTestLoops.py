@@ -14,12 +14,9 @@ import matplotlib.pyplot as plt
 import scipy.sparse as sps
 import time
 from scipy.stats import describe
-import os
-import os.path
 import subprocess
-import sys
 
-numcores = 8
+numcores = 4
 
 ## Function that reads the files produced by Weiguo
 def getvector(necfile,dtype):
@@ -42,28 +39,48 @@ def get_structure_mask(struct_id_list, struct_img_arr):
         img_struct[np.where(struct_img_arr & 2 ** (s - 1))] = s
     return np.copy(img_struct)
 
+## Function that selects roughly the number numelems as a sample. (You get substantially less)
+## Say you input numelems=90. Then you get less than 90 voxels in your case.
+def get_sub_sub_sample(subsampling_img, numelems):
+    sub_sub = np.zeros_like(subsampling_img)
+    locations = np.where(subsampling_img)[0]
+    print(locations)
+    print('number of elements', len(locations))
+    a = np.arange(0,len(locations), int(len(locations)/numelems))
+    print(a)
+    sublocations = locations[a]
+    sub_sub[sublocations] = 1
+    return(sub_sub)
+
 class tomodata:
     ## Initialization of the data
     def __init__(self):
-        #self.base_dir = 'data/dij/HelicalGyn/'
-        self.base_dir = 'data/dij/prostate/'#153
+        self.base_dir = 'data/dij/HelicalGyn/'
+        self.base_dir = 'data/dij/prostate/'
         self.img_filename = 'samplemask.img'
         self.header_filename = 'samplemask.header'
         self.struct_img_filename = 'roimask.img'
         self.struct_img_header = 'roimask.header'
         self.outputDirectory = "output/"
+        self.roinames = {}
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
-        self.maxIntensity = 200
-        self.get_dim(self.base_dir, 'samplemask.header')
-        self.get_totalbeamlets(self.base_dir, 'dij/Size_out.txt')
-        self.roimask_reader(self.base_dir, 'roimask.header')
+        self.maxIntensity = 300
+        self.caseSideX = 256
+        self.caseSideY = 256
+        self.caseSideZ = 193
+        # The number of loops to be used in this case
+        self.ProjectionsPerLoop = 51
+        self.voxelsBigSpace = self.caseSideX * self.caseSideY * self.caseSideZ
         print('Read vectors...')
         self.readWeiguosCase(  )
+        self.maskNamesGetter(self.base_dir + self.struct_img_header)
         print('done')
         # Create a space in smallvoxel coordinates
         self.smallvoxels = self.BigToSmallCreator()
         print('Build sparse matrix.')
+        # The next part uses the case corresponding to either Wilmer or Weiguo's case
+        self.totalbeamlets = 33792
         self.totalsmallvoxels = max(self.smallvoxels) + 1 #12648448
         print('totalsmallvoxels:', self.totalsmallvoxels)
         print('a brief description of Dijs array', describe(self.Dijs))
@@ -78,68 +95,31 @@ class tomodata:
             T = None
             if self.mask[i] in self.TARGETList:
                 T = self.TARGETThresholds[np.where(self.mask[i] == self.TARGETList)[0][0]]
-                self.quadHelperOver[i] = 0.00001
+                self.quadHelperOver[i] = 0.0001
                 self.quadHelperUnder[i] = 0.006
             # Constraint on OARs
             elif self.mask[i] in self.OARList:
                 T = self.OARThresholds[np.where(self.mask[i] == self.OARList)[0][0]]
-                self.quadHelperOver[i] = 0.00001
+                self.quadHelperOver[i] = 0.0001
                 self.quadHelperUnder[i] = 0.00
             elif 0 == self.mask[i]:
                 print('there is an element in the voxels that is also mask 0')
             self.quadHelperThresh[i] = T
             ########################
+        ## This is the total number of voxels that there are in the body. Not all voxels from all directions
 
-    def roimask_reader(self, base, fname):
-        self.OARDict = {}
-        self.TARGETDict = {}
-        self.SUPPORTDict = {}
-        with open(base + fname, 'r') as rmrd:
-            for line in rmrd:
-                if 'ROIIndex =' in line:
-                    roiidx = int(line.split(' ')[2])
-                elif 'ROIName =' in line:
-                    roiname = line.split(' ')[2]
-                elif 'RTROIInterpretedType =' in line:
-                    roitype = line.split(' ')[2]
-                    if 'SUPPORT' in roitype:
-                        self.SUPPORTDict[roiidx] = roiname
-                    elif 'ORGAN' in roitype:
-                        self.OARDict[roiidx] = roiname
-                    elif 'PTV' in roitype:
-                        self.TARGETDict[roiidx] = roiname
-                    else:
-                        sys.exit('ERROR, roi type not defined')
-                else:
-                    pass
-        rmrd.closed
-        #Merge all dictionaries
-        self.AllDict = dict(self.SUPPORTDict)
-        self.AllDict.update(self.OARDict)
-        self.AllDict.update(self.TARGETDict)
-
-    ## Get the total number of beamlets
-    def get_totalbeamlets(self, base, fname):
-        with open(base + fname, 'r') as szout:
-            for i, line in enumerate(szout):
-                if 1 == i:
-                    self.totalbeamlets = int(line)
-        szout.closed
-
-
-    ## Get the dimensions of the voxel big space
-    def get_dim(self, base, fname):
-        with open(base + fname, 'r') as header:
-            dim_xyz = [0] * 3
-            for i, line in enumerate(header):
-                if 'x_dim' in line:
-                    dim_x = int(line.split(' ')[2])
-                if 'y_dim' in line:
-                    dim_y = int(line.split(' ')[2])
-                if 'z_dim' in line:
-                    dim_z = int(line.split(' ')[2])
-        header.closed
-        self.voxelsBigSpace = dim_x * dim_y * dim_z
+    ## Keep the ROI's in a dictionary
+    def maskNamesGetter(self, maskfile):
+        lines = tuple(open(maskfile, 'r'))
+        for line in lines:
+            if 'ROIIndex =' == line[:10]:
+                roinumber = line.split(' = ')[1].strip()
+            elif 'ROIName =' == line[:9]:
+                roiname = line.split(' = ')[1].strip()
+            elif '}' == line[0]:
+                self.roinames[roinumber] = roiname
+            else:
+                pass
 
     ## Create a map from big to small voxel space, the order of elements is preserved but there is a compression to only
     # one element in between.
@@ -148,27 +128,6 @@ class tomodata:
         a, b, c, d = np.unique(self.voxels, return_index=True, return_inverse=True, return_counts=True)
         print('BigToSmallCreator:size of c. Size of the problem:', len(c))
         return(c)
-
-    ## Choose Small Space is the function that reduces the resolution to work with. voxelsHD will remain to be used for
-    # functions that require high resolution. Mainly when loading the hints.
-    def chooseSmallSpace(self, stepsparse):
-        # Original Map
-        om = [ij for ij in range(self.voxelsBigSpace)]
-        # New Map
-        nm = []
-        for i in np.arange(0, self.caseSide, stepsparse):
-            for j in np.arange(0, self.caseSide, stepsparse):
-                nm.append(om[int(j) + int(i) * self.caseSide])
-        # Summary statistics of voxels
-        print('effectivity of the reduction:', len(om)/len(nm))
-        indices = np.where(np.in1d(self.voxels, nm))[0]
-        self.bixels = self.bixels[indices]
-        self.voxels = self.voxels[indices]
-        self.Dijs = self.Dijs[indices]
-        print(len(self.mask))
-        self.mask = np.array([self.mask[i] for i in nm])
-        locats = np.where(0 == self.mask)[0]
-        self.mask = np.delete(self.mask, locats)
 
     def getNumProjections(self):
         with open(self.base_dir + 'motion.txt') as f:
@@ -180,26 +139,52 @@ class tomodata:
         # Next I am removing the voxels that have a mask of zero (0) because they REALLY complicate things otherwise
         # Making the problem larger.
         #-------------------------------------
+        # Cut the mask to only the elements contained in the voxel list
+        voxelindex = np.zeros_like(self.mask)
+        voxelindex[np.unique(self.voxels)] = 1
+        self.mask = np.multiply(voxelindex, self.mask)
         locats = np.where(0 == self.mask)[0]
         self.mask = np.delete(self.mask, locats)
+        # intersection of voxels and nonzero
         indices = np.where(np.in1d(self.voxels, locats))[0]
+        # Cut whatever is not in the voxels.
         self.bixels = np.delete(self.bixels, indices)
         self.voxels = np.delete(self.voxels, indices)
         self.Dijs = np.delete(self.Dijs, indices)
+        #self.mask = np.delete(self.mask, indices)
 
-    def removecouch(self):
-        # Next I am removing the voxels that have a mask of zero (22) because they are the couch
-        #-------------------------------------
-        locats = np.where(22 == self.mask)[0]
-        self.mask = np.delete(self.mask, locats)
-        indices = np.where(np.in1d(self.voxels, locats))[0]
-        self.bixels = np.delete(self.bixels, indices)
-        self.voxels = np.delete(self.voxels, indices)
-        self.Dijs = np.delete(self.Dijs, indices)
+    def removebixels(self, pitch):
+        bixelkill = np.where(0 != (self.bixels % pitch) )
+        self.bixels = np.delete(self.bixels, bixelkill)
+        self.voxels = np.delete(self.voxels, bixelkill)
+        self.Dijs = np.delete(self.Dijs, bixelkill)
+
+    ## Roughly cut the projections necessary to obtain as many loops as loopstosave. Discard the rest.
+    ## Assuming 51 projections per loop
+    def leaveonlyafewloopsalive(self, loopstosave):
+        projections = np.floor(self.bixels / self.N).astype(int)
+        liminf = int(np.average(np.unique(projections))) - 25 * loopstosave
+        limsup = liminf + 51 * loopstosave
+        intherangea = 0 + (projections < liminf)
+        intherangeb = 0 + (limsup < projections)
+        intherange = intherangea + intherangeb
+        projkill = np.where(intherange)
+        self.bixels = np.delete(self.bixels, projkill)
+        self.voxels = np.delete(self.voxels, projkill)
+        self.Dijs = np.delete(self.Dijs, projkill)
+
+    def convertmasktobasic(self):
+        ## Get only the basic bit from the mask.
+        inorgan = [100] * (len(self.mask))
+        for i in reversed(self.ALLList):
+            print(i)
+            inorgan = [i if self.mask[n] & 2**(i-1) else inorgan[n] for n in range(len(self.mask))]
+        self.mask = inorgan
+        np.save('data/dij/prostate/dij/roimaskClean', arr=self.mask, allow_pickle=False)
 
     ## Read Weiguo's Case
     def readWeiguosCase(self):
-        if self.base_dir=='data/dij/prostate/':#153
+        if self.base_dir=='data/dij/prostate/':
             dtype=np.uint32
             # Assign structures and thresholds for each of them
             self.OARList = [21, 6, 11, 13, 14, 8, 12, 15, 7, 9, 5, 4, 20, 19, 18, 10, 22]
@@ -211,7 +196,7 @@ class tomodata:
             self.OARList = [21, 6, 11, 13, 14, 8, 12, 15, 7, 9, 5, 4, 20, 19, 18, 10, 22]
             self.OARThresholds = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
             self.TARGETList = [2]
-            self.TARGETThresholds = [80]
+            self.TARGETThresholds = [78]
 
         self.bixels = getvector(self.base_dir + 'dij/Bixels_out.bin', np.int32)
         self.voxels = getvector(self.base_dir + 'dij/Voxels_out.bin', np.int32)
@@ -221,15 +206,18 @@ class tomodata:
 
         # get subsample mask
         img_arr = getvector(self.base_dir + self.img_filename, dtype=dtype)
+        img_arr = get_sub_sub_sample(img_arr, 10000)
         # get structure file
         struct_img_arr = getvector(self.base_dir + self.struct_img_filename, dtype=dtype)
         # Convert the mask into a list of unitary structures. A voxel gets assigned to only one place.
         img_struct = get_structure_mask(reversed(self.ALLList), struct_img_arr)
         # Get the subsampled list of voxels.
-        self.longmask = get_subsampled_mask(img_struct, img_arr)
+        self.mask = get_subsampled_mask(img_struct, img_arr)
         # Select only the voxels that exist in the small voxel space provided.
-        self.mask = self.longmask[np.unique(self.voxels)]
         self.removezeroes()
+        #self.convertmasktobasic()
+        self.removebixels(5)
+        self.leaveonlyafewloopsalive(7)
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 ## This part is for AMPL's implementation:
@@ -239,6 +227,11 @@ def printAMPLfile(data):
     print('param numvoxels :=', len(data.mask), ';', file = f)
     print('param U :=', data.maxIntensity, ';', file = f)
     print('param numLeaves :=', data.N, ';', file=f)
+    pds.set_option('precision', 16)
+    leafs = (data.bixels % data.N).astype(int)
+    projections = np.floor(data.bixels / data.N).astype(int)
+    myloops = np.floor(projections / data.ProjectionsPerLoop).astype(int)
+    print('param numLoops :=', max(myloops), ';', file=f)
     print('param: VOXELS: thethreshold :=', file = f)
     thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': data.quadHelperThresh})
     print(thrs.to_string(index=False, header = False), file = f)
@@ -251,17 +244,22 @@ def printAMPLfile(data):
     thrs = pds.DataFrame(data={'A': np.arange(len(data.mask)), 'B': data.quadHelperUnder})
     print(thrs.to_string(index=False, header = False), file=f)
     print(";", file=f)
-    print('param: KNJPARAMETERS: D:=' , file = f)
-    pds.set_option('precision', 16)
-    leafs = (data.bixels % data.N).astype(int)
-    projections = np.floor(data.bixels / data.N).astype(int)
-    sparseinfo = pds.DataFrame(data = {'LEAVES' : leafs, 'PROJECTIONS' : projections, 'VOXELS' : data.smallvoxels, 'ZDOSES' : data.Dijs})
+    print('param: KNJMPARAMETERS: D:=' , file = f)
+    sparseinfo = pds.DataFrame(data = {'LEAVES' : leafs, 'PROJECTIONS' : projections, 'VOXELS' : data.smallvoxels, 'ZDOSES' : data.Dijs},
+                               columns = ['LEAVES', 'PROJECTIONS', 'VOXELS', 'ZDOSES'])
     print(sparseinfo.to_string(index=False, header=False), file = f)
+    print(";", file = f)
+    PM1 = np.array(list(range(data.ProjectionsPerLoop * (1 + max(myloops)))))
+    myloopsM1 = np.floor(PM1 / data.ProjectionsPerLoop).astype(int)
+    print('set POSSIBLEPL:=' , file = f)
+    setinfo = pds.DataFrame(data = {'PROJECTIONSM1' : PM1, 'LOOPSM1' : myloopsM1},
+                               columns = ['PROJECTIONSM1', 'LOOPSM1'])
+    print(setinfo.to_string(index=False, header=False), file = f)
     print(";", file = f)
     f.close()
 
 def runAMPL():
-    procstring = subprocess.check_output(['ampl', 'heuristicRealCases.run'])
+    procstring = subprocess.check_output(['ampl', 'heuristicRealCasesDPfirst.run'])
     return(procstring)
 
 def readDosefromtext(pstring):
@@ -301,7 +299,7 @@ def plotDVHNoClass(data, z, NameTag='', showPlot=False):
         hist, bins = np.histogram(dose[sVoxels], bins=100)
         dvh = 1. - np.cumsum(hist) / float(sVoxels.shape[0])
         dvh = np.insert(dvh, 0, 1)
-        plt.plot(bins, dvh, label=data.AllDict[index], linewidth=2)
+        plt.plot(bins, dvh, label=data.roinames[str(index)], linewidth=2)
     lgd = plt.legend(fancybox=True, framealpha=0.5, bbox_to_anchor=(1.05, 1), loc=2)
     plt.title('DVH')
     plt.grid(True)
@@ -313,15 +311,19 @@ def plotDVHNoClass(data, z, NameTag='', showPlot=False):
         plt.show()
     plt.close()
 
-start_time = time.time()
 dataobject = tomodata()
 printAMPLfile(dataobject)
 z = np.zeros(len(dataobject.mask))
+start_time = time.time()
 pstring = runAMPL()
 z = readDosefromtext(pstring)
-plotDVHNoClass(dataobject, z, 'dvh')
+print("--- %s seconds running the AMPL part---" % (time.time() - start_time))
+# Ignore errors that correspond to DVH Plot
+try:
+    plotDVHNoClass(dataobject, z, 'dvh')
+except IndexError:
+    print("Index is out of bounds and no DVH plot will be generated. However, I am ignoring this error for now.")
 # Output ampl results for the next run in case something fails.
 text_output = open("amploutput.txt", "wb")
 text_output.write(pstring)
 text_output.close()
-print("--- %s seconds ---" % (time.time() - start_time))

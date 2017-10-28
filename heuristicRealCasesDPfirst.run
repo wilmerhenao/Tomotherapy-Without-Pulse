@@ -3,10 +3,16 @@ model heuristicRealCases.mod;
 data tomononlinearRealCases.dat;
 option solver gurobi, solution_round 1;
 option gurobi_options 'outlev 1';
-#option gurobi_options 'Degenmoves 100000'; # Limits degenerate simplex moves. These moves are performed to improve the integrality of the current relaxation solution
-option gurobi_options 'mipgap 0.5';
+option gurobi_options 'ams_limit 0';
+option gurobi_options 'mip 0';
+# The one below cuts like 90% of the time
+option gurobi_options 'mipgapabs 2000';
+# Reduces the time to a half
+option gurobi_options 'feastol 1e-3';
+#option gurobi_options 'bariterlim 100';
+#option gurobi_options 'barconvtool 100';
 problem CMP: y, z, z_plus, z_minus, ObjectiveFunction, doses_to_j, positive_only;
-problem DP: mu, betas, z, z_plus, z_minus, ObjectiveFunction, doses_to_j_yparam, positive_only, Mlimits, abs_greater, abs_smaller, Nlimits; #alphalimits
+problem DP: mu, betas, z, z_plus, z_minus, ObjectiveFunction, doses_to_j_yparam, positive_only, Mlimits, abs_greater, abs_smaller, alphalimitsNotPerLeaf;#, Nlimits;#, alphalimits;#
 
 # Initialize to default values
 let {n in LEAVES, k in PROJECTIONS} betasparam[n,k] := 0;		# All closed
@@ -59,7 +65,7 @@ repeat {
            option gurobi_options 'mipgap 0.1';
 
         # Exit condition
-        if abs(newobj - oldobj)/oldobj < 0.01 then break;
+        if abs(newobj - oldobj)/oldobj < 0.001 then break;
         else let numberOfIterations := numberOfIterations + 1;
     }
     let {k in PROJECTIONS} yparam[k] := U;

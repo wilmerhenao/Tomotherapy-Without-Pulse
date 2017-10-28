@@ -70,3 +70,4 @@ subject to Nlimits {n in LEAVES, m in LOOPS}: sum{k in PROJECTIONSM1: (k, m) in 
 # -------------------------------------------------------------------
 
 subject to alphalimits {n in LEAVES, j in VOXELS}: sum{k in PROJECTIONSM1: (n,k,j) in KNJMPARAMETERS} mu[n, k] <= 5;
+subject to alphalimitsNotPerLeaf {j in VOXELS}: sum{k in PROJECTIONSM1, n in LEAVES: (n,k,j) in KNJMPARAMETERS} mu[n, k] <= 3 * 80/5;
