@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/heuristicRealCasesDPfirst.run" afterPath="$PROJECT_DIR$/heuristicRealCasesDPfirst.run" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py" afterPath="$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py" />
     </list>
     <ignored path="CaseCreation.iws" />
@@ -29,8 +28,8 @@
             <file leaf-file-name="tomotherapyIterAMPLGeneral.py" pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="228">
-                    <caret line="72" column="16" lean-forward="false" selection-start-line="72" selection-start-column="13" selection-end-line="72" selection-end-column="16" />
+                  <state relative-caret-position="466">
+                    <caret line="247" column="34" lean-forward="false" selection-start-line="247" selection-start-column="34" selection-end-line="247" selection-end-column="34" />
                     <folding />
                   </state>
                 </provider>
@@ -50,8 +49,8 @@
       <file leaf-file-name="tomotherapyIterAMPLProstateDPFirst.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirst.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="834">
-              <caret line="87" column="18" lean-forward="false" selection-start-line="87" selection-start-column="13" selection-end-line="87" selection-end-column="18" />
+            <state relative-caret-position="86">
+              <caret line="183" column="0" lean-forward="false" selection-start-line="183" selection-start-column="0" selection-end-line="216" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -88,8 +87,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>sampleevery</find>
-      <find>readWeiguosCase</find>
       <find>get_sub_sub_sample</find>
       <find>50</find>
       <find>130</find>
@@ -118,6 +115,8 @@
       <find>max</find>
       <find>get_sub_sub</find>
       <find>get_totalbeamlets</find>
+      <find>roimask_reader</find>
+      <find>readWeiguosC</find>
     </findStrings>
     <replaceStrings>
       <replace>self.data.K</replace>
@@ -519,13 +518,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00114" summary="Changed the data to only 51 control points.">
-      <created>1471988549028</created>
-      <option name="number" value="00114" />
-      <option name="presentableId" value="LOCAL-00114" />
-      <option name="project" value="LOCAL" />
-      <updated>1471988549028</updated>
-    </task>
     <task id="LOCAL-00115" summary="Changed the data to only 51 control points. Does not converge">
       <created>1472155805343</created>
       <option name="number" value="00115" />
@@ -862,7 +854,14 @@
       <option name="project" value="LOCAL" />
       <updated>1509161388823</updated>
     </task>
-    <option name="localTasksCounter" value="163" />
+    <task id="LOCAL-00163" summary="starting work on general algorithm">
+      <created>1510553956353</created>
+      <option name="number" value="00163" />
+      <option name="presentableId" value="LOCAL-00163" />
+      <option name="project" value="LOCAL" />
+      <updated>1510553956353</updated>
+    </task>
+    <option name="localTasksCounter" value="164" />
     <servers />
   </component>
   <component name="TodoView">
@@ -934,7 +933,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Removed refine function. Everything seems to run fine now. But it's really slow." />
     <MESSAGE value="It's a lot faster. But still below AMPL" />
     <MESSAGE value="Constraints established as columns to addvar" />
     <MESSAGE value="Added AMPL files to python project" />
@@ -959,7 +957,8 @@
     <MESSAGE value="This version included loop as well as per voxel constraints" />
     <MESSAGE value="Running for publication at INFORMS 17" />
     <MESSAGE value="This is a case that runs in 84 seconds. Down from more than 2000" />
-    <option name="LAST_COMMIT_MESSAGE" value="This is a case that runs in 84 seconds. Down from more than 2000" />
+    <MESSAGE value="starting work on general algorithm" />
+    <option name="LAST_COMMIT_MESSAGE" value="starting work on general algorithm" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1374,16 +1373,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="72" column="16" lean-forward="false" selection-start-line="72" selection-start-column="13" selection-end-line="72" selection-end-column="16" />
+        <state relative-caret-position="466">
+          <caret line="247" column="34" lean-forward="false" selection-start-line="247" selection-start-column="34" selection-end-line="247" selection-end-column="34" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirst.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="834">
-          <caret line="87" column="18" lean-forward="false" selection-start-line="87" selection-start-column="13" selection-end-line="87" selection-end-column="18" />
+        <state relative-caret-position="86">
+          <caret line="183" column="0" lean-forward="false" selection-start-line="183" selection-start-column="0" selection-end-line="216" selection-end-column="34" />
           <folding />
         </state>
       </provider>

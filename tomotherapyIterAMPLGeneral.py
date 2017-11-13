@@ -60,6 +60,8 @@ class tomodata:
     def __init__(self):
         self.base_dir = 'data/dij/HelicalGyn/'
         self.base_dir = 'data/dij/prostate/'#153
+        # The number of loops to be used in this case
+        self.ProjectionsPerLoop = 51
         self.img_filename = 'samplemask.img'
         self.header_filename = 'samplemask.header'
         self.struct_img_filename = 'roimask.img'
@@ -212,19 +214,19 @@ class tomodata:
 
     ## Read Weiguo's Case
     def readWeiguosCase(self):
-        if self.base_dir=='data/dij/prostate/':#153
+        if self.base_dir=='data/dij/prostate/':
             dtype=np.uint32
             # Assign structures and thresholds for each of them
             self.OARList = [21, 6, 11, 13, 14, 8, 12, 15, 7, 9, 5, 4, 20, 19, 18, 10, 22]
-            self.OARThresholds = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+            self.OARThresholds = [5, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
             self.TARGETList = [2]
             self.TARGETThresholds = [78]
         else:
             dtype=np.uint16
             self.OARList = [21, 6, 11, 13, 14, 8, 12, 15, 7, 9, 5, 4, 20, 19, 18, 10, 22]
-            self.OARThresholds = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+            self.OARThresholds = [5, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
             self.TARGETList = [2]
-            self.TARGETThresholds = [80]
+            self.TARGETThresholds = [78]
 
         self.bixels = getvector(self.base_dir + 'dij/Bixels_out.bin', np.int32)
         self.voxels = getvector(self.base_dir + 'dij/Voxels_out.bin', np.int32)
@@ -234,15 +236,16 @@ class tomodata:
 
         # get subsample mask
         img_arr = getvector(self.base_dir + self.img_filename, dtype=dtype)
+        img_arr = get_sub_sub_sample(img_arr, 1000)
         # get structure file
         struct_img_arr = getvector(self.base_dir + self.struct_img_filename, dtype=dtype)
         # Convert the mask into a list of unitary structures. A voxel gets assigned to only one place.
         img_struct = get_structure_mask(reversed(self.ALLList), struct_img_arr)
         # Get the subsampled list of voxels.
-        self.longmask = get_subsampled_mask(img_struct, img_arr)
+        self.mask = get_subsampled_mask(img_struct, img_arr)
         # Select only the voxels that exist in the small voxel space provided.
-        self.mask = self.longmask[np.unique(self.voxels)]
-        self.removezeroes()
+        self.removezeroes(0)
+        #self.convertmasktobasic()
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 ## This part is for AMPL's implementation:
