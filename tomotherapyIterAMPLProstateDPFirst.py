@@ -172,15 +172,6 @@ class tomodata:
         self.Dijs = np.delete(self.Dijs, bixelkill)
         self.mask = self.mask[np.unique(self.smallvoxels)]
 
-    def convertmasktobasic(self):
-        ## Get only the basic bit from the mask.
-        inorgan = [100] * (len(self.mask))
-        for i in reversed(self.ALLList):
-            print(i)
-            inorgan = [i if self.mask[n] & 2**(i-1) else inorgan[n] for n in range(len(self.mask))]
-        self.mask = inorgan
-        np.save('data/dij/prostate/dij/roimaskClean', arr=self.mask, allow_pickle=False)
-
     ## Read Weiguo's Case
     def readWeiguosCase(self):
         if self.base_dir=='data/dij/prostate/':
@@ -214,7 +205,6 @@ class tomodata:
         self.mask = get_subsampled_mask(img_struct, img_arr)
         # Select only the voxels that exist in the small voxel space provided.
         self.removezeroes(0)
-        #self.convertmasktobasic()
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 ## This part is for AMPL's implementation:

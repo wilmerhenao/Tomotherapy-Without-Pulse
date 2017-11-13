@@ -75,9 +75,14 @@ class tomodata:
         self.roimask_reader(self.base_dir, 'roimask.header')
         print('Read vectors...')
         self.readWeiguosCase(  )
+        self.maskNamesGetter(self.base_dir + self.struct_img_header)
         print('done')
         # Create a space in smallvoxel coordinates
         self.smallvoxels = self.BigToSmallCreator()
+        # Now remove bixels carefully
+        self.removebixels(5)
+        # Do the smallvoxels again:
+        blaa, blab, self.smallvoxels, blad = np.unique(self.smallvoxels, return_index=True, return_inverse=True, return_counts=True)
         print('Build sparse matrix.')
         self.totalsmallvoxels = max(self.smallvoxels) + 1 #12648448
         print('totalsmallvoxels:', self.totalsmallvoxels)
@@ -93,17 +98,34 @@ class tomodata:
             T = None
             if self.mask[i] in self.TARGETList:
                 T = self.TARGETThresholds[np.where(self.mask[i] == self.TARGETList)[0][0]]
-                self.quadHelperOver[i] = 0.00001
-                self.quadHelperUnder[i] = 0.006
+                self.quadHelperOver[i] = 0.0001
+                self.quadHelperUnder[i] = 0.009
             # Constraint on OARs
             elif self.mask[i] in self.OARList:
                 T = self.OARThresholds[np.where(self.mask[i] == self.OARList)[0][0]]
-                self.quadHelperOver[i] = 0.00001
+                self.quadHelperOver[i] = 0.0001
                 self.quadHelperUnder[i] = 0.00
+                if self.mask[i] == 6:
+                    self.quadHelperOver[i] = 0.01
+                if self.mask[i] == 7:
+                    self.quadHelperOver[i] = 0.1
             elif 0 == self.mask[i]:
                 print('there is an element in the voxels that is also mask 0')
             self.quadHelperThresh[i] = T
             ########################
+
+    ## Keep the ROI's in a dictionary
+    def maskNamesGetter(self, maskfile):
+        lines = tuple(open(maskfile, 'r'))
+        for line in lines:
+            if 'ROIIndex =' == line[:10]:
+                roinumber = line.split(' = ')[1].strip()
+            elif 'ROIName =' == line[:9]:
+                roiname = line.split(' = ')[1].strip()
+            elif '}' == line[0]:
+                self.roinames[roinumber] = roiname
+            else:
+                pass
 
     def roimask_reader(self, base, fname):
         self.OARDict = {}
@@ -164,53 +186,36 @@ class tomodata:
         print('BigToSmallCreator:size of c. Size of the problem:', len(c))
         return(c)
 
-    ## Choose Small Space is the function that reduces the resolution to work with. voxelsHD will remain to be used for
-    # functions that require high resolution. Mainly when loading the hints.
-    def chooseSmallSpace(self, stepsparse):
-        # Original Map
-        om = [ij for ij in range(self.voxelsBigSpace)]
-        # New Map
-        nm = []
-        for i in np.arange(0, self.caseSide, stepsparse):
-            for j in np.arange(0, self.caseSide, stepsparse):
-                nm.append(om[int(j) + int(i) * self.caseSide])
-        # Summary statistics of voxels
-        print('effectivity of the reduction:', len(om)/len(nm))
-        indices = np.where(np.in1d(self.voxels, nm))[0]
-        self.bixels = self.bixels[indices]
-        self.voxels = self.voxels[indices]
-        self.Dijs = self.Dijs[indices]
-        print(len(self.mask))
-        self.mask = np.array([self.mask[i] for i in nm])
-        locats = np.where(0 == self.mask)[0]
-        self.mask = np.delete(self.mask, locats)
-
     def getNumProjections(self):
         with open(self.base_dir + 'motion.txt') as f:
             for i, l in enumerate(f):
                 pass
         return i # Do not return -1 because the file has a header.
 
-    def removezeroes(self):
+    def removezeroes(self, toremove):
         # Next I am removing the voxels that have a mask of zero (0) because they REALLY complicate things otherwise
         # Making the problem larger.
         #-------------------------------------
-        locats = np.where(0 == self.mask)[0]
+        # Cut the mask to only the elements contained in the voxel list
+        voxelindex = np.zeros_like(self.mask)
+        voxelindex[np.unique(self.voxels)] = 1
+        self.mask = np.multiply(voxelindex, self.mask)
+        locats = np.where(toremove == self.mask)[0]
         self.mask = np.delete(self.mask, locats)
+        # intersection of voxels and nonzero
         indices = np.where(np.in1d(self.voxels, locats))[0]
+        # Cut whatever is not in the voxels.
         self.bixels = np.delete(self.bixels, indices)
         self.voxels = np.delete(self.voxels, indices)
         self.Dijs = np.delete(self.Dijs, indices)
+        #self.mask = np.delete(self.mask, indices)
 
-    def removecouch(self):
-        # Next I am removing the voxels that have a mask of zero (22) because they are the couch
-        #-------------------------------------
-        locats = np.where(22 == self.mask)[0]
-        self.mask = np.delete(self.mask, locats)
-        indices = np.where(np.in1d(self.voxels, locats))[0]
-        self.bixels = np.delete(self.bixels, indices)
-        self.voxels = np.delete(self.voxels, indices)
-        self.Dijs = np.delete(self.Dijs, indices)
+    def removebixels(self, pitch):
+        bixelkill = np.where(0 != (self.bixels % pitch) )
+        self.bixels = np.delete(self.bixels, bixelkill)
+        self.smallvoxels = np.delete(self.smallvoxels, bixelkill)
+        self.Dijs = np.delete(self.Dijs, bixelkill)
+        self.mask = self.mask[np.unique(self.smallvoxels)]
 
     ## Read Weiguo's Case
     def readWeiguosCase(self):
@@ -245,7 +250,6 @@ class tomodata:
         self.mask = get_subsampled_mask(img_struct, img_arr)
         # Select only the voxels that exist in the small voxel space provided.
         self.removezeroes(0)
-        #self.convertmasktobasic()
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 ## This part is for AMPL's implementation:
@@ -255,6 +259,11 @@ def printAMPLfile(data):
     print('param numvoxels :=', len(data.mask), ';', file = f)
     print('param U :=', data.maxIntensity, ';', file = f)
     print('param numLeaves :=', data.N, ';', file=f)
+    pds.set_option('precision', 16)
+    leafs = (data.bixels % data.N).astype(int)
+    projections = np.floor(data.bixels / data.N).astype(int)
+    myloops = np.floor(projections / data.ProjectionsPerLoop).astype(int)
+    print('param numLoops :=', max(myloops), ';', file=f)
     print('param: VOXELS: thethreshold :=', file = f)
     thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': data.quadHelperThresh})
     print(thrs.to_string(index=False, header = False), file = f)
@@ -267,12 +276,17 @@ def printAMPLfile(data):
     thrs = pds.DataFrame(data={'A': np.arange(len(data.mask)), 'B': data.quadHelperUnder})
     print(thrs.to_string(index=False, header = False), file=f)
     print(";", file=f)
-    print('param: KNJPARAMETERS: D:=' , file = f)
-    pds.set_option('precision', 16)
-    leafs = (data.bixels % data.N).astype(int)
-    projections = np.floor(data.bixels / data.N).astype(int)
-    sparseinfo = pds.DataFrame(data = {'LEAVES' : leafs, 'PROJECTIONS' : projections, 'VOXELS' : data.smallvoxels, 'ZDOSES' : data.Dijs})
+    print('param: KNJMPARAMETERS: D:=' , file = f)
+    sparseinfo = pds.DataFrame(data = {'LEAVES' : leafs, 'PROJECTIONS' : projections, 'VOXELS' : data.smallvoxels, 'ZDOSES' : data.Dijs},
+                               columns = ['LEAVES', 'PROJECTIONS', 'VOXELS', 'ZDOSES'])
     print(sparseinfo.to_string(index=False, header=False), file = f)
+    print(";", file = f)
+    PM1 = np.array(list(range(data.ProjectionsPerLoop * (1 + max(myloops)))))
+    myloopsM1 = np.floor(PM1 / data.ProjectionsPerLoop).astype(int)
+    print('set POSSIBLEPL:=' , file = f)
+    setinfo = pds.DataFrame(data = {'PROJECTIONSM1' : PM1, 'LOOPSM1' : myloopsM1},
+                               columns = ['PROJECTIONSM1', 'LOOPSM1'])
+    print(setinfo.to_string(index=False, header=False), file = f)
     print(";", file = f)
     f.close()
 
@@ -329,15 +343,25 @@ def plotDVHNoClass(data, z, NameTag='', showPlot=False):
         plt.show()
     plt.close()
 
-start_time = time.time()
 dataobject = tomodata()
 printAMPLfile(dataobject)
 z = np.zeros(len(dataobject.mask))
+start_time = time.time()
 pstring = runAMPL()
 z = readDosefromtext(pstring)
-plotDVHNoClass(dataobject, z, 'dvh')
+output2 = open('z.pkl', 'wb')
+pickle.dump(z, output2)
+output2.close()
+output = open('dataobject.pkl', 'wb')
+pickle.dump(dataobject, output)
+output.close()
+print("--- %s seconds running the AMPL part---" % (time.time() - start_time))
+# Ignore errors that correspond to DVH Plot
+try:
+    plotDVHNoClass(dataobject, z, 'dvh')
+except IndexError:
+    print("Index is out of bounds and no DVH plot will be generated. However, I am ignoring this error for now.")
 # Output ampl results for the next run in case something fails.
 text_output = open("amploutput.txt", "wb")
 text_output.write(pstring)
 text_output.close()
-print("--- %s seconds ---" % (time.time() - start_time))

@@ -7,6 +7,7 @@
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py" afterPath="$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirst.py" afterPath="$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirst.py" />
     </list>
     <ignored path="CaseCreation.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,8 +29,8 @@
             <file leaf-file-name="tomotherapyIterAMPLGeneral.py" pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="466">
-                    <caret line="247" column="34" lean-forward="false" selection-start-line="247" selection-start-column="34" selection-end-line="247" selection-end-column="34" />
+                  <state relative-caret-position="552">
+                    <caret line="367" column="0" lean-forward="true" selection-start-line="367" selection-start-column="0" selection-end-line="367" selection-end-column="0" />
                     <folding />
                   </state>
                 </provider>
@@ -49,8 +50,8 @@
       <file leaf-file-name="tomotherapyIterAMPLProstateDPFirst.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirst.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="86">
-              <caret line="183" column="0" lean-forward="false" selection-start-line="183" selection-start-column="0" selection-end-line="216" selection-end-column="34" />
+            <state relative-caret-position="790">
+              <caret line="322" column="0" lean-forward="true" selection-start-line="322" selection-start-column="0" selection-end-line="322" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -87,11 +88,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>get_sub_sub_sample</find>
-      <find>50</find>
-      <find>130</find>
-      <find>removebixels</find>
-      <find>realU</find>
       <find>maxIntensity</find>
       <find>50)</find>
       <find>Mbar</find>
@@ -103,20 +99,25 @@
       <find>samplemask.header</find>
       <find>roimask.header</find>
       <find>struct_img_header</find>
-      <find>maskNamesGetter</find>
       <find>header_filename</find>
       <find>struct_img_filename</find>
       <find>remove</find>
       <find>loopstosave</find>
       <find>1000</find>
       <find>sub_sub</find>
-      <find>removezeroes</find>
       <find>90</find>
       <find>max</find>
       <find>get_sub_sub</find>
       <find>get_totalbeamlets</find>
       <find>roimask_reader</find>
       <find>readWeiguosC</find>
+      <find>removezeroes</find>
+      <find>readWeiguosCase</find>
+      <find>maskNamesGetter</find>
+      <find>chooseSmall</find>
+      <find>removecouch</find>
+      <find>removebixels</find>
+      <find>convertmasktobasic</find>
     </findStrings>
     <replaceStrings>
       <replace>self.data.K</replace>
@@ -168,8 +169,8 @@
         <option value="$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirstTestLoops.py" />
         <option value="$PROJECT_DIR$/plotexponential.py" />
         <option value="$PROJECT_DIR$/heuristicRealCases.mod" />
-        <option value="$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirst.py" />
         <option value="$PROJECT_DIR$/heuristicRealCasesDPfirst.run" />
+        <option value="$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirst.py" />
         <option value="$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py" />
       </list>
     </option>
@@ -518,13 +519,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00115" summary="Changed the data to only 51 control points. Does not converge">
-      <created>1472155805343</created>
-      <option name="number" value="00115" />
-      <option name="presentableId" value="LOCAL-00115" />
-      <option name="project" value="LOCAL" />
-      <updated>1472155805344</updated>
-    </task>
     <task id="LOCAL-00116" summary="checking if this thing is working at IOE">
       <created>1477594848517</created>
       <option name="number" value="00116" />
@@ -861,7 +855,14 @@
       <option name="project" value="LOCAL" />
       <updated>1510553956353</updated>
     </task>
-    <option name="localTasksCounter" value="164" />
+    <task id="LOCAL-00164" summary="Updated read weiguo's case">
+      <created>1510556369043</created>
+      <option name="number" value="00164" />
+      <option name="presentableId" value="LOCAL-00164" />
+      <option name="project" value="LOCAL" />
+      <updated>1510556369043</updated>
+    </task>
+    <option name="localTasksCounter" value="165" />
     <servers />
   </component>
   <component name="TodoView">
@@ -933,7 +934,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="It's a lot faster. But still below AMPL" />
     <MESSAGE value="Constraints established as columns to addvar" />
     <MESSAGE value="Added AMPL files to python project" />
     <MESSAGE value="Automatically runs the ampl code and prints the results." />
@@ -958,7 +958,8 @@
     <MESSAGE value="Running for publication at INFORMS 17" />
     <MESSAGE value="This is a case that runs in 84 seconds. Down from more than 2000" />
     <MESSAGE value="starting work on general algorithm" />
-    <option name="LAST_COMMIT_MESSAGE" value="starting work on general algorithm" />
+    <MESSAGE value="Updated read weiguo's case" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated read weiguo's case" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -999,19 +1000,9 @@
           <option name="timeStamp" value="156" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirst.py</url>
-          <line>287</line>
-          <option name="timeStamp" value="191" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirstTestLoops.py</url>
           <line>170</line>
           <option name="timeStamp" value="199" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirst.py</url>
-          <line>151</line>
-          <option name="timeStamp" value="202" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -1373,16 +1364,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="466">
-          <caret line="247" column="34" lean-forward="false" selection-start-line="247" selection-start-column="34" selection-end-line="247" selection-end-column="34" />
+        <state relative-caret-position="552">
+          <caret line="367" column="0" lean-forward="true" selection-start-line="367" selection-start-column="0" selection-end-line="367" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirst.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="86">
-          <caret line="183" column="0" lean-forward="false" selection-start-line="183" selection-start-column="0" selection-end-line="216" selection-end-column="34" />
+        <state relative-caret-position="790">
+          <caret line="322" column="0" lean-forward="true" selection-start-line="322" selection-start-column="0" selection-end-line="322" selection-end-column="0" />
           <folding />
         </state>
       </provider>
