@@ -42,10 +42,23 @@ def get_structure_mask(struct_id_list, struct_img_arr):
         img_struct[np.where(struct_img_arr & 2 ** (s - 1))] = s
     return np.copy(img_struct)
 
+## Function that selects roughly the number numelems as a sample. (You get substantially less)
+## Say you input numelems=90. Then you get less than 90 voxels in your case.
+def get_sub_sub_sample(subsampling_img, numelems):
+    sub_sub = np.zeros_like(subsampling_img)
+    locations = np.where(subsampling_img)[0]
+    print(locations)
+    print('number of elements', len(locations))
+    a = np.arange(0,len(locations), int(len(locations)/numelems))
+    print(a)
+    sublocations = locations[a]
+    sub_sub[sublocations] = 1
+    return(sub_sub)
+
 class tomodata:
     ## Initialization of the data
     def __init__(self):
-        #self.base_dir = 'data/dij/HelicalGyn/'
+        self.base_dir = 'data/dij/HelicalGyn/'
         self.base_dir = 'data/dij/prostate/'#153
         self.img_filename = 'samplemask.img'
         self.header_filename = 'samplemask.header'

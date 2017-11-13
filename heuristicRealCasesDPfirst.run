@@ -2,15 +2,31 @@ reset;
 model heuristicRealCases.mod;
 data tomononlinearRealCases.dat;
 option solver gurobi, solution_round 1;
-option gurobi_options 'outlev 1';
-option gurobi_options 'ams_limit 0';
-option gurobi_options 'mip 0';
 # The one below cuts like 90% of the time
-option gurobi_options 'mipgapabs 2000';
+option gurobi_options $gurobi_options 'mipgap 1e-2';
+#option gurobi_options $gurobi_options 'presparsify 1';
+#option gurobi_options $gurobi_options 'feastol 0.99';
 # Reduces the time to a half
-option gurobi_options 'feastol 1e-3';
+# option gurobi_options 'feastol 1e-3';
+option gurobi_options $gurobi_options 'lpmethod 0';
+#option gurobi_options $gurobi_options 'scale 0';
+option gurobi_options $gurobi_options 'AggFill 100';
+option gurobi_options $gurobi_options 'PreDual 0';
+#option gurobi_options $gurobi_options 'NumericFocus 1';
+option gurobi_options $gurobi_options 'Presolve 1';
+#option gurobi_options $gurobi_options 'OutputFlag 0';
+
+#option gurobi_options $gurobi_options 'threads 8';
+#option gurobi_options $gurobi_options 'concurrentmip 8';
+#option gurobi_options $gurobi_options 'logfile logfile.txt';
 #option gurobi_options 'bariterlim 100';
 #option gurobi_options 'barconvtool 100';
+## Tuning Options
+#option gurobi_options $gurobi_options 'pool_tunejobs 8';
+#option gurobi_options $gurobi_options 'tunetimelimit 144000';
+#option gurobi_options $gurobi_options 'tunebase tuneresults';
+#option gurobi_options 'paramfile "tuneresults1.prm"'
+
 problem CMP: y, z, z_plus, z_minus, ObjectiveFunction, doses_to_j, positive_only;
 problem DP: mu, betas, z, z_plus, z_minus, ObjectiveFunction, doses_to_j_yparam, positive_only, Mlimits, abs_greater, abs_smaller, alphalimitsNotPerLeaf;#, Nlimits;#, alphalimits;#
 
