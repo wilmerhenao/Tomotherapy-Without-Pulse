@@ -14,10 +14,10 @@ import matplotlib.pyplot as plt
 import scipy.sparse as sps
 import time
 from scipy.stats import describe
-import os
-import os.path
 import subprocess
 import sys
+import pickle
+from scipy import stats
 
 numcores = 8
 
@@ -59,17 +59,21 @@ class tomodata:
     ## Initialization of the data
     def __init__(self):
         self.base_dir = 'data/dij/HelicalGyn/'
-        self.base_dir = 'data/dij/prostate/'#153
+        self.base_dir = 'data/dij153/prostate/'#153
+        #self.base_dir = 'data/dij/prostate/'  # 51
         # The number of loops to be used in this case
-        self.ProjectionsPerLoop = 51
+        self.ProjectionsPerLoop = 153
+        bixelsintween = 1
+        self.maxIntensity = 300
+        self.maxvoxels = 400
         self.img_filename = 'samplemask.img'
         self.header_filename = 'samplemask.header'
         self.struct_img_filename = 'roimask.img'
         self.struct_img_header = 'roimask.header'
         self.outputDirectory = "output/"
+        self.roinames = {}
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
         self.N = 80
-        self.maxIntensity = 200
         self.get_dim(self.base_dir, 'samplemask.header')
         self.get_totalbeamlets(self.base_dir, 'dij/Size_out.txt')
         self.roimask_reader(self.base_dir, 'roimask.header')
@@ -80,7 +84,7 @@ class tomodata:
         # Create a space in smallvoxel coordinates
         self.smallvoxels = self.BigToSmallCreator()
         # Now remove bixels carefully
-        self.removebixels(5)
+        self.removebixels(bixelsintween)
         # Do the smallvoxels again:
         blaa, blab, self.smallvoxels, blad = np.unique(self.smallvoxels, return_index=True, return_inverse=True, return_counts=True)
         print('Build sparse matrix.')
@@ -208,7 +212,6 @@ class tomodata:
         self.bixels = np.delete(self.bixels, indices)
         self.voxels = np.delete(self.voxels, indices)
         self.Dijs = np.delete(self.Dijs, indices)
-        #self.mask = np.delete(self.mask, indices)
 
     def removebixels(self, pitch):
         bixelkill = np.where(0 != (self.bixels % pitch) )
@@ -219,29 +222,23 @@ class tomodata:
 
     ## Read Weiguo's Case
     def readWeiguosCase(self):
-        if self.base_dir=='data/dij/prostate/':
-            dtype=np.uint32
-            # Assign structures and thresholds for each of them
-            self.OARList = [21, 6, 11, 13, 14, 8, 12, 15, 7, 9, 5, 4, 20, 19, 18, 10, 22]
-            self.OARThresholds = [5, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-            self.TARGETList = [2]
-            self.TARGETThresholds = [78]
-        else:
-            dtype=np.uint16
-            self.OARList = [21, 6, 11, 13, 14, 8, 12, 15, 7, 9, 5, 4, 20, 19, 18, 10, 22]
-            self.OARThresholds = [5, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-            self.TARGETList = [2]
-            self.TARGETThresholds = [78]
+        # Assign structures and thresholds for each of them
+        self.OARList = [21, 6, 11, 13, 14, 8, 12, 15, 7, 9, 5, 4, 20, 19, 18, 10, 22]
+        self.OARThresholds = [5, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+        self.TARGETList = [2]
+        self.TARGETThresholds = [78]
+        dtype=np.uint32
 
         self.bixels = getvector(self.base_dir + 'dij/Bixels_out.bin', np.int32)
         self.voxels = getvector(self.base_dir + 'dij/Voxels_out.bin', np.int32)
         self.Dijs = getvector(self.base_dir + 'dij/Dijs_out.bin', np.float32)
+        #self.voxelsshort = getvector('data/dij/prostate/' + 'dij/Voxels_out.bin', np.int32)
 
         self.ALLList = self.TARGETList + self.OARList
 
         # get subsample mask
         img_arr = getvector(self.base_dir + self.img_filename, dtype=dtype)
-        img_arr = get_sub_sub_sample(img_arr, 1000)
+        img_arr = get_sub_sub_sample(img_arr, self.maxvoxels)
         # get structure file
         struct_img_arr = getvector(self.base_dir + self.struct_img_filename, dtype=dtype)
         # Convert the mask into a list of unitary structures. A voxel gets assigned to only one place.
@@ -291,7 +288,7 @@ def printAMPLfile(data):
     f.close()
 
 def runAMPL():
-    procstring = subprocess.check_output(['ampl', 'heuristicRealCases.run'])
+    procstring = subprocess.check_output(['ampl', 'heuristicRealCasesDPfirst.run'])
     return(procstring)
 
 def readDosefromtext(pstring):

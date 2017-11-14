@@ -7,7 +7,6 @@
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py" afterPath="$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirst.py" afterPath="$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirst.py" />
     </list>
     <ignored path="CaseCreation.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -21,47 +20,17 @@
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
-  <component name="DockManager">
-    <window id="1">
-      <content type="file-editors">
-        <state>
-          <leaf>
-            <file leaf-file-name="tomotherapyIterAMPLGeneral.py" pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="552">
-                    <caret line="367" column="0" lean-forward="true" selection-start-line="367" selection-start-column="0" selection-end-line="367" selection-end-column="0" />
-                    <folding />
-                  </state>
-                </provider>
-              </entry>
-            </file>
-          </leaf>
-        </state>
-      </content>
-    </window>
-  </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
     <favorites_list name="CaseCreation" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="tomotherapyIterAMPLProstateDPFirst.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirst.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="790">
-              <caret line="322" column="0" lean-forward="true" selection-start-line="322" selection-start-column="0" selection-end-line="322" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="heuristicRealCasesDPfirst.run" pinned="false" current-in-tab="false">
+      <file leaf-file-name="heuristicRealCasesDPfirst.run" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/heuristicRealCasesDPfirst.run">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="18" column="51" lean-forward="false" selection-start-line="18" selection-start-column="51" selection-end-line="18" selection-end-column="51" />
+            <state relative-caret-position="75">
+              <caret line="5" column="50" lean-forward="false" selection-start-line="5" selection-start-column="50" selection-end-line="5" selection-end-column="50" />
               <folding />
             </state>
           </provider>
@@ -77,6 +46,18 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="tomotherapyIterAMPLGeneral.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="341">
+              <caret line="64" column="37" lean-forward="true" selection-start-line="64" selection-start-column="37" selection-end-line="64" selection-end-column="37" />
+              <folding>
+                <element signature="e#190#210#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -88,36 +69,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>maxIntensity</find>
-      <find>50)</find>
-      <find>Mbar</find>
-      <find>all</find>
-      <find>OARList</find>
-      <find>ALLList</find>
-      <find>mask</find>
       <find>struct_img_arr</find>
       <find>samplemask.header</find>
       <find>roimask.header</find>
       <find>struct_img_header</find>
       <find>header_filename</find>
       <find>struct_img_filename</find>
-      <find>remove</find>
       <find>loopstosave</find>
       <find>1000</find>
-      <find>sub_sub</find>
       <find>90</find>
       <find>max</find>
-      <find>get_sub_sub</find>
       <find>get_totalbeamlets</find>
       <find>roimask_reader</find>
       <find>readWeiguosC</find>
-      <find>removezeroes</find>
-      <find>readWeiguosCase</find>
       <find>maskNamesGetter</find>
       <find>chooseSmall</find>
       <find>removecouch</find>
       <find>removebixels</find>
       <find>convertmasktobasic</find>
+      <find>roinames</find>
+      <find>readWeigu</find>
+      <find>remove</find>
+      <find>readWeiguosCase</find>
+      <find>dij/prostate</find>
+      <find>removezeroes</find>
+      <find>removeze</find>
+      <find>get_sub_sub</find>
+      <find>self.voxels</find>
+      <find>base_dir</find>
+      <find>sub_sub</find>
+      <find>maxvoxels</find>
     </findStrings>
     <replaceStrings>
       <replace>self.data.K</replace>
@@ -251,24 +232,7 @@
       <recent name="C:\Users\S170452\PycharmProjects\pythonTemplate" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.tomotherapyIterAMPLProstateDPFirst">
-    <configuration default="false" name="tomotherapyIterAMPLProstate" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="CaseCreation" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tomotherapyIterAMPLProstate.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Python.tomotherapyIterAMPLGeneral">
     <configuration default="false" name="tomotherapyIterAMPLProstateDPFirst" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -333,6 +297,23 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="Tomotherapy-Without-Pulse" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/plotexponential.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="tomotherapyIterAMPLGeneral" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Tomotherapy-Without-Pulse" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -489,19 +470,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.tomotherapyIterAMPLProstate" />
-      <item index="1" class="java.lang.String" itemvalue="Python.tomotherapyIterAMPLProstateDPFirst" />
-      <item index="2" class="java.lang.String" itemvalue="Python.plotvoxelgraph" />
-      <item index="3" class="java.lang.String" itemvalue="Python.tomotherapyIterAMPLProstateDPFirstTestLoops" />
-      <item index="4" class="java.lang.String" itemvalue="Python.plotexponential" />
+      <item index="0" class="java.lang.String" itemvalue="Python.tomotherapyIterAMPLProstateDPFirst" />
+      <item index="1" class="java.lang.String" itemvalue="Python.plotvoxelgraph" />
+      <item index="2" class="java.lang.String" itemvalue="Python.tomotherapyIterAMPLProstateDPFirstTestLoops" />
+      <item index="3" class="java.lang.String" itemvalue="Python.plotexponential" />
+      <item index="4" class="java.lang.String" itemvalue="Python.tomotherapyIterAMPLGeneral" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.tomotherapyIterAMPLProstateDPFirst" />
-        <item index="1" class="java.lang.String" itemvalue="Python.plotexponential" />
-        <item index="2" class="java.lang.String" itemvalue="Python.tomotherapyIterAMPLProstateDPFirstTestLoops" />
-        <item index="3" class="java.lang.String" itemvalue="Python.plotvoxelgraph" />
-        <item index="4" class="java.lang.String" itemvalue="Python.tomotherapyIterAMPLProstate" />
+        <item index="0" class="java.lang.String" itemvalue="Python.tomotherapyIterAMPLGeneral" />
+        <item index="1" class="java.lang.String" itemvalue="Python.tomotherapyIterAMPLProstateDPFirst" />
+        <item index="2" class="java.lang.String" itemvalue="Python.plotexponential" />
+        <item index="3" class="java.lang.String" itemvalue="Python.tomotherapyIterAMPLProstateDPFirstTestLoops" />
+        <item index="4" class="java.lang.String" itemvalue="Python.plotvoxelgraph" />
       </list>
     </recent_temporary>
   </component>
@@ -518,13 +499,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
-    </task>
-    <task id="LOCAL-00116" summary="checking if this thing is working at IOE">
-      <created>1477594848517</created>
-      <option name="number" value="00116" />
-      <option name="presentableId" value="LOCAL-00116" />
-      <option name="project" value="LOCAL" />
-      <updated>1477594848518</updated>
     </task>
     <task id="LOCAL-00117" summary="Adding the exact pricing problem. Right now working on the dose constraints.">
       <created>1477614421499</created>
@@ -862,7 +836,14 @@
       <option name="project" value="LOCAL" />
       <updated>1510556369043</updated>
     </task>
-    <option name="localTasksCounter" value="165" />
+    <task id="LOCAL-00165" summary="Done with changes. Next I will run at radiation math for the first time">
+      <created>1510558169013</created>
+      <option name="number" value="00165" />
+      <option name="presentableId" value="LOCAL-00165" />
+      <option name="project" value="LOCAL" />
+      <updated>1510558169013</updated>
+    </task>
+    <option name="localTasksCounter" value="166" />
     <servers />
   </component>
   <component name="TodoView">
@@ -883,9 +864,11 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2612903" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299285" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17083333" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18386108" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22663802" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -893,11 +876,9 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3299285" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.08084164" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.49540347" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22663802" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -934,7 +915,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Constraints established as columns to addvar" />
     <MESSAGE value="Added AMPL files to python project" />
     <MESSAGE value="Automatically runs the ampl code and prints the results." />
     <MESSAGE value="This new version only works with AMPL" />
@@ -959,7 +939,8 @@
     <MESSAGE value="This is a case that runs in 84 seconds. Down from more than 2000" />
     <MESSAGE value="starting work on general algorithm" />
     <MESSAGE value="Updated read weiguo's case" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated read weiguo's case" />
+    <MESSAGE value="Done with changes. Next I will run at radiation math for the first time" />
+    <option name="LAST_COMMIT_MESSAGE" value="Done with changes. Next I will run at radiation math for the first time" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1004,6 +985,11 @@
           <line>170</line>
           <option name="timeStamp" value="199" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py</url>
+          <line>205</line>
+          <option name="timeStamp" value="214" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
@@ -1015,7 +1001,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="203" />
+      <option name="time" value="215" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1354,26 +1340,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/heuristicRealCasesDPfirst.run">
+    <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirst.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="51" lean-forward="false" selection-start-line="18" selection-start-column="51" selection-end-line="18" selection-end-column="51" />
-          <folding />
+        <state relative-caret-position="3190">
+          <caret line="175" column="17" lean-forward="false" selection-start-line="175" selection-start-column="8" selection-end-line="175" selection-end-column="17" />
+          <folding>
+            <element signature="e#190#210#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="552">
-          <caret line="367" column="0" lean-forward="true" selection-start-line="367" selection-start-column="0" selection-end-line="367" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="341">
+          <caret line="64" column="37" lean-forward="true" selection-start-line="64" selection-start-column="37" selection-end-line="64" selection-end-column="37" />
+          <folding>
+            <element signature="e#190#210#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirst.py">
+    <entry file="file://$PROJECT_DIR$/heuristicRealCasesDPfirst.run">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="790">
-          <caret line="322" column="0" lean-forward="true" selection-start-line="322" selection-start-column="0" selection-end-line="322" selection-end-column="0" />
+        <state relative-caret-position="75">
+          <caret line="5" column="50" lean-forward="false" selection-start-line="5" selection-start-column="50" selection-end-line="5" selection-end-column="50" />
           <folding />
         </state>
       </provider>
