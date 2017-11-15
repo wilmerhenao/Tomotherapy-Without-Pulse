@@ -63,9 +63,10 @@ class tomodata:
         #self.base_dir = 'data/dij/prostate/'  # 51
         # The number of loops to be used in this case
         self.ProjectionsPerLoop = 153
-        bixelsintween = 1
+        self.bixelsintween = 20
         self.maxIntensity = 300
         self.maxvoxels = 400
+        self.MBar = 15 # This is per arc. Although in practice it will be multiplied times numloops
         self.img_filename = 'samplemask.img'
         self.header_filename = 'samplemask.header'
         self.struct_img_filename = 'roimask.img'
@@ -77,6 +78,7 @@ class tomodata:
         self.get_dim(self.base_dir, 'samplemask.header')
         self.get_totalbeamlets(self.base_dir, 'dij/Size_out.txt')
         self.roimask_reader(self.base_dir, 'roimask.header')
+        self.argumentVariables()
         print('Read vectors...')
         self.readWeiguosCase(  )
         self.maskNamesGetter(self.base_dir + self.struct_img_header)
@@ -84,7 +86,7 @@ class tomodata:
         # Create a space in smallvoxel coordinates
         self.smallvoxels = self.BigToSmallCreator()
         # Now remove bixels carefully
-        self.removebixels(bixelsintween)
+        self.removebixels(self.bixelsintween)
         # Do the smallvoxels again:
         blaa, blab, self.smallvoxels, blad = np.unique(self.smallvoxels, return_index=True, return_inverse=True, return_counts=True)
         print('Build sparse matrix.')
@@ -117,6 +119,14 @@ class tomodata:
                 print('there is an element in the voxels that is also mask 0')
             self.quadHelperThresh[i] = T
             ########################
+
+    def argumentVariables(self):
+        if len(sys.argv) > 1:
+            self.bixelsintween = int(sys.argv[1])
+        if len(sys.argv) > 2:
+            self.maxvoxels = int(sys.argv[2])
+        if len(sys.argv) > 3:
+            self.MBar = int(sys.argv[3])
 
     ## Keep the ROI's in a dictionary
     def maskNamesGetter(self, maskfile):
@@ -166,7 +176,6 @@ class tomodata:
                 if 1 == i:
                     self.totalbeamlets = int(line)
         szout.closed
-
 
     ## Get the dimensions of the voxel big space
     def get_dim(self, base, fname):
@@ -233,9 +242,7 @@ class tomodata:
         self.voxels = getvector(self.base_dir + 'dij/Voxels_out.bin', np.int32)
         self.Dijs = getvector(self.base_dir + 'dij/Dijs_out.bin', np.float32)
         #self.voxelsshort = getvector('data/dij/prostate/' + 'dij/Voxels_out.bin', np.int32)
-
         self.ALLList = self.TARGETList + self.OARList
-
         # get subsample mask
         img_arr = getvector(self.base_dir + self.img_filename, dtype=dtype)
         img_arr = get_sub_sub_sample(img_arr, self.maxvoxels)
@@ -261,6 +268,7 @@ def printAMPLfile(data):
     projections = np.floor(data.bixels / data.N).astype(int)
     myloops = np.floor(projections / data.ProjectionsPerLoop).astype(int)
     print('param numLoops :=', max(myloops), ';', file=f)
+    print('param MBar :=', int(data.MBar * max(myloops)), ';', file=f)
     print('param: VOXELS: thethreshold :=', file = f)
     thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': data.quadHelperThresh})
     print(thrs.to_string(index=False, header = False), file = f)
@@ -352,7 +360,10 @@ output2.close()
 output = open('dataobject.pkl', 'wb')
 pickle.dump(dataobject, output)
 output.close()
-print("--- %s seconds running the AMPL part---" % (time.time() - start_time))
+totalAMPLtime = (time.time() - start_time)
+print("--- %s seconds running the AMPL part---" % totalAMPLtime)
+if len(sys.argv) > 3:
+    print("tabledresults: ", sys.argv[1], sys.argv[2], sys.argv[3], dataobject.totalsmallvoxels, totalAMPLtime)
 # Ignore errors that correspond to DVH Plot
 try:
     plotDVHNoClass(dataobject, z, 'dvh')

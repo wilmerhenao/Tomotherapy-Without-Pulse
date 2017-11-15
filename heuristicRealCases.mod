@@ -15,6 +15,7 @@ param U > 0;
 param realU binary;
 param numLeaves integer > 0;
 param numLoops integer > 0;
+param MBar integer > 0;
 
 set PROJECTIONS = {0..numProjections - 1};
 set PROJECTIONSM1 = {0..numProjections - 2};
@@ -26,8 +27,7 @@ set POSSIBLEPL within {k in PROJECTIONSM1, m in LOOPS};
 
 # Parameters
 param D {KNJMPARAMETERS} >= 0;
-param Mbar = numProjections / 3;
-param Loopbar = 10;
+param Loopbar = 1.4 * MBar / numLoops;
 param thethreshold {VOXELS} >= 0;
 param quadHelperOver {VOXELS} >= 0;
 param quadHelperUnder {VOXELS} >= 0;
@@ -55,7 +55,7 @@ subject to positive_only {j in VOXELS}: z_plus[j] - z_minus[j] = z[j] - thethres
 # -------------------------------------------------------------------
 
 subject to doses_to_j_yparam {j in VOXELS}: z[j] = sum{ (n,k,j) in KNJMPARAMETERS}( D[n,k,j] * betas[n,k] * yparam[k]);
-subject to Mlimits {n in LEAVES}: sum{k in PROJECTIONSM1} mu[n,k] <= Mbar;
+subject to Mlimits {n in LEAVES}: sum{k in PROJECTIONSM1} mu[n,k] <= MBar;
 subject to abs_greater {n in LEAVES, k in PROJECTIONSM1}: mu[n,k] >= betas[n, k+1] - betas[n,k];
 subject to abs_smaller {n in LEAVES, k in PROJECTIONSM1}: mu[n,k] >= -(betas[n, k+1] - betas[n,k]);
 
