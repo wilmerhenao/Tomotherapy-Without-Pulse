@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/runGeneral.sh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/heuristicRealCases.mod" afterPath="$PROJECT_DIR$/heuristicRealCases.mod" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py" afterPath="$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py" />
     </list>
     <ignored path="CaseCreation.iws" />
@@ -31,28 +29,18 @@
       <file leaf-file-name="heuristicRealCasesDPfirst.run" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/heuristicRealCasesDPfirst.run">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="28" lean-forward="true" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
+            <state relative-caret-position="-49">
+              <caret line="8" column="28" lean-forward="false" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="runGeneral.sh" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/runGeneral.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="4" lean-forward="true" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="heuristicRealCases.mod" pinned="false" current-in-tab="false">
+      <file leaf-file-name="heuristicRealCases.mod" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/heuristicRealCases.mod">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+            <state relative-caret-position="168">
+              <caret line="7" column="23" lean-forward="true" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -61,8 +49,8 @@
       <file leaf-file-name="tomotherapyIterAMPLGeneral.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="960">
-              <caret line="64" column="37" lean-forward="false" selection-start-line="64" selection-start-column="37" selection-end-line="64" selection-end-column="37" />
+            <state relative-caret-position="168">
+              <caret line="62" column="51" lean-forward="true" selection-start-line="62" selection-start-column="51" selection-end-line="62" selection-end-column="51" />
               <folding>
                 <element signature="e#190#210#0" expanded="true" />
               </folding>
@@ -81,7 +69,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>struct_img_arr</find>
       <find>samplemask.header</find>
       <find>roimask.header</find>
       <find>struct_img_header</find>
@@ -111,6 +98,7 @@
       <find>base_dir</find>
       <find>sub_sub</find>
       <find>maxvoxels</find>
+      <find>MBar</find>
     </findStrings>
     <replaceStrings>
       <replace>self.data.K</replace>
@@ -188,20 +176,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="Tomotherapy-Without-Pulse">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -213,6 +187,20 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="Tomotherapy-Without-Pulse" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="Tomotherapy-Without-Pulse">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -511,13 +499,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
-    </task>
-    <task id="LOCAL-00118" summary="Finished first version of the exact pricing problem. There are problems with the results.">
-      <created>1477628864910</created>
-      <option name="number" value="00118" />
-      <option name="presentableId" value="LOCAL-00118" />
-      <option name="project" value="LOCAL" />
-      <updated>1477628864911</updated>
     </task>
     <task id="LOCAL-00119" summary="I have changed the cycling rule and reused picklereader">
       <created>1478241667762</created>
@@ -855,7 +836,14 @@
       <option name="project" value="LOCAL" />
       <updated>1510638110111</updated>
     </task>
-    <option name="localTasksCounter" value="167" />
+    <task id="LOCAL-00167" summary="Added a tool to run a batch process">
+      <created>1510775280295</created>
+      <option name="number" value="00167" />
+      <option name="presentableId" value="LOCAL-00167" />
+      <option name="project" value="LOCAL" />
+      <updated>1510775280296</updated>
+    </task>
+    <option name="localTasksCounter" value="168" />
     <servers />
   </component>
   <component name="TodoView">
@@ -927,7 +915,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Automatically runs the ampl code and prints the results." />
     <MESSAGE value="This new version only works with AMPL" />
     <MESSAGE value="Got rid of the results file. Now the results go to a string." />
     <MESSAGE value="file sent by Troy to read Weiguo's data" />
@@ -952,7 +939,8 @@
     <MESSAGE value="Updated read weiguo's case" />
     <MESSAGE value="Done with changes. Next I will run at radiation math for the first time" />
     <MESSAGE value="General version working with mipgap updated. 153 projections.&#10;Running right now." />
-    <option name="LAST_COMMIT_MESSAGE" value="General version working with mipgap updated. 153 projections.&#10;Running right now." />
+    <MESSAGE value="Added a tool to run a batch process" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a tool to run a batch process" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -999,7 +987,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py</url>
-          <line>205</line>
+          <line>240</line>
           <option name="timeStamp" value="214" />
         </line-breakpoint>
       </breakpoints>
@@ -1337,14 +1325,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/heuristicRealCases.mod">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLProstateDPFirst.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3190">
@@ -1352,28 +1332,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/heuristicRealCasesDPfirst.run">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-49">
+          <caret line="8" column="28" lean-forward="false" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/runGeneral.sh" />
     <entry file="file://$PROJECT_DIR$/tomotherapyIterAMPLGeneral.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="960">
-          <caret line="64" column="37" lean-forward="false" selection-start-line="64" selection-start-column="37" selection-end-line="64" selection-end-column="37" />
+        <state relative-caret-position="168">
+          <caret line="62" column="51" lean-forward="true" selection-start-line="62" selection-start-column="51" selection-end-line="62" selection-end-column="51" />
           <folding>
             <element signature="e#190#210#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/heuristicRealCasesDPfirst.run">
+    <entry file="file://$PROJECT_DIR$/heuristicRealCases.mod">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="28" lean-forward="true" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/runGeneral.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="4" lean-forward="true" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
+        <state relative-caret-position="168">
+          <caret line="7" column="23" lean-forward="true" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
           <folding />
         </state>
       </provider>

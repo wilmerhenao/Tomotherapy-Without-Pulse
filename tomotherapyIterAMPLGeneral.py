@@ -67,6 +67,7 @@ class tomodata:
         self.maxIntensity = 300
         self.maxvoxels = 400
         self.MBar = 15 # This is per arc. Although in practice it will be multiplied times numloops
+        self.LBar = 17
         self.img_filename = 'samplemask.img'
         self.header_filename = 'samplemask.header'
         self.struct_img_filename = 'roimask.img'
@@ -127,6 +128,8 @@ class tomodata:
             self.maxvoxels = int(sys.argv[2])
         if len(sys.argv) > 3:
             self.MBar = int(sys.argv[3])
+        if len(sys.argv) > 4:
+            self.LBar = int(sys.argv[4])
 
     ## Keep the ROI's in a dictionary
     def maskNamesGetter(self, maskfile):
@@ -269,6 +272,7 @@ def printAMPLfile(data):
     myloops = np.floor(projections / data.ProjectionsPerLoop).astype(int)
     print('param numLoops :=', max(myloops), ';', file=f)
     print('param MBar :=', int(data.MBar * max(myloops)), ';', file=f)
+    print('param LBar :=', int(data.LBar), ';', file=f)
     print('param: VOXELS: thethreshold :=', file = f)
     thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': data.quadHelperThresh})
     print(thrs.to_string(index=False, header = False), file = f)
