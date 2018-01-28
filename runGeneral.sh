@@ -1,5 +1,6 @@
-for ((v = 200; v <= 10000; v+=200)); do
-for ((i = 8; i <= 45; i++)); do
-    python tomotherapyIterAMPLGeneral.py 10 $v $i
+
+for ((v = 100; v <= 8000; m+=200)); do
+for ((c = 3; c <= 10; c++)); do
+    python tomotherapyIterAMPLGeneral.py 10 $v 40 $c
 done
 done

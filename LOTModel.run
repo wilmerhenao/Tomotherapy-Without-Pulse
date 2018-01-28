@@ -14,28 +14,9 @@ option gurobi_options $gurobi_options 'AggFill 100';
 option gurobi_options $gurobi_options 'PreDual 0';
 #option gurobi_options $gurobi_options 'NumericFocus 1';
 option gurobi_options $gurobi_options 'Presolve 1';
-#option gurobi_options $gurobi_options 'OutputFlag 0';
-
-#option gurobi_options $gurobi_options 'threads 8';
-#option gurobi_options $gurobi_options 'concurrentmip 8';
-#option gurobi_options $gurobi_options 'logfile logfile.txt';
-#option gurobi_options 'bariterlim 100';
-#option gurobi_options 'barconvtool 100';
-## Tuning Options
-#option gurobi_options $gurobi_options 'pool_tunejobs 8';
-#option gurobi_options $gurobi_options 'tunetimelimit 144000';
-#option gurobi_options $gurobi_options 'tunebase tuneresults';
-#option gurobi_options 'paramfile "tuneresults1.prm"'
 
 problem LO: t, z, z_plus, z_minus, betas, ObjectiveFunction, positive_only, doses_to_j_yparam, upperlimit, lowerlimitaverage, lowerlimit;
 
 solve LO;
 display ystable;
 display z;
-#display z_plus;
-#display z_minus;
-#display thethreshold;
-#display positive_only;
-#display DPtimekeeper;
-#display CMPtimekeeper;
-#display numberOfIterations;
