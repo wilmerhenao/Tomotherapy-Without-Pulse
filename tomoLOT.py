@@ -63,11 +63,9 @@ class tomodata:
         # The number of loops to be used in this case 
         self.ProjectionsPerLoop = 51
         self.bixelsintween = 2
-        self.maxIntensity = 100
-        self.maxvoxels = 200
-        self.MBar = 15 # This is per arc. Although in practice it will be multiplied times numloops
-        self.consecutive = 3
-        self.LBar = 17
+        self.maxIntensity = 500
+        self.yBar = 400
+        self.maxvoxels = 50
         self.img_filename = 'samplemask.img'
         self.header_filename = 'samplemask.header'
         self.struct_img_filename = 'roimask.img'
@@ -128,8 +126,6 @@ class tomodata:
             self.maxvoxels = int(sys.argv[2])
         if len(sys.argv) > 3:
             self.MBar = int(sys.argv[3])
-        if len(sys.argv) > 4:
-            self.consecutive = int(sys.argv[4])
 
     ## Keep the ROI's in a dictionary
     def maskNamesGetter(self, maskfile):
@@ -266,15 +262,12 @@ def printAMPLfile(data):
     print('param numvoxels :=', len(data.mask), ';', file = f)
     print('param U :=', data.maxIntensity, ';', file = f)
     print('param numLeaves :=', data.N, ';', file=f)
-    print('param consecutive :=', data.consecutive, ';', file=f)
-    print('param projPerLoop :=', data.ProjectionsPerLoop, ';', file=f)
+    print('param yparam :=', data.yBar, ';', file=f)
     pds.set_option('precision', 16)
     leafs = (data.bixels % data.N).astype(int)
     projections = np.floor(data.bixels / data.N).astype(int)
     myloops = np.floor(projections / data.ProjectionsPerLoop).astype(int)
     print('param numLoops :=', max(myloops), ';', file=f)
-    print('param MBar :=', int(data.MBar * max(myloops)), ';', file=f)
-    print('param LBar :=', int(data.LBar), ';', file=f)
     print('param: VOXELS: thethreshold :=', file = f)
     thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': data.quadHelperThresh})
     print(thrs.to_string(index=False, header = False), file = f)
@@ -291,13 +284,6 @@ def printAMPLfile(data):
     sparseinfo = pds.DataFrame(data = {'LEAVES' : leafs, 'PROJECTIONS' : projections, 'VOXELS' : data.smallvoxels, 'ZDOSES' : data.Dijs},
                                columns = ['LEAVES', 'PROJECTIONS', 'VOXELS', 'ZDOSES'])
     print(sparseinfo.to_string(index=False, header=False), file = f)
-    print(";", file = f)
-    PM1 = np.array(list(range(data.ProjectionsPerLoop * (1 + max(myloops)))))
-    myloopsM1 = np.floor(PM1 / data.ProjectionsPerLoop).astype(int)
-    print('set POSSIBLEPL:=' , file = f)
-    setinfo = pds.DataFrame(data = {'PROJECTIONSM1' : PM1, 'LOOPSM1' : myloopsM1},
-                               columns = ['PROJECTIONSM1', 'LOOPSM1'])
-    print(setinfo.to_string(index=False, header=False), file = f)
     print(";", file = f)
     f.close()
 
