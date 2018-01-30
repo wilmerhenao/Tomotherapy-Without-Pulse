@@ -2,22 +2,14 @@
 ## The CMP
 # -------------------------------------------------------------------
 # Set definitions
-param numvoxels integer > 0;
-param timeflagold >= 0;
-param proctime >= 0;
-param DPtimekeeper >= 0;
-param CMPtimekeeper >= 0;
-param numberOfIterations integer > 0;
 param numProjections > 0;
 param U > 0;
 param numLeaves integer > 0;
-param numLoops integer > 0;
-param consecutive integer > 0;
+param projecs > 0;
 
+# Set definitions
 set PROJECTIONS = {0..numProjections - 1};
-set PROJECTIONSM1 = {0..numProjections - 2};
 set LEAVES = {0..(numLeaves - 1)};
-set LOOPS = {0..numLoops};
 set VOXELS;
 set KNJMPARAMETERS within {n in LEAVES, k in PROJECTIONS, j in VOXELS};
 
@@ -29,7 +21,7 @@ param quadHelperUnder {VOXELS} >= 0;
 param yparam;
 #50 msecs is 0.05;
 param tprime := 0.04;
-param t2prime := 0.05;
+param t2prime := 0.15;
 
 # Variables
 var betas {n in LEAVES, k in PROJECTIONS} binary;
@@ -40,14 +32,9 @@ var z_minus {j in VOXELS} >= 0;
 
 # Objective
 minimize ObjectiveFunction: sum {j in VOXELS} (quadHelperUnder[j] * z_minus[j] * z_minus[j] + quadHelperOver[j] * z_plus[j] * z_plus[j]);
+# -------------------------------------------------------------------
 subject to positive_only {j in VOXELS}: z_plus[j] - z_minus[j] = z[j] - thethreshold[j];
-
-# -------------------------------------------------------------------
-## The DP       
-# -------------------------------------------------------------------
-
 subject to doses_to_j_yparam {j in VOXELS}: z[j] = yparam * sum{ (n,k,j) in KNJMPARAMETERS}( D[n,k,j] * betas[n,k]);
-
-subject to upperbound {n in LEAVES, k in PROJECTIONS}: t[n,k] <= ((360/51)/(360/60)) * betas[n,k];
+subject to upperbound {n in LEAVES, k in PROJECTIONS}: t[n,k] <= ((360/projecs)/(360/60)) * betas[n,k];
 subject to lowerbound {n in LEAVES, k in PROJECTIONS}: t[n,k] >= tprime * betas[n,k];
 subject to lowerboundaverage: sum{n in LEAVES, k in PROJECTIONS} t[n,k] >= t2prime * sum{n in LEAVES, k in PROJECTIONS} betas[n,k];

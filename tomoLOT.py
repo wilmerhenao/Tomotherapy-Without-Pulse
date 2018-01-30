@@ -62,10 +62,10 @@ class tomodata:
         self.base_dir = 'data/dij/prostate/'  # 51
         # The number of loops to be used in this case 
         self.ProjectionsPerLoop = 51
-        self.bixelsintween = 2
-        self.maxIntensity = 500
-        self.yBar = 400
-        self.maxvoxels = 50
+        self.bixelsintween = 4
+        self.maxIntensity = 1500
+        self.yBar = 1000
+        self.maxvoxels = 400
         self.img_filename = 'samplemask.img'
         self.header_filename = 'samplemask.header'
         self.struct_img_filename = 'roimask.img'
@@ -97,13 +97,13 @@ class tomodata:
         self.quadHelperUnder = np.zeros(len(self.mask))
         self.quadHelperOver = np.zeros(len(self.mask))
         self.numProjections = self.getNumProjections()
-        #######################################3
+        #######################################
         for i in range(len(self.mask)):
             # Constraint on TARGETS
             T = None
             if self.mask[i] in self.TARGETList:
                 T = self.TARGETThresholds[np.where(self.mask[i] == self.TARGETList)[0][0]]
-                self.quadHelperOver[i] = 0.000001
+                self.quadHelperOver[i] = 0.01
                 self.quadHelperUnder[i] = 0.9
             # Constraint on OARs
             elif self.mask[i] in self.OARList:
@@ -259,15 +259,13 @@ class tomodata:
 def printAMPLfile(data):
     f = open("tomononlinearRealCases.dat", "w")
     print('param numProjections :=', data.numProjections, ';', file = f)
-    print('param numvoxels :=', len(data.mask), ';', file = f)
     print('param U :=', data.maxIntensity, ';', file = f)
     print('param numLeaves :=', data.N, ';', file=f)
     print('param yparam :=', data.yBar, ';', file=f)
+    print('param projecs :=', data.ProjectionsPerLoop, ';', file=f)
     pds.set_option('precision', 16)
     leafs = (data.bixels % data.N).astype(int)
     projections = np.floor(data.bixels / data.N).astype(int)
-    myloops = np.floor(projections / data.ProjectionsPerLoop).astype(int)
-    print('param numLoops :=', max(myloops), ';', file=f)
     print('param: VOXELS: thethreshold :=', file = f)
     thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': data.quadHelperThresh})
     print(thrs.to_string(index=False, header = False), file = f)
@@ -355,7 +353,7 @@ output.close()
 totalAMPLtime = (time.time() - start_time)
 print("--- %s seconds running the AMPL part---" % totalAMPLtime)
 if len(sys.argv) > 4:
-    print("tabledresults: ", sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], dataobject.totalsmallvoxels, totalAMPLtime)
+    print("tabledresults: ", sys.argv[1], sys.argv[2], sys.argv[3], dataobject.totalsmallvoxels, totalAMPLtime)
 # Ignore errors that correspond to DVH Plot
 try:
     plotDVHNoClass(dataobject, z, 'dvh')
