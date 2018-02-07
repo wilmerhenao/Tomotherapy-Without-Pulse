@@ -62,10 +62,10 @@ class tomodata:
         self.base_dir = 'data/dij/prostate/'  # 51
         # The number of loops to be used in this case 
         self.ProjectionsPerLoop = 51
-        self.bixelsintween = 4
-        self.maxIntensity = 1500
-        self.yBar = 1000
-        self.maxvoxels = 400
+        self.bixelsintween = 5
+        self.maxIntensity = 1000
+        self.yBar = 350
+        self.maxvoxels = 10000
         self.img_filename = 'samplemask.img'
         self.header_filename = 'samplemask.header'
         self.struct_img_filename = 'roimask.img'
@@ -85,7 +85,7 @@ class tomodata:
         # Create a space in smallvoxel coordinates
         self.smallvoxels = self.BigToSmallCreator()
         # Now remove bixels carefully
-        self.removebixels(self.bixelsintween)
+        # self.removebixels(self.bixelsintween)
         # Do the smallvoxels again:
         blaa, blab, self.smallvoxels, blad = np.unique(self.smallvoxels, return_index=True, return_inverse=True, return_counts=True)
         print('Build sparse matrix.')
@@ -103,17 +103,17 @@ class tomodata:
             T = None
             if self.mask[i] in self.TARGETList:
                 T = self.TARGETThresholds[np.where(self.mask[i] == self.TARGETList)[0][0]]
-                self.quadHelperOver[i] = 0.01
-                self.quadHelperUnder[i] = 0.9
+                self.quadHelperOver[i] = 0.00002
+                self.quadHelperUnder[i] = 0.00008
             # Constraint on OARs
             elif self.mask[i] in self.OARList:
                 T = self.OARThresholds[np.where(self.mask[i] == self.OARList)[0][0]]
-                self.quadHelperOver[i] = 0.000001
+                self.quadHelperOver[i] = 0.000002
                 self.quadHelperUnder[i] = 0.0
-                if self.mask[i] == 6:
-                    self.quadHelperOver[i] = 0.01
-                if self.mask[i] == 7:
-                    self.quadHelperOver[i] = 0.1
+                #if self.mask[i] == 6:
+                #    self.quadHelperOver[i] = 0.01
+                #if self.mask[i] == 7:
+                #    self.quadHelperOver[i] = 0.1
             elif 0 == self.mask[i]:
                 print('there is an element in the voxels that is also mask 0')
             self.quadHelperThresh[i] = T
@@ -212,7 +212,12 @@ class tomodata:
         voxelindex = np.zeros_like(self.mask)
         voxelindex[np.unique(self.voxels)] = 1
         self.mask = np.multiply(voxelindex, self.mask)
-        locats = np.where(toremove == self.mask)[0]
+        locats = np.where(toremove[0] == self.mask)[0]
+        if len(toremove) > 1:
+            for i in range(1, len(toremove)):
+                locats = np.concatenate([locats, np.where(toremove[i] == self.mask)[0]])
+        locats.sort()
+        print(len(locats))
         self.mask = np.delete(self.mask, locats)
         # intersection of voxels and nonzero
         indices = np.where(np.in1d(self.voxels, locats))[0]
@@ -232,7 +237,7 @@ class tomodata:
     def readWeiguosCase(self):
         # Assign structures and thresholds for each of them
         self.OARList = [21, 6, 11, 13, 14, 8, 12, 15, 7, 9, 5, 4, 20, 19, 18, 10, 22]
-        self.OARThresholds = [5, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+        self.OARThresholds = [10, 10, 10, 10, 10, 10, 10, 78, 10, 10, 10, 10, 10, 10, 10, 10, 10]
         self.TARGETList = [2]
         self.TARGETThresholds = [78]
         dtype=np.uint32
@@ -252,7 +257,7 @@ class tomodata:
         # Get the subsampled list of voxels.
         self.mask = get_subsampled_mask(img_struct, img_arr)
         # Select only the voxels that exist in the small voxel space provided.
-        self.removezeroes(0)
+        self.removezeroes([0, 10, 11, 17, 12, 3, 15, 16, 9, 5, 4, 20, 21, 19, 18])
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 ## This part is for AMPL's implementation:

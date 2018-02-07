@@ -24,7 +24,7 @@ param tprime := 0.04;
 param t2prime := 0.15;
 
 # Variables
-var betas {n in LEAVES, k in PROJECTIONS} binary;
+# var betas {n in LEAVES, k in PROJECTIONS} binary;
 var z {j in VOXELS} >= 0;
 var t {n in LEAVES, k in PROJECTIONS} >= 0;
 var z_plus {j in VOXELS} >= 0;
@@ -34,7 +34,7 @@ var z_minus {j in VOXELS} >= 0;
 minimize ObjectiveFunction: sum {j in VOXELS} (quadHelperUnder[j] * z_minus[j] * z_minus[j] + quadHelperOver[j] * z_plus[j] * z_plus[j]);
 # -------------------------------------------------------------------
 subject to positive_only {j in VOXELS}: z_plus[j] - z_minus[j] = z[j] - thethreshold[j];
-subject to doses_to_j_yparam {j in VOXELS}: z[j] = yparam * sum{ (n,k,j) in KNJMPARAMETERS}( D[n,k,j] * betas[n,k]);
-subject to upperbound {n in LEAVES, k in PROJECTIONS}: t[n,k] <= ((360/projecs)/(360/60)) * betas[n,k];
-subject to lowerbound {n in LEAVES, k in PROJECTIONS}: t[n,k] >= tprime * betas[n,k];
-subject to lowerboundaverage: sum{n in LEAVES, k in PROJECTIONS} t[n,k] >= t2prime * sum{n in LEAVES, k in PROJECTIONS} betas[n,k];
+subject to doses_to_j_yparam {j in VOXELS}: z[j] = yparam * sum{ (n,k,j) in KNJMPARAMETERS}( D[n,k,j] * t[n,k]);
+#subject to upperbound {n in LEAVES, k in PROJECTIONS}: t[n,k] <= ((360/projecs)/(360/60)) * betas[n,k];
+#subject to lowerbound {n in LEAVES, k in PROJECTIONS}: t[n,k] >= tprime * betas[n,k];
+#subject to lowerboundaverage: sum{n in LEAVES, k in PROJECTIONS} t[n,k] >= t2prime * sum{n in LEAVES, k in PROJECTIONS} betas[n,k];

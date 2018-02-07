@@ -7,7 +7,7 @@ option gurobi_options $gurobi_options 'mipgap 1e-2';
 #option gurobi_options $gurobi_options 'presparsify 1';
 #option gurobi_options $gurobi_options 'feastol 0.99';
 # Reduces the time to a half
-# option gurobi_options 'feastol 1e-3';
+option gurobi_options  $gurobi_options 'feastol 1e-2';
 option gurobi_options $gurobi_options 'lpmethod 0';
 #option gurobi_options $gurobi_options 'scale 0';
 option gurobi_options $gurobi_options 'AggFill 100';
@@ -16,7 +16,7 @@ option gurobi_options $gurobi_options 'PreDual 0';
 option gurobi_options $gurobi_options 'Presolve 1';
 
 #problem LowSpeed: t, z, z_plus, z_minus, betas, ObjectiveFunction, positive_only, doses_to_j_yparam, upperbound, lowerboundaverage, lowerbound;
-problem LowSpeed: t, z, z_plus, z_minus, betas, ObjectiveFunction, positive_only, doses_to_j_yparam;
+problem LowSpeed: t, z, z_plus, z_minus, ObjectiveFunction, positive_only, doses_to_j_yparam;
 
 solve LowSpeed;
 display z;
