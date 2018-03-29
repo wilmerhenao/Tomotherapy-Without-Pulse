@@ -15,8 +15,7 @@ option gurobi_options $gurobi_options 'PreDual 0';
 #option gurobi_options $gurobi_options 'NumericFocus 1';
 option gurobi_options $gurobi_options 'Presolve 1';
 
-#problem LowSpeed: t, z, z_plus, z_minus, betas, ObjectiveFunction, positive_only, doses_to_j_yparam, upperbound, lowerboundaverage, lowerbound;
-problem LowSpeed: t, z, z_plus, z_minus, ObjectiveFunction, positive_only, doses_to_j_yparam;
+problem VarSpeed: z, z_plus, z_minus, betas, B, cgamma, lgamma, ObjectiveFunction, positive_only, doses_to_j_yparam, LOC, LCT, endOpen, endClose, eitherOpenOrClose;
 
-solve LowSpeed;
+solve VarSpeed;
 display z;

@@ -11,14 +11,23 @@ except ImportError:
 import pandas as pds
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy.sparse as sps
 import time
 from scipy.stats import describe
 import subprocess
 import sys
 import pickle
+import math
 
 numcores = 8
+subdivisions = 20
+degreesPerSubdivision = (360/51) / subdivisions
+timeko = 0.05 # msecs
+timekc = 0.04 # msecs
+speed = 24 # degrees per second
+howmanydegreesko = speed * timeko # Degrees spanned in this time
+howmanydegreeskc = speed * timekc # Degrees spanned in this time
+ko = math.ceil(howmanydegreesko / degreesPerSubdivision)
+kc = math.ceil(howmanydegreeskc / degreesPerSubdivision)
 
 ## Function that reads the files produced by Weiguo
 def getvector(necfile,dtype):
@@ -33,7 +42,6 @@ def get_subsampled_mask(struct_img_mask_full_res, subsampling_img):
     sub_sampled_img_struct = np.zeros_like(struct_img_mask_full_res)
     sub_sampled_img_struct[np.where(subsampling_img)] =  struct_img_mask_full_res[np.where(subsampling_img)]
     return np.copy(sub_sampled_img_struct)
-# In[5]:
 
 def get_structure_mask(struct_id_list, struct_img_arr):
     img_struct = np.zeros_like(struct_img_arr)
@@ -62,10 +70,12 @@ class tomodata:
         self.base_dir = 'data/dij/prostate/'  # 51
         # The number of loops to be used in this case 
         self.ProjectionsPerLoop = 51
-        self.bixelsintween = 5
+        self.bixelsintween = 1
         self.maxIntensity = 1000
         self.yBar = 350
         self.maxvoxels = 10000
+        self.tprime = 100 # LOT in miliseconds
+        self.tdprime = 40 # LCT in miliseconds
         self.img_filename = 'samplemask.img'
         self.header_filename = 'samplemask.header'
         self.struct_img_filename = 'roimask.img'
@@ -92,7 +102,7 @@ class tomodata:
         self.totalsmallvoxels = max(self.smallvoxels) + 1 #12648448
         print('totalsmallvoxels:', self.totalsmallvoxels)
         print('a brief description of Dijs array', describe(self.Dijs))
-        self.D = sps.csr_matrix((self.Dijs, (self.smallvoxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
+        #self.D = sps.csr_matrix((self.Dijs, (self.smallvoxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
         self.quadHelperThresh = np.zeros(len(self.mask))
         self.quadHelperUnder = np.zeros(len(self.mask))
         self.quadHelperOver = np.zeros(len(self.mask))
@@ -110,14 +120,16 @@ class tomodata:
                 T = self.OARThresholds[np.where(self.mask[i] == self.OARList)[0][0]]
                 self.quadHelperOver[i] = 0.000002
                 self.quadHelperUnder[i] = 0.0
-                #if self.mask[i] == 6:
-                #    self.quadHelperOver[i] = 0.01
-                #if self.mask[i] == 7:
-                #    self.quadHelperOver[i] = 0.1
             elif 0 == self.mask[i]:
                 print('there is an element in the voxels that is also mask 0')
             self.quadHelperThresh[i] = T
+        self.subdivisionOrganizer()
             ########################
+
+    def subdivisionOrganizer(self):
+        self.numProjections *= subdivisions
+        self.ProjectionsPerLoop *= subdivisions
+
 
     def argumentVariables(self):
         if len(sys.argv) > 1:
@@ -268,9 +280,19 @@ def printAMPLfile(data):
     print('param numLeaves :=', data.N, ';', file=f)
     print('param yparam :=', data.yBar, ';', file=f)
     print('param projecs :=', data.ProjectionsPerLoop, ';', file=f)
+    print('param kc :=', kc, ';', file=f)
+    print('param ko :=', ko, ';', file=f)
     pds.set_option('precision', 16)
     leafs = (data.bixels % data.N).astype(int)
     projections = np.floor(data.bixels / data.N).astype(int)
+
+    # Incorporate subdivisions
+    leafs = np.repeat(leafs, subdivisions)
+    data.smallvoxels = np.repeat(data.smallvoxels, subdivisions)
+    projections = subdivisions * np.repeat(projections, subdivisions) + np.tile([i for i in range(subdivisions)], len(data.Dijs))
+    # THIS HAS TO BE DONE AFTER THE PREVIOUS STEP
+    data.Dijs = np.repeat(data.Dijs, subdivisions) / subdivisions
+    # Done with the incorporation of subdivisions
     print('param: VOXELS: thethreshold :=', file = f)
     thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': data.quadHelperThresh})
     print(thrs.to_string(index=False, header = False), file = f)

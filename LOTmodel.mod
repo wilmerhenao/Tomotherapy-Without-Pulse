@@ -6,12 +6,19 @@ param numProjections > 0;
 param U > 0;
 param numLeaves integer > 0;
 param projecs > 0;
+param ko integer > 0;
+param kc integer > 0;
 
 # Set definitions
-set PROJECTIONS = {0..numProjections - 1};
+set PROJECTIONS = {0..(numProjections - 1)};
+set PROJECTIONSM1 = {0..(numProjections - 2)};
+set PROJECTIONSMKO = {0..(numProjections - ko-1)};
+set PROJECTIONSMKC = {0..(numProjections - kc-1)};
+set LOTSET = {0..(kc-1)};
+set LCTSET = {0..(ko-1)};
 set LEAVES = {0..(numLeaves - 1)};
 set VOXELS;
-set KNJMPARAMETERS within {n in LEAVES, k in PROJECTIONS, j in VOXELS};
+set KNJMPARAMETERS within {l in LEAVES, p in PROJECTIONS, j in VOXELS};
 
 # Parameters
 param D {KNJMPARAMETERS} >= 0;
@@ -20,21 +27,23 @@ param quadHelperOver {VOXELS} >= 0;
 param quadHelperUnder {VOXELS} >= 0;
 param yparam;
 #50 msecs is 0.05;
-param tprime := 0.04;
-param t2prime := 0.15;
 
 # Variables
-# var betas {n in LEAVES, k in PROJECTIONS} binary;
 var z {j in VOXELS} >= 0;
-var t {n in LEAVES, k in PROJECTIONS} >= 0;
 var z_plus {j in VOXELS} >= 0;
 var z_minus {j in VOXELS} >= 0;
+var betas {l in LEAVES, p in PROJECTIONS} binary;
+var B {l in LEAVES, p in PROJECTIONS} binary;
+var cgamma{l in LEAVES, p in PROJECTIONS} binary;
+var lgamma{l in LEAVES, p in PROJECTIONS} binary;
 
 # Objective
 minimize ObjectiveFunction: sum {j in VOXELS} (quadHelperUnder[j] * z_minus[j] * z_minus[j] + quadHelperOver[j] * z_plus[j] * z_plus[j]);
 # -------------------------------------------------------------------
 subject to positive_only {j in VOXELS}: z_plus[j] - z_minus[j] = z[j] - thethreshold[j];
-subject to doses_to_j_yparam {j in VOXELS}: z[j] = yparam * sum{ (n,k,j) in KNJMPARAMETERS}( D[n,k,j] * t[n,k]);
-#subject to upperbound {n in LEAVES, k in PROJECTIONS}: t[n,k] <= ((360/projecs)/(360/60)) * betas[n,k];
-#subject to lowerbound {n in LEAVES, k in PROJECTIONS}: t[n,k] >= tprime * betas[n,k];
-#subject to lowerboundaverage: sum{n in LEAVES, k in PROJECTIONS} t[n,k] >= t2prime * sum{n in LEAVES, k in PROJECTIONS} betas[n,k];
+subject to doses_to_j_yparam {j in VOXELS}: z[j] = yparam * sum{ (l,p,j) in KNJMPARAMETERS}( D[l,p,j] * betas[l,p]);
+subject to LOC {l in LEAVES, p in PROJECTIONSMKO, k in LOTSET}: B[l,p] <= betas[l, p + k];
+subject to LCT {l in LEAVES, p in PROJECTIONSMKC, k in LCTSET}: cgamma[l,p] <= lgamma[l, p + k];
+subject to endOpen {l in LEAVES, p in PROJECTIONSM1}: betas[l, p] <= betas[l, p + 1] + cgamma[l, p + 1];
+subject to endClose {l in LEAVES, p in PROJECTIONSM1}: lgamma[l, p] <= lgamma[l, p + 1] + B[l, p + 1];
+subject to eitherOpenOrClose {l in LEAVES, p in PROJECTIONS}: betas[l, p] + lgamma[l, p] = 1;
