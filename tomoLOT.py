@@ -11,7 +11,7 @@ except ImportError:
 import pandas as pds
 import numpy as np
 import matplotlib.pyplot as plt
-import time
+import os.path
 from scipy.stats import describe
 import subprocess
 import sys
@@ -19,7 +19,8 @@ import pickle
 import math
 
 numcores = 8
-subdivisions = 20
+subdivisions = 1
+tumorsite = "Prostate"
 degreesPerSubdivision = (360/51) / subdivisions
 timeko = 0.05 # msecs
 timekc = 0.04 # msecs
@@ -70,10 +71,10 @@ class tomodata:
         self.base_dir = 'data/dij/prostate/'  # 51
         # The number of loops to be used in this case 
         self.ProjectionsPerLoop = 51
-        self.bixelsintween = 1
-        self.maxIntensity = 1000
+        self.bixelsintween = 5
+        self.maxIntensity = 300
         self.yBar = 350
-        self.maxvoxels = 10000
+        self.maxvoxels = 200
         self.tprime = 100 # LOT in miliseconds
         self.tdprime = 40 # LCT in miliseconds
         self.img_filename = 'samplemask.img'
@@ -273,8 +274,8 @@ class tomodata:
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 ## This part is for AMPL's implementation:
-def printAMPLfile(data):
-    f = open("tomononlinearRealCases.dat", "w")
+def printAMPLfile(data, subdivisions, tumorsite):
+    f = open("Data" + str(tumorsite) + "/tomononlinearRealCases_split_" + str(subdivisions) + "_vxls_" + str(data.maxvoxels) + ".dat", "w")
     print('param numProjections :=', data.numProjections, ';', file = f)
     print('param U :=', data.maxIntensity, ';', file = f)
     print('param numLeaves :=', data.N, ';', file=f)
@@ -365,8 +366,10 @@ def plotDVHNoClass(data, z, NameTag='', showPlot=False):
         plt.show()
     plt.close()
 
-dataobject = tomodata()
-printAMPLfile(dataobject)
+# Only enter the next loop if the file exists
+if not os.path.isfile("Data" + str(tumorsite) + "/tomononlinearRealCases_split_" + str(subdivisions) + "_vxls_" + str(data.maxvoxels) + ".dat"):
+    dataobject = tomodata()
+    printAMPLfile(dataobject, subdivisions, tumorsite)
 z = np.zeros(len(dataobject.mask))
 start_time = time.time()
 pstring = runAMPL()

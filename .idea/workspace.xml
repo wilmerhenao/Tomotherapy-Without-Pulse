@@ -30,18 +30,18 @@
       <file leaf-file-name="LOTmodel.mod" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/LOTmodel.mod">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="12" column="44" lean-forward="false" selection-start-line="12" selection-start-column="44" selection-end-line="12" selection-end-column="44" />
+            <state relative-caret-position="374">
+              <caret line="22" column="71" lean-forward="false" selection-start-line="22" selection-start-column="71" selection-end-line="22" selection-end-column="71" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="heuristic.mod" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/heuristic.mod">
+      <file leaf-file-name="LOTModel.run" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/LOTModel.run">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="262">
-              <caret line="12" column="37" lean-forward="false" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
+            <state relative-caret-position="255">
+              <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -50,8 +50,8 @@
       <file leaf-file-name="tomoLOT.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomoLOT.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="532">
-              <caret line="19" column="0" lean-forward="true" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+            <state relative-caret-position="199">
+              <caret line="374" column="19" lean-forward="true" selection-start-line="374" selection-start-column="19" selection-end-line="374" selection-end-column="19" />
               <folding>
                 <element signature="e#190#210#0" expanded="true" />
               </folding>
@@ -70,13 +70,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>numLoops</find>
-      <find>VOXELS</find>
-      <find>quadHelperThresh</find>
-      <find>roimask_</find>
-      <find>base</find>
-      <find>get_dim</find>
-      <find>get_totalbeamlets</find>
       <find>roimask_reader</find>
       <find>AllDict</find>
       <find>remove</find>
@@ -100,6 +93,13 @@
       <find>numProjections</find>
       <find>subdivisionOrganizer</find>
       <find>maxIntensity</find>
+      <find>NSMKO</find>
+      <find>LOTSET</find>
+      <find>tween</find>
+      <find>maxkokc</find>
+      <find>printAMPL</find>
+      <find>AMPLf</find>
+      <find>runAMPL</find>
     </findStrings>
     <replaceStrings>
       <replace>self.data.K</replace>
@@ -107,6 +107,7 @@
       <replace>10</replace>
       <replace>mysum</replace>
       <replace>mymax</replace>
+      <replace>maxkcko</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -161,16 +162,17 @@
         <option value="$PROJECT_DIR$/../../VMAT/casereader/IMRTspine.py" />
         <option value="$PROJECT_DIR$/../../VMAT/casereader/casereader.py" />
         <option value="$PROJECT_DIR$/basura2.py" />
-        <option value="$PROJECT_DIR$/LOTModel.run" />
         <option value="$PROJECT_DIR$/LOTmodel.mod" />
+        <option value="$PROJECT_DIR$/LOTModel.run" />
         <option value="$PROJECT_DIR$/tomoLOT.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1917" />
-    <option name="width" value="1926" />
-    <option name="height" value="1083" />
+    <option name="x" value="2774" />
+    <option name="y" value="147" />
+    <option name="width" value="1918" />
+    <option name="height" value="1087" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -190,7 +192,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="settings.github" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/heuristic.mod" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/LOTModel.run" />
     <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="options.splitter.main.proportions" value="0.3" />
@@ -472,13 +474,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
-    </task>
-    <task id="LOCAL-00124" summary="Removed the double creation of the threshold coefficients.">
-      <created>1486748504928</created>
-      <option name="number" value="00124" />
-      <option name="presentableId" value="LOCAL-00124" />
-      <option name="project" value="LOCAL" />
-      <updated>1486748504929</updated>
     </task>
     <task id="LOCAL-00125" summary="Doing some damage to the code.">
       <created>1486765089350</created>
@@ -816,7 +811,14 @@
       <option name="project" value="LOCAL" />
       <updated>1517975569659</updated>
     </task>
-    <option name="localTasksCounter" value="173" />
+    <task id="LOCAL-00173" summary="implemented minus the ghost points. I will implement the ghost points next">
+      <created>1522339364436</created>
+      <option name="number" value="00173" />
+      <option name="presentableId" value="LOCAL-00173" />
+      <option name="project" value="LOCAL" />
+      <updated>1522339364437</updated>
+    </task>
+    <option name="localTasksCounter" value="174" />
     <servers />
   </component>
   <component name="TodoView">
@@ -835,7 +837,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.128125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4057377" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30327868" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2612903" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17083333" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -888,7 +890,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added a tool to test whether running DP first is a good idea or not." />
     <MESSAGE value="creating subsubsampler" />
     <MESSAGE value="created susubsample, but it's not working in the AMPL part" />
     <MESSAGE value="Dimension reduction worked, but there is still a bug in the histogram creation" />
@@ -913,7 +914,8 @@
     <MESSAGE value="Model already running but taking very long" />
     <MESSAGE value="testing a tomo benchmark" />
     <MESSAGE value="there was an error in the betas" />
-    <option name="LAST_COMMIT_MESSAGE" value="there was an error in the betas" />
+    <MESSAGE value="implemented minus the ghost points. I will implement the ghost points next" />
+    <option name="LAST_COMMIT_MESSAGE" value="implemented minus the ghost points. I will implement the ghost points next" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -975,17 +977,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tomoLOT.py</url>
-          <line>295</line>
+          <line>302</line>
           <option name="timeStamp" value="229" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tomoLOT.py</url>
-          <line>130</line>
+          <line>137</line>
           <option name="timeStamp" value="230" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tomoLOT.py</url>
-          <line>278</line>
+          <line>285</line>
           <option name="timeStamp" value="231" />
         </line-breakpoint>
       </breakpoints>
@@ -1328,33 +1330,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/LOTModel.run">
+    <entry file="file://$PROJECT_DIR$/heuristic.mod">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="18" lean-forward="false" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
+        <state relative-caret-position="262">
+          <caret line="12" column="37" lean-forward="true" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/LOTmodel.mod">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="12" column="44" lean-forward="false" selection-start-line="12" selection-start-column="44" selection-end-line="12" selection-end-column="44" />
+        <state relative-caret-position="374">
+          <caret line="22" column="71" lean-forward="false" selection-start-line="22" selection-start-column="71" selection-end-line="22" selection-end-column="71" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/heuristic.mod">
+    <entry file="file://$PROJECT_DIR$/LOTModel.run">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="12" column="37" lean-forward="false" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
+        <state relative-caret-position="255">
+          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tomoLOT.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="532">
-          <caret line="19" column="0" lean-forward="true" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+        <state relative-caret-position="199">
+          <caret line="374" column="19" lean-forward="true" selection-start-line="374" selection-start-column="19" selection-end-line="374" selection-end-column="19" />
           <folding>
             <element signature="e#190#210#0" expanded="true" />
           </folding>

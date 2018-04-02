@@ -9,11 +9,13 @@ param projecs > 0;
 param ko integer > 0;
 param kc integer > 0;
 
+param maxkcko := max(ko, kc);
+
 # Set definitions
-set PROJECTIONS = {0..(numProjections - 1)};
-set PROJECTIONSM1 = {0..(numProjections - 2)};
-set PROJECTIONSMKO = {0..(numProjections - ko-1)};
-set PROJECTIONSMKC = {0..(numProjections - kc-1)};
+set PROJECTIONS = {-maxkcko..((numProjections - 1) + maxkcko)};
+set PROJECTIONSM1 = {-maxkcko..((numProjections - 2) + maxkcko)};
+set PROJECTIONSSHORT = {0..(numProjections - 1)};
+set PROJECTIONSSHORTM1 = {0..(numProjections - 2)};
 set LOTSET = {0..(kc-1)};
 set LCTSET = {0..(ko-1)};
 set LEAVES = {0..(numLeaves - 1)};
@@ -42,8 +44,8 @@ minimize ObjectiveFunction: sum {j in VOXELS} (quadHelperUnder[j] * z_minus[j] *
 # -------------------------------------------------------------------
 subject to positive_only {j in VOXELS}: z_plus[j] - z_minus[j] = z[j] - thethreshold[j];
 subject to doses_to_j_yparam {j in VOXELS}: z[j] = yparam * sum{ (l,p,j) in KNJMPARAMETERS}( D[l,p,j] * betas[l,p]);
-subject to LOC {l in LEAVES, p in PROJECTIONSMKO, k in LOTSET}: B[l,p] <= betas[l, p + k];
-subject to LCT {l in LEAVES, p in PROJECTIONSMKC, k in LCTSET}: cgamma[l,p] <= lgamma[l, p + k];
-subject to endOpen {l in LEAVES, p in PROJECTIONSM1}: betas[l, p] <= betas[l, p + 1] + cgamma[l, p + 1];
-subject to endClose {l in LEAVES, p in PROJECTIONSM1}: lgamma[l, p] <= lgamma[l, p + 1] + B[l, p + 1];
+subject to LOC {l in LEAVES, p in PROJECTIONSSHORT, k in LOTSET}: B[l,p] <= betas[l, p + k];
+subject to LCT {l in LEAVES, p in PROJECTIONSSHORT, k in LCTSET}: cgamma[l,p] <= lgamma[l, p + k];
+subject to endOpen {l in LEAVES, p in PROJECTIONSSHORTM1}: betas[l, p] <= betas[l, p + 1] + cgamma[l, p + 1];
+subject to endClose {l in LEAVES, p in PROJECTIONSSHORTM1}: lgamma[l, p] <= lgamma[l, p + 1] + B[l, p + 1];
 subject to eitherOpenOrClose {l in LEAVES, p in PROJECTIONS}: betas[l, p] + lgamma[l, p] = 1;
