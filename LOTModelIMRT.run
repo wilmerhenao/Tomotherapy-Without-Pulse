@@ -1,6 +1,6 @@
 reset;
-model LOTmodel.mod;
-data DataProstate/tomononlinearRealCases_split_8_vxls_200.dat;
+model LOTmodelIMRT.mod;
+data DataProstate/tomononlinearRealCases_split_1_vxls_10000.dat;
 #data warmstart.dat;
 option solver gurobi, solution_round 1;
 # The one below cuts like 90% of the time
@@ -14,15 +14,11 @@ option gurobi_options $gurobi_options 'AggFill 100';
 option gurobi_options $gurobi_options 'PreDual 0';
 #option gurobi_options $gurobi_options 'NumericFocus 1';
 option gurobi_options $gurobi_options 'Presolve 1';
-problem VarSpeed: z, z_plus, z_minus, betas, B, cgamma, lgamma, ObjectiveFunction, positive_only, doses_to_j_yparam, LOC, LCT, endOpen, endClose, eitherOpenOrClose;
+problem VarSpeed: z, z_plus, z_minus, t, ObjectiveFunction, positive_only, doses_to_j_yparam;
 solve VarSpeed;
 display numProjections;
 display maxkcko;
 display numvoxels;
 display numLeaves;
 display z;
-display betas;
-display B;
-display cgamma;
-display lgamma;
 display ObjectiveFunction;

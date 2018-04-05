@@ -17,9 +17,11 @@ import subprocess
 import sys
 import pickle
 import math
+import time
 
 numcores = 8
 subdivisions = 1
+maxvoxels = 200
 tumorsite = "Prostate"
 degreesPerSubdivision = (360/51) / subdivisions
 timeko = 0.05 # msecs
@@ -74,7 +76,7 @@ class tomodata:
         self.bixelsintween = 5
         self.maxIntensity = 300
         self.yBar = 350
-        self.maxvoxels = 200
+        self.maxvoxels = maxvoxels
         self.tprime = 100 # LOT in miliseconds
         self.tdprime = 40 # LCT in miliseconds
         self.img_filename = 'samplemask.img'
@@ -281,6 +283,7 @@ def printAMPLfile(data, subdivisions, tumorsite):
     print('param numLeaves :=', data.N, ';', file=f)
     print('param yparam :=', data.yBar, ';', file=f)
     print('param projecs :=', data.ProjectionsPerLoop, ';', file=f)
+    print('param numvoxels :=', len(data.mask), ';', file=f)
     print('param kc :=', kc, ';', file=f)
     print('param ko :=', ko, ';', file=f)
     pds.set_option('precision', 16)
@@ -313,17 +316,76 @@ def printAMPLfile(data, subdivisions, tumorsite):
     print(";", file = f)
     f.close()
 
-def runAMPL():
+def runAMPL(maxvoxels, i, tumorsite):
+    # Change the run file:
+    with open("LOTModelTemplate.run", "r+") as r:
+        with open("LOTModel.run", "w") as w:
+            old = r.read()
+            newstatement = old
+            if old.startswith("data "):
+                newstatement = "data Data" + tumorsite + "/tomononlinearRealCases_split_" + str(i) + "_vxls_" + str(maxvoxels) + ".dat;"
+            w.write(newstatement)
     procstring = subprocess.check_output(['ampl', 'LOTModel.run'])
     return(procstring)
 
+def writebetas(betas, B, cgamma, lgamma, numProjections, maxkcko, numLeaves):
+    f = open("warmstart.dat", "w")
+    leaves = np.tile(np.array(range(numLeaves)), numProjections + 2 * maxkcko)
+    projections = np.repeat(np.concatenate((np.concatenate((np.array(range(-maxkcko, 0)), np.array(range(numProjections)))), np.array(range(numProjections, numProjections + maxkcko)))), numLeaves)
+    print("param betas := ", file=f)
+    betainfo = pds.DataFrame(
+        data={'LEAVES': leaves, 'PROJECTIONS': projections, 'betas': betas.flatten()},
+        columns=['LEAVES', 'PROJECTIONS', 'betas'])
+    print(betainfo.to_string(index=False, header=False), file=f)
+    print(";", file=f)
+    print("param B := ", file=f)
+    betainfo = pds.DataFrame(
+        data={'LEAVES': leaves, 'PROJECTIONS': projections, 'B': B.flatten()},
+        columns=['LEAVES', 'PROJECTIONS', 'B'])
+    print(betainfo.to_string(index=False, header=False), file=f)
+    print(";", file=f)
+    print("param cgamma := ", file=f)
+    betainfo = pds.DataFrame(
+        data={'LEAVES': leaves, 'PROJECTIONS': projections, 'cgamma': cgamma.flatten()},
+        columns=['LEAVES', 'PROJECTIONS', 'cgamma'])
+    print(betainfo.to_string(index=False, header=False), file=f)
+    print(";", file=f)
+    print("param lgamma := ", file=f)
+    betainfo = pds.DataFrame(
+        data={'LEAVES': leaves, 'PROJECTIONS': projections, 'lgamma': lgamma.flatten()},
+        columns=['LEAVES', 'PROJECTIONS', 'lgamma'])
+    print(betainfo.to_string(index=False, header=False), file=f)
+    print(";", file=f)
+    f.close()
+
 def readDosefromtext(pstring):
     strstring = pstring.decode("utf-8") # decode the bytes stringst
-    print(strstring)
+    #print(strstring)
     lines = strstring.split('\n')
     linecontainssolution = False
+    linecontainsbetas = False
+    linecontainsB = False
+    linecontainslgamma = False
+    linecontainscgamma = False
+    obj = None
     for line in lines:
-        if linecontainssolution:
+        if line.startswith("numvoxels"):
+            numvoxels = line.split()[2]
+            z = np.zeros(int(numvoxels))
+        elif line.startswith("ObjectiveFunction"):
+            obj = float(line.split()[2])
+            print('objective value in the latest run:', obj)
+        elif line.startswith("maxkcko"):
+            maxkcko = int(line.split()[2])
+        elif line.startswith('numProjections'):
+            numProjections = int(line.split()[2])
+        elif line.startswith('numLeaves'):
+            numLeaves = int(line.split()[2])
+            betas = np.zeros((numProjections + 2 * maxkcko, numLeaves))
+            B = np.zeros((numProjections + 2 * maxkcko, numLeaves))
+            cgamma = np.zeros((numProjections + 2 * maxkcko, numLeaves))
+            lgamma = np.zeros((numProjections + 2 * maxkcko, numLeaves))
+        elif linecontainssolution:
             l = []
             for t in line.split():
                 try:
@@ -333,10 +395,95 @@ def readDosefromtext(pstring):
             if len(l) > 0:
                 for i in range(int(len(l) / 2)):
                     z[int(l[int(2 * i)])] = l[int(2 * i + 1)]
-        else:
-            if ('z [*] :=' in line):
-                linecontainssolution = True
-    return(z)
+            if "" == line:
+                linecontainssolution = False
+        elif linecontainsbetas:
+            if not line == "": #If it's not empty
+                if line.startswith(":"):
+                    locat = []
+                    for t in line.split():
+                        try:
+                            locat.append(int(t))
+                        except ValueError:
+                            pass
+                else:
+                    l = []
+                    for t in line.split():
+                        try:
+                            l.append(int(t))
+                        except ValueError:
+                            pass
+                    for i in range(int(len(l) - 1)):
+                        betas[l[0] + maxkcko, locat[i]] = l[i + 1]
+        elif linecontainsB:
+            if not line == "": #If it's not empty
+                if line.startswith(":"):
+                    locat = []
+                    for t in line.split():
+                        try:
+                            locat.append(int(t))
+                        except ValueError:
+                            pass
+                else:
+                    l = []
+                    for t in line.split():
+                        try:
+                            l.append(int(t))
+                        except ValueError:
+                            pass
+                    for i in range(int(len(l) - 1)):
+                        B[l[0] + maxkcko, locat[i]] = l[i + 1]
+        elif linecontainscgamma:
+            if not line == "": #If it's not empty
+                if line.startswith(":"):
+                    locat = []
+                    for t in line.split():
+                        try:
+                            locat.append(int(t))
+                        except ValueError:
+                            pass
+                else:
+                    l = []
+                    for t in line.split():
+                        try:
+                            l.append(int(t))
+                        except ValueError:
+                            pass
+                    for i in range(int(len(l) - 1)):
+                        cgamma[l[0] + maxkcko, locat[i]] = l[i + 1]
+        elif linecontainslgamma:
+            if not line == "": #If it's not empty
+                if line.startswith(":"):
+                    locat = []
+                    for t in line.split():
+                        try:
+                            locat.append(int(t))
+                        except ValueError:
+                            pass
+                else:
+                    l = []
+                    for t in line.split():
+                        try:
+                            l.append(int(t))
+                        except ValueError:
+                            pass
+                    for i in range(int(len(l) - 1)):
+                        lgamma[l[0] + maxkcko, locat[i]] = l[i + 1]
+        elif ('z [*] :=' in line):
+            linecontainssolution = True
+        elif ('betas [*,*] (tr)' in line):
+            linecontainsbetas = True
+        elif ('B [*,*] (tr)' in line):
+            linecontainsbetas = False
+            linecontainsB = True
+        elif ('cgamma [*,*] (tr)' in line):
+            linecontainsB = False
+            linecontainscgamma = True
+        elif ('lgamma [*,*] (tr)' in line):
+            linecontainscgamma = False
+            linecontainslgamma = True
+    writebetas(betas, B, cgamma, lgamma, numProjections, maxkcko, numLeaves)
+    return(z, betas, B, cgamma, lgamma, obj)
 
 # Plot the dose volume histogram
 def plotDVHNoClass(data, z, NameTag='', showPlot=False):
@@ -367,18 +514,36 @@ def plotDVHNoClass(data, z, NameTag='', showPlot=False):
     plt.close()
 
 # Only enter the next loop if the file exists
-if not os.path.isfile("Data" + str(tumorsite) + "/tomononlinearRealCases_split_" + str(subdivisions) + "_vxls_" + str(data.maxvoxels) + ".dat"):
+if not os.path.isfile("Data" + str(tumorsite) + "/tomononlinearRealCases_split_" + str(subdivisions) + "_vxls_" + str(maxvoxels) + ".dat"):
     dataobject = tomodata()
     printAMPLfile(dataobject, subdivisions, tumorsite)
-z = np.zeros(len(dataobject.mask))
+
 start_time = time.time()
-pstring = runAMPL()
-z = readDosefromtext(pstring)
+# Erase everything in the warmstart file
+f = open("warmstart.dat", "w")
+f.close()
+oldobj = np.inf
+for i in [1, 2, 4, 8, 16, 32]:
+    start_time = time.time()
+    pstring = runAMPL(maxvoxels, i, tumorsite)
+    totalAMPLtime = (time.time() - start_time)
+    print("--- %s seconds running the AMPL part---" % totalAMPLtime)
+    z, betas, B, cgamma, lgamma, newobj = readDosefromtext(pstring)
+    print('new obj:', newobj)
+    mej = (newobj - oldobj)/oldobj
+    oldobj = newobj
+    print('reduction:', mej)
+    if mej < 0.01:
+        break
+
 output2 = open('z.pkl', 'wb')
 pickle.dump(z, output2)
 output2.close()
 output = open('dataobject.pkl', 'wb')
-pickle.dump(dataobject, output)
+try:
+    pickle.dump(dataobject, output)
+except:
+    print("dataobject was never defined")
 output.close()
 totalAMPLtime = (time.time() - start_time)
 print("--- %s seconds running the AMPL part---" % totalAMPLtime)
@@ -386,7 +551,9 @@ if len(sys.argv) > 4:
     print("tabledresults: ", sys.argv[1], sys.argv[2], sys.argv[3], dataobject.totalsmallvoxels, totalAMPLtime)
 # Ignore errors that correspond to DVH Plot
 try:
-    plotDVHNoClass(dataobject, z, 'dvh')
+    pass
+    # Correct this and bring back the plotting when I can.
+    #plotDVHNoClass(dataobject, z, 'dvh')
 except IndexError:
     print("Index is out of bounds and no DVH plot will be generated. However, I am ignoring this error for now.")
 # Output ampl results for the next run in case something fails.
