@@ -1,19 +1,18 @@
 reset;
 model LOTmodel.mod;
-data DataProstate/tomononlinearRealCases_split_8_vxls_200.dat;
-#data warmstart.dat;
+data DataProstate/tomononlinearRealCases_split_4_vxls_200.dat;
+data warmstart.dat;
 option solver gurobi, solution_round 1;
 # The one below cuts like 90% of the time
 option gurobi_options $gurobi_options 'mipgap 1e-2';
-#option gurobi_options $gurobi_options 'presparsify 1';
-#option gurobi_options $gurobi_options 'feastol 0.99';
 # Reduces the time to a half
+option gurobi_options  $gurobi_options 'outlev 1';
 option gurobi_options  $gurobi_options 'feastol 1e-2';
 option gurobi_options $gurobi_options 'lpmethod 0';
 option gurobi_options $gurobi_options 'AggFill 100';
-option gurobi_options $gurobi_options 'PreDual 0';
-#option gurobi_options $gurobi_options 'NumericFocus 1';
-option gurobi_options $gurobi_options 'Presolve 1';
+option gurobi_options $gurobi_options 'predual 0';
+option gurobi_options $gurobi_options 'presolve 1';
+option gurobi_options $gurobi_options 'warmstart 3';
 problem VarSpeed: z, z_plus, z_minus, betas, B, cgamma, lgamma, ObjectiveFunction, positive_only, doses_to_j_yparam, LOC, LCT, endOpen, endClose, eitherOpenOrClose;
 solve VarSpeed;
 display numProjections;
@@ -26,3 +25,4 @@ display B;
 display cgamma;
 display lgamma;
 display ObjectiveFunction;
+

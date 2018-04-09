@@ -24,8 +24,8 @@ subdivisions = 1
 maxvoxels = 200
 tumorsite = "Prostate"
 degreesPerSubdivision = (360/51) / subdivisions
-timeko = 0.05 # msecs
-timekc = 0.04 # msecs
+timeko = 0.05 # secs
+timekc = 0.04 # secs
 speed = 24 # degrees per second
 howmanydegreesko = speed * timeko # Degrees spanned in this time
 howmanydegreeskc = speed * timekc # Degrees spanned in this time
@@ -320,12 +320,17 @@ def runAMPL(maxvoxels, i, tumorsite):
     # Change the run file:
     with open("LOTModelTemplate.run", "r+") as r:
         with open("LOTModel.run", "w") as w:
-            old = r.read()
-            newstatement = old
-            if old.startswith("data "):
-                newstatement = "data Data" + tumorsite + "/tomononlinearRealCases_split_" + str(i) + "_vxls_" + str(maxvoxels) + ".dat;"
-            w.write(newstatement)
+            lines = r.read()
+            for line in lines.split('\n'):
+                newstatement = line
+                if newstatement.startswith("data Data"):
+                    newstatement = "data Data" + tumorsite + "/tomononlinearRealCases_split_" + str(i) + "_vxls_" + str(maxvoxels) + ".dat;"
+                w.write(newstatement)
+                w.write('\n')
+        w.close()
+    #print('ready to run ampl process')
     procstring = subprocess.check_output(['ampl', 'LOTModel.run'])
+    #print('finished running ampl process')
     return(procstring)
 
 def writebetas(betas, B, cgamma, lgamma, numProjections, maxkcko, numLeaves):
@@ -360,7 +365,7 @@ def writebetas(betas, B, cgamma, lgamma, numProjections, maxkcko, numLeaves):
 
 def readDosefromtext(pstring):
     strstring = pstring.decode("utf-8") # decode the bytes stringst
-    #print(strstring)
+    print(strstring)
     lines = strstring.split('\n')
     linecontainssolution = False
     linecontainsbetas = False
