@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/LOTModel.run" afterPath="$PROJECT_DIR$/LOTModel.run" />
-      <change beforePath="$PROJECT_DIR$/LOTModelTemplate.run" afterPath="$PROJECT_DIR$/LOTModelTemplate.run" />
       <change beforePath="$PROJECT_DIR$/tomoLOT.py" afterPath="$PROJECT_DIR$/tomoLOT.py" />
     </list>
     <ignored path="CaseCreation.iws" />
@@ -60,8 +58,8 @@
       <file leaf-file-name="tomoLOT.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomoLOT.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="261">
-              <caret line="27" column="20" lean-forward="false" selection-start-line="27" selection-start-column="20" selection-end-line="27" selection-end-column="20" />
+            <state relative-caret-position="488">
+              <caret line="532" column="30" lean-forward="true" selection-start-line="532" selection-start-column="30" selection-end-line="532" selection-end-column="30" />
               <folding>
                 <element signature="e#190#210#0" expanded="true" />
               </folding>
@@ -80,14 +78,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>removebixels</find>
-      <find>sum</find>
-      <find>max</find>
-      <find>if mysum</find>
-      <find>BigToSmallCreator</find>
-      <find>.D</find>
-      <find>quadHelperOver</find>
-      <find>tomodata</find>
       <find>leafs</find>
       <find>k0</find>
       <find>kprime</find>
@@ -110,6 +100,14 @@
       <find>betas</find>
       <find>readDosefromtext</find>
       <find>LOTModel.run</find>
+      <find>get_dim</find>
+      <find>get_totalbeamlets</find>
+      <find>roimask_reader</find>
+      <find>argumentVariables</find>
+      <find>readWeiguosCase</find>
+      <find>maskNamesGetter</find>
+      <find>getNumProjections</find>
+      <find>tomodata</find>
     </findStrings>
     <replaceStrings>
       <replace>self.data.K</replace>
@@ -490,13 +488,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
     </task>
-    <task id="LOCAL-00127" summary="added the variables">
-      <created>1486769794474</created>
-      <option name="number" value="00127" />
-      <option name="presentableId" value="LOCAL-00127" />
-      <option name="project" value="LOCAL" />
-      <updated>1486769794474</updated>
-    </task>
     <task id="LOCAL-00128" summary="added the variables">
       <created>1486769800180</created>
       <option name="number" value="00128" />
@@ -833,7 +824,14 @@
       <option name="project" value="LOCAL" />
       <updated>1522947957660</updated>
     </task>
-    <option name="localTasksCounter" value="176" />
+    <task id="LOCAL-00176" summary="Up to this point I have the approach where I make 2 power subdivisions of each projection in order to get a cleaner approach">
+      <created>1523297260437</created>
+      <option name="number" value="00176" />
+      <option name="presentableId" value="LOCAL-00176" />
+      <option name="project" value="LOCAL" />
+      <updated>1523297260437</updated>
+    </task>
+    <option name="localTasksCounter" value="177" />
     <servers />
   </component>
   <component name="TodoView">
@@ -915,7 +913,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Dimension reduction worked, but there is still a bug in the histogram creation" />
     <MESSAGE value="Going to add the loops constraints" />
     <MESSAGE value="changed the dat file format" />
     <MESSAGE value="Updated and work. Next I will add the new constraints" />
@@ -940,7 +937,8 @@
     <MESSAGE value="implemented minus the ghost points. I will implement the ghost points next" />
     <MESSAGE value="Implemented the refinement and remember" />
     <MESSAGE value="Implemented the refinement but maybe not working in ampl" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented the refinement but maybe not working in ampl" />
+    <MESSAGE value="Up to this point I have the approach where I make 2 power subdivisions of each projection in order to get a cleaner approach" />
+    <option name="LAST_COMMIT_MESSAGE" value="Up to this point I have the approach where I make 2 power subdivisions of each projection in order to get a cleaner approach" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1002,12 +1000,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tomoLOT.py</url>
-          <line>387</line>
+          <line>389</line>
           <option name="timeStamp" value="246" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tomoLOT.py</url>
-          <line>496</line>
+          <line>498</line>
           <option name="timeStamp" value="247" />
         </line-breakpoint>
       </breakpoints>
@@ -1362,8 +1360,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomoLOT.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="27" column="20" lean-forward="false" selection-start-line="27" selection-start-column="20" selection-end-line="27" selection-end-column="20" />
+        <state relative-caret-position="488">
+          <caret line="532" column="30" lean-forward="true" selection-start-line="532" selection-start-column="30" selection-end-line="532" selection-end-column="30" />
           <folding>
             <element signature="e#190#210#0" expanded="true" />
           </folding>

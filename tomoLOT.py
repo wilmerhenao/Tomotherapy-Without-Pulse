@@ -19,6 +19,7 @@ import pickle
 import math
 import time
 
+# User input goes here and only here
 numcores = 8
 subdivisions = 1
 maxvoxels = 200
@@ -29,6 +30,7 @@ timekc = 0.04 # secs
 speed = 24 # degrees per second
 howmanydegreesko = speed * timeko # Degrees spanned in this time
 howmanydegreeskc = speed * timekc # Degrees spanned in this time
+# How many projections must remain open
 ko = math.ceil(howmanydegreesko / degreesPerSubdivision)
 kc = math.ceil(howmanydegreeskc / degreesPerSubdivision)
 
@@ -77,8 +79,8 @@ class tomodata:
         self.maxIntensity = 300
         self.yBar = 350
         self.maxvoxels = maxvoxels
-        self.tprime = 100 # LOT in miliseconds
-        self.tdprime = 40 # LCT in miliseconds
+        self.tprime = timeko # LOT in miliseconds
+        self.tdprime = timekc # LCT in miliseconds
         self.img_filename = 'samplemask.img'
         self.header_filename = 'samplemask.header'
         self.struct_img_filename = 'roimask.img'
