@@ -294,7 +294,6 @@ def createModel(data):
     leafsD = (data.bixels % data.N).astype(int)
     projectionsD = np.floor(data.bixels / data.N).astype(int)
 
-
     # Create variables
     z = m.addVars(voxels, lb = 0.0, obj = 1.0, vtype = GRB.CONTINUOUS, names = "z")
     z_plus = m.addVars(voxels, lb = 0.0, obj = np.sqrt(data.quadHelperUnder), vtype = GRB.CONTINUOUS, names = "z_plus")
@@ -306,15 +305,21 @@ def createModel(data):
     m.update()
     # Create Constraints
     positive_only = m.addConstrs((z_plus[v] - z_minus[v] == z[v] - data.quadHelperThresh[v] for v in voxels), "positive_only")
+    # Create empty container for constraints of type:
+    doses_to_j_yparam = []
     for v in voxels:
         locations = np.where(v == data.smallvoxels)[0]
-        # Tengo que adicionar las sumas aqui
-        doses_to_j_yparam[v] = m.addConstr((z[v] == data.yBar * for v in voxels), name="doses_to_j_yparam[" + v + "]")
+        rhs = LinExpr(0.0)
+        for l in locations:
+            rhs.add(data.Dijs[l] * betas[leafsD[l], projectionsD[l]])
+        doses_to_j_yparam.append(m.addConstr(z[v] == data.yBar * rhs, name="doses_to_j_yparam[" + v + "]"))
     LOC = m.addConstrs((B[l,p] <= betas[l,p+k] for l in leaves for p in projectionsshort for k in LOTSET), "LOC")
     LCT = m.addConstrs((cgamma[l,p] <= lgamma[l,p+k] for l in leaves for p in projectionsshort for k in LCTSET), "LCT")
     endOpen = m.addConstrs((betas[l, p] <= betas[l, p + 1] + cgamma[l, p + 1] for l in leaves for p in projectionsshortM1), "endOpen")
     endClose = m.addConstrs((lgamma[l, p] <= B[l, p + 1] + lgamma[l, p + 1] for l in leaves for p in projectionsshortM1), "endClose")
     eitherOpenOrClose = m.addConstrs((betas[l, p] + lgamma[l, p] == 1), "eitherOpenOrClose")
+    m.update()
+    m.setObjective(, GRB.MINIMIZE)
 
     return(m)
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
