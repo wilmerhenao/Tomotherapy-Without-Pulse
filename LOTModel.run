@@ -1,6 +1,6 @@
 reset;
 model LOTmodel.mod;
-data DataProstate/tomononlinearRealCases_split_4_vxls_200.dat;
+data DataProstate/tomononlinearRealCases_split_1_vxls_200.dat;
 data warmstart.dat;
 option solver gurobi, solution_round 1;
 # The one below cuts like 90% of the time

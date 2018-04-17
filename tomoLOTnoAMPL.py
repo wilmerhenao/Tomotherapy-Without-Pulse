@@ -280,20 +280,18 @@ class tomodata:
 def createModel(data):
     m = Model("discrete")
     voxels = range(len(data.mask))
-    leaves = range(len(data.N))
-    ko = ko
-    kc = kc
+    leaves = range(data.N)
+    #ko = ko
+    #kc = kc
     maxkcko = max(kc, ko)
     numProjections = data.numProjections
-    projections = range(-maxkcko, numProjections - 1 + maxkcko)
-    projectionsshort = range(numProjections - 1)
-    projectionsshortM1 = range(numProjections - 2)
+    projections = range(numProjections - 1 + 2 * maxkcko)
+    projectionsshort = range(maxkcko, maxkcko + numProjections - 1)
+    projectionsshortM1 = range(maxkcko, maxkcko + numProjections - 2)
     LOTSET = range(kc - 1)
     LCTSET = range(ko - 1)
-
     leafsD = (data.bixels % data.N).astype(int)
     projectionsD = np.floor(data.bixels / data.N).astype(int)
-
     # Create variables
     z = m.addVars(voxels, lb = 0.0, obj = 1.0, vtype = GRB.CONTINUOUS, names = "z")
     z_plus = m.addVars(voxels, lb = 0.0, obj = np.sqrt(data.quadHelperUnder), vtype = GRB.CONTINUOUS, names = "z_plus")
@@ -307,21 +305,27 @@ def createModel(data):
     positive_only = m.addConstrs((z_plus[v] - z_minus[v] == z[v] - data.quadHelperThresh[v] for v in voxels), "positive_only")
     # Create empty container for constraints of type:
     doses_to_j_yparam = []
+    myObj = QuadExpr(0.0)
     for v in voxels:
         locations = np.where(v == data.smallvoxels)[0]
         rhs = LinExpr(0.0)
         for l in locations:
             rhs.add(data.Dijs[l] * betas[leafsD[l], projectionsD[l]])
-        doses_to_j_yparam.append(m.addConstr(z[v] == data.yBar * rhs, name="doses_to_j_yparam[" + v + "]"))
-    LOC = m.addConstrs((B[l,p] <= betas[l,p+k] for l in leaves for p in projectionsshort for k in LOTSET), "LOC")
+        doses_to_j_yparam.append(m.addConstr(z[v] == data.yBar * rhs, name="doses_to_j_yparam[" + str(v) + "]"))
+        # Append goal to objective
+        myObj.add(data.quadHelperUnder[v] * z_minus[v] * z_minus[v] + data.quadHelperOver[v] * z_plus[v] * z_plus[v])
+    LOC = m.addConstrs((B[l, p] <= betas[l, p + k] for l in leaves for p in projectionsshort for k in LOTSET), "LOC")
     LCT = m.addConstrs((cgamma[l,p] <= lgamma[l,p+k] for l in leaves for p in projectionsshort for k in LCTSET), "LCT")
     endOpen = m.addConstrs((betas[l, p] <= betas[l, p + 1] + cgamma[l, p + 1] for l in leaves for p in projectionsshortM1), "endOpen")
     endClose = m.addConstrs((lgamma[l, p] <= B[l, p + 1] + lgamma[l, p + 1] for l in leaves for p in projectionsshortM1), "endClose")
-    eitherOpenOrClose = m.addConstrs((betas[l, p] + lgamma[l, p] == 1), "eitherOpenOrClose")
+    eitherOpenOrClose = m.addConstrs((betas[l, p] + lgamma[l, p] == 1 for p in projections), "eitherOpenOrClose")
+    m.setObjective(myObj, GRB.MINIMIZE)
     m.update()
-    m.setObjective(, GRB.MINIMIZE)
-
+    m.optimize()
+    v = m.getVars()
+    print('checking everything')
     return(m)
+
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 ## This part is for AMPL's implementation:
 def printAMPLfile(data, subdivisions, tumorsite):
@@ -337,7 +341,6 @@ def printAMPLfile(data, subdivisions, tumorsite):
     pds.set_option('precision', 16)
     leafs = (data.bixels % data.N).astype(int)
     projections = np.floor(data.bixels / data.N).astype(int)
-
     # Incorporate subdivisions
     leafs = np.repeat(leafs, subdivisions)
     data.smallvoxels = np.repeat(data.smallvoxels, subdivisions)
@@ -566,10 +569,15 @@ def plotDVHNoClass(data, z, NameTag='', showPlot=False):
         plt.show()
     plt.close()
 
+dataobject = tomodata()
+m = createModel(dataobject)
+sys.exit()
+
 # Only enter the next loop if the file exists
 if not os.path.isfile("Data" + str(tumorsite) + "/tomononlinearRealCases_split_" + str(subdivisions) + "_vxls_" + str(maxvoxels) + ".dat"):
     dataobject = tomodata()
     m = createModel(dataobject)
+    sys.exit()
     printAMPLfile(dataobject, subdivisions, tumorsite)
 
 start_time = time.time()
