@@ -23,17 +23,20 @@ from gurobipy import *
 # User input goes here and only here
 numcores = 8
 subdivisions = 1
-maxvoxels = 200
+maxvoxels = 500
 tumorsite = "Prostate"
 degreesPerSubdivision = (360/51) / subdivisions
 timeko = 0.05 # secs
 timekc = 0.04 # secs
+time10 = 10
 speed = 24 # degrees per second
 howmanydegreesko = speed * timeko # Degrees spanned in this time
 howmanydegreeskc = speed * timekc # Degrees spanned in this time
+howmanydegrees10 = speed * time10 # Degrees spanned in 10 seconds
 # How many projections must remain open
 ko = math.ceil(howmanydegreesko / degreesPerSubdivision)
 kc = math.ceil(howmanydegreeskc / degreesPerSubdivision)
+k10 = math.ceil(howmanydegrees10 / degreesPerSubdivision)
 
 ## Function that reads the files produced by Weiguo
 def getvector(necfile,dtype):
@@ -277,29 +280,35 @@ class tomodata:
         # Select only the voxels that exist in the small voxel space provided.
         self.removezeroes([0, 10, 11, 17, 12, 3, 15, 16, 9, 5, 4, 20, 21, 19, 18])
 
-def createModel(data):
-    m = Model("discrete")
+def createModel (data):
+    m = Model("SOLVE51")
+    m.params.MIPGap = 2E-1
+    m.params.IntFeasTol = 1E-2
+    m.params.SiftMethod = 0
+    m.params.AggFill = 100
+    m.params.PreDual = 0
+    m.params.Presolve = 1
+    #m.params.TimeLimit = 60
     voxels = range(len(data.mask))
     leaves = range(data.N)
-    #ko = ko
-    #kc = kc
     maxkcko = max(kc, ko)
     numProjections = data.numProjections
     projections = range(numProjections - 1 + 2 * maxkcko)
-    projectionsshort = range(maxkcko, maxkcko + numProjections - 1)
-    projectionsshortM1 = range(maxkcko, maxkcko + numProjections - 2)
-    LOTSET = range(kc - 1)
-    LCTSET = range(ko - 1)
+    projectionsshort = range(numProjections - 1)
+    projectionsshortM1 = range(numProjections - 2)
+    LOTSET = range (kc - 1)
+    LCTSET = range (ko - 1)
     leafsD = (data.bixels % data.N).astype(int)
     projectionsD = np.floor(data.bixels / data.N).astype(int)
     # Create variables
+    print('len of voxels and projections:', len(voxels), len(projections))
     z = m.addVars(voxels, lb = 0.0, obj = 1.0, vtype = GRB.CONTINUOUS, names = "z")
-    z_plus = m.addVars(voxels, lb = 0.0, obj = np.sqrt(data.quadHelperUnder), vtype = GRB.CONTINUOUS, names = "z_plus")
-    z_minus = m.addVars(voxels, lb = 0.0, obj = np.sqrt(data.quadHelperOver), vtype = GRB.CONTINUOUS, names = "z_minus")
-    betas = m.addVars(leaves, projections, obj = 1, vtype = GRB.BINARY, names = "betas")
-    B = m.addVars(leaves, projections, obj = 1, vtype = GRB.BINARY, names = "B")
-    cgamma = m.addVars(leaves, projections, obj = 1, vtype = GRB.BINARY, names = "cgamma")
-    lgamma = m.addVars(leaves, projections, obj = 1, vtype = GRB.BINARY, names = "lgamma")
+    z_plus = m.addVars(voxels, lb = 0.0, obj = np.sqrt(data.quadHelperOver), vtype = GRB.CONTINUOUS, names = "z_plus")
+    z_minus = m.addVars(voxels, lb = 0.0, obj = np.sqrt(data.quadHelperUnder), vtype = GRB.CONTINUOUS, names = "z_minus")
+    betas = m.addVars(leaves, projections, obj = 1.0, vtype = GRB.BINARY, names = "betas")
+    B = m.addVars(leaves, projections, obj = 1.0, vtype = GRB.BINARY, names = "B")
+    cgamma = m.addVars(leaves, projections, obj = 1.0, vtype = GRB.BINARY, names = "cgamma")
+    lgamma = m.addVars(leaves, projections, obj = 1.0, vtype = GRB.BINARY, names = "lgamma")
     m.update()
     # Create Constraints
     positive_only = m.addConstrs((z_plus[v] - z_minus[v] == z[v] - data.quadHelperThresh[v] for v in voxels), "positive_only")
@@ -310,21 +319,22 @@ def createModel(data):
         locations = np.where(v == data.smallvoxels)[0]
         rhs = LinExpr(0.0)
         for l in locations:
-            rhs.add(data.Dijs[l] * betas[leafsD[l], projectionsD[l]])
+            rhs.add(data.Dijs[l] * betas[leafsD[l], projectionsD[l] + maxkcko])
         doses_to_j_yparam.append(m.addConstr(z[v] == data.yBar * rhs, name="doses_to_j_yparam[" + str(v) + "]"))
         # Append goal to objective
-        myObj.add(data.quadHelperUnder[v] * z_minus[v] * z_minus[v] + data.quadHelperOver[v] * z_plus[v] * z_plus[v])
-    LOC = m.addConstrs((B[l, p] <= betas[l, p + k] for l in leaves for p in projectionsshort for k in LOTSET), "LOC")
-    LCT = m.addConstrs((cgamma[l,p] <= lgamma[l,p+k] for l in leaves for p in projectionsshort for k in LCTSET), "LCT")
-    endOpen = m.addConstrs((betas[l, p] <= betas[l, p + 1] + cgamma[l, p + 1] for l in leaves for p in projectionsshortM1), "endOpen")
-    endClose = m.addConstrs((lgamma[l, p] <= B[l, p + 1] + lgamma[l, p + 1] for l in leaves for p in projectionsshortM1), "endClose")
-    eitherOpenOrClose = m.addConstrs((betas[l, p] + lgamma[l, p] == 1 for p in projections), "eitherOpenOrClose")
+        # DON'T MULTIPLY TIMES THE QUADHELPERS! THIS IS ALREADY DONE IN THE DECLARATION 10 LINES ABOVE
+        myObj.add(z_minus[v] * z_minus[v] + z_plus[v] * z_plus[v])
+    LOC = m.addConstrs((B[l, p + maxkcko] <= betas[l, p + maxkcko + k] for l in leaves for p in projectionsshort for k in LOTSET), "LOC")
+    LCT = m.addConstrs((cgamma[l,p + maxkcko] <= lgamma[l,p + maxkcko + k] for l in leaves for p in projectionsshort for k in LCTSET), "LCT")
+    endOpen = m.addConstrs((betas[l, p + maxkcko] <= betas[l, p + maxkcko + 1] + cgamma[l, p + maxkcko + 1] for l in leaves for p in projectionsshortM1), "endOpen")
+    endClose = m.addConstrs((lgamma[l, p + maxkcko] <= B[l, p + maxkcko + 1] + lgamma[l, p + maxkcko + 1] for l in leaves for p in projectionsshortM1), "endClose")
+    #print('projections', projections)
+    eitherOpenOrClose = m.addConstrs((betas[l, p] + lgamma[l, p] == 1 for l in leaves for p in projections), "eitherOpenOrClose")
     m.setObjective(myObj, GRB.MINIMIZE)
     m.update()
     m.optimize()
-    v = m.getVars()
-    print('checking everything')
-    return(m)
+    z_output = [v.x for v in m.getVars()[0:len(voxels)]]
+    return(z_output)
 
 ## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
 ## This part is for AMPL's implementation:
@@ -384,163 +394,6 @@ def runAMPL(maxvoxels, i, tumorsite):
     #print('finished running ampl process')
     return(procstring)
 
-def writebetas(betas, B, cgamma, lgamma, numProjections, maxkcko, numLeaves):
-    f = open("warmstart.dat", "w")
-    leaves = np.tile(np.array(range(numLeaves)), numProjections + 2 * maxkcko)
-    projections = np.repeat(np.concatenate((np.concatenate((np.array(range(-maxkcko, 0)), np.array(range(numProjections)))), np.array(range(numProjections, numProjections + maxkcko)))), numLeaves)
-    print("param betas := ", file=f)
-    betainfo = pds.DataFrame(
-        data={'LEAVES': leaves, 'PROJECTIONS': projections, 'betas': betas.flatten()},
-        columns=['LEAVES', 'PROJECTIONS', 'betas'])
-    print(betainfo.to_string(index=False, header=False), file=f)
-    print(";", file=f)
-    print("param B := ", file=f)
-    betainfo = pds.DataFrame(
-        data={'LEAVES': leaves, 'PROJECTIONS': projections, 'B': B.flatten()},
-        columns=['LEAVES', 'PROJECTIONS', 'B'])
-    print(betainfo.to_string(index=False, header=False), file=f)
-    print(";", file=f)
-    print("param cgamma := ", file=f)
-    betainfo = pds.DataFrame(
-        data={'LEAVES': leaves, 'PROJECTIONS': projections, 'cgamma': cgamma.flatten()},
-        columns=['LEAVES', 'PROJECTIONS', 'cgamma'])
-    print(betainfo.to_string(index=False, header=False), file=f)
-    print(";", file=f)
-    print("param lgamma := ", file=f)
-    betainfo = pds.DataFrame(
-        data={'LEAVES': leaves, 'PROJECTIONS': projections, 'lgamma': lgamma.flatten()},
-        columns=['LEAVES', 'PROJECTIONS', 'lgamma'])
-    print(betainfo.to_string(index=False, header=False), file=f)
-    print(";", file=f)
-    f.close()
-
-def readDosefromtext(pstring):
-    strstring = pstring.decode("utf-8") # decode the bytes stringst
-    print(strstring)
-    lines = strstring.split('\n')
-    linecontainssolution = False
-    linecontainsbetas = False
-    linecontainsB = False
-    linecontainslgamma = False
-    linecontainscgamma = False
-    obj = None
-    for line in lines:
-        if line.startswith("numvoxels"):
-            numvoxels = line.split()[2]
-            z = np.zeros(int(numvoxels))
-        elif line.startswith("ObjectiveFunction"):
-            obj = float(line.split()[2])
-            print('objective value in the latest run:', obj)
-        elif line.startswith("maxkcko"):
-            maxkcko = int(line.split()[2])
-        elif line.startswith('numProjections'):
-            numProjections = int(line.split()[2])
-        elif line.startswith('numLeaves'):
-            numLeaves = int(line.split()[2])
-            betas = np.zeros((numProjections + 2 * maxkcko, numLeaves))
-            B = np.zeros((numProjections + 2 * maxkcko, numLeaves))
-            cgamma = np.zeros((numProjections + 2 * maxkcko, numLeaves))
-            lgamma = np.zeros((numProjections + 2 * maxkcko, numLeaves))
-        elif linecontainssolution:
-            l = []
-            for t in line.split():
-                try:
-                    l.append(float(t))
-                except ValueError:
-                    pass
-            if len(l) > 0:
-                for i in range(int(len(l) / 2)):
-                    z[int(l[int(2 * i)])] = l[int(2 * i + 1)]
-            if "" == line:
-                linecontainssolution = False
-        elif linecontainsbetas:
-            if not line == "": #If it's not empty
-                if line.startswith(":"):
-                    locat = []
-                    for t in line.split():
-                        try:
-                            locat.append(int(t))
-                        except ValueError:
-                            pass
-                else:
-                    l = []
-                    for t in line.split():
-                        try:
-                            l.append(int(t))
-                        except ValueError:
-                            pass
-                    for i in range(int(len(l) - 1)):
-                        betas[l[0] + maxkcko, locat[i]] = l[i + 1]
-        elif linecontainsB:
-            if not line == "": #If it's not empty
-                if line.startswith(":"):
-                    locat = []
-                    for t in line.split():
-                        try:
-                            locat.append(int(t))
-                        except ValueError:
-                            pass
-                else:
-                    l = []
-                    for t in line.split():
-                        try:
-                            l.append(int(t))
-                        except ValueError:
-                            pass
-                    for i in range(int(len(l) - 1)):
-                        B[l[0] + maxkcko, locat[i]] = l[i + 1]
-        elif linecontainscgamma:
-            if not line == "": #If it's not empty
-                if line.startswith(":"):
-                    locat = []
-                    for t in line.split():
-                        try:
-                            locat.append(int(t))
-                        except ValueError:
-                            pass
-                else:
-                    l = []
-                    for t in line.split():
-                        try:
-                            l.append(int(t))
-                        except ValueError:
-                            pass
-                    for i in range(int(len(l) - 1)):
-                        cgamma[l[0] + maxkcko, locat[i]] = l[i + 1]
-        elif linecontainslgamma:
-            if not line == "": #If it's not empty
-                if line.startswith(":"):
-                    locat = []
-                    for t in line.split():
-                        try:
-                            locat.append(int(t))
-                        except ValueError:
-                            pass
-                else:
-                    l = []
-                    for t in line.split():
-                        try:
-                            l.append(int(t))
-                        except ValueError:
-                            pass
-                    for i in range(int(len(l) - 1)):
-                        lgamma[l[0] + maxkcko, locat[i]] = l[i + 1]
-        elif ('z [*] :=' in line):
-            linecontainssolution = True
-        elif ('betas [*,*] (tr)' in line):
-            linecontainsbetas = True
-        elif ('B [*,*] (tr)' in line):
-            linecontainsbetas = False
-            linecontainsB = True
-        elif ('cgamma [*,*] (tr)' in line):
-            linecontainsB = False
-            linecontainscgamma = True
-        elif ('lgamma [*,*] (tr)' in line):
-            linecontainscgamma = False
-            linecontainslgamma = True
-    writebetas(betas, B, cgamma, lgamma, numProjections, maxkcko, numLeaves)
-    return(z, betas, B, cgamma, lgamma, obj)
-
 # Plot the dose volume histogram
 def plotDVHNoClass(data, z, NameTag='', showPlot=False):
     voxDict = {}
@@ -570,7 +423,8 @@ def plotDVHNoClass(data, z, NameTag='', showPlot=False):
     plt.close()
 
 dataobject = tomodata()
-m = createModel(dataobject)
+z = createModel(dataobject)
+plotDVHNoClass(dataobject, z, 'dvh')
 sys.exit()
 
 # Only enter the next loop if the file exists

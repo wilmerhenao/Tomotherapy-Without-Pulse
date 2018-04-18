@@ -13,7 +13,6 @@ param numvoxels > 0;
 param maxkcko := max(ko, kc);
 # Set definitions
 set PROJECTIONS = {-maxkcko..((numProjections - 1) + maxkcko)};
-set PROJECTIONSM1 = {-maxkcko..((numProjections - 2) + maxkcko)};
 set PROJECTIONSSHORT = {0..(numProjections - 1)};
 set PROJECTIONSSHORTM1 = {0..(numProjections - 2)};
 set LOTSET = {0..(kc-1)};
