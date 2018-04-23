@@ -1,5 +1,5 @@
 # -------------------------------------------------------------------
-## The CMP
+## SOLVE51
 # -------------------------------------------------------------------
 # Set definitions
 param numProjections > 0;
@@ -9,6 +9,8 @@ param projecs > 0;
 param ko integer > 0;
 param kc integer > 0;
 param numvoxels > 0;
+param r > 0;
+param timeperprojection > 0;
 
 param maxkcko := max(ko, kc);
 # Set definitions

@@ -13,16 +13,50 @@ option gurobi_options $gurobi_options 'AggFill 100';
 option gurobi_options $gurobi_options 'predual 0';
 option gurobi_options $gurobi_options 'presolve 1';
 option gurobi_options $gurobi_options 'warmstart 3';
-problem VarSpeed: z, z_plus, z_minus, betas, B, cgamma, lgamma, ObjectiveFunction, positive_only, doses_to_j_yparam, LOC, LCT, endOpen, endClose, eitherOpenOrClose;
-solve VarSpeed;
-display numProjections;
-display maxkcko;
-display numvoxels;
-display numLeaves;
-display z;
-display betas;
-display B;
-display cgamma;
-display lgamma;
-display ObjectiveFunction;
+
+problem SOLVE51: z, z_plus, z_minus, betas, B, cgamma, lgamma, ObjectiveFunction, positive_only, doses_to_j_yparam, LOC, LCT, endOpen, endClose, eitherOpenOrClose;
+
+solve SOLVE51;
+
+1# Having solved the 51 projections case. Refine the grid where it matters. First Create times
+
+# Define indexed collections of sets
+set TIMES {LEAVES} = {};
+set PROJIRREG {LEAVES} ordered = {};
+set NEWD {};
+var pnegativesflag; #This var checks if the projections are in negative time
+var pcounter; # Number of projections away from zero
+var prevtime;
+
+for {l in LEAVES}{
+    let pnegativesflag := 1;
+    let pcounter := 0
+    let prevtime := -timeperprojection * maxkcko;
+    for p in PROJECTIONS{
+    	if pnegativesflag then {
+    	   if p >= 0 then {
+    	       # you would only enter here once per leaf (when projections become positive)
+	           let pnegativesflag := 0
+	           let pcounter := 1
+	       }
+	    }
+    	# Test whether this is a leaf-state change or not
+    	if 1 = B[l,p] or 1 = cgamma[l,p] then {
+       	   for r_index in {0..r}{
+       	       let prevtime := prevtime + timeperprojection / r;
+       	       let TIMES[l] := TIMES[l] union {prevtime};
+	       if pnegativesflag then
+	       	   let PROJIRREG := PROJIRREG union {-pcounter};
+	       else
+		       let PROJIRREG := PROJIRREG union {pcounter};
+	       let pcounter := pcounter + 1;
+       	   }
+    	}  else {
+       	   let prevtime := prevtime + timeperprojection;
+       	   let TIMES[l] := TIMES[l] union {prevtime};
+	   let PROJIRREG := PROJIRREG union {pcounter};
+	   let pcounter := pcounter + 1;
+    	}
+    }
+}
 
