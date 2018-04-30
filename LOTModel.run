@@ -1,7 +1,7 @@
 reset;
 model LOTmodel.mod;
 data DataProstate/tomononlinearRealCases_split_1_vxls_200.dat;
-data warmstart.dat;
+#data warmstart.dat;
 option solver gurobi, solution_round 1;
 # The one below cuts like 90% of the time
 option gurobi_options $gurobi_options 'mipgap 1e-2';
@@ -18,45 +18,89 @@ problem SOLVE51: z, z_plus, z_minus, betas, B, cgamma, lgamma, ObjectiveFunction
 
 solve SOLVE51;
 
-1# Having solved the 51 projections case. Refine the grid where it matters. First Create times
+# Having solved the 51 projections case. Refine the grid where it matters. First Create times
 
-# Define indexed collections of sets
-set TIMES {LEAVES} = {};
-set PROJIRREG {LEAVES} ordered = {};
-set NEWD {};
-var pnegativesflag; #This var checks if the projections are in negative time
-var pcounter; # Number of projections away from zero
-var prevtime;
-
-for {l in LEAVES}{
-    let pnegativesflag := 1;
-    let pcounter := 0
-    let prevtime := -timeperprojection * maxkcko;
-    for p in PROJECTIONS{
-    	if pnegativesflag then {
-    	   if p >= 0 then {
-    	       # you would only enter here once per leaf (when projections become positive)
-	           let pnegativesflag := 0
-	           let pcounter := 1
-	       }
-	    }
+for {l in LEAVES} {
+    let pcounter := 0;
+    let prevtime := 0;
+    for {p in {0..((numProjections - 1) + maxkcko)}} {
     	# Test whether this is a leaf-state change or not
     	if 1 = B[l,p] or 1 = cgamma[l,p] then {
-       	   for r_index in {0..r}{
-       	       let prevtime := prevtime + timeperprojection / r;
+       	    for {r_index in 0..r} {
        	       let TIMES[l] := TIMES[l] union {prevtime};
-	       if pnegativesflag then
-	       	   let PROJIRREG := PROJIRREG union {-pcounter};
-	       else
-		       let PROJIRREG := PROJIRREG union {pcounter};
-	       let pcounter := pcounter + 1;
-       	   }
+	       	   let PROJIRREGACTIVE[l] := PROJIRREGACTIVE[l] union {pcounter};
+               let PROJIRREG[l] := PROJIRREG[l] union {pcounter};
+               let PMAPPER[l, p] := PMAPPER[l, p] union {pcounter};
+	           let pcounter := pcounter + 1;
+       	    }
     	}  else {
        	   let prevtime := prevtime + timeperprojection;
        	   let TIMES[l] := TIMES[l] union {prevtime};
-	   let PROJIRREG := PROJIRREG union {pcounter};
-	   let pcounter := pcounter + 1;
+	   if pnegativesflag then {
+               let PROJIRREG[l] := PROJIRREG[l] union {-pcounter};
+               let PMAPPER[l, p] := PMAPPER[l, p] union {-pcounter}; # Map related projection
+	   } else {
+	       let PROJIRREGACTIVE[l] := PROJIRREGACTIVE[l] union {pcounter};
+               let PROJIRREG[l] := PROJIRREG[l] union {pcounter};
+               let PMAPPER[l, p] := PMAPPER[l, p] union {-pcounter}; # Map related projection
+           }
+           let pcounter := pcounter + 1;
     	}
     }
 }
 
+for {(l,p,v) in KNJMPARAMETERS} {
+    if 1 = B[l,p] or 1 = cgamma[l,p] then {
+            for {newp in PMAPPER[l, p]} {
+            if 1 = card(PMAPPER[l,p]) then{
+                let NEWKNJ := NEWKNJ union {(l, newp, v)};
+            } else {
+	        let NEWKNJ := NEWKNJ union {(l, newp, v)};
+            }
+        }
+    }
+}
+
+for {(l,p,v) in NEWKNJ}{
+	display l;
+	display p;
+	display v;
+}
+
+# Fill the NEWD matrix that will be used for the second problem
+for {(l,p,v) in KNJMPARAMETERS} {
+    if 1 = B[l,p] or 1 = cgamma[l,p] then {
+            for {newp in PMAPPER[l, p]} {
+            if 1 = card(PMAPPER[l,p]) then{
+                let NEWD[l, newp, v] := D[l,p,v];
+            } else {
+                let NEWD[l, newp, v] := D[l,p,v]/r;
+            }
+        }
+    }
+}
+
+for {l in LEAVES} {
+    for {p in {PROJIRREGACTIVE[l] diff last(PROJIRREGACTIVE[l]) }{
+    	#Calculate KC and KO
+	let lotc := 1;
+	let lctc := 1;
+	repeat {
+	       let LOTSETFINE[l, p] := LOTSETFINE [l, p] union {lotc};
+	       let lotc := lotc + 1;
+	       if TIMES[l][p + lotc] - TIMES[l][p] > timeopen or p == last(PROJIRREGACTIVE[l]) then {
+	       	  break
+	       }
+	}
+	repeat {
+	       let LCTSETFINE[l, p] := LCTSETFINE [l, p] union {lctc};
+	       let lctc := lctc + 1;
+	       if TIMES[l][p + lctc] - TIMES[l][p] > timeopen or p == last(PROJIRREGACTIVE[l]) then {
+	       	  break
+	       }
+	}
+    }
+}
+
+problem SOLVEFINE: z, z_plus, z_minus, betasFine, BFine, cgammaFine, lgammaFine, ObjectiveFunction, positive_only, doses_Fine, LOC_Fine, LCT_Fine, endOpen_Fine, endClose_Fine, eitherOpenOrClose_Fine;
+solve SOLVEFINE;
