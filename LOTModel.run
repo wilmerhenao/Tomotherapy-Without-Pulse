@@ -20,62 +20,35 @@ solve SOLVE51;
 
 # Having solved the 51 projections case. Refine the grid where it matters. First Create times
 
+# Generate the sets
 for {l in LEAVES} {
     let pcounter := 0;
-    let prevtime := 0;
     for {p in {0..((numProjections - 1) + maxkcko)}} {
     	# Test whether this is a leaf-state change or not
     	if 1 = B[l,p] or 1 = cgamma[l,p] then {
        	    for {r_index in 0..r} {
-       	       let TIMES[l] := TIMES[l] union {prevtime};
+       	       let TIMES[l] := TIMES[l] union {timeperprojection/r};
 	       	   let PROJIRREGACTIVE[l] := PROJIRREGACTIVE[l] union {pcounter};
                let PROJIRREG[l] := PROJIRREG[l] union {pcounter};
-               let PMAPPER[l, p] := PMAPPER[l, p] union {pcounter};
+	           let PINVMAPPER[l] := PINVMAPPER[l] union {p}
+	           let PMAPPER[l, p] := PMAPPER[l, p] union {pcounter};
 	           let pcounter := pcounter + 1;
        	    }
-    	}  else {
-       	   let prevtime := prevtime + timeperprojection;
-       	   let TIMES[l] := TIMES[l] union {prevtime};
-	   if pnegativesflag then {
-               let PROJIRREG[l] := PROJIRREG[l] union {-pcounter};
-               let PMAPPER[l, p] := PMAPPER[l, p] union {-pcounter}; # Map related projection
-	   } else {
+    	} else {
+       	   let TIMES[l] := TIMES[l] union {timeperprojection};
 	       let PROJIRREGACTIVE[l] := PROJIRREGACTIVE[l] union {pcounter};
-               let PROJIRREG[l] := PROJIRREG[l] union {pcounter};
-               let PMAPPER[l, p] := PMAPPER[l, p] union {-pcounter}; # Map related projection
-           }
+           let PROJIRREG[l] := PROJIRREG[l] union {pcounter};
+           let PINVMAPPER[l] := PINVMAPPER[l] union {p}
+           let PMAPPER[l, p] := PMAPPER[l, p] union {pcounter};
            let pcounter := pcounter + 1;
-    	}
-    }
-}
-
-for {(l,p,v) in KNJMPARAMETERS} {
-    if 1 = B[l,p] or 1 = cgamma[l,p] then {
-            for {newp in PMAPPER[l, p]} {
-            if 1 = card(PMAPPER[l,p]) then{
-                let NEWKNJ := NEWKNJ union {(l, newp, v)};
-            } else {
-	        let NEWKNJ := NEWKNJ union {(l, newp, v)};
-            }
         }
     }
 }
 
-for {(l,p,v) in NEWKNJ}{
-	display l;
-	display p;
-	display v;
-}
-
-# Fill the NEWD matrix that will be used for the second problem
 for {(l,p,v) in KNJMPARAMETERS} {
     if 1 = B[l,p] or 1 = cgamma[l,p] then {
-            for {newp in PMAPPER[l, p]} {
-            if 1 = card(PMAPPER[l,p]) then{
-                let NEWD[l, newp, v] := D[l,p,v];
-            } else {
-                let NEWD[l, newp, v] := D[l,p,v]/r;
-            }
+        for {newp in PMAPPER[l, p]} {
+            let NEWKNJ := NEWKNJ union {(l, newp, v)};
         }
     }
 }
