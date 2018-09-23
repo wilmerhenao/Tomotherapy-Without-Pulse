@@ -77,7 +77,7 @@ class tomodata:
         self.base_dir = 'data/dij/HelicalGyn/'
         #self.base_dir = 'data/dij153/prostate/'#153
         self.base_dir = 'data/dij/prostate/'  # 51
-        # The number of loops to be used in this case 
+        # The number of loops to be used in this case
         self.ProjectionsPerLoop = 51
         self.bixelsintween = 5
         self.maxIntensity = 300
@@ -296,8 +296,8 @@ def createModel (data):
     projections = range(numProjections - 1 + 2 * maxkcko)
     projectionsshort = range(numProjections - 1)
     projectionsshortM1 = range(numProjections - 2)
-    LOTSET = range (kc - 1)
-    LCTSET = range (ko - 1)
+    LOTSET = range(kc - 1)
+    LCTSET = range(ko - 1)
     leafsD = (data.bixels % data.N).astype(int)
     projectionsD = np.floor(data.bixels / data.N).astype(int)
     # Create variables

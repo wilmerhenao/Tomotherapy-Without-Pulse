@@ -28,15 +28,15 @@ for {l in LEAVES} {
     	if 1 = B[l,p] or 1 = cgamma[l,p] then {
        	    for {r_index in 0..r} {
        	       let TIMES[l] := TIMES[l] union {timeperprojection/r};
-	       	   let PROJIRREGACTIVE[l] := PROJIRREGACTIVE[l] union {pcounter};
+	       let PROJIRREGACTIVE[l] := PROJIRREGACTIVE[l] union {pcounter};
                let PROJIRREG[l] := PROJIRREG[l] union {pcounter};
-	           let PINVMAPPER[l] := PINVMAPPER[l] union {p}
-	           let PMAPPER[l, p] := PMAPPER[l, p] union {pcounter};
-	           let pcounter := pcounter + 1;
+	       let PINVMAPPER[l] := PINVMAPPER[l] union {p}
+	       let PMAPPER[l, p] := PMAPPER[l, p] union {pcounter};
+	       let pcounter := pcounter + 1;
        	    }
     	} else {
        	   let TIMES[l] := TIMES[l] union {timeperprojection};
-	       let PROJIRREGACTIVE[l] := PROJIRREGACTIVE[l] union {pcounter};
+	   let PROJIRREGACTIVE[l] := PROJIRREGACTIVE[l] union {pcounter};
            let PROJIRREG[l] := PROJIRREG[l] union {pcounter};
            let PINVMAPPER[l] := PINVMAPPER[l] union {p}
            let PMAPPER[l, p] := PMAPPER[l, p] union {pcounter};
