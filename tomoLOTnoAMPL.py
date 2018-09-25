@@ -11,32 +11,26 @@ except ImportError:
 import pandas as pds
 import numpy as np
 import matplotlib.pyplot as plt
-import os.path
 from scipy.stats import describe
 import subprocess
-import sys
-import pickle
 import math
-import time
 from gurobipy import *
 
 # User input goes here and only here
 numcores = 8
-subdivisions = 1
+numberOfLeaves = 80
 maxvoxels = 500
 tumorsite = "Prostate"
-degreesPerSubdivision = (360/51) / subdivisions
-timeko = 0.05 # secs
-timekc = 0.04 # secs
+timeko = 0.08 # secs
+timekc = 0.07 # secs
 time10 = 10
 speed = 24 # degrees per second
 howmanydegreesko = speed * timeko # Degrees spanned in this time
 howmanydegreeskc = speed * timekc # Degrees spanned in this time
 howmanydegrees10 = speed * time10 # Degrees spanned in 10 seconds
-# How many projections must remain open
-ko = math.ceil(howmanydegreesko / degreesPerSubdivision)
-kc = math.ceil(howmanydegreeskc / degreesPerSubdivision)
-k10 = math.ceil(howmanydegrees10 / degreesPerSubdivision)
+t51 = (360/51) / speed
+subdivisions = max(math.ceil(t51/timeko), math.ceil(t51/timekc)) # This is d on the paper
+degreesPerSubdivision = (360/51) / subdivisions
 
 ## Function that reads the files produced by Weiguo
 def getvector(necfile,dtype):
@@ -92,7 +86,7 @@ class tomodata:
         self.outputDirectory = "output/"
         self.roinames = {}
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
-        self.N = 80
+        self.N = numberOfLeaves
         self.get_dim(self.base_dir, 'samplemask.header')
         self.get_totalbeamlets(self.base_dir, 'dij/Size_out.txt')
         self.roimask_reader(self.base_dir, 'roimask.header')
@@ -138,7 +132,6 @@ class tomodata:
     def subdivisionOrganizer(self):
         self.numProjections *= subdivisions
         self.ProjectionsPerLoop *= subdivisions
-
 
     def argumentVariables(self):
         if len(sys.argv) > 1:
@@ -336,64 +329,6 @@ def createModel (data):
     z_output = [v.x for v in m.getVars()[0:len(voxels)]]
     return(z_output)
 
-## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
-## This part is for AMPL's implementation:
-def printAMPLfile(data, subdivisions, tumorsite):
-    f = open("Data" + str(tumorsite) + "/tomononlinearRealCases_split_" + str(subdivisions) + "_vxls_" + str(data.maxvoxels) + ".dat", "w")
-    print('param numProjections :=', data.numProjections, ';', file = f)
-    print('param U :=', data.maxIntensity, ';', file = f)
-    print('param numLeaves :=', data.N, ';', file=f)
-    print('param yparam :=', data.yBar, ';', file=f)
-    print('param projecs :=', data.ProjectionsPerLoop, ';', file=f)
-    print('param numvoxels :=', len(data.mask), ';', file=f)
-    print('param kc :=', kc, ';', file=f)
-    print('param ko :=', ko, ';', file=f)
-    pds.set_option('precision', 16)
-    leafs = (data.bixels % data.N).astype(int)
-    projections = np.floor(data.bixels / data.N).astype(int)
-    # Incorporate subdivisions
-    leafs = np.repeat(leafs, subdivisions)
-    data.smallvoxels = np.repeat(data.smallvoxels, subdivisions)
-    projections = subdivisions * np.repeat(projections, subdivisions) + np.tile([i for i in range(subdivisions)], len(data.Dijs))
-    # THIS HAS TO BE DONE AFTER THE PREVIOUS STEP
-    data.Dijs = np.repeat(data.Dijs, subdivisions) / subdivisions
-    # Done with the incorporation of subdivisions
-    print('param: VOXELS: thethreshold :=', file = f)
-    thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': data.quadHelperThresh})
-    print(thrs.to_string(index=False, header = False), file = f)
-    print(";", file=f)
-    print('param: quadHelperOver :=', file = f)
-    thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': data.quadHelperOver})
-    print(thrs.to_string(index=False, header = False), file = f)
-    print(";", file=f)
-    print('param: quadHelperUnder :=', file=f)
-    thrs = pds.DataFrame(data={'A': np.arange(len(data.mask)), 'B': data.quadHelperUnder})
-    print(thrs.to_string(index=False, header = False), file=f)
-    print(";", file=f)
-    print('param: KNJMPARAMETERS: D:=' , file = f)
-    sparseinfo = pds.DataFrame(data = {'LEAVES' : leafs, 'PROJECTIONS' : projections, 'VOXELS' : data.smallvoxels, 'ZDOSES' : data.Dijs},
-                               columns = ['LEAVES', 'PROJECTIONS', 'VOXELS', 'ZDOSES'])
-    print(sparseinfo.to_string(index=False, header=False), file = f)
-    print(";", file = f)
-    f.close()
-
-def runAMPL(maxvoxels, i, tumorsite):
-    # Change the run file:
-    with open("LOTModelTemplate.run", "r+") as r:
-        with open("LOTModel.run", "w") as w:
-            lines = r.read()
-            for line in lines.split('\n'):
-                newstatement = line
-                if newstatement.startswith("data Data"):
-                    newstatement = "data Data" + tumorsite + "/tomononlinearRealCases_split_" + str(i) + "_vxls_" + str(maxvoxels) + ".dat;"
-                w.write(newstatement)
-                w.write('\n')
-        w.close()
-    #print('ready to run ampl process')
-    procstring = subprocess.check_output(['ampl', 'LOTModel.run'])
-    #print('finished running ampl process')
-    return(procstring)
-
 # Plot the dose volume histogram
 def plotDVHNoClass(data, z, NameTag='', showPlot=False):
     voxDict = {}
@@ -427,13 +362,6 @@ z = createModel(dataobject)
 plotDVHNoClass(dataobject, z, 'dvh')
 sys.exit()
 
-# Only enter the next loop if the file exists
-if not os.path.isfile("Data" + str(tumorsite) + "/tomononlinearRealCases_split_" + str(subdivisions) + "_vxls_" + str(maxvoxels) + ".dat"):
-    dataobject = tomodata()
-    m = createModel(dataobject)
-    sys.exit()
-    printAMPLfile(dataobject, subdivisions, tumorsite)
-
 start_time = time.time()
 # Erase everything in the warmstart file
 f = open("warmstart.dat", "w")
@@ -441,7 +369,7 @@ f.close()
 oldobj = np.inf
 for i in [1, 2, 4, 8, 16, 32]:
     start_time = time.time()
-    pstring = runAMPL(maxvoxels, i, tumorsite)
+    #pstring = runAMPL(maxvoxels, i, tumorsite)
     totalAMPLtime = (time.time() - start_time)
     print("--- %s seconds running the AMPL part---" % totalAMPLtime)
     z, betas, B, cgamma, lgamma, newobj = readDosefromtext(pstring)
