@@ -18,6 +18,7 @@ from gurobipy import *
 
 # User input goes here and only here
 numcores = 8
+initialProjections = 51
 numberOfLeaves = 80
 maxvoxels = 500
 tumorsite = "Prostate"
@@ -28,9 +29,10 @@ speed = 24 # degrees per second
 howmanydegreesko = speed * timeko # Degrees spanned in this time
 howmanydegreeskc = speed * timekc # Degrees spanned in this time
 howmanydegrees10 = speed * time10 # Degrees spanned in 10 seconds
-t51 = (360/51) / speed
+t51 = (360/initialProjections) / speed
+delta51 = speed * t51 # Espacio es igual a velocidad por tiempo
 subdivisions = max(math.ceil(t51/timeko), math.ceil(t51/timekc)) # This is d on the paper
-degreesPerSubdivision = (360/51) / subdivisions
+degreesPerSubdivision = (360/initialProjections) / subdivisions
 
 ## Function that reads the files produced by Weiguo
 def getvector(necfile,dtype):
@@ -72,7 +74,7 @@ class tomodata:
         #self.base_dir = 'data/dij153/prostate/'#153
         self.base_dir = 'data/dij/prostate/'  # 51
         # The number of loops to be used in this case
-        self.ProjectionsPerLoop = 51
+        self.ProjectionsPerLoop = initialProjections
         self.bixelsintween = 5
         self.maxIntensity = 300
         self.yBar = 350
@@ -284,15 +286,23 @@ def createModel (data):
     #m.params.TimeLimit = 60
     voxels = range(len(data.mask))
     leaves = range(data.N)
-    maxkcko = max(kc, ko)
-    numProjections = data.numProjections
-    projections = range(numProjections - 1 + 2 * maxkcko)
+    # How many projections must remain open per leaf
+    ko = math.ceil(howmanydegreesko / degreesPerSubdivision)
+    kc = math.ceil(howmanydegreeskc / degreesPerSubdivision)
+    k10 = math.ceil(howmanydegrees10 / degreesPerSubdivision)
+    # How many projections are there?
+    projIni = 1 + np.floor(max(data.bixels / data.N)).astype(int)
+    projBasic = projIni * subdivisions
+    numProjections = k10 + projBasic + (max(ko, kc) - 1)
+    projections = range(numProjections)
     projectionsshort = range(numProjections - 1)
     projectionsshortM1 = range(numProjections - 2)
-    LOTSET = range(kc - 1)
-    LCTSET = range(ko - 1)
-    leafsD = (data.bixels % data.N).astype(int)
-    projectionsD = np.floor(data.bixels / data.N).astype(int)
+    LOTSET = range(ko - 1)
+    LCTSET = range(kc - 1)
+    # Create map to the parents (Only the effective projections used):
+    # This is a list of numpy arrays (1 for each leaf)
+    M = [np.repeat(range(projIni), subdivisions) for _ in range(data.N)]
+    delta = [[delta51 / subdivisions for _ in range(len(M[0]))] for _ in range(data.N)]
     # Create variables
     print('len of voxels and projections:', len(voxels), len(projections))
     z = m.addVars(voxels, lb = 0.0, obj = 1.0, vtype = GRB.CONTINUOUS, names = "z")
@@ -308,19 +318,25 @@ def createModel (data):
     # Create empty container for constraints of type:
     doses_to_j_yparam = []
     myObj = QuadExpr(0.0)
+    rhs = [LinExpr(0.0) for _ in range(voxels)]
+    for l in range(data.N):
+        for p in range(projBasic):
+            loc = np.where(M[l][p] * data.N + l == data.bixels)
+            Dijs = [0.0 for _ in voxels]
+            for i in loc:
+                Dijs[data.voxels[i]] += data.Dijs[i]
+            for v in voxels:
+                rhs[v] += Dijs[i]* delta[l][p] * betas[l, p]
+
     for v in voxels:
-        locations = np.where(v == data.smallvoxels)[0]
-        rhs = LinExpr(0.0)
-        for l in locations:
-            rhs.add(data.Dijs[l] * betas[leafsD[l], projectionsD[l] + maxkcko])
-        doses_to_j_yparam.append(m.addConstr(z[v] == data.yBar * rhs, name="doses_to_j_yparam[" + str(v) + "]"))
+        doses_to_j_yparam.append(m.addConstr(z[v] == data.yBar * rhs[v], name="doses_to_j_yparam[" + str(v) + "]"))
         # Append goal to objective
         # DON'T MULTIPLY TIMES THE QUADHELPERS! THIS IS ALREADY DONE IN THE DECLARATION 10 LINES ABOVE
         myObj.add(z_minus[v] * z_minus[v] + z_plus[v] * z_plus[v])
-    LOC = m.addConstrs((B[l, p + maxkcko] <= betas[l, p + maxkcko + k] for l in leaves for p in projectionsshort for k in LOTSET), "LOC")
-    LCT = m.addConstrs((cgamma[l,p + maxkcko] <= lgamma[l,p + maxkcko + k] for l in leaves for p in projectionsshort for k in LCTSET), "LCT")
-    endOpen = m.addConstrs((betas[l, p + maxkcko] <= betas[l, p + maxkcko + 1] + cgamma[l, p + maxkcko + 1] for l in leaves for p in projectionsshortM1), "endOpen")
-    endClose = m.addConstrs((lgamma[l, p + maxkcko] <= B[l, p + maxkcko + 1] + lgamma[l, p + maxkcko + 1] for l in leaves for p in projectionsshortM1), "endClose")
+    LOC = m.addConstrs((B[l, p + k10] <= betas[l, p + k10 + k] for l in leaves for p in projectionsshort for k in LOTSET), "LOC")
+    LCT = m.addConstrs((cgamma[l, p + k10] <= lgamma[l, p + k10 + k] for l in leaves for p in projectionsshort for k in LCTSET), "LCT")
+    endOpen = m.addConstrs((betas[l, p + k10] <= betas[l, p + k10 + 1] + cgamma[l, p + k10 + 1] for l in leaves for p in projectionsshortM1), "endOpen")
+    endClose = m.addConstrs((lgamma[l, p + k10] <= B[l, p + k10 + 1] + lgamma[l, p + k10 + 1] for l in leaves for p in projectionsshortM1), "endClose")
     #print('projections', projections)
     eitherOpenOrClose = m.addConstrs((betas[l, p] + lgamma[l, p] == 1 for l in leaves for p in projections), "eitherOpenOrClose")
     m.setObjective(myObj, GRB.MINIMIZE)

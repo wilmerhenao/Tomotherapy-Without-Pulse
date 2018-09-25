@@ -42,13 +42,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Python Console" value="131" />
-          <entry key="py" value="160" />
+          <entry key="Python Console" value="541" />
+          <entry key="py" value="1246" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="291" />
+          <entry key="Python" value="1787" />
         </counts>
       </usages-collector>
     </session>
@@ -61,8 +61,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomoLOTnoAMPL.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="160">
-              <caret line="32" column="47" selection-start-line="32" selection-start-column="47" selection-end-line="32" selection-end-column="47" />
+            <state relative-caret-position="176">
+              <caret line="304" column="87" selection-start-line="304" selection-start-column="87" selection-end-line="304" selection-end-column="87" />
               <folding>
                 <element signature="e#190#210#0" expanded="true" />
               </folding>
@@ -74,7 +74,7 @@
         <entry file="file:///opt/intel/intelpython35/lib/python3.5/fnmatch.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="195">
-              <caret line="16" column="59" lean-forward="true" selection-start-line="16" selection-start-column="59" selection-end-line="16" selection-end-column="59" />
+              <caret line="16" column="59" selection-start-line="16" selection-start-column="59" selection-end-line="16" selection-end-column="59" />
             </state>
           </provider>
         </entry>
@@ -90,12 +90,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>get_dim</find>
-      <find>get_totalbeamlets</find>
-      <find>roimask_reader</find>
-      <find>argumentVariables</find>
-      <find>readWeiguosCase</find>
-      <find>maskNamesGetter</find>
       <find>tomodata</find>
       <find>VOXELS</find>
       <find>ko</find>
@@ -120,6 +114,12 @@
       <find>printAMPLfile</find>
       <find>runAMPL</find>
       <find>numProjections</find>
+      <find>51</find>
+      <find>projectionsD</find>
+      <find>.bixels</find>
+      <find>initialProjections</find>
+      <find>delta</find>
+      <find>leafsD</find>
     </findStrings>
     <replaceStrings>
       <replace>self.data.K</replace>
@@ -132,6 +132,7 @@
       <replace>lgamma</replace>
       <replace>int</replace>
       <replace>PROJIRREG</replace>
+      <replace>k10</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -870,7 +871,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.32012513" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.270073" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -994,13 +995,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tomoLOTnoAMPL.py</url>
-          <line>361</line>
+          <line>377</line>
           <option name="timeStamp" value="254" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tomoLOTnoAMPL.py</url>
-          <line>22</line>
-          <option name="timeStamp" value="264" />
+          <line>294</line>
+          <option name="timeStamp" value="266" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -1341,14 +1342,14 @@
     <entry file="file:///opt/intel/intelpython35/lib/python3.5/fnmatch.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
-          <caret line="16" column="59" lean-forward="true" selection-start-line="16" selection-start-column="59" selection-end-line="16" selection-end-column="59" />
+          <caret line="16" column="59" selection-start-line="16" selection-start-column="59" selection-end-line="16" selection-end-column="59" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tomoLOTnoAMPL.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="32" column="47" selection-start-line="32" selection-start-column="47" selection-end-line="32" selection-end-column="47" />
+        <state relative-caret-position="176">
+          <caret line="304" column="87" selection-start-line="304" selection-start-column="87" selection-end-line="304" selection-end-column="87" />
           <folding>
             <element signature="e#190#210#0" expanded="true" />
           </folding>
