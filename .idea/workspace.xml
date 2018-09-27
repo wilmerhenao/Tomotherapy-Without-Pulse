@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/tomotherapyIteration.py" mnemonic="5" />
-  </component>
   <component name="ChangeListManager">
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/tomoLOTnoAMPL.py" beforeDir="false" afterPath="$PROJECT_DIR$/tomoLOTnoAMPL.py" afterDir="false" />
@@ -42,13 +39,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Python Console" value="541" />
-          <entry key="py" value="1246" />
+          <entry key="Python Console" value="675" />
+          <entry key="py" value="2610" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="1787" />
+          <entry key="Python" value="3285" />
         </counts>
       </usages-collector>
     </session>
@@ -61,10 +58,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tomoLOTnoAMPL.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="304" column="87" selection-start-line="304" selection-start-column="87" selection-end-line="304" selection-end-column="87" />
+            <state relative-caret-position="308">
+              <caret line="340" column="26" selection-start-line="340" selection-start-column="26" selection-end-line="340" selection-end-column="26" />
               <folding>
                 <element signature="e#190#210#0" expanded="true" />
+                <marker date="1538084923426" expanded="true" signature="14478:14480" ph="..." />
               </folding>
             </state>
           </provider>
@@ -90,13 +88,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>tomodata</find>
-      <find>VOXELS</find>
-      <find>ko</find>
-      <find>betas</find>
-      <find>np.where</find>
-      <find>Objective</find>
-      <find>create</find>
       <find>readDose</find>
       <find>readDosefromtext</find>
       <find>z</find>
@@ -108,18 +99,25 @@
       <find>createModel</find>
       <find>.numProjections</find>
       <find>getNumProjections</find>
-      <find>projections</find>
       <find>80</find>
       <find>printAMPL</find>
       <find>printAMPLfile</find>
       <find>runAMPL</find>
-      <find>numProjections</find>
       <find>51</find>
       <find>projectionsD</find>
       <find>.bixels</find>
       <find>initialProjections</find>
       <find>delta</find>
       <find>leafsD</find>
+      <find>positive_only</find>
+      <find>z_plus</find>
+      <find>doses_to_j</find>
+      <find>projections</find>
+      <find>TARGETList</find>
+      <find>TARGET</find>
+      <find>quadHelperOver</find>
+      <find>delta51</find>
+      <find>numProjections</find>
     </findStrings>
     <replaceStrings>
       <replace>self.data.K</replace>
@@ -870,8 +868,8 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.270073" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.27841502" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.2367049" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -992,16 +990,6 @@
           <url>file://$PROJECT_DIR$/tomoLOT.py</url>
           <line>498</line>
           <option name="timeStamp" value="247" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tomoLOTnoAMPL.py</url>
-          <line>377</line>
-          <option name="timeStamp" value="254" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tomoLOTnoAMPL.py</url>
-          <line>294</line>
-          <option name="timeStamp" value="266" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -1348,10 +1336,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tomoLOTnoAMPL.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="304" column="87" selection-start-line="304" selection-start-column="87" selection-end-line="304" selection-end-column="87" />
+        <state relative-caret-position="308">
+          <caret line="340" column="26" selection-start-line="340" selection-start-column="26" selection-end-line="340" selection-end-column="26" />
           <folding>
             <element signature="e#190#210#0" expanded="true" />
+            <marker date="1538084923426" expanded="true" signature="14478:14480" ph="..." />
           </folding>
         </state>
       </provider>
