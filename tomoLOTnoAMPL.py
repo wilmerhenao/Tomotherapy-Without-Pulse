@@ -15,6 +15,8 @@ from scipy.stats import describe
 import subprocess
 import math
 from gurobipy import *
+from collections import defaultdict
+import pprint
 
 # User input goes here and only here
 numcores = 8
@@ -88,7 +90,7 @@ class tomodata:
         self.outputDirectory = "output/"
         self.roinames = {}
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
-        self.N = numberOfLeaves
+        self.L = numberOfLeaves
         self.get_dim(self.base_dir, 'samplemask.header')
         self.get_totalbeamlets(self.base_dir, 'dij/Size_out.txt')
         self.roimask_reader(self.base_dir, 'roimask.header')
@@ -277,14 +279,13 @@ class tomodata:
 
 def solveContinuous (data):
     voxels = range(len(data.mask))
-    projIni = 1 + np.floor(max(data.bixels / data.N)).astype(int)
+    projIni = 1 + np.floor(max(data.bixels / data.L)).astype(int)
     numProjections = projIni * subdivisions
     projections = range(numProjections)
-    leaves = range(data.N)
-    leafsD = (data.bixels % data.N).astype(int)
-    projectionsD = np.floor(data.bixels / data.N).astype(int)
+    leaves = range(data.L)
+    leafsD = (data.bixels % data.L).astype(int)
+    projectionsD = np.floor(data.bixels / data.L).astype(int)
     m = Model("SOLVECONTINUOUS")
-    #m.params.MIPGap = 1E-2
     m.params.BarConvTol = 1.0
     print("Solving the continuous version of the model")
     z = m.addVars(voxels, lb = 0.0, obj = 1.0, vtype = GRB.CONTINUOUS, names = "z")
@@ -302,7 +303,8 @@ def solveContinuous (data):
     m.update()
     m.optimize()
     z_output = [v.x for v in m.getVars()[0:len(voxels)]]
-    return(z_output)
+    d = {"z_out": z, "z_plus_out": z_plus, "z_minus_out": z_minus, "dose_out": dose}
+    return(d)
 
 def preTreatmentMaterials(data):
     # How many projections must remain open per leaf
@@ -310,19 +312,37 @@ def preTreatmentMaterials(data):
     kc = math.ceil(howmanydegreeskc / degreesPerSubdivision)
     k10 = math.ceil(howmanydegrees10 / degreesPerSubdivision)
     kcomax = max(ko, kc)
-    projIni = 1 + np.floor(max(data.bixels / data.N)).astype(int)
+    projIni = int(1 + np.floor(max(data.bixels / data.L)).astype(int))
     projBasic = projIni * subdivisions
     numProjections = k10 + projBasic + (kcomax - 1)
-    Pset = [numProjections for _ in range(data.N)]
-    M = [np.repeat(range(projIni), subdivisions) for _ in range(data.N)]
+    Pset = [numProjections for _ in range(data.L)]
+    Psetshort = [numProjections - 1 for _ in range(data.L)]
+    PsetshortM1 = [numProjections - 2 for _ in range(data.L)]
+    M = [np.concatenate((np.concatenate(([-10**3] * k10, np.repeat(range(projIni), subdivisions)), axis=0), [-10**3]*(kcomax - 1)), axis=0) for _ in range(data.L)]
+    Minv = [defaultdict(list) for _ in range(data.L)] # Minv is a list of defaultdicts that keeps the inverse of map M
+    for l in range(len(M)):
+        for p in range(len(M[l])):
+            Minv[l][M[l][p]].append(p)
     deltalp = delta51 / subdivisions
-    deltas = [[deltalp for _ in range(Pset[l])] for l in range(data.N)]
-    LOTset = [[range(ko) if p <= (Pset[l] - kcomax) else range(1) for p in range(Pset[l])] for l in range(data.N)] # This range must be reviewed
-    LCTset = [[range(kc) if p <= (Pset[l] - kcomax) else range(1) for p in range(Pset[l])] for l in range(data.N)]
-    d = {"Pset": Pset, "M": M, "deltas": deltas, "LOTset": LOTset, "LCTset": LCTset}
+    deltas = [[deltalp for _ in range(Pset[l])] for l in range(data.L)]
+    LOTset = [[range(ko) if p <= (Pset[l] - kcomax) else range(0) for p in range(Pset[l])] for l in range(data.L)] # This range must be reviewed
+    LCTset = [[range(kc) if p <= (Pset[l] - kcomax) else range(0) for p in range(Pset[l])] for l in range(data.L)]
+    d = {"Pset": Pset, "Psetshort": Psetshort, "PsetshortM1": PsetshortM1, "M": M, "Minv": Minv, "deltas": deltas, "LOTset": LOTset, "LCTset": LCTset, "k10": k10}
     return(d)
 
-def createModel (data):
+def warmTreatent(data):
+    
+
+def createModel (data, d):
+    voxels = range(len(data.mask))
+    leaves = range(data.L)
+    leafsD = (data.bixels % data.L).astype(int)
+    projectionsD = np.floor(data.bixels / data.L).astype(int)
+    projIni = 1 + np.floor(max(data.bixels / data.L)).astype(int)
+    numProjections = projIni * subdivisions
+    projections = range(numProjections)
+    projectionsshort = range(numProjections - 1)
+    projectionsshortM1 = range(numProjections - 2)
     m = Model("SOLVE51")
     m.params.MIPGap = 2E-1
     m.params.IntFeasTol = 1E-2
@@ -330,57 +350,39 @@ def createModel (data):
     m.params.AggFill = 100
     m.params.PreDual = 0
     m.params.Presolve = 1
-    voxels = range(len(data.mask))
-    leaves = range(data.N)
-    leafsD = (data.bixels % data.N).astype(int)
-    projectionsD = np.floor(data.bixels / data.N).astype(int)
-    projIni = 1 + np.floor(max(data.bixels / data.N)).astype(int)
-    numProjections = projIni * subdivisions
-    projections = range(numProjections)
-    d = preTreatmentMaterials(data)
+    flag = True
+    if flag:
+        d = preTreatmentMaterials(data)
+        flag = False
+    else:
+        d = warmTreatment(data)
     print('Solving the MIP')
     z = m.addVars(voxels, lb = 0.0, obj = 1.0, vtype = GRB.CONTINUOUS, names = "z")
     z_plus = m.addVars(voxels, lb = 0.0, obj = np.sqrt(data.quadHelperOver), vtype = GRB.CONTINUOUS, names = "z_plus")
     z_minus = m.addVars(voxels, lb = 0.0, obj = np.sqrt(data.quadHelperUnder), vtype = GRB.CONTINUOUS, names = "z_minus")
-    betas = [m.addVars(range(d["Pset"][l]), obj = 1.0, vtype = GRB.BINARY, names = "betas_" + str(l)) for l in range(data.N)]
-    B = [m.addVars(range(d["Pset"][l]), obj = 1.0, vtype = GRB.BINARY, names = "B_" + str(l)) for l in range(data.N)]
-    cgamma = [m.addVars(range(d["Pset"][l]), obj = 1.0, vtype = GRB.BINARY, names = "cgamma_" + str(l)) for l in range(data.N)]
-    lgamma = [m.addVars(range(d["Pset"][l]), obj = 1.0, vtype = GRB.BINARY, names = "lgamma_" + str(l)) for l in range(data.N)]
+    betas = [m.addVars(range(d["Pset"][l]), obj = 1.0, vtype = GRB.BINARY, names = "betas_" + str(l)) for l in range(data.L)]
+    B = [m.addVars(range(d["Pset"][l]), obj = 1.0, vtype = GRB.BINARY, names = "B_" + str(l)) for l in range(data.L)]
+    cgamma = [m.addVars(range(d["Pset"][l]), obj = 1.0, vtype = GRB.BINARY, names = "cgamma_" + str(l)) for l in range(data.L)]
+    lgamma = [m.addVars(range(d["Pset"][l]), obj = 1.0, vtype = GRB.BINARY, names = "lgamma_" + str(l)) for l in range(data.L)]
     m.update()
     # Create Constraints
-    myObj = QuadExpr(0.0)
-    hs = [LinExpr(0.0) for _ in voxels]
-    [hs[data.smallvoxels[l]].add(data.Dijs[l] * betas[leafsD[l]][projectionsD[l]]) for l in range(len(data.smallvoxels))]
-    [m.addConstr(z[v] == data.yBar * hs[v], name="doses_to_j_yparam[" + str(v) + "]") for v in voxels]
-    for v in voxels:
-        myObj.add(z_minus[v] * z_minus[v] + z_plus[v] * z_plus[v])
     positive_only = m.addConstrs((z_plus[v] - z_minus[v] == z[v] - data.quadHelperThresh[v] for v in voxels), "positive_only")
-    m.setObjective(myObj, GRB.MINIMIZE)
-    positive_only = m.addConstrs((z_plus[v] - z_minus[v] == z[v] - data.quadHelperThresh[v] for v in voxels), "positive_only")
-    # Create empty container for constraints of type:
     doses_to_j_yparam = []
     myObj = QuadExpr(0.0)
-    rhs = [LinExpr(0.0) for _ in range(voxels)]
-    for l in range(data.N):
-        for p in range(projBasic):
-            loc = np.where(M[l][p] * data.N + l == data.bixels)
-            Dijs = [0.0 for _ in voxels]
-            for i in loc:
-                Dijs[data.voxels[i]] += data.Dijs[i]
-            for v in voxels:
-                rhs[v] += Dijs[i]* delta[l][p] * betas[l, p]
+    rhs = [LinExpr(0.0) for _ in voxels]
+    [rhs[data.smallvoxels[i]].add(data.Dijs[i] * quicksum([betas[leafsD[i]][p_hat] for p_hat in d["Minv"][leafsD[i]][projectionsD[i]]])) for i in range(len(data.smallvoxels))]
 
     for v in voxels:
         doses_to_j_yparam.append(m.addConstr(z[v] == data.yBar * rhs[v], name="doses_to_j_yparam[" + str(v) + "]"))
         # Append goal to objective
         # DON'T MULTIPLY TIMES THE QUADHELPERS! THIS IS ALREADY DONE IN THE DECLARATION 10 LINES ABOVE
         myObj.add(z_minus[v] * z_minus[v] + z_plus[v] * z_plus[v])
-    LOC = m.addConstrs((B[l, p + k10] <= betas[l, p + k10 + k] for l in leaves for p in projectionsshort for k in LOTSET), "LOC")
-    LCT = m.addConstrs((cgamma[l, p + k10] <= lgamma[l, p + k10 + k] for l in leaves for p in projectionsshort for k in LCTSET), "LCT")
-    endOpen = m.addConstrs((betas[l, p + k10] <= betas[l, p + k10 + 1] + cgamma[l, p + k10 + 1] for l in leaves for p in projectionsshortM1), "endOpen")
-    endClose = m.addConstrs((lgamma[l, p + k10] <= B[l, p + k10 + 1] + lgamma[l, p + k10 + 1] for l in leaves for p in projectionsshortM1), "endClose")
+    LOC = m.addConstrs((B[l][p] <= betas[l][p + k] for l in leaves for p in range(d["Pset"][l]) for k in d["LOTset"][l][p]), "LOC")
+    LCT = m.addConstrs((cgamma[l][p] <= lgamma[l][p + k] for l in leaves for p in range(d["Pset"][l]) for k in d["LCTset"][l][p]), "LCT")
+    endOpen = m.addConstrs((betas[l][p] <= betas[l][p + 1] + cgamma[l][p + 1] for l in leaves for p in range(d["Psetshort"][l])), "endOpen")
+    endClose = m.addConstrs((lgamma[l][p] <= B[l][p + 1] + lgamma[l][p + 1] for l in leaves for p in range(d["Psetshort"][l])), "endClose")
     #print('projections', projections)
-    eitherOpenOrClose = m.addConstrs((betas[l, p] + lgamma[l, p] == 1 for l in leaves for p in projections), "eitherOpenOrClose")
+    eitherOpenOrClose = m.addConstrs((betas[l][p] + lgamma[l][p] == 1 for l in leaves for p in range(d["Pset"][l])), "eitherOpenOrClose")
     m.setObjective(myObj, GRB.MINIMIZE)
     m.update()
     m.optimize()
@@ -416,8 +418,8 @@ def plotDVHNoClass(data, z, NameTag='', showPlot=False):
     plt.close()
 
 dataobject = tomodata()
-z = solveContinuous(dataobject)
-#z = createModel(dataobject)
+d = solveContinuous(dataobject)
+z = createModel(dataobject, d)
 plotDVHNoClass(dataobject, z, 'dvh')
 sys.exit()
 
@@ -463,3 +465,14 @@ except IndexError:
 text_output = open("amploutput.txt", "wb")
 text_output.write(pstring)
 text_output.close()
+
+
+#    for l in range(data.L):
+#        print('adding leaf:', l)
+#        for p in range(d["Pset"][l]):
+#            loc = np.where(d["M"][l][p] * data.L + l == data.bixels)[0]
+#            Dijs = [0.0 for _ in voxels]
+#            for i in loc:
+#                Dijs[data.smallvoxels[i]] += data.Dijs[i]
+#            for v in voxels:
+#                rhs[v] += Dijs[v] * d["deltas"][l][p] * betas[l][p]
