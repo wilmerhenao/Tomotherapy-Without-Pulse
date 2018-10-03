@@ -24,8 +24,8 @@ initialProjections = 51
 numberOfLeaves = 80
 maxvoxels = 2000
 tumorsite = "Prostate"
-timeko = 0.08 # secs
-timekc = 0.07 # secs
+timeko = 0.1 # secs
+timekc = 0.095 # secs
 time10 = 10
 speed = 24 # degrees per second
 howmanydegreesko = speed * timeko # Degrees spanned in this time
@@ -270,9 +270,9 @@ class tomodata:
         img_arr = get_sub_sub_sample(img_arr, self.maxvoxels)
         # get structure file
         struct_img_arr = getvector(self.base_dir + self.struct_img_filename, dtype=dtype)
-        # Convert the mask into a list of unitary structures. A voxel gets assigned to only one place.
+        # Convert the mask into a list of unitary structures. A voxel gets assigned to only one place
         img_struct = get_structure_mask(reversed(self.ALLList), struct_img_arr)
-        # Get the subsampled list of voxels.
+        # Get the subsampled list of voxels
         self.mask = get_subsampled_mask(img_struct, img_arr)
         # Select only the voxels that exist in the small voxel space provided.
         self.removezeroes([0, 10, 11, 17, 12, 3, 15, 16, 9, 5, 4, 20, 21, 19, 18])
@@ -291,7 +291,7 @@ def solveContinuous (data):
     z = m.addVars(voxels, lb = 0.0, obj = 1.0, vtype = GRB.CONTINUOUS, names = "z")
     z_plus = m.addVars(voxels, lb = 0.0, obj = np.sqrt(data.quadHelperOver), vtype = GRB.CONTINUOUS, names = "z_plus")
     z_minus = m.addVars(voxels, lb = 0.0, obj = np.sqrt(data.quadHelperUnder), vtype = GRB.CONTINUOUS, names = "z_minus")
-    dose = m.addVars(leaves, projections, obj=1.0, vtype=GRB.CONTINUOUS, names="dose")
+    dose = m.addVars(leaves, projections, obj=1.0, vtype=GRB.CONTINUOUS, names="dose", lb = timeko, ub = t51 - timekc)
     myObj = QuadExpr(0.0)
     hs = [LinExpr(0.0) for _ in voxels]
     [hs[data.smallvoxels[l]].add(data.Dijs[l] * dose[leafsD[l], projectionsD[l]]) for l in range(len(data.smallvoxels))]
@@ -306,7 +306,7 @@ def solveContinuous (data):
     d = {"z_out": z, "z_plus_out": z_plus, "z_minus_out": z_minus, "dose_out": dose}
     return(d)
 
-def preTreatmentMaterials(data):
+def preTreatmentMaterials(data, d):
     # How many projections must remain open per leaf
     ko = math.ceil(howmanydegreesko / degreesPerSubdivision)
     kc = math.ceil(howmanydegreeskc / degreesPerSubdivision)
@@ -327,11 +327,67 @@ def preTreatmentMaterials(data):
     deltas = [[deltalp for _ in range(Pset[l])] for l in range(data.L)]
     LOTset = [[range(ko) if p <= (Pset[l] - kcomax) else range(0) for p in range(Pset[l])] for l in range(data.L)] # This range must be reviewed
     LCTset = [[range(kc) if p <= (Pset[l] - kcomax) else range(0) for p in range(Pset[l])] for l in range(data.L)]
-    d = {"Pset": Pset, "Psetshort": Psetshort, "PsetshortM1": PsetshortM1, "M": M, "Minv": Minv, "deltas": deltas, "LOTset": LOTset, "LCTset": LCTset, "k10": k10}
+    d = {"Pset": Pset, "Psetshort": Psetshort, "PsetshortM1": PsetshortM1, "M": M, "Minv": Minv, "deltas": deltas, "LOTset": LOTset, "LCTset": LCTset, "k10": k10,
+         "z_out": d["z_out"], "z_plus_out": d["z_plus_out"], "z_minus_out": d["z_minus_out"], "dose_out": d["dose_out"]}
     return(d)
 
-def warmTreatent(data):
-    
+def warmTreatment(data, d):
+    # How many projections must remain open per leaf
+    ko = math.ceil(howmanydegreesko / degreesPerSubdivision)
+    kc = math.ceil(howmanydegreeskc / degreesPerSubdivision)
+    k10 = math.ceil(howmanydegrees10 / degreesPerSubdivision)
+    kcomax = max(ko, kc)
+    Pset = []
+    M = []
+    for l in range(data.L):
+        Pset.append([i for i in range(k10)])
+        M.append([-10**3] * k10)
+        deltas.append([delta51] * k10)
+        i = k10
+        for p in range(k10, d["Pset"][l] - (kcomax - 1)):
+            if 1 == betas[l][p]:
+                segments = subdivisions
+            else:
+                segments = 1
+            for _ in segments:
+                M[l].append(d["M"][l][p])
+                deltas[l].append(d["deltas"][l][p] / segments)
+                Pset[l].append(i)
+                i += 1
+        for p in kcomax - 1:
+            M[l].append(-10**3)
+            Pset[l].append(i)
+            deltas[l].append(delta51)
+            i += 1
+    Psetshort = [Pset[l].pop() for _ in range(data.L)]
+    PsetshortM1 = [Psetshort[l].pop() - 2 for _ in range(data.L)]
+    Minv = [defaultdict(list) for _ in range(data.L)] # Minv is a list of defaultdicts that keeps the inverse of map M
+    LOTset = []
+    LCTset = []
+    for l in range(len(M)):
+        LOTset.append(np.array([0.0] * len(M[l])))
+        LCTset.append(np.array([0.0] * len(M[l])))
+        # fulltimes is how much of the time is getting covered by following
+        ofulltimes = np.array([0.0] * len(M[l]))
+        cfulltimes = np.array([0.0] * len(M[l]))
+        c0 = 0
+        o0 = 0
+        for p in range(len(M[l])):
+            Minv[l][M[l][p]].append(p)
+            ofulltimes[o0:p] += deltas[l][p]
+            cfulltimes[c0:p] += deltas[l][p]
+            LOTset[l][o0:p] += 1
+            LCTset[l][c0:p] += 1
+            while(ofulltimes[o0] >= howmanydegreesko):
+                o0 += 1
+            while(cfulltimes[c0] >= howmanydegreeskc):
+                c0 += 1
+
+    dnew = {"Pset": Pset, "Psetshort": Psetshort, "PsetshortM1": PsetshortM1, "M": M, "Minv": Minv, "deltas": deltas,
+            "LOTset": LOTset, "LCTset": LCTset, "k10": k10, "z_out": d["z_out"], "z_plus_out": d["z_plus_out"],
+            "z_minus_out": d["z_minus_out"], "betas_out": d["betas_out"], "B_out":d["B_out"], "cgamma_out": d["cgamma_out"],
+            "lgamma_out": d["lgamma_out"]}
+    return(dnew)
 
 def createModel (data, d):
     voxels = range(len(data.mask))
@@ -343,50 +399,69 @@ def createModel (data, d):
     projections = range(numProjections)
     projectionsshort = range(numProjections - 1)
     projectionsshortM1 = range(numProjections - 2)
-    m = Model("SOLVE51")
-    m.params.MIPGap = 2E-1
-    m.params.IntFeasTol = 1E-2
-    m.params.SiftMethod = 0
-    m.params.AggFill = 100
-    m.params.PreDual = 0
-    m.params.Presolve = 1
     flag = True
-    if flag:
-        d = preTreatmentMaterials(data)
+    for _ in range(2):
+        if flag:
+            d = preTreatmentMaterials(data, d)
+        else:
+            d = warmTreatment(data, d)
+        m = Model("SOLVE51")
+        m.params.MIPGap = 2E-1
+        m.params.IntFeasTol = 1E-2
+        print('Solving the MIP')
+        z = m.addVars(voxels, lb = 0.0, obj = 1.0, vtype = GRB.CONTINUOUS, names = "z")
+        z_plus = m.addVars(voxels, lb = 0.0, obj = np.sqrt(data.quadHelperOver), vtype = GRB.CONTINUOUS, names = "z_plus")
+        z_minus = m.addVars(voxels, lb = 0.0, obj = np.sqrt(data.quadHelperUnder), vtype = GRB.CONTINUOUS, names = "z_minus")
+        betas = [m.addVars(range(d["Pset"][l]), obj = 1.0, vtype = GRB.BINARY, names = "betas_" + str(l)) for l in range(data.L)]
+        B = [m.addVars(range(d["Pset"][l]), obj = 1.0, vtype = GRB.BINARY, names = "B_" + str(l)) for l in range(data.L)]
+        cgamma = [m.addVars(range(d["Pset"][l]), obj = 1.0, vtype = GRB.BINARY, names = "cgamma_" + str(l)) for l in range(data.L)]
+        lgamma = [m.addVars(range(d["Pset"][l]), obj = 1.0, vtype = GRB.BINARY, names = "lgamma_" + str(l)) for l in range(data.L)]
+        m.update()
+        # Create Constraints
+        positive_only = m.addConstrs((z_plus[v] - z_minus[v] == z[v] - data.quadHelperThresh[v] for v in voxels), "positive_only")
+        doses_to_j_yparam = []
+        myObj = QuadExpr(0.0)
+        rhs = [LinExpr(0.0) for _ in voxels]
+        [rhs[data.smallvoxels[i]].add(data.Dijs[i] * quicksum([betas[leafsD[i]][p_hat] for p_hat in d["Minv"][leafsD[i]][projectionsD[i]]])) for i in range(len(data.smallvoxels))]
+        for v in voxels:
+            doses_to_j_yparam.append(m.addConstr(z[v] == data.yBar * rhs[v], name="doses_to_j_yparam[" + str(v) + "]"))
+            # Append goal to objective
+            # DON'T MULTIPLY TIMES THE QUADHELPERS! THIS IS ALREADY DONE IN THE DECLARATION 10 LINES ABOVE
+            myObj.add(z_minus[v] * z_minus[v] + z_plus[v] * z_plus[v])
+        LOC = m.addConstrs((B[l][p] <= betas[l][p + k] for l in leaves for p in range(d["Pset"][l]) for k in d["LOTset"][l][p]), "LOC")
+        LCT = m.addConstrs((cgamma[l][p] <= lgamma[l][p + k] for l in leaves for p in range(d["Pset"][l]) for k in d["LCTset"][l][p]), "LCT")
+        endOpen = m.addConstrs((betas[l][p] <= betas[l][p + 1] + cgamma[l][p + 1] for l in leaves for p in range(d["Psetshort"][l])), "endOpen")
+        endClose = m.addConstrs((lgamma[l][p] <= B[l][p + 1] + lgamma[l][p + 1] for l in leaves for p in range(d["Psetshort"][l])), "endClose")
+        eitherOpenOrClose = m.addConstrs((betas[l][p] + lgamma[l][p] == 1 for l in leaves for p in range(d["Pset"][l])), "eitherOpenOrClose")
+        m.setObjective(myObj, GRB.MINIMIZE)
+        m.update()
+        if flag:
+            for v in voxels:
+                a = 1
+                #z[v].Pstart = d["z_out"][v]
+                #z_plus[v].Pstart = d["z_plus_out"][v]
+                #z_minus[v].Pstart = d["z_minus_out"][v]
+        else:
+            for v in voxels:
+                z[v].Start = d["z_out"][v]
+                z_plus[v].Start = d["z_plus_out"][v]
+                z_minus[v].Start = d["z_minus_out"][v]
+            for l in range(len(d["M"])):
+                for p in range(d["Pset"][l]):
+                    betas[l][p].Start = d["betas_out"][l][p]
+                    B[l][p].Start = d["B_out"][l][p]
+                    cgamma[l][p].Start = d["cgamma_out"][l][p]
+                    lgamma[l][p].Start = d["lgamma_out"][l][p]
+        m.optimize()
+        z_output = [v.x for v in m.getVars()[0:len(voxels)]]
+        d["z_out"] = z
+        d["z_plus_out"] = z_plus
+        d["z_minus_out"] = z_minus
+        d["betas_out"] = betas
+        d["B_out"] = B
+        d["cgamma_out"] = cgamma
+        d["lgamma_out"] = lgamma
         flag = False
-    else:
-        d = warmTreatment(data)
-    print('Solving the MIP')
-    z = m.addVars(voxels, lb = 0.0, obj = 1.0, vtype = GRB.CONTINUOUS, names = "z")
-    z_plus = m.addVars(voxels, lb = 0.0, obj = np.sqrt(data.quadHelperOver), vtype = GRB.CONTINUOUS, names = "z_plus")
-    z_minus = m.addVars(voxels, lb = 0.0, obj = np.sqrt(data.quadHelperUnder), vtype = GRB.CONTINUOUS, names = "z_minus")
-    betas = [m.addVars(range(d["Pset"][l]), obj = 1.0, vtype = GRB.BINARY, names = "betas_" + str(l)) for l in range(data.L)]
-    B = [m.addVars(range(d["Pset"][l]), obj = 1.0, vtype = GRB.BINARY, names = "B_" + str(l)) for l in range(data.L)]
-    cgamma = [m.addVars(range(d["Pset"][l]), obj = 1.0, vtype = GRB.BINARY, names = "cgamma_" + str(l)) for l in range(data.L)]
-    lgamma = [m.addVars(range(d["Pset"][l]), obj = 1.0, vtype = GRB.BINARY, names = "lgamma_" + str(l)) for l in range(data.L)]
-    m.update()
-    # Create Constraints
-    positive_only = m.addConstrs((z_plus[v] - z_minus[v] == z[v] - data.quadHelperThresh[v] for v in voxels), "positive_only")
-    doses_to_j_yparam = []
-    myObj = QuadExpr(0.0)
-    rhs = [LinExpr(0.0) for _ in voxels]
-    [rhs[data.smallvoxels[i]].add(data.Dijs[i] * quicksum([betas[leafsD[i]][p_hat] for p_hat in d["Minv"][leafsD[i]][projectionsD[i]]])) for i in range(len(data.smallvoxels))]
-
-    for v in voxels:
-        doses_to_j_yparam.append(m.addConstr(z[v] == data.yBar * rhs[v], name="doses_to_j_yparam[" + str(v) + "]"))
-        # Append goal to objective
-        # DON'T MULTIPLY TIMES THE QUADHELPERS! THIS IS ALREADY DONE IN THE DECLARATION 10 LINES ABOVE
-        myObj.add(z_minus[v] * z_minus[v] + z_plus[v] * z_plus[v])
-    LOC = m.addConstrs((B[l][p] <= betas[l][p + k] for l in leaves for p in range(d["Pset"][l]) for k in d["LOTset"][l][p]), "LOC")
-    LCT = m.addConstrs((cgamma[l][p] <= lgamma[l][p + k] for l in leaves for p in range(d["Pset"][l]) for k in d["LCTset"][l][p]), "LCT")
-    endOpen = m.addConstrs((betas[l][p] <= betas[l][p + 1] + cgamma[l][p + 1] for l in leaves for p in range(d["Psetshort"][l])), "endOpen")
-    endClose = m.addConstrs((lgamma[l][p] <= B[l][p + 1] + lgamma[l][p + 1] for l in leaves for p in range(d["Psetshort"][l])), "endClose")
-    #print('projections', projections)
-    eitherOpenOrClose = m.addConstrs((betas[l][p] + lgamma[l][p] == 1 for l in leaves for p in range(d["Pset"][l])), "eitherOpenOrClose")
-    m.setObjective(myObj, GRB.MINIMIZE)
-    m.update()
-    m.optimize()
-    z_output = [v.x for v in m.getVars()[0:len(voxels)]]
     return(z_output)
 
 # Plot the dose volume histogram
@@ -420,7 +495,7 @@ def plotDVHNoClass(data, z, NameTag='', showPlot=False):
 dataobject = tomodata()
 d = solveContinuous(dataobject)
 z = createModel(dataobject, d)
-plotDVHNoClass(dataobject, z, 'dvh')
+plotDVHNoClass(dataobject, d["z_out"], 'dvh')
 sys.exit()
 
 start_time = time.time()
