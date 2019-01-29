@@ -1,5 +1,5 @@
 __author__ = 'wilmer'
-
+# This one corresponds to the AverageOpeningTime.pdf document (first model)
 try:
     import mkl
     have_mkl = True
@@ -8,7 +8,6 @@ except ImportError:
     have_mkl = False
     print("Running with normal backends")
 
-import pandas as pds
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import describe
@@ -24,7 +23,7 @@ initialProjections = 51
 numberOfLeaves = 80
 maxvoxels = 2000
 tumorsite = "Prostate"
-timeko = 0.1 # secs
+timeko = 0.08 # secs
 timekc = 0.095 # secs
 time10 = 10
 speed = 24 # degrees per second
@@ -271,55 +270,52 @@ class tomodata:
         # Select only the voxels that exist in the small voxel space provided.
         self.removezeroes([0, 10, 11, 17, 12, 3, 15, 16, 9, 5, 4, 20, 21, 19, 18])
 
-def solveContinuous (data):
+def solveContinuous(data):
     bigM = t51
+    data.yBar = data.yBar/delta51 # Coordinate the delta in here
     voxels = range(len(data.mask))
     projIni = 1 + np.floor(max(data.bixels / data.L)).astype(int)
-    numProjections = k10 + projIni + 1
+    numProjections = k10 + projIni
     projections = range(numProjections)
     leaves = range(data.L)
     leafsD = (data.bixels % data.L).astype(int)
     projectionsD = np.floor(data.bixels / data.L).astype(int)
     m = Model("SOLVECONTINUOUS")
     m.params.BarConvTol = 1.0
-    print("Solving the continuous version of the model")
+    print("Solving the Average LOT Constrained version of the model")
     z = m.addVars(voxels, lb = 0.0, obj = 1.0, vtype = GRB.CONTINUOUS, name = "z")
     z_plus = m.addVars(voxels, lb = 0.0, obj = np.sqrt(data.quadHelperOver), vtype = GRB.CONTINUOUS, name = "z_plus")
     z_minus = m.addVars(voxels, lb = 0.0, obj = np.sqrt(data.quadHelperUnder), vtype = GRB.CONTINUOUS, name = "z_minus")
-    t = m.addVars(leaves, projections, obj=1.0, vtype=GRB.CONTINUOUS, name="t", lb = 0, ub = t51)
-    mu = m.addVars(leaves, projections, obj=1.0, vtype=GRB.BINARY, lb = 0.0, name="mu")
-    xi = m.addVars(leaves, projections, obj=1.0, vtype=GRB.CONTINUOUS, lb = 0.0, name="xi")
-    zeta = m.addVars(leaves, projections, obj=1.0, vtype=GRB.CONTINUOUS, lb = 0.0, name="zeta")
-    psi = m.addVars(leaves, projections, obj=1.0, vtype=GRB.CONTINUOUS, lb = 0.0, name="psi")
-    beta = m.addVars(leaves, projections, obj=1.0, vtype=GRB.CONTINUOUS, lb = 0.0, name="beta")
+    t = m.addVars(leaves, projections, obj=1.0, vtype=GRB.CONTINUOUS, name="t", lb = 0.0, ub = t51)
+    beta = m.addVars(leaves, projections, obj=1.0, vtype=GRB.BINARY, name="beta")
     m.update()
     myObj = QuadExpr(0.0)
     hs = [LinExpr(0.0) for _ in voxels]
     [hs[data.smallvoxels[l]].add(data.Dijs[l] * t[leafsD[l], projectionsD[l]]) for l in range(len(data.smallvoxels))]
-    [m.addConstr(z[v] == data.yBar * hs[v], name="doses_to_j_yparam[" + str(v) + "]") for v in voxels]
+    [m.addConstr(z[v] == data.yBar * delta51 * hs[v], name="doses_to_j_yparam[" + str(v) + "]") for v in voxels]
     for v in voxels:
         myObj.add(z_minus[v] * z_minus[v] + z_plus[v] * z_plus[v])
     positive_only = m.addConstrs((z_plus[v] - z_minus[v] == z[v] - data.quadHelperThresh[v] for v in voxels), "positive_only")
     closed_start = m.addConstrs((0 == t[l, p] for l in leaves for p in range(k10)), "closed_start")
-    open_at_all = m.addConstrs((t[l, p] <= bigM * beta[l, p] for l in leaves for p in projections), "open_at_all")
-    MCxi1 = m.addConstrs((xi[l,p] <= t51 * mu[l, p] for l in leaves for p in range(k10, numProjections - 1)), "MCxi1")
-    MCxi2 = m.addConstrs((xi[l,p] <= t[l,p+1] for l in leaves for p in range(k10, numProjections - 1)), "MCxi2")
-    MCxi3 = m.addConstrs((xi[l,p] >= t[l,p+1] - (1 - mu[l,p]) for l in leaves for p in range(k10, numProjections - 1)), "MCxi3")
-    MCzeta1 = m.addConstrs((zeta[l,p] <= t51 * mu[l,p-1] for l in leaves for p in range(k10, numProjections - 1)), "MCzeta1")
-    MCzeta2 = m.addConstrs((zeta[l,p] <= t[l,p-1] for l in leaves for p in range(k10, numProjections - 1)), "MCzeta2")
-    MCzeta3 = m.addConstrs((zeta[l,p] >= t[l,p-1] - (1 - mu[l,p-1]) for l in leaves for p in range(k10, numProjections - 1)), "MCzeta3")
-    MCpsi1 = m.addConstrs((xi[l,p] <= t51 * mu[l,p]*mu[l,p-1] for l in leaves for p in range(k10, numProjections - 1)), "MCpsi1")
-    MCpsi2 = m.addConstrs((xi[l,p] <= t[l,p-1] for l in leaves for p in range(k10, numProjections - 1)), "MCpsi2")
-    MCpsi3 = m.addConstrs((xi[l,p] >= t[l,p-1] - (1 - mu[l,p]*mu[l,p-1]) for l in leaves for p in range(k10, numProjections - 1)), "MCpsi3")
+    open_at_all1 = m.addConstrs((0.005 * beta[l, p] <= t[l, p] for l in leaves for p in projections), "open_at_all1")
+    open_at_all2 = m.addConstrs((t[l, p] <= bigM * beta[l, p] for l in leaves for p in projections), "open_at_all2")
+    lside = LinExpr(0.0)
+    rside = LinExpr(0.0)
+    for l in range(data.L):
+        for p in range(k10, numProjections):
+            lside.add(t[l,p])
+            rside.add(beta[l,p])
+    Average_LOT_c = m.addConstr((lside >= timeko * rside), "Average_LOT_c")
     m.setObjective(myObj, GRB.MINIMIZE)
     m.update()
     m.optimize()
     z_output = [v.x for v in m.getVars()[0:len(voxels)]]
-    d = {"z_out": z, "z_plus_out": z_plus, "z_minus_out": z_minus, "dose_out": t}
+    d = {"z_out": z, "z_plus_out": z_plus, "z_minus_out": z_minus, "dose_out": t, "z_output": z_output}
     return(d)
 
 # Plot the dose volume histogram
 def plotDVHNoClass(data, z, NameTag='', showPlot=False):
+    #z_output = [v.x for v in z]
     voxDict = {}
     data.TARGETList = np.intersect1d(np.array(data.TARGETList), np.unique(data.mask))
     data.OARList = np.intersect1d(np.array(data.OARList), np.unique(data.mask))
@@ -348,7 +344,7 @@ def plotDVHNoClass(data, z, NameTag='', showPlot=False):
 
 dataobject = tomodata()
 d = solveContinuous(dataobject)
-plotDVHNoClass(dataobject, d["z_out"], 'dvh')
+plotDVHNoClass(dataobject, d["z_output"], 'dvh')
 sys.exit()
 
 start_time = time.time()

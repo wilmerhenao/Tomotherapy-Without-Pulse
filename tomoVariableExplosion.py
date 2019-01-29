@@ -1,5 +1,5 @@
 __author__ = 'wilmer'
-
+# This one corresponds to the AverageOpeningTime.pdf document (first model)
 try:
     import mkl
     have_mkl = True
@@ -8,17 +8,31 @@ except ImportError:
     have_mkl = False
     print("Running with normal backends")
 
-import pandas as pds
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy.sparse as sps
-import time
 from scipy.stats import describe
 import subprocess
-import sys
-import pickle
+import math
+from gurobipy import *
+from collections import defaultdict
+import pprint
 
+# User input goes here and only here
 numcores = 8
+initialProjections = 51
+numberOfLeaves = 80
+maxvoxels = 2000
+tumorsite = "Prostate"
+timeko = 0.08 # secs
+timekc = 0.095 # secs
+time10 = 10
+speed = 24 # degrees per second
+howmanydegreesko = speed * timeko # Degrees spanned in this time
+howmanydegreeskc = speed * timekc # Degrees spanned in this time
+howmanydegrees10 = speed * time10 # Degrees spanned in 10 seconds
+t51 = (360/initialProjections) / speed
+k10 = math.ceil(time10 / t51)
+delta51 = speed * t51 # Espacio es igual a velocidad por tiempo
 
 ## Function that reads the files produced by Weiguo
 def getvector(necfile,dtype):
@@ -33,7 +47,6 @@ def get_subsampled_mask(struct_img_mask_full_res, subsampling_img):
     sub_sampled_img_struct = np.zeros_like(struct_img_mask_full_res)
     sub_sampled_img_struct[np.where(subsampling_img)] =  struct_img_mask_full_res[np.where(subsampling_img)]
     return np.copy(sub_sampled_img_struct)
-# In[5]:
 
 def get_structure_mask(struct_id_list, struct_img_arr):
     img_struct = np.zeros_like(struct_img_arr)
@@ -60,14 +73,14 @@ class tomodata:
         self.base_dir = 'data/dij/HelicalGyn/'
         #self.base_dir = 'data/dij153/prostate/'#153
         self.base_dir = 'data/dij/prostate/'  # 51
-        # The number of loops to be used in this case 
-        self.ProjectionsPerLoop = 51
-        self.bixelsintween = 2
-        self.maxIntensity = 100
-        self.maxvoxels = 200
-        self.MBar = 15 # This is per arc. Although in practice it will be multiplied times numloops
-        self.consecutive = 3
-        self.LBar = 17
+        # The number of loops to be used in this case
+        self.ProjectionsPerLoop = initialProjections
+        self.bixelsintween = 5
+        self.maxIntensity = 300
+        self.yBar = 350
+        self.maxvoxels = maxvoxels
+        self.tprime = timeko # LOT in miliseconds
+        self.tdprime = timekc # LCT in miliseconds
         self.img_filename = 'samplemask.img'
         self.header_filename = 'samplemask.header'
         self.struct_img_filename = 'roimask.img'
@@ -75,7 +88,7 @@ class tomodata:
         self.outputDirectory = "output/"
         self.roinames = {}
         # N Value: Number of beamlets in the gantry (overriden in Wilmer's Case)
-        self.N = 80
+        self.L = numberOfLeaves
         self.get_dim(self.base_dir, 'samplemask.header')
         self.get_totalbeamlets(self.base_dir, 'dij/Size_out.txt')
         self.roimask_reader(self.base_dir, 'roimask.header')
@@ -87,35 +100,31 @@ class tomodata:
         # Create a space in smallvoxel coordinates
         self.smallvoxels = self.BigToSmallCreator()
         # Now remove bixels carefully
-        self.removebixels(self.bixelsintween)
+        # self.removebixels(self.bixelsintween)
         # Do the smallvoxels again:
         blaa, blab, self.smallvoxels, blad = np.unique(self.smallvoxels, return_index=True, return_inverse=True, return_counts=True)
         print('Build sparse matrix.')
         self.totalsmallvoxels = max(self.smallvoxels) + 1 #12648448
         print('totalsmallvoxels:', self.totalsmallvoxels)
         print('a brief description of Dijs array', describe(self.Dijs))
-        self.D = sps.csr_matrix((self.Dijs, (self.smallvoxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
+        #self.D = sps.csr_matrix((self.Dijs, (self.smallvoxels, self.bixels)), shape=(self.totalsmallvoxels, self.totalbeamlets))
         self.quadHelperThresh = np.zeros(len(self.mask))
         self.quadHelperUnder = np.zeros(len(self.mask))
         self.quadHelperOver = np.zeros(len(self.mask))
         self.numProjections = self.getNumProjections()
-        #######################################3
+        #######################################
         for i in range(len(self.mask)):
             # Constraint on TARGETS
             T = None
             if self.mask[i] in self.TARGETList:
                 T = self.TARGETThresholds[np.where(self.mask[i] == self.TARGETList)[0][0]]
-                self.quadHelperOver[i] = 0.000001
-                self.quadHelperUnder[i] = 0.9
+                self.quadHelperOver[i] = 0.0002
+                self.quadHelperUnder[i] = 0.08
             # Constraint on OARs
             elif self.mask[i] in self.OARList:
                 T = self.OARThresholds[np.where(self.mask[i] == self.OARList)[0][0]]
-                self.quadHelperOver[i] = 0.000001
+                self.quadHelperOver[i] = 0.000002
                 self.quadHelperUnder[i] = 0.0
-                if self.mask[i] == 6:
-                    self.quadHelperOver[i] = 0.01
-                if self.mask[i] == 7:
-                    self.quadHelperOver[i] = 0.1
             elif 0 == self.mask[i]:
                 print('there is an element in the voxels that is also mask 0')
             self.quadHelperThresh[i] = T
@@ -128,8 +137,6 @@ class tomodata:
             self.maxvoxels = int(sys.argv[2])
         if len(sys.argv) > 3:
             self.MBar = int(sys.argv[3])
-        if len(sys.argv) > 4:
-            self.consecutive = int(sys.argv[4])
 
     ## Keep the ROI's in a dictionary
     def maskNamesGetter(self, maskfile):
@@ -216,7 +223,12 @@ class tomodata:
         voxelindex = np.zeros_like(self.mask)
         voxelindex[np.unique(self.voxels)] = 1
         self.mask = np.multiply(voxelindex, self.mask)
-        locats = np.where(toremove == self.mask)[0]
+        locats = np.where(toremove[0] == self.mask)[0]
+        if len(toremove) > 1:
+            for i in range(1, len(toremove)):
+                locats = np.concatenate([locats, np.where(toremove[i] == self.mask)[0]])
+        locats.sort()
+        print(len(locats))
         self.mask = np.delete(self.mask, locats)
         # intersection of voxels and nonzero
         indices = np.where(np.in1d(self.voxels, locats))[0]
@@ -236,7 +248,7 @@ class tomodata:
     def readWeiguosCase(self):
         # Assign structures and thresholds for each of them
         self.OARList = [21, 6, 11, 13, 14, 8, 12, 15, 7, 9, 5, 4, 20, 19, 18, 10, 22]
-        self.OARThresholds = [5, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+        self.OARThresholds = [10, 10, 10, 10, 10, 10, 10, 78, 10, 10, 10, 10, 10, 10, 10, 10, 10]
         self.TARGETList = [2]
         self.TARGETThresholds = [78]
         dtype=np.uint32
@@ -251,83 +263,95 @@ class tomodata:
         img_arr = get_sub_sub_sample(img_arr, self.maxvoxels)
         # get structure file
         struct_img_arr = getvector(self.base_dir + self.struct_img_filename, dtype=dtype)
-        # Convert the mask into a list of unitary structures. A voxel gets assigned to only one place.
+        # Convert the mask into a list of unitary structures. A voxel gets assigned to only one place
         img_struct = get_structure_mask(reversed(self.ALLList), struct_img_arr)
-        # Get the subsampled list of voxels.
+        # Get the subsampled list of voxels
         self.mask = get_subsampled_mask(img_struct, img_arr)
         # Select only the voxels that exist in the small voxel space provided.
-        self.removezeroes(0)
+        self.removezeroes([0, 10, 11, 17, 12, 3, 15, 16, 9, 5, 4, 20, 21, 19, 18])
 
-## Number of beamlets in each gantry. Usually 64 but Weiguo uses 80
-## This part is for AMPL's implementation:
-def printAMPLfile(data):
-    f = open("tomononlinearRealCases.dat", "w")
-    print('param numProjections :=', data.numProjections, ';', file = f)
-    print('param numvoxels :=', len(data.mask), ';', file = f)
-    print('param U :=', data.maxIntensity, ';', file = f)
-    print('param numLeaves :=', data.N, ';', file=f)
-    print('param consecutive :=', data.consecutive, ';', file=f)
-    print('param projPerLoop :=', data.ProjectionsPerLoop, ';', file=f)
-    pds.set_option('precision', 16)
-    leafs = (data.bixels % data.N).astype(int)
-    projections = np.floor(data.bixels / data.N).astype(int)
-    myloops = np.floor(projections / data.ProjectionsPerLoop).astype(int)
-    print('param numLoops :=', max(myloops), ';', file=f)
-    print('param MBar :=', int(data.MBar * max(myloops)), ';', file=f)
-    print('param LBar :=', int(data.LBar), ';', file=f)
-    print('param: VOXELS: thethreshold :=', file = f)
-    thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': data.quadHelperThresh})
-    print(thrs.to_string(index=False, header = False), file = f)
-    print(";", file=f)
-    print('param: quadHelperOver :=', file = f)
-    thrs = pds.DataFrame(data = {'A': np.arange(len(data.mask)), 'B': data.quadHelperOver})
-    print(thrs.to_string(index=False, header = False), file = f)
-    print(";", file=f)
-    print('param: quadHelperUnder :=', file=f)
-    thrs = pds.DataFrame(data={'A': np.arange(len(data.mask)), 'B': data.quadHelperUnder})
-    print(thrs.to_string(index=False, header = False), file=f)
-    print(";", file=f)
-    print('param: KNJMPARAMETERS: D:=' , file = f)
-    sparseinfo = pds.DataFrame(data = {'LEAVES' : leafs, 'PROJECTIONS' : projections, 'VOXELS' : data.smallvoxels, 'ZDOSES' : data.Dijs},
-                               columns = ['LEAVES', 'PROJECTIONS', 'VOXELS', 'ZDOSES'])
-    print(sparseinfo.to_string(index=False, header=False), file = f)
-    print(";", file = f)
-    PM1 = np.array(list(range(data.ProjectionsPerLoop * (1 + max(myloops)))))
-    myloopsM1 = np.floor(PM1 / data.ProjectionsPerLoop).astype(int)
-    print('set POSSIBLEPL:=' , file = f)
-    setinfo = pds.DataFrame(data = {'PROJECTIONSM1' : PM1, 'LOOPSM1' : myloopsM1},
-                               columns = ['PROJECTIONSM1', 'LOOPSM1'])
-    print(setinfo.to_string(index=False, header=False), file = f)
-    print(";", file = f)
-    f.close()
+def solveContinuous(data):
+    bigM = t51
+    data.yBar = data.yBar/delta51 # Coordinate the delta in here
+    voxels = range(len(data.mask))
+    projIni = 3 + np.floor(max(data.bixels / data.L)).astype(int)
+    numProjections = projIni
+    projections = range(numProjections)
+    aevents = range(numProjections)
+    leaves = range(data.L)
+    leafsD = (data.bixels % data.L).astype(int)
+    projectionsD = np.floor(data.bixels / data.L).astype(int)
+    m = Model("SOLVECONTINUOUS")
+    m.params.BarConvTol = 1.0
+    print("Solving the Average LOT Constrained version of the model")
+    z = m.addVars(voxels, lb = 0.0, obj = 1.0, vtype = GRB.CONTINUOUS, name = "z")
+    z_plus = m.addVars(voxels, lb = 0.0, obj = np.sqrt(data.quadHelperOver), vtype = GRB.CONTINUOUS, name = "z_plus")
+    z_minus = m.addVars(voxels, lb = 0.0, obj = np.sqrt(data.quadHelperUnder), vtype = GRB.CONTINUOUS, name = "z_minus")
+    f = m.addVars(leaves, aevents, obj=1.0, vtype=GRB.CONTINUOUS, name="f", lb = 0.0, ub = t51 * numProjections)
+    g = m.addVars(leaves, aevents, obj=1.0, vtype=GRB.CONTINUOUS, name="g", lb = 0.0, ub = t51 * numProjections)
+    o = m.addVars(leaves, projections, aevents, obj=1.0, vtype=GRB.BINARY, name="o")
+    c = m.addVars(leaves, projections, aevents, obj=1.0, vtype=GRB.BINARY, name="c")
+    mu = m.addVars(leaves, projections, aevents, obj = 1.0, vtype=GRB.BINARY, name = 'mu')
+    eta = m.addVars(leaves, projections, aevents, obj = 1.0, vtype=GRB.BINARY, name = 'eta')
+    zetaf = m.addVars(leaves, projections, aevents, obj = 1.0, vtype=GRB.CONTINUOUS, name = 'zetaf')
+    zetag = m.addVars(leaves, projections, aevents, obj = 1.0, vtype=GRB.CONTINUOUS, name = 'zetag')
+    print('added vars')
+    m.update()
+    myObj = QuadExpr(0.0)
+    hs = [LinExpr(0.0) for _ in voxels]
+    [hs[data.smallvoxels[l]].add(data.Dijs[l] * t51 * mu[leafsD[l], projectionsD[l], i] * eta[leafsD[l], projectionsD[l], i] + zetag[leafsD[l], projectionsD[l], i] - projectionsD[l] * t51 * (c[leafsD[l], projectionsD[l], i] - o[leafsD[l], projectionsD[l], i]) + zetaf[leafsD[l], projectionsD[l], i]) for l in range(len(data.smallvoxels)) for i in aevents]
+    [m.addConstr(z[v] == data.yBar * delta51 * hs[v], name="doses_to_j_yparam[" + str(v) + "]") for v in voxels]
+    for v in voxels:
+        myObj.add(z_minus[v] * z_minus[v] + z_plus[v] * z_plus[v])
+    positive_only = m.addConstrs((z_plus[v] - z_minus[v] == z[v] - data.quadHelperThresh[v] for v in voxels), "positive_only")
+    closed_start = m.addConstrs((0 == mu[l, 0, i] for l in leaves for i in aevents), "closed_start")
+    closed_end = m.addConstrs((0 == eta[l, numProjections-1, i] for l in leaves for i in aevents), "closed_end")
+    happened1 = m.addConstrs((p <= f[l, i] * bigM * (1 - o[l,p,i]) for l in leaves for i in aevents for p in projections), "happened1")
+    happened2 = m.addConstrs((f[l, i] <= p + bigM * o[l, p, i] for l in leaves for i in aevents for p in projections), "happened2")
+    happened3 = m.addConstrs((f[l, i] <= p + 1 + bigM * (1 - o[l,p,i]) for l in leaves for i in aevents for p in projections), "happened3")
+    happened4 = m.addConstrs((p + 1 <= f[l, i] + bigM * o[l,p,i] for l in leaves for i in aevents for p in projections), "happened4")
+    happened5 = m.addConstrs((p <= g[l, i] * bigM * (1 - c[l,p,i]) for l in leaves for i in aevents for p in projections), "happened5")
+    happened6 = m.addConstrs((g[l, i] <= p + bigM * c[l, p, i] for l in leaves for i in aevents for p in projections), "happened6")
 
-def runAMPL():
-    procstring = subprocess.check_output(['ampl', 'LOTModelIMRT.run'])
-    return(procstring)
-
-def readDosefromtext(pstring):
-    strstring = pstring.decode("utf-8") # decode the bytes stringst
-    print(strstring)
-    lines = strstring.split('\n')
-    linecontainssolution = False
-    for line in lines:
-        if linecontainssolution:
-            l = []
-            for t in line.split():
-                try:
-                    l.append(float(t))
-                except ValueError:
-                    pass
-            if len(l) > 0:
-                for i in range(int(len(l) / 2)):
-                    z[int(l[int(2 * i)])] = l[int(2 * i + 1)]
-        else:
-            if ('z [*] :=' in line):
-                linecontainssolution = True
-    return(z)
+    print('added bp')
+    happened7 = m.addConstrs((g[l, i] <= p + 1 + bigM * (1 - c[l,p,i]) for l in leaves for i in aevents for p in projections), "happened7")
+    happened8 = m.addConstrs((p + 1 <= g[l, i] + bigM * c[l,p,i] for l in leaves for i in aevents for p in projections), "happened8")
+    growing_mu = m.addConstrs((mu[l, p, i] <= mu[l, p + 1, i]  for l in leaves for i in aevents for p in range(1, numProjections-1)), "growing_mu")
+    jump_up = m.addConstrs((o[l, p, i] <= mu[l, p + 1, i]  for l in leaves for i in aevents for p in range(1, numProjections-1)), "jump_up")
+    decreasing_mu = m.addConstrs((eta[l, p, i] >= eta[l, p + 1, i]  for l in leaves for i in aevents for p in range(1, numProjections-1)), "decreasing_mu")
+    jump_down = m.addConstrs((c[l, p, i] <= mu[l, p - 1, i]  for l in leaves for i in aevents for p in range(1, numProjections-1)), "jump_down")
+    to = m.addConstrs((f[l, i] + timeko <= g[l, i]  for l in leaves for i in aevents), "to")
+    tc = m.addConstrs((g[l, i] + timekc <= f[l, i + 1]  for l in leaves for i in range(1, numProjections-1)), "tc")
+    left_side = LinExpr(0.0)
+    [left_side.add(zetaf[l, p, i] - zetag[l, p, i]) for l in leaves for i in aevents for p in projections]
+    right_side = LinExpr(0.0)
+    [right_side.add(timeko * o[l, p, i]) for l in leaves for i in aevents for p in projections]
+    average_min = m.addConstr((left_side >= right_side), "average_min")
+    mccormickg1 = m.addConstrs((zetag[l, p, i] <= numProjections * t51 * c[l, p, i] for l in leaves for i in aevents for p in projections), "mccormickg1")
+    mccormickg2 = m.addConstrs((zetag[l, p, i] >= 0 for l in leaves for i in aevents for p in projections), "mccormickg2")
+    mccormickg3 = m.addConstrs((zetag[l, p, i] <= g[l, i] for l in leaves for i in aevents for p in projections), "mccormickg3")
+    mccormickg4 = m.addConstrs((zetag[l, p, i] >= g[l, i] - (1 - c[l, p, i]) for l in leaves for i in aevents for p in projections), "mccormickg4")
+    mccormickf1 = m.addConstrs((zetaf[l, p, i] <= numProjections * t51 * o[l, p, i] for l in leaves for i in aevents for p in projections), "mccormickf1")
+    mccormickf2 = m.addConstrs((zetaf[l, p, i] >= 0 for l in leaves for i in aevents for p in projections), "mccormickf2")
+    mccormickf3 = m.addConstrs((zetaf[l, p, i] <= f[l, i] for l in leaves for i in aevents for p in projections), "mccormickf3")
+    mccormickf4 = m.addConstrs((zetaf[l, p, i] >= f[l, i] - (1 - o[l, p, i]) for l in leaves for i in aevents for p in projections), "mccormickf4")
+    lside = LinExpr(0.0)
+    rside = LinExpr(0.0)
+    for l in range(data.L):
+        for p in range(k10, numProjections):
+            lside.add(t[l,p])
+            rside.add(beta[l,p])
+    Average_LOT_c = m.addConstr((lside >= timeko * rside), "Average_LOT_c")
+    m.setObjective(myObj, GRB.MINIMIZE)
+    m.update()
+    m.optimize()
+    z_output = [v.x for v in m.getVars()[0:len(voxels)]]
+    d = {"z_out": z, "z_plus_out": z_plus, "z_minus_out": z_minus, "dose_out": t, "z_output": z_output}
+    return(d)
 
 # Plot the dose volume histogram
 def plotDVHNoClass(data, z, NameTag='', showPlot=False):
+    #z_output = [v.x for v in z]
     voxDict = {}
     data.TARGETList = np.intersect1d(np.array(data.TARGETList), np.unique(data.mask))
     data.OARList = np.intersect1d(np.array(data.OARList), np.unique(data.mask))
@@ -355,27 +379,60 @@ def plotDVHNoClass(data, z, NameTag='', showPlot=False):
     plt.close()
 
 dataobject = tomodata()
-printAMPLfile(dataobject)
-z = np.zeros(len(dataobject.mask))
+d = solveContinuous(dataobject)
+plotDVHNoClass(dataobject, d["z_output"], 'dvh')
+sys.exit()
+
 start_time = time.time()
-pstring = runAMPL()
-z = readDosefromtext(pstring)
+# Erase everything in the warmstart file
+f = open("warmstart.dat", "w")
+f.close()
+oldobj = np.inf
+for i in [1, 2, 4, 8, 16, 32]:
+    start_time = time.time()
+    #pstring = runAMPL(maxvoxels, i, tumorsite)
+    totalAMPLtime = (time.time() - start_time)
+    print("--- %s seconds running the AMPL part---" % totalAMPLtime)
+    z, betas, B, cgamma, lgamma, newobj = readDosefromtext(pstring)
+    print('new obj:', newobj)
+    mej = (newobj - oldobj)/oldobj
+    oldobj = newobj
+    print('reduction:', mej)
+    if mej < 0.01:
+        break
+
 output2 = open('z.pkl', 'wb')
 pickle.dump(z, output2)
 output2.close()
 output = open('dataobject.pkl', 'wb')
-pickle.dump(dataobject, output)
+try:
+    pickle.dump(dataobject, output)
+except:
+    print("dataobject was never defined")
 output.close()
 totalAMPLtime = (time.time() - start_time)
 print("--- %s seconds running the AMPL part---" % totalAMPLtime)
 if len(sys.argv) > 4:
-    print("tabledresults: ", sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], dataobject.totalsmallvoxels, totalAMPLtime)
+    print("tabledresults: ", sys.argv[1], sys.argv[2], sys.argv[3], dataobject.totalsmallvoxels, totalAMPLtime)
 # Ignore errors that correspond to DVH Plot
 try:
-    plotDVHNoClass(dataobject, z, 'dvh')
+    pass
+    # Correct this and bring back the plotting when I can.
+    #plotDVHNoClass(dataobject, z, 'dvh')
 except IndexError:
     print("Index is out of bounds and no DVH plot will be generated. However, I am ignoring this error for now.")
 # Output ampl results for the next run in case something fails.
 text_output = open("amploutput.txt", "wb")
 text_output.write(pstring)
 text_output.close()
+
+
+#    for l in range(data.L):
+#        print('adding leaf:', l)
+#        for p in range(d["Pset"][l]):
+#            loc = np.where(d["M"][l][p] * data.L + l == data.bixels)[0]
+#            Dijs = [0.0 for _ in voxels]
+#            for i in loc:
+#                Dijs[data.smallvoxels[i]] += data.Dijs[i]
+#            for v in voxels:
+#                rhs[v] += Dijs[v] * d["deltas"][l][p] * betas[l][p]

@@ -303,7 +303,7 @@ def solveContinuous (data):
     m.update()
     m.optimize()
     z_output = [v.x for v in m.getVars()[0:len(voxels)]]
-    d = {"z_out": z, "z_plus_out": z_plus, "z_minus_out": z_minus, "dose_out": dose}
+    d = {"z_out": z, "z_plus_out": z_plus, "z_minus_out": z_minus, "dose_out": dose, "z_output": z_output}
     return(d)
 
 def preTreatmentMaterials(data, d):
@@ -327,6 +327,16 @@ def preTreatmentMaterials(data, d):
     deltas = [[deltalp for _ in range(Pset[l])] for l in range(data.L)]
     LOTset = [[range(ko) if p <= (Pset[l] - kcomax) else range(0) for p in range(Pset[l])] for l in range(data.L)] # This range must be reviewed
     LCTset = [[range(kc) if p <= (Pset[l] - kcomax) else range(0) for p in range(Pset[l])] for l in range(data.L)]
+    # Now let's recalculate the z's and accomodate them to the binary world.
+    betas_in = []
+    B_in = []
+    cgamma_in = []
+    lgamma_in = []
+    for l in range(data.L):
+        betas_in.append([0] * Pset[l])
+        for p in range(Pset[l]):
+            betas[l][p]
+
     d = {"Pset": Pset, "Psetshort": Psetshort, "PsetshortM1": PsetshortM1, "M": M, "Minv": Minv, "deltas": deltas, "LOTset": LOTset, "LCTset": LCTset, "k10": k10,
          "z_out": d["z_out"], "z_plus_out": d["z_plus_out"], "z_minus_out": d["z_minus_out"], "dose_out": d["dose_out"]}
     return(d)
@@ -494,8 +504,8 @@ def plotDVHNoClass(data, z, NameTag='', showPlot=False):
 
 dataobject = tomodata()
 d = solveContinuous(dataobject)
-z = createModel(dataobject, d)
-plotDVHNoClass(dataobject, d["z_out"], 'dvh')
+#z = createModel(dataobject, d)
+plotDVHNoClass(dataobject, d["z_output"], 'dvh')
 sys.exit()
 
 start_time = time.time()
