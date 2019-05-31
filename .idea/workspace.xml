@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="Modified the constraints to assure that certain quantities are only calculated once">
-      <change afterPath="$PROJECT_DIR$/runGeneral.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighborsBarConvTol.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighborsFeasibilityTol.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighborsImproveMIPFocus.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighborsImproveStartGap.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighborsInfProofCuts.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighborsPumpPasses.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighborsScaleFlag.py" afterDir="false" />
+    <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="This is before I change the calculateTIMRT function to reflect the new model">
+      <change afterPath="$PROJECT_DIR$/reader.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="CaseCreation.iws" />
@@ -29,10 +22,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighbors.py">
+        <entry file="file://$PROJECT_DIR$/tomoAverageMultiProj.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="376">
-              <caret line="101" column="29" selection-start-line="101" selection-start-column="29" selection-end-line="101" selection-end-column="29" />
+            <state relative-caret-position="222">
+              <caret line="118" column="49" lean-forward="true" selection-start-line="118" selection-start-column="49" selection-end-line="118" selection-end-column="49" />
               <folding>
                 <element signature="e#265#278#0" expanded="true" />
               </folding>
@@ -41,13 +34,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/tomoAverageMultiProj.py">
+        <entry file="file://$PROJECT_DIR$/reader.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4354">
-              <caret line="381" column="53" lean-forward="true" selection-start-line="381" selection-start-column="53" selection-end-line="381" selection-end-column="53" />
-              <folding>
-                <element signature="e#265#278#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="45">
+              <caret line="3" column="11" lean-forward="true" selection-start-line="3" selection-start-column="11" selection-end-line="3" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -55,29 +45,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/dij/prostate/roimask.header">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
+            <state relative-caret-position="30">
               <caret line="2" column="17" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="17" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/VMATClasses.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1292">
-              <caret line="77" column="16" selection-start-line="77" selection-start-column="16" selection-end-line="77" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/ResultsAnalyzer.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5984">
-              <caret line="359" column="26" selection-start-line="359" selection-start-column="26" selection-end-line="359" selection-end-column="26" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -85,8 +54,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/casereader.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19907">
-              <caret line="1179" column="115" selection-start-line="1179" selection-start-column="107" selection-end-line="1179" selection-end-column="115" />
+            <state relative-caret-position="362">
+              <caret line="70" selection-start-line="70" selection-end-line="70" />
             </state>
           </provider>
         </entry>
@@ -102,19 +71,8 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Bladder</find>
-      <find>opti</find>
-      <find>t[</find>
-      <find>calculateT</find>
-      <find>projections</find>
-      <find>op</find>
-      <find>leavelen</find>
-      <find>tumorsite</find>
-      <find>51</find>
-      <find>arget</find>
       <find>TARGETList</find>
       <find>struct_img_filename</find>
-      <find>calculate</find>
       <find>calculateTI</find>
       <find>1000</find>
       <find>leavelengths</find>
@@ -130,8 +88,19 @@
       <find>get_stru</find>
       <find>removezeroes</find>
       <find>removeze</find>
-      <find>calculateTIMRT</find>
       <find>projectionsEven</find>
+      <find>calculate</find>
+      <find>numProjections</find>
+      <find>slackAvg</find>
+      <find>calculateTIMRT</find>
+      <find>objective</find>
+      <find>sinogramAndHisto</find>
+      <find>maxvoxels</find>
+      <find>dvh</find>
+      <find>min-AvgLOT</find>
+      <find>pickle.dum</find>
+      <find>nbeamlets</find>
+      <find>output</find>
     </findStrings>
     <replaceStrings>
       <replace>self.data.K</replace>
@@ -156,6 +125,7 @@
       <replace>data.timeko</replace>
       <replace>/</replace>
       <replace>\</replace>
+      <replace>timeA</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -164,7 +134,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/tomotherapyColumnGeneration.py" />
         <option value="$PROJECT_DIR$/heuristic.run" />
         <option value="$PROJECT_DIR$/tomotherapyIteration.py" />
         <option value="$USER_HOME$/PycharmProjects/basura/basura.py" />
@@ -213,8 +182,9 @@
         <option value="$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighborsScaleFlag.py" />
         <option value="$PROJECT_DIR$/../../VMAT/casereader/ResultsAnalyzer.py" />
         <option value="$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighbors.py" />
-        <option value="$PROJECT_DIR$/../../VMAT/casereader/casereader.py" />
         <option value="$PROJECT_DIR$/tomoAverageMultiProj.py" />
+        <option value="$PROJECT_DIR$/reader.py" />
+        <option value="$PROJECT_DIR$/../../VMAT/casereader/casereader.py" />
       </list>
     </option>
   </component>
@@ -232,7 +202,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../VMAT/casereader" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../VMAT/casereader/casereader.py" />
     <property name="options.lastSelected" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.splitter.main.proportions" value="0.3" />
@@ -268,7 +238,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.tomoAverageMultiProj">
+  <component name="RunManager" selected="Python.reader">
     <configuration default="true" type="tests" factoryName="Attests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -351,6 +321,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="reader" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Tomotherapy-Without-Pulse" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reader.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="tomoAverageMultiProj" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Tomotherapy-Without-Pulse" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -385,27 +376,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighbors.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="tomoAverageOnlyTwoProjectionsNeighborsScaleFlag" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Tomotherapy-Without-Pulse" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighborsScaleFlag.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -507,16 +477,16 @@
       <item itemvalue="Python.ResultsAnalyzer" />
       <item itemvalue="Python.casereader" />
       <item itemvalue="Python.tomoAverageMultiProj" />
-      <item itemvalue="Python.tomoAverageOnlyTwoProjectionsNeighborsScaleFlag" />
       <item itemvalue="Python.tomoAverageOnlyTwoProjectionsNeighbors" />
+      <item itemvalue="Python.reader" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.reader" />
         <item itemvalue="Python.tomoAverageMultiProj" />
         <item itemvalue="Python.casereader" />
         <item itemvalue="Python.tomoAverageOnlyTwoProjectionsNeighbors" />
         <item itemvalue="Python.ResultsAnalyzer" />
-        <item itemvalue="Python.tomoAverageOnlyTwoProjectionsNeighborsScaleFlag" />
       </list>
     </recent_temporary>
   </component>
@@ -530,13 +500,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1465575876920</updated>
-    </task>
-    <task id="LOCAL-00137" summary="Constraints established as columns to addvar">
-      <created>1487633016358</created>
-      <option name="number" value="00137" />
-      <option name="presentableId" value="LOCAL-00137" />
-      <option name="project" value="LOCAL" />
-      <updated>1487633016358</updated>
     </task>
     <task id="LOCAL-00138" summary="Added AMPL files to python project">
       <created>1487633149832</created>
@@ -874,7 +837,14 @@
       <option name="project" value="LOCAL" />
       <updated>1552172880896</updated>
     </task>
-    <option name="localTasksCounter" value="186" />
+    <task id="LOCAL-00186" summary="This is before I change the calculateTIMRT function to reflect the new model">
+      <created>1559001219707</created>
+      <option name="number" value="00186" />
+      <option name="presentableId" value="LOCAL-00186" />
+      <option name="project" value="LOCAL" />
+      <updated>1559001219707</updated>
+    </task>
+    <option name="localTasksCounter" value="187" />
     <servers />
   </component>
   <component name="TodoView">
@@ -887,23 +857,23 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1358" y="-452" width="1936" height="1096" extended-state="6" />
+    <frame x="1917" y="0" width="1926" height="1083" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.25" />
-      <window_info id="Structure" order="1" side_tool="true" visible="true" weight="0.052687038" />
+      <window_info id="Structure" order="1" side_tool="true" visible="true" weight="0.053248137" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.32960597" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.8083067" weight="0.45245558" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.76659644" visible="true" weight="0.4036327" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.8067093" visible="true" weight="0.22048067" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.76606953" weight="0.19677094" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32905984" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32905984" />
       <window_info anchor="bottom" auto_hide="true" x="2316" y="-302" width="894" height="308" id="Python Console" order="8" type="FLOATING" weight="0.39624608" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.23340358" side_tool="true" visible="true" weight="0.4036327" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.19329074" side_tool="true" visible="true" weight="0.22048067" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -941,7 +911,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Running for publication at INFORMS 17" />
     <MESSAGE value="This is a case that runs in 84 seconds. Down from more than 2000" />
     <MESSAGE value="starting work on general algorithm" />
     <MESSAGE value="Updated read weiguo's case" />
@@ -966,7 +935,8 @@
     <MESSAGE value="Modify the ampl part a little. Still not done" />
     <MESSAGE value="Changed the AMPL model so that now it doesn't internally build a new Dose-To-Points Matrix" />
     <MESSAGE value="Modified the constraints to assure that certain quantities are only calculated once" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modified the constraints to assure that certain quantities are only calculated once" />
+    <MESSAGE value="This is before I change the calculateTIMRT function to reflect the new model" />
+    <option name="LAST_COMMIT_MESSAGE" value="This is before I change the calculateTIMRT function to reflect the new model" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1008,28 +978,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../../VMAT/casereader/casereader.py</url>
-          <line>186</line>
+          <line>189</line>
           <option name="timeStamp" value="355" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tomoAverageMultiProj.py</url>
-          <line>518</line>
-          <option name="timeStamp" value="356" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tomoAverageMultiProj.py</url>
-          <line>736</line>
-          <option name="timeStamp" value="371" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tomoAverageMultiProj.py</url>
-          <line>512</line>
-          <option name="timeStamp" value="375" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tomoAverageMultiProj.py</url>
-          <line>563</line>
-          <option name="timeStamp" value="378" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1096,7 +1046,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/LOTModelTemplate.run" />
     <entry file="file://$PROJECT_DIR$/LOTmodel.mod" />
     <entry file="file://$PROJECT_DIR$/LOTModel.run" />
     <entry file="file:///opt/intel/intelpython35/lib/python3.5/fnmatch.py" />
@@ -1306,23 +1255,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/dij/prostate/roimask.header">
+    <entry file="file:///opt/intel/intelpython3/lib/python3.6/site-packages/numpy/core/numeric.py" />
+    <entry file="file:///opt/intel/intelpython3/lib/python3.6/site-packages/numpy/lib/arraysetops.py" />
+    <entry file="file://$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighbors.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="17" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/VMATClasses.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1292">
-          <caret line="77" column="16" selection-start-line="77" selection-start-column="16" selection-end-line="77" selection-end-column="16" />
+        <state relative-caret-position="394">
+          <caret line="25" column="13" lean-forward="true" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
+          <folding>
+            <element signature="e#265#278#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/ResultsAnalyzer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5984">
+        <state relative-caret-position="663">
           <caret line="359" column="26" selection-start-line="359" selection-start-column="26" selection-end-line="359" selection-end-column="26" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
@@ -1330,32 +1277,41 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/VMATClasses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="663">
+          <caret line="77" column="16" selection-start-line="77" selection-start-column="16" selection-end-line="77" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/dij/prostate/roimask.header">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="17" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/casereader.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19907">
-          <caret line="1179" column="115" selection-start-line="1179" selection-start-column="107" selection-end-line="1179" selection-end-column="115" />
+        <state relative-caret-position="362">
+          <caret line="70" selection-start-line="70" selection-end-line="70" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighbors.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="376">
-          <caret line="101" column="29" selection-start-line="101" selection-start-column="29" selection-end-line="101" selection-end-column="29" />
-          <folding>
-            <element signature="e#265#278#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///opt/intel/intelpython3/lib/python3.6/site-packages/numpy/core/numeric.py" />
-    <entry file="file:///opt/intel/intelpython3/lib/python3.6/site-packages/numpy/lib/arraysetops.py" />
     <entry file="file://$PROJECT_DIR$/tomoAverageMultiProj.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4354">
-          <caret line="381" column="53" lean-forward="true" selection-start-line="381" selection-start-column="53" selection-end-line="381" selection-end-column="53" />
+        <state relative-caret-position="222">
+          <caret line="118" column="49" lean-forward="true" selection-start-line="118" selection-start-column="49" selection-end-line="118" selection-end-column="49" />
           <folding>
             <element signature="e#265#278#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/reader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="11" lean-forward="true" selection-start-line="3" selection-start-column="11" selection-end-line="3" selection-end-column="11" />
         </state>
       </provider>
     </entry>
