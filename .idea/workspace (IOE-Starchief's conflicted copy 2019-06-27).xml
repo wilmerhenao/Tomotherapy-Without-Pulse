@@ -4,9 +4,6 @@
     <list default="true" id="15357674-4601-47e0-9395-a383a17935c0" name="Default" comment="Added the file that will visually compare the results of the 2 sets of apertures">
       <change afterPath="$PROJECT_DIR$/FailedmultiTool.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/OrganizedmultiTool.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/OrganizedmultiToolIMRTtest.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/OrganizedmultiToolLung.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResultTomo.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/SinogramComparisons.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/basurareader.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/multiTool.py" afterDir="false" />
@@ -37,82 +34,13 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/OrganizedmultiTool.py">
+        <entry file="file://$PROJECT_DIR$/multiTool.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="595">
-              <caret line="47" column="22" selection-start-line="47" selection-start-column="22" selection-end-line="47" selection-end-column="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/OrganizedmultiToolIMRTtest.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4505">
-              <caret line="277" column="22" selection-start-line="277" selection-start-column="13" selection-end-line="277" selection-end-column="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="29580">
-              <caret line="1740" selection-start-line="1740" selection-end-line="1740" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ResultTomo.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5051">
-              <caret line="428" column="19" selection-start-line="428" selection-start-column="19" selection-end-line="428" selection-end-column="19" />
+            <state relative-caret-position="14569">
+              <caret line="869" column="12" selection-start-line="869" selection-start-column="4" selection-end-line="869" selection-end-column="12" />
               <folding>
-                <element signature="e#168#181#0" expanded="true" />
+                <element signature="e#265#278#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/basurareader.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="713">
-              <caret line="350" column="16" selection-start-line="350" selection-start-column="16" selection-end-line="350" selection-end-column="16" />
-              <folding>
-                <element signature="e#1#14#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/casereader.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="202">
-              <caret line="1043" column="6" selection-start-line="1043" selection-start-column="4" selection-end-line="1043" selection-end-column="6" />
-              <folding>
-                <element signature="e#1#19#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://C:/Intel/python/intelpython3/Lib/codecs.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5236">
-              <caret line="308" selection-start-line="308" selection-end-line="308" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://C:/Intel/python/intelpython3/Lib/site-packages/matplotlib/text.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2771">
-              <caret line="183" selection-start-line="183" selection-end-line="183" />
             </state>
           </provider>
         </entry>
@@ -120,8 +48,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/SinogramComparisons.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="172">
-              <caret line="50" column="55" lean-forward="true" selection-start-line="50" selection-start-column="55" selection-end-line="50" selection-end-column="55" />
+            <state relative-caret-position="-289">
+              <caret line="1" column="75" lean-forward="true" selection-start-line="1" selection-start-column="75" selection-end-line="1" selection-end-column="75" />
               <folding>
                 <element signature="e#265#278#0" expanded="true" />
               </folding>
@@ -140,36 +68,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>13</find>
-      <find>p7</find>
-      <find>z_output</find>
-      <find>minimize</find>
-      <find>testcase</find>
-      <find>thiscase</find>
-      <find>refinement</find>
-      <find>refinementPr</find>
-      <find>refinemenTP</find>
-      <find>caligraphicC</find>
-      <find>calcDose</find>
-      <find>calcgrad</find>
-      <find>currentIntensities</find>
-      <find>beam.</find>
-      <find>imrt</find>
-      <find>addconstr</find>
-      <find>weiguo</find>
-      <find>leavelen</find>
-      <find>IMRT-</find>
-      <find>imrt20</find>
-      <find>chunkName</find>
-      <find>double</find>
-      <find>compare</find>
-      <find>plotDVHcompare</find>
-      <find>plotDVH</find>
-      <find>plotDVHc</find>
-      <find>sys.exit()</find>
-      <find>Sinogram Comparison</find>
-      <find>C2</find>
-      <find>Sinogram Comparison of Low</find>
+      <find>HistogramNoIMRT</find>
+      <find>histogram</find>
+      <find>sinogramAndHistogramNoIMRT</find>
+      <find>forward</find>
+      <find>Feasible</find>
+      <find>.chunkName</find>
+      <find>myhints</find>
+      <find>loadWarmstart</find>
+      <find>initialPro</find>
+      <find>timeLimit</find>
+      <find>solveModel</find>
+      <find>plotDVHNoClass</find>
+      <find>Method</find>
+      <find>calculateT</find>
+      <find>calculateTpairSolution</find>
+      <find>tumorsite</find>
+      <find>BigToSmallCreator</find>
+      <find>voxels</find>
+      <find>readWeiguosCase</find>
+      <find>stats</find>
+      <find>describe</find>
+      <find>153</find>
+      <find>runner277</find>
+      <find>DVH</find>
+      <find>plotSinogram</find>
+      <find>output</find>
+      <find>pickle.</find>
+      <find>read(</find>
+      <find>Sinogram</find>
+      <find>data</find>
     </findStrings>
     <replaceStrings>
       <replace>self.data.K</replace>
@@ -210,6 +138,10 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/basura2.py" />
+        <option value="$PROJECT_DIR$/LOTModelPre.run" />
+        <option value="$PROJECT_DIR$/LOTModelPost.run" />
+        <option value="$PROJECT_DIR$/LOTModelIMRT.run" />
         <option value="$PROJECT_DIR$/LOTmodelIMRT.mod" />
         <option value="$PROJECT_DIR$/tomoLOT.py" />
         <option value="$PROJECT_DIR$/LOTModelTemplate.run" />
@@ -241,6 +173,7 @@
         <option value="$PROJECT_DIR$/reader.py" />
         <option value="$PROJECT_DIR$/basurareader.py" />
         <option value="$PROJECT_DIR$/../../VMAT/casereader/DVHnewPlotter.py" />
+        <option value="$PROJECT_DIR$/../../VMAT/casereader/casereader.py" />
         <option value="$PROJECT_DIR$/../../VMAT/casereader/casereadertestCalibration.py" />
         <option value="$PROJECT_DIR$/../../VMAT/casereader/casereaderTargetRightEye.py" />
         <option value="$PROJECT_DIR$/../../VMAT/casereader/casereaderTargetRightEyePTVSuperExtreme.py" />
@@ -255,20 +188,13 @@
         <option value="$PROJECT_DIR$/tomoAverageMultiProjScaling3NoObj.py" />
         <option value="$PROJECT_DIR$/testIMRTwith20MsecConstraint.py" />
         <option value="$PROJECT_DIR$/multiTool.py" />
-        <option value="$PROJECT_DIR$/OrganizedmultiToolIMRTtest.py" />
-        <option value="$PROJECT_DIR$/OrganizedmultiToolLung.py" />
-        <option value="$PROJECT_DIR$/OrganizedmultiTool.py" />
-        <option value="$PROJECT_DIR$/../../VMAT/casereader/casereader.py" />
-        <option value="$PROJECT_DIR$/ResultTomo.py" />
         <option value="$PROJECT_DIR$/SinogramComparisons.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="1504" />
-    <option name="y" value="-292" />
-    <option name="width" value="1936" />
-    <option name="height" value="1096" />
+  <component name="ProjectFrameBounds">
+    <option name="width" value="1378" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -334,48 +260,6 @@
       <option name="USE_PATTERN" value="false" />
       <method />
     </configuration>
-    <configuration name="OrganizedmultiTool" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Tomotherapy-Without-Pulse" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/OrganizedmultiTool.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="ResultTomo" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Tomotherapy-Without-Pulse" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ResultTomo.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="SinogramComparisons" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Tomotherapy-Without-Pulse" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -418,19 +302,19 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="casereader" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="conditionTester" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Tomotherapy-Without-Pulse" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Intel\python\intelpython3\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../../VMAT/casereader" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="C:/Intel/python/intelpython3/Lib/site-packages/numpy/core" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../../VMAT/casereader/casereader.py" />
+      <option name="SCRIPT_NAME" value="C:/Intel/python/intelpython3/Lib/site-packages/numpy/core/conditionTester.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -439,7 +323,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="reader" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="multiTool" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Tomotherapy-Without-Pulse" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -451,7 +335,49 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reader.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/multiTool.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="testIMRTwith20MsecConstraint" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Tomotherapy-Without-Pulse" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/testIMRTwith20MsecConstraint.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="tomoAverageMultiProjScaling3NoObj" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Tomotherapy-Without-Pulse" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tomoAverageMultiProjScaling3NoObj.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -550,19 +476,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.ResultTomo" />
+      <item itemvalue="Python.conditionTester" />
+      <item itemvalue="Python.multiTool" />
+      <item itemvalue="Python.testIMRTwith20MsecConstraint" />
+      <item itemvalue="Python.tomoAverageMultiProjScaling3NoObj" />
       <item itemvalue="Python.SinogramComparisons" />
-      <item itemvalue="Python.OrganizedmultiTool" />
-      <item itemvalue="Python.casereader" />
-      <item itemvalue="Python.reader" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.ResultTomo" />
         <item itemvalue="Python.SinogramComparisons" />
-        <item itemvalue="Python.reader" />
-        <item itemvalue="Python.casereader" />
-        <item itemvalue="Python.OrganizedmultiTool" />
+        <item itemvalue="Python.multiTool" />
+        <item itemvalue="Python.testIMRTwith20MsecConstraint" />
+        <item itemvalue="Python.tomoAverageMultiProjScaling3NoObj" />
+        <item itemvalue="Python.conditionTester" />
       </list>
     </recent_temporary>
   </component>
@@ -933,20 +859,21 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1358" y="-452" width="1936" height="1096" extended-state="7" />
+    <frame x="0" y="0" width="1378" height="744" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.25" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.05484558" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.054477613" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.32960597" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.78115016" weight="0.308779" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.8546326" weight="0.28859738" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.78115016" weight="0.20751634" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.8546326" weight="0.04901961" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32905984" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32905984" />
-      <window_info anchor="bottom" auto_hide="true" x="638" y="79" width="1159" height="666" id="Python Console" order="8" type="FLOATING" weight="0.39624608" />
+      <window_info anchor="bottom" auto_hide="true" x="2802" y="523" width="156" height="36" id="Python Console" order="8" type="FLOATING" weight="0.39624608" />
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.14536741" side_tool="true" weight="0.2369281" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -1042,6 +969,11 @@
           <option name="timeStamp" value="332" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../../VMAT/casereader/ResultsAnalyzer.py</url>
+          <line>394</line>
+          <option name="timeStamp" value="334" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighbors.py</url>
           <line>576</line>
           <option name="timeStamp" value="354" />
@@ -1050,6 +982,11 @@
           <url>file://$PROJECT_DIR$/basurareader.py</url>
           <line>392</line>
           <option name="timeStamp" value="382" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../../VMAT/casereader/casereader.py</url>
+          <line>1058</line>
+          <option name="timeStamp" value="383" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tomoAverageMultiProjOnlyAvg.py</url>
@@ -1078,23 +1015,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/SinogramComparisons.py</url>
-          <line>59</line>
+          <line>54</line>
           <option name="timeStamp" value="451" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/OrganizedmultiToolIMRTtest.py</url>
-          <line>265</line>
-          <option name="timeStamp" value="459" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../../VMAT/casereader/casereader.py</url>
-          <line>110</line>
-          <option name="timeStamp" value="468" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/OrganizedmultiToolIMRTtest.py</url>
-          <line>280</line>
-          <option name="timeStamp" value="470" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1161,6 +1083,61 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/cookbook.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="13" column="47" selection-start-line="13" selection-start-column="47" selection-end-line="13" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighborsFeasibilityTol.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="370" column="30" lean-forward="true" selection-start-line="370" selection-start-column="30" selection-end-line="370" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighborsBarConvTol.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="370" column="4" selection-start-line="370" selection-start-column="4" selection-end-line="370" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighborsInfProofCuts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="371" column="4" selection-start-line="371" selection-start-column="4" selection-end-line="371" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighborsPumpPasses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="373" column="30" selection-start-line="373" selection-start-column="30" selection-end-line="373" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/brain180twister.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="398">
+          <caret line="63" column="34" selection-start-line="63" selection-start-column="34" selection-end-line="63" selection-end-column="34" />
+          <folding>
+            <element signature="e#41#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/casereaderHouse.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="534">
+          <caret line="136" selection-start-line="136" selection-end-line="136" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighborsImproveMIPFocus.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="196">
@@ -1230,6 +1207,20 @@
     </entry>
     <entry file="file:///opt/intel/intelpython3/lib/python3.6/site-packages/numpy/core/numeric.py" />
     <entry file="file:///opt/intel/intelpython3/lib/python3.6/site-packages/numpy/lib/arraysetops.py" />
+    <entry file="file://$PROJECT_DIR$/runComparer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="32" selection-start-line="6" selection-start-column="32" selection-end-line="6" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/reader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="531">
+          <caret line="25" column="30" lean-forward="true" selection-start-line="25" selection-start-column="30" selection-end-line="25" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/data/dij/prostate/roimask.header">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
@@ -1254,6 +1245,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighbors.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6103">
+          <caret line="371" column="25" selection-start-line="371" selection-start-column="25" selection-end-line="371" selection-end-column="25" />
+          <folding>
+            <element signature="e#265#278#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tomoAverageMultiProjOnlyAvg.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="7038">
@@ -1268,6 +1269,8 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://C:/Intel/python/intelpython3/Lib/codecs.py" />
+    <entry file="file://$PROJECT_DIR$/basurareader.py" />
     <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/DVHnewPlotter.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -1291,27 +1294,54 @@
     <entry file="file://C:/Intel/python/intelpython3/Lib/site-packages/numpy/core/fromnumeric.py" />
     <entry file="file://$PROJECT_DIR$/fullProblemOfficial.py" />
     <entry file="file://$PROJECT_DIR$/tomoAverageMultiProjScaling3NoObj.py" />
+    <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/casereader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="378" column="43" selection-start-line="378" selection-start-column="36" selection-end-line="378" selection-end-column="43" />
+          <folding>
+            <element signature="e#1#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/FailedmultiTool.py" />
     <entry file="file://$PROJECT_DIR$/tomoAverageMultiProjScalingNoObj.py" />
     <entry file="file://$PROJECT_DIR$/tomoAverageMultiProjHintsIncluded.py" />
     <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/casereaderTargetRightEye.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
+        <state relative-caret-position="799">
           <caret line="63" column="28" selection-start-line="63" selection-start-column="28" selection-end-line="63" selection-end-column="28" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/casereaderTargetRightEyePTVExtreme.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
+        <state relative-caret-position="799">
           <caret line="63" column="28" selection-start-line="63" selection-start-column="28" selection-end-line="63" selection-end-column="28" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/casereaderTargetRightEyePTVSuperExtreme.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
+        <state relative-caret-position="799">
           <caret line="63" column="28" selection-start-line="63" selection-start-column="28" selection-end-line="63" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/casereadertestCalibration.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="385">
+          <caret line="113" column="32" selection-start-line="113" selection-start-column="32" selection-end-line="113" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tomoAverageMultiProj.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="9" />
+          <folding>
+            <element signature="e#265#278#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1322,144 +1352,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/site-packages/pyparsing.py" />
-    <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/casereadertestCalibration.py">
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/site-packages/pyparsing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="113" column="32" selection-start-line="113" selection-start-column="32" selection-end-line="113" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tomoAverageMultiProj.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="23" selection-start-line="25" selection-start-column="23" selection-end-line="25" selection-end-column="23" />
-          <folding>
-            <element signature="e#265#278#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/OrganizedmultiToolLung.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2584">
-          <caret line="164" column="48" selection-start-line="164" selection-start-column="48" selection-end-line="164" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tomoAverageOnlyTwoProjectionsNeighbors.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5882">
-          <caret line="22" column="17" lean-forward="true" selection-start-line="22" selection-start-column="17" selection-end-line="22" selection-end-column="17" />
-          <folding>
-            <element signature="e#265#278#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/runComparer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="16" lean-forward="true" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/reader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="23" lean-forward="true" selection-start-line="22" selection-start-column="23" selection-end-line="22" selection-end-column="23" />
+        <state relative-caret-position="84">
+          <caret line="3457" selection-start-line="3457" selection-end-line="3457" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/multiTool.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3009">
-          <caret line="189" column="54" selection-start-line="189" selection-start-column="54" selection-end-line="189" selection-end-column="54" />
+        <state relative-caret-position="14569">
+          <caret line="869" column="12" selection-start-line="869" selection-start-column="4" selection-end-line="869" selection-end-column="12" />
           <folding>
             <element signature="e#265#278#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/OrganizedmultiTool.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
-          <caret line="47" column="22" selection-start-line="47" selection-start-column="22" selection-end-line="47" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/OrganizedmultiToolIMRTtest.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4505">
-          <caret line="277" column="22" selection-start-line="277" selection-start-column="13" selection-end-line="277" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="29580">
-          <caret line="1740" selection-start-line="1740" selection-end-line="1740" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Intel/python/intelpython3/Lib/codecs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5236">
-          <caret line="308" selection-start-line="308" selection-end-line="308" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Intel/python/intelpython3/Lib/site-packages/matplotlib/text.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2771">
-          <caret line="183" selection-start-line="183" selection-end-line="183" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basurareader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="713">
-          <caret line="350" column="16" selection-start-line="350" selection-start-column="16" selection-end-line="350" selection-end-column="16" />
-          <folding>
-            <element signature="e#1#14#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ResultTomo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5051">
-          <caret line="428" column="19" selection-start-line="428" selection-start-column="19" selection-end-line="428" selection-end-column="19" />
-          <folding>
-            <element signature="e#168#181#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/casereader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="202">
-          <caret line="1043" column="6" selection-start-line="1043" selection-start-column="4" selection-end-line="1043" selection-end-column="6" />
-          <folding>
-            <element signature="e#1#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../VMAT/casereader/apertureAnalyzer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="279">
-          <caret line="9" column="18" lean-forward="true" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/SinogramComparisons.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="50" column="55" lean-forward="true" selection-start-line="50" selection-start-column="55" selection-end-line="50" selection-end-column="55" />
+        <state relative-caret-position="-289">
+          <caret line="1" column="75" lean-forward="true" selection-start-line="1" selection-start-column="75" selection-end-line="1" selection-end-column="75" />
           <folding>
             <element signature="e#265#278#0" expanded="true" />
           </folding>

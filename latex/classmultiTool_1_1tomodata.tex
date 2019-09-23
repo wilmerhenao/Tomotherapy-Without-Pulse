@@ -1,0 +1,184 @@
+\hypertarget{classmultiTool_1_1tomodata}{}\section{multi\+Tool.\+tomodata Class Reference}
+\label{classmultiTool_1_1tomodata}\index{multiTool.tomodata@{multiTool.tomodata}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a5afb229515533993e8393b0daefb334c}\label{classmultiTool_1_1tomodata_a5afb229515533993e8393b0daefb334c}} 
+def \mbox{\hyperlink{classmultiTool_1_1tomodata_a5afb229515533993e8393b0daefb334c}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self)
+\begin{DoxyCompactList}\small\item\em Initialization of the data. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_abd2f1b1441e3742dfb6bf45033380bab}\label{classmultiTool_1_1tomodata_abd2f1b1441e3742dfb6bf45033380bab}} 
+def \mbox{\hyperlink{classmultiTool_1_1tomodata_abd2f1b1441e3742dfb6bf45033380bab}{mask\+Names\+Getter}} (self, maskfile)
+\begin{DoxyCompactList}\small\item\em Keep the R\+OI\textquotesingle{}s in a dictionary. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a961ebec9c5be04832dc29b65133bca1e}\label{classmultiTool_1_1tomodata_a961ebec9c5be04832dc29b65133bca1e}} 
+def {\bfseries roimask\+\_\+reader} (self, base, fname)
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a1f36df9bd821a67b9fca6b1bcfbd5a11}\label{classmultiTool_1_1tomodata_a1f36df9bd821a67b9fca6b1bcfbd5a11}} 
+def \mbox{\hyperlink{classmultiTool_1_1tomodata_a1f36df9bd821a67b9fca6b1bcfbd5a11}{get\+\_\+totalbeamlets}} (self, base, fname)
+\begin{DoxyCompactList}\small\item\em Get the total number of beamlets. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a5ee1741b8cee03ef45c948aae95d1a69}\label{classmultiTool_1_1tomodata_a5ee1741b8cee03ef45c948aae95d1a69}} 
+def \mbox{\hyperlink{classmultiTool_1_1tomodata_a5ee1741b8cee03ef45c948aae95d1a69}{get\+\_\+dim}} (self, base, fname)
+\begin{DoxyCompactList}\small\item\em Get the dimensions of the voxel big space. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classmultiTool_1_1tomodata_ae155fe953b7611fcf0dc7a261761ae15}{Big\+To\+Small\+Creator}} (self)
+\begin{DoxyCompactList}\small\item\em Create a map from big to small voxel space, the order of elements is preserved but there is a compression to only one element in between. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_adacf42bd78e33abfdb2afa77c2088cf3}\label{classmultiTool_1_1tomodata_adacf42bd78e33abfdb2afa77c2088cf3}} 
+def {\bfseries get\+Num\+Projections} (self)
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a036908561acc8715dbfe4a93a1e90038}\label{classmultiTool_1_1tomodata_a036908561acc8715dbfe4a93a1e90038}} 
+def {\bfseries removezeroes} (self, toremove)
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_adc8f463528343cdd7a6deb9a49b696d5}\label{classmultiTool_1_1tomodata_adc8f463528343cdd7a6deb9a49b696d5}} 
+def {\bfseries removebixels} (self, pitch)
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_aa5f4559675dc261494a0036aab654d0a}\label{classmultiTool_1_1tomodata_aa5f4559675dc261494a0036aab654d0a}} 
+def \mbox{\hyperlink{classmultiTool_1_1tomodata_aa5f4559675dc261494a0036aab654d0a}{read\+Weiguos\+Case}} (self)
+\begin{DoxyCompactList}\small\item\em Read Weiguo\textquotesingle{}s Case. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a9f2a7d3968b3633bda92aa460556be6a}\label{classmultiTool_1_1tomodata_a9f2a7d3968b3633bda92aa460556be6a}} 
+def {\bfseries max\+Tgt\+Doses} (self, num\+Projections, k10)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a80e5431102a5938d9cade6ae4a423fb4}\label{classmultiTool_1_1tomodata_a80e5431102a5938d9cade6ae4a423fb4}} 
+{\bfseries base\+\_\+dir}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_ad29a7e93a52260b45746bab6f798cdda}\label{classmultiTool_1_1tomodata_ad29a7e93a52260b45746bab6f798cdda}} 
+{\bfseries Projections\+Per\+Loop}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_af061b7c2b599d275be7fe54c7cf3170d}\label{classmultiTool_1_1tomodata_af061b7c2b599d275be7fe54c7cf3170d}} 
+{\bfseries bixelsintween}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a285a8320e7c6b1cb34f8f3ea7b6f21e3}\label{classmultiTool_1_1tomodata_a285a8320e7c6b1cb34f8f3ea7b6f21e3}} 
+{\bfseries y\+Bar}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a4ebb02d0f4c5d05997c2e35b373a2bda}\label{classmultiTool_1_1tomodata_a4ebb02d0f4c5d05997c2e35b373a2bda}} 
+{\bfseries maxvoxels}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_ae5b712ee85020dd4bb997a45101b50c6}\label{classmultiTool_1_1tomodata_ae5b712ee85020dd4bb997a45101b50c6}} 
+{\bfseries img\+\_\+filename}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a94043cefb3a26cad25ba990e13eb75ce}\label{classmultiTool_1_1tomodata_a94043cefb3a26cad25ba990e13eb75ce}} 
+{\bfseries header\+\_\+filename}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a9e40968a0d273b8d71c9c5b8c8727585}\label{classmultiTool_1_1tomodata_a9e40968a0d273b8d71c9c5b8c8727585}} 
+{\bfseries struct\+\_\+img\+\_\+filename}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a2eae01ba964ba2898a3597621fc7385b}\label{classmultiTool_1_1tomodata_a2eae01ba964ba2898a3597621fc7385b}} 
+{\bfseries struct\+\_\+img\+\_\+header}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a3412d9c61d16fe4552d2ff248ed76158}\label{classmultiTool_1_1tomodata_a3412d9c61d16fe4552d2ff248ed76158}} 
+{\bfseries output\+Directory}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a56cbfd9401d8f4f4f6160b93bf2cf526}\label{classmultiTool_1_1tomodata_a56cbfd9401d8f4f4f6160b93bf2cf526}} 
+{\bfseries roinames}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a729cef28234ba0711d18318941dfcb30}\label{classmultiTool_1_1tomodata_a729cef28234ba0711d18318941dfcb30}} 
+{\bfseries L}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a1e6450267a74f287d3561e5c05282ecc}\label{classmultiTool_1_1tomodata_a1e6450267a74f287d3561e5c05282ecc}} 
+{\bfseries timeA}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a3a78cc5e77cd8c0b0e16df86ea58b69f}\label{classmultiTool_1_1tomodata_a3a78cc5e77cd8c0b0e16df86ea58b69f}} 
+{\bfseries timeM}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_aaaff9a0fed5e3fd18729f3d6c7a29ab7}\label{classmultiTool_1_1tomodata_aaaff9a0fed5e3fd18729f3d6c7a29ab7}} 
+{\bfseries smallvoxels}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_aa48946a2fd215739a8e5c400924e3cc9}\label{classmultiTool_1_1tomodata_aa48946a2fd215739a8e5c400924e3cc9}} 
+{\bfseries totalsmallvoxels}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_af1d2ec8849e69b30e9ec11b6fe1855dc}\label{classmultiTool_1_1tomodata_af1d2ec8849e69b30e9ec11b6fe1855dc}} 
+{\bfseries quad\+Helper\+Thresh}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a1da93ed6874db3924bb5c363314e58e3}\label{classmultiTool_1_1tomodata_a1da93ed6874db3924bb5c363314e58e3}} 
+{\bfseries quad\+Helper\+Under}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a3a2fa71c02c8216a2875e3f48d2179e0}\label{classmultiTool_1_1tomodata_a3a2fa71c02c8216a2875e3f48d2179e0}} 
+{\bfseries quad\+Helper\+Over}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_ac8e4292481b7419a9e186c7129ca6c32}\label{classmultiTool_1_1tomodata_ac8e4292481b7419a9e186c7129ca6c32}} 
+{\bfseries num\+Projections}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a8b5428f9423e5ca0fe845ce5d0bfa91c}\label{classmultiTool_1_1tomodata_a8b5428f9423e5ca0fe845ce5d0bfa91c}} 
+{\bfseries leafsD}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_aa3c86bff7c0fc8567e39080e5445f737}\label{classmultiTool_1_1tomodata_aa3c86bff7c0fc8567e39080e5445f737}} 
+{\bfseries projectionsD}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_ae18a69c9166192f6b3b8625674638f9b}\label{classmultiTool_1_1tomodata_ae18a69c9166192f6b3b8625674638f9b}} 
+{\bfseries bdata}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_ade1e4af5beab2657cd810d64f18a45fd}\label{classmultiTool_1_1tomodata_ade1e4af5beab2657cd810d64f18a45fd}} 
+{\bfseries treatment\+Name}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_aac95adca149cf522bcde4b97b102599a}\label{classmultiTool_1_1tomodata_aac95adca149cf522bcde4b97b102599a}} 
+{\bfseries chunk\+Name}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a9860b7f92ab55249a9b1db35953d9964}\label{classmultiTool_1_1tomodata_a9860b7f92ab55249a9b1db35953d9964}} 
+{\bfseries logfile}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a8565c4b85aca5df39482cf0eb8f826be}\label{classmultiTool_1_1tomodata_a8565c4b85aca5df39482cf0eb8f826be}} 
+{\bfseries log\+File}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_aae90572b4ce5e51bfd1f1cfadc379c2b}\label{classmultiTool_1_1tomodata_aae90572b4ce5e51bfd1f1cfadc379c2b}} 
+{\bfseries O\+A\+R\+Dict}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_afa7e990cc26141abf86c4731da9ff93e}\label{classmultiTool_1_1tomodata_afa7e990cc26141abf86c4731da9ff93e}} 
+{\bfseries T\+A\+R\+G\+E\+T\+Dict}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a6ca23bd3ea9f38a311c5e57be136786f}\label{classmultiTool_1_1tomodata_a6ca23bd3ea9f38a311c5e57be136786f}} 
+{\bfseries S\+U\+P\+P\+O\+R\+T\+Dict}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_ade35932c3179b8a05456ec7bb9229e09}\label{classmultiTool_1_1tomodata_ade35932c3179b8a05456ec7bb9229e09}} 
+{\bfseries All\+Dict}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a482b07ee5b2665f834a6b1f79b7f5c51}\label{classmultiTool_1_1tomodata_a482b07ee5b2665f834a6b1f79b7f5c51}} 
+{\bfseries totalbeamlets}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a8f2f0b04354f05dfba28b7fbb7bae569}\label{classmultiTool_1_1tomodata_a8f2f0b04354f05dfba28b7fbb7bae569}} 
+{\bfseries voxels\+Big\+Space}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a2a485cd6c002bcd55a1bafdb245ea97a}\label{classmultiTool_1_1tomodata_a2a485cd6c002bcd55a1bafdb245ea97a}} 
+{\bfseries mask}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_afc7fca897f5da9d8b312c3b8e9f4a86d}\label{classmultiTool_1_1tomodata_afc7fca897f5da9d8b312c3b8e9f4a86d}} 
+{\bfseries bixels}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a1b98b47fa0d4b79ab8c622004f1b6c53}\label{classmultiTool_1_1tomodata_a1b98b47fa0d4b79ab8c622004f1b6c53}} 
+{\bfseries voxels}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_aedcfa502e133a1a3c1adfa3cc6f0206d}\label{classmultiTool_1_1tomodata_aedcfa502e133a1a3c1adfa3cc6f0206d}} 
+{\bfseries Dijs}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_ad6b9090f1520f949ef2ece290c4d7e16}\label{classmultiTool_1_1tomodata_ad6b9090f1520f949ef2ece290c4d7e16}} 
+{\bfseries O\+A\+R\+List}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a95ef2d7a8c74f8b6c0565e59c744271d}\label{classmultiTool_1_1tomodata_a95ef2d7a8c74f8b6c0565e59c744271d}} 
+{\bfseries O\+A\+R\+Thresholds}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_aafd9434cff2f4f239926f81db973a33e}\label{classmultiTool_1_1tomodata_aafd9434cff2f4f239926f81db973a33e}} 
+{\bfseries T\+A\+R\+G\+E\+T\+List}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a8a9521cc3c8084440be4e756344ba7ab}\label{classmultiTool_1_1tomodata_a8a9521cc3c8084440be4e756344ba7ab}} 
+{\bfseries T\+A\+R\+G\+E\+T\+Thresholds}
+\item 
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_a2c0f23209caf580b2f9c966d1e2c58e8}\label{classmultiTool_1_1tomodata_a2c0f23209caf580b2f9c966d1e2c58e8}} 
+{\bfseries A\+L\+L\+List}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classmultiTool_1_1tomodata_ae155fe953b7611fcf0dc7a261761ae15}\label{classmultiTool_1_1tomodata_ae155fe953b7611fcf0dc7a261761ae15}} 
+\index{multiTool.tomodata@{multiTool.tomodata}!BigToSmallCreator@{BigToSmallCreator}}
+\index{BigToSmallCreator@{BigToSmallCreator}!multiTool.tomodata@{multiTool.tomodata}}
+\subsubsection{\texorpdfstring{BigToSmallCreator()}{BigToSmallCreator()}}
+{\footnotesize\ttfamily def multi\+Tool.\+tomodata.\+Big\+To\+Small\+Creator (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Create a map from big to small voxel space, the order of elements is preserved but there is a compression to only one element in between. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+multi\+Tool.\+py\end{DoxyCompactItemize}
