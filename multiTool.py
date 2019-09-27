@@ -278,7 +278,7 @@ class tomodata:
             else:
                 self.logFile = self.outputDirectory + 'logFile' + self.chunkName + 'completeSolution.log'
 
-    ## Keep the ROI's in a dictionary
+    ## This function keeps the ROI's in a dictionary
     def maskNamesGetter(self, maskfile):
         lines = tuple(open(maskfile, 'r'))
         for line in lines:
@@ -290,7 +290,8 @@ class tomodata:
                 self.roinames[roinumber] = roiname
             else:
                 pass
-
+                
+    ## Takes care of the indices and the mask 
     def roimask_reader(self, base, fname):
         self.OARDict = {}
         self.TARGETDict = {}
@@ -353,12 +354,15 @@ class tomodata:
         print('BigToSmallCreator:size of c. Size of the problem:', len(c))
         return(c)
 
+    ## Using the motion.txt file provided, this function calculates the number of projections
+    # by counting the lines
     def getNumProjections(self):
         with open(self.base_dir + 'motion.txt') as f:
             for i, l in enumerate(f):
                 pass
         return i # Do not return -1 because the file has a header.
-
+    
+    ## Remove the voxels with a mask of zero (Air Voxels)
     def removezeroes(self, toremove):
         # Next I am removing the voxels that have a mask of zero (0) because they REALLY complicate things otherwise
         # Making the problem larger.
@@ -380,6 +384,8 @@ class tomodata:
         self.voxels = np.delete(self.voxels, indices)
         self.Dijs = np.delete(self.Dijs, indices)
 
+
+    ## Deletes the corresponding bixels
     def removebixels(self, pitch):
         bixelkill = np.where(0 != (self.bixels % pitch) )
         bixelkill = np.where(self.bixels < 60)
@@ -428,9 +434,9 @@ class tomodata:
             self.removezeroes([0, 18])
         else:
             self.removezeroes([0, 10, 14, 15, 8, 16, 9, 17])
-
+            
+    ## This function will calculate the maximum bixel to a target coming from a particular beamlet
     def maxTgtDoses(self, numProjections, k10):
-        # This function will calculate the maximum bixel to a target coming from a particular beamlet
         bdoses = np.zeros(self.L, numProjections)
 
 def solveModel(data):

@@ -4,5 +4,5 @@
 \contentsline {chapter}{\numberline {2}Class Documentation}{3}{chapter.2}% 
 \contentsline {section}{\numberline {2.1}multi\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Tool.\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}tomodata Class Reference}{3}{section.2.1}% 
 \contentsline {subsection}{\numberline {2.1.1}Member Function Documentation}{4}{subsection.2.1.1}% 
-\contentsline {subsubsection}{\numberline {2.1.1.1}BigToSmallCreator()}{4}{subsubsection.2.1.1.1}% 
-\contentsline {chapter}{Index}{5}{section*.3}% 
+\contentsline {subsubsection}{\numberline {2.1.1.1}BigToSmallCreator()}{5}{subsubsection.2.1.1.1}% 
+\contentsline {chapter}{Index}{7}{section*.3}% 

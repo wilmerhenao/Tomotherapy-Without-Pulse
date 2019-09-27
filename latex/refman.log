@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Arch Linux) (preloaded format=pdflatex 2019.8.7)  22 SEP 2019 22:03
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Arch Linux) (preloaded format=pdflatex 2019.8.7)  26 SEP 2019 22:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1043,39 +1043,40 @@ File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <8> not available
 (Font)              Font shape `T1/pcr/m/sl' tried instead on input line 174.
-) [4] (./refman.ind [5
+ [4]) [5] [6
 
+] (./refman.ind
+[7
 
 
 
 ])
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 176.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 176.
-
-(./refman.aux)
+ (./refman.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 176.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 176.
 Package rerunfilecheck Info: File `refman.out' has not changed.
 (rerunfilecheck)             Checksum: 967F7093CAD1769F7C5D9DD31B4B0B6F;1180.
  ) 
 Here is how much of TeX's memory you used:
- 16484 strings out of 492623
- 239786 string characters out of 6135670
- 345620 words of memory out of 5000000
+ 16486 strings out of 492623
+ 239798 string characters out of 6135670
+ 348620 words of memory out of 5000000
  20071 multiletter control sequences out of 15000+600000
  58639 words of font info for 67 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 53i,11n,92p,938b,406s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 53i,15n,92p,938b,406s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-dist/fon
 ts/type1/urw/courier/ucrr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/courier/
 ucrro8a.pfb></usr/share/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/sh
 are/texmf-dist/fonts/type1/urw/helvetic/uhvb8ac.pfb></usr/share/texmf-dist/font
 s/type1/urw/helvetic/uhvr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/helvetic
 /uhvro8a.pfb>
-Output written on refman.pdf (9 pages, 60043 bytes).
+Output written on refman.pdf (11 pages, 62221 bytes).
 PDF statistics:
- 187 PDF objects out of 1000 (max. 8388607)
- 168 compressed objects within 2 object streams
- 70 named destinations out of 1000 (max. 500000)
+ 200 PDF objects out of 1000 (max. 8388607)
+ 179 compressed objects within 2 object streams
+ 72 named destinations out of 1000 (max. 500000)
  57 words of extra memory for PDF output out of 10000 (max. 10000000)
 
